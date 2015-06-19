@@ -1,0 +1,4 @@
+[submodule "ext/Android/sdk"]
+	path = ext/Android/sdk
+	url = git@github.com:adjust/android_sdk.git
+	branch = cocos2dx
