@@ -12,8 +12,8 @@ To integrate the adjust SDK into your Cocos2d-x iOS project, please read our [Co
 To integrate the adjust SDK into your Cocos2d-x Android project, please read our [Cocos2d-x Android guide][cocos2dx_android].
 
 [adjust.com]: http://adjust.com
-[cocos2dx_ios]: http://adjust.com
-[cocos2dx_android]: http://adjust.com
+[cocos2dx_ios]: https://github.com/adjust/cocos2dx_sdk/blob/development/doc/ios/ios.md
+[cocos2dx_android]: https://github.com/adjust/cocos2dx_sdk/blob/development/doc/android/android.md
 
 ## License
 
