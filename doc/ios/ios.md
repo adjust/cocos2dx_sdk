@@ -39,7 +39,7 @@ Add `-fobjc-arc` and `-ObjC` flags to it.
 
 In the Project Navigator, open the source file of your application delegate. 
 Add the import statement at the top of the file, then add the following call to 
-Adjust in the didFinishLaunching or didFinishLaunchingWithOptions method of your app delegate:
+Adjust in the applicationDidFinishLaunching of your app delegate:
 
 ```cpp
 #include "Adjust2dx.h"
@@ -193,7 +193,7 @@ app via a custom URL scheme. We will only read certain adjust specific
 parameters. This is essential if you are planning to run retargeting or
 re-engagement campaigns with deep links.
 
-In the Project Navigator open the source file your Application Controller. Find
+In the Project Navigator open the source file your App Controller. Find
 or add the method `openURL` and add the following call to adjust:
 
 ```objc
@@ -201,7 +201,7 @@ or add the method `openURL` and add the following call to adjust:
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
     [Adjust appWillOpenUrl:url];
 
-    return true;
+    return YES;
 }
 ```
 
@@ -219,7 +219,7 @@ adjustConfig.setEventBufferingEnabled(true);
 
 You can register a delegate callback to be notified of tracker attribution
 changes. Due to the different sources considered for attribution, this
-information can not by provided synchronously. Follow these steps to implement
+information can not be provided synchronously. Follow these steps to implement
 the optional delegate protocol in your app delegate:
 
 Please make sure to consider our [applicable attribution data
@@ -233,7 +233,7 @@ policies.][attribution-data]
     }
     ```
 
-3. Set the delegate with your `ADJConfig2dx` instance:
+2. Set the delegate with your `ADJConfig2dx` instance:
 
     ```cpp
     adjustConfig.setAttributionCallback(attributionCallbackMethod);
