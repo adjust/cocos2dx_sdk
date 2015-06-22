@@ -439,7 +439,7 @@ You can check if the adjust SDK is currently enabled by calling the function
 [activity]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/activity.png
 [log_message]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/log_message.png
 
-[referrer]:      doc/referrer.md
+[referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
 [google_play_services]: http://developer.android.com/google/play-services/setup.html
 [android_application]:  http://developer.android.com/reference/android/app/Application.html
