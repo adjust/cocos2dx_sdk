@@ -3,9 +3,9 @@
 This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at
 adjust.com.
 
-## Basic integration into Cocos2d-x iOS project
+## Basic integration into Cocos2d-x Android project
 
-We will describe the steps to integrate the adjust SDK into your Cocos2d-x iOS project.
+We will describe the steps to integrate the adjust SDK into your Cocos2d-x Android project.
 
 ### 1. Get the SDK
 
@@ -14,7 +14,7 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your project
 
-Take the files from `Android/Adjust` folder and add them to your iOS project.
+Take the files from `Android/Adjust` folder and add them to your Android project.
 
 ![][add_android_files]
 
