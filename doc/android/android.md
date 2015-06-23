@@ -14,13 +14,13 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your project
 
-Take the files from `Android/Adjust` folder and add them to your Android project.
+Take the files from the `Android/Adjust` folder and add them to your Android project.
 
 ![][add_android_files]
 
-### 3. Add adjust C++ source files to `Android.mk`
+### 3. Add the adjust C++ source files to `Android.mk`
 
-Make sure to add newly added adjust C++ files paths to `LOCAL_SRC_FILES` section in your
+Make sure to also add the paths of the adjust C++ files to the `LOCAL_SRC_FILES` section in your
 `Android.mk` file.
 
 ![][add_to_android_mk]
@@ -115,14 +115,14 @@ To start with, we'll set up basic session tracking.
 
 #### Basic Setup
 
-We recommend using a global android [Application][android_application] class to
-initialize the SDK. If don't have one in your app already, follow these steps:
+We recommend using a global Android [Application][android_application] class to
+initialize the SDK. If you don't have one in your app already, follow these steps:
 
 1. Create a class that extends `Application`.
     ![][application_class]
 
 2. Open the `AndroidManifest.xml` file of your app and locate the `<application>` element.
-3. Add the attribute `android:name` and set it to the name of your new application class pefixed by a dot.
+3. Add the attribute `android:name` and set it to the name of your new application class prefixed by a dot.
 
     In our example app we use an `Application` class named `GlobalApplication`, so the manifest file is configured as:
     ```xml
@@ -260,7 +260,7 @@ The event instance can be used to configure the event even more before tracking 
 #### Add tracking of revenue
 
 If your users can generate revenue by tapping on advertisements or making
-in-app purchases you can track those revenues with events. Lets say a tap is
+in-app purchases you can track those revenues with events. Let's say a tap is
 worth one Euro cent. You could then track the revenue event like this:
 
 ```cpp
@@ -269,7 +269,7 @@ adjustEvent.setRevenue(0.01, "EUR");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-This can be combined with callback parameters of course.
+This can of course be combined with callback parameters.
 
 When you set a currency token, adjust will automatically convert the incoming revenues into 
 a reporting revenue of your choice. Read more about [currency conversion here.][currency-conversion]
@@ -280,7 +280,7 @@ guide.][event-tracking]
 #### Add callback parameters
 
 You can register a callback URL for your events in your [dashboard]. We will
-send a GET request to that URL whenever the event gets tracked. You can add
+send a GET request to that URL whenever the event is tracked. You can add
 callback parameters to that event by calling `addCallbackParameter` on the
 event instance before tracking it. We will then append these parameters to your
 callback URL.
@@ -340,7 +340,7 @@ app. We will only read certain adjust specific parameters. This is essential if
 you are planning to run retargeting or re-engagement campaigns with deep links.
 
 For each activity that accepts deep links, find the `onCreate` method and add
-the folowing call to adjust:
+the following call to adjust:
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -352,6 +352,8 @@ protected void onCreate(Bundle savedInstanceState) {
     //...
 }
 ```
+
+You can read more about [deeplinking in our docs][deeplinking].
 
 ### 13. Enable event buffering
 
@@ -452,6 +454,7 @@ You can check if the adjust SDK is currently enabled by calling the function
 [maven]:                http://maven.org
 [example]:              https://github.com/adjust/android_sdk/tree/master/Adjust/example
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
+[deeplinking]: https://docs.adjust.com/en/tracker-generation/#deeplinking
 
 ## License
 
