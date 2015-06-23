@@ -189,7 +189,7 @@ config.setLogLevel(LogLevel.VERBOSE);   // enable all logging
 config.setLogLevel(LogLevel.DEBUG);     // enable more logging
 config.setLogLevel(LogLevel.INFO);      // the default
 config.setLogLevel(LogLevel.WARN);      // disable info logging
-config.setLogLevel(LogLevel.ERROR];     // disable warnings as well
+config.setLogLevel(LogLevel.ERROR);     // disable warnings as well
 config.setLogLevel(LogLevel.ASSERT);    // disable errors as well
 ```
 
