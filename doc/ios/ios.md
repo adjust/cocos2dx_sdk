@@ -14,7 +14,7 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your solution
 
-Take the files from `iOS/Adjust` folder and add them to your iOS project.
+Take the files from the `iOS/Adjust` folder and add them to your iOS project.
 
 ![][add_ios_files]
 
@@ -112,9 +112,9 @@ ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-When event occurs you should now see `Event tracked` in the logs.
+When this event is triggered, you should see `Event tracked` in the logs.
 
-The event instance can be used to configure the event even more before tracking
+The event instance can be used to configure the event further before tracking
 it.
 
 #### Track revenue
@@ -193,7 +193,7 @@ app via a custom URL scheme. We will only read certain adjust specific
 parameters. This is essential if you are planning to run retargeting or
 re-engagement campaigns with deep links.
 
-In the Project Navigator open the source file your App Controller. Find
+In the Project Navigator open the source file of your App Controller. Find
 or add the method `openURL` and add the following call to adjust:
 
 ```objc
@@ -204,6 +204,8 @@ or add the method `openURL` and add the following call to adjust:
     return YES;
 }
 ```
+
+You can read more about [deeplinking in our docs][deeplinking].
 
 ### 8. Enable event buffering
 
@@ -242,7 +244,7 @@ policies.][attribution-data]
 As the delegate callback is configured using the `ADJConfig2dx` instance, you
 should call `setAttributionCallback` before calling `Adjust2dx::appDidLaunch(adjustConfig)`.
 
-The delegate function will get when the SDK receives final attribution data.
+The delegate function will be called when the SDK receives final attribution data.
 Within the delegate function you have access to the `attribution` parameter.
 Here is a quick summary of its properties:
 
@@ -281,3 +283,4 @@ You can check if the adjust SDK is currently enabled by calling the function
 [event-tracking]: https://docs.adjust.com/en/event-tracking
 [special-partners]: https://docs.adjust.com/en/special-partners
 [currency-conversion]: https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
+[deeplinking]: https://docs.adjust.com/en/tracker-generation/#deeplinking
