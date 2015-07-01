@@ -428,6 +428,26 @@ You can check if the adjust SDK is currently enabled by calling the function
 `isEnabled`. It is always possible to activate the adjust SDK by invoking
 `setEnabled` with the enabled parameter as `true`.
 
+### 16. Offline mode
+
+You can put the adjust SDK in offline mode to suspend transmission to our servers, 
+while retaining tracked data to be sent later. While in offline mode, all information is saved
+in a file, so be careful not to trigger too many events while in offline mode.
+
+You can activate offline mode by calling `setOfflineMode` with the parameter `true`.
+
+```java
+Adjust.setOfflineMode(true);
+```
+
+Conversely, you can deactivate offline mode by calling `setOfflineMode` with `false`.
+When the adjust SDK is put back in online mode, all saved information is send to our servers 
+with the correct time information.
+
+Unlike disabling tracking, this setting is *not remembered*
+bettween sessions. This means that the SDK is in online mode whenever it is started,
+even if the app was terminated in offline mode.
+
 [dashboard]:     http://adjust.com
 [releases]:      https://github.com/adjust/cocos2dx_sdk/releases
 [add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/add_android_files.png
