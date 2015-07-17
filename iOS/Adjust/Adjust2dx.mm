@@ -13,6 +13,7 @@ const std::string ADJEnvironmentSandbox2dx = std::string([ADJEnvironmentSandbox 
 const std::string ADJEnvironmentProduction2dx = std::string([ADJEnvironmentProduction UTF8String]);
 
 void Adjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
+    [((ADJConfig *)adjustConfig.getConfig()) setSdkPrefix:@"cocos2d-x4.0.1"];
     [Adjust appDidLaunch:(ADJConfig *)adjustConfig.getConfig()];
 }
 
