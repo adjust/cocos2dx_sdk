@@ -14,7 +14,7 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your solution
 
-Take the files from the `iOS/Adjust` folder and add them to your iOS project.
+Take the files from the `Adjust` folder and add them to your iOS project.
 
 ![][add_ios_files]
 
@@ -29,9 +29,9 @@ the `AdSupport.framework` and `iAd.framework`.
 
 ### 4. Add additional linker flags
 
-If you are not using `Objective-C Automatic Reference Counting`, you should add two additional linker flags.
+In order to support categories from `Adjust.framework`, you should add an additional linker flag.
 Go to the `Build Settings` part of Project Settings and look for `Other Linker Flags` option.
-Add `-fobjc-arc` and `-ObjC` flags to it.
+Add `-ObjC` flag to it.
 
 ![][add_other_linker_flags]
 
@@ -42,13 +42,14 @@ Add the import statement at the top of the file, then add the following call to
 Adjust in the applicationDidFinishLaunching of your app delegate:
 
 ```cpp
-#include "Adjust2dx.h"
+#include "Adjust/Adjust2dx.h"
 // ...
-std::string yourAppToken = "{YourAppToken}";
-std::string environment = ADJEnvironmentSandbox2dx;
+std::string appToken = "{YourAppToken}";
+std::string environment = AdjustEnvironmentSandbox2dx;
 
-ADJConfig2dx adjustConfig = ADJConfig2dx(yourAppToken, environment);
-Adjust2dx::appDidLaunch(adjustConfig);
+AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+
+Adjust2dx::start(adjustConfig);
 ```
 
 ![][add_adjust2dx]
@@ -60,14 +61,14 @@ Depending on whether you build your app for testing or for production, you must
 set `environment` with one of these values:
 
 ```cpp
-std::string environment = ADJEnvironmentSandbox2dx;
-std::string environment = ADJEnvironmentProduction2dx;
+std::string environment = AdjustEnvironmentSandbox2dx;
+std::string environment = AdjustEnvironmentProduction2dx;
 ```
 
-**Important:** This value should be set to `ADJEnvironmentSandbox2dx` if and only
+**Important:** This value should be set to `AdjustEnvironmentSandbox2dx` if and only
 if you or someone else is testing your app. Make sure to set the environment to
-`ADJEnvironmentProduction2dx` just before you publish the app. Set it back to
-`ADJEnvironmentSandbox2dx` when you start developing and testing it again.
+`AdjustEnvironmentProduction2dx` just before you publish the app. Set it back to
+`AdjustEnvironmentSandbox2dx` when you start developing and testing it again.
 
 We use this environment to distinguish between real traffic and test traffic
 from test devices. It is very important that you keep this value meaningful at
@@ -76,16 +77,16 @@ all times! This is especially important if you are tracking revenue.
 #### Adjust Logging
 
 You can increase or decrease the amount of logs you see in tests by calling
-`setLogLevel` on your `ADJConfig2dx` instance with one of the following
+`setLogLevel` on your `AdjustConfig2dx` instance with one of the following
 parameters:
 
 ```cpp
-adjustConfig.setLogLevel(ADJLogLevel2dxVerbose); // enable all logging
-adjustConfig.setLogLevel(ADJLogLevel2dxDebug);   // enable more logging
-adjustConfig.setLogLevel(ADJLogLevel2dxInfo);    // the default
-adjustConfig.setLogLevel(ADJLogLevel2dxWarn);    // disable info logging
-adjustConfig.setLogLevel(ADJLogLevel2dxError);   // disable warnings as well
-adjustConfig.setLogLevel(ADJLogLevel2dxAssert);  // disable errors as well
+adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose); // enable all logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxDebug);   // enable more logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxInfo);    // the default
+adjustConfig.setLogLevel(AdjustLogLevel2dxWarn);    // disable info logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxError);   // disable warnings as well
+adjustConfig.setLogLevel(AdjustLogLevel2dxAssert);  // disable errors as well
 ```
 
 ### 5. Build your app
@@ -108,7 +109,7 @@ which has an associated event token - looking something like `abc123`. In your
 game you would then add the following lines to track the event you are interested in:
 
 ```cpp
-ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
@@ -124,7 +125,7 @@ in-app purchases you can track those revenues with events. Lets say a tap is
 worth one Euro cent. You could then track the revenue event like this:
 
 ```cpp
-ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 adjustEvent.setRevenue(0.01, "EUR");
 Adjust2dx::trackEvent(adjustEvent);
 ```
@@ -135,6 +136,36 @@ When you set a currency token, adjust will automatically convert the incoming re
 revenue of your choice. Read more about [currency conversion here.][currency-conversion]
 
 You can read more about revenue and event tracking in the [event tracking guide.][event-tracking]
+
+##### <a id="deduplication"></a> Revenue deduplication
+
+You can also pass in an optional transaction ID to avoid tracking duplicate revenues. The last ten transaction 
+IDs are remembered and revenue events with duplicate transaction IDs are skipped. This is especially useful for 
+in-app purchase tracking. See an example below.
+
+If you want to track in-app purchases, please make sure to call `trackEvent` only if the transaction is finished
+and item is purchased. That way you can avoid tracking revenue that is not actually being generated.
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setRevenue(0.01, "EUR");
+adjustEvent.setTransactionId("transactionID");
+Adjust2dx::trackEvent(adjustEvent);
+```
+
+##### Receipt verification
+
+If you track in-app purchases, you can also attach the receipt to the tracked event. In that case our servers 
+will verify that receipt with Apple and discard the event if the verification failed. To make this work, you 
+also need to send us the transaction ID of the purchase. The transaction ID will also be used for SDK side 
+deduplication as explained [above](#deduplication):
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setRevenue(0.01, "EUR");
+adjustEvent.setReceipt("receipt", "transactionID");
+Adjust2dx::trackEvent(adjustEvent);
+```
 
 #### Add callback parameters
 
@@ -148,7 +179,7 @@ For example, suppose you have registered the URL
 `http://www.adjust.com/callback` then track an event like this:
 
 ```cpp
-ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 adjustEvent.addCallbackParameter("key", "value");
 adjustEvent.addCallbackParameter("foo", "bar");
 Adjust2dx::trackEvent(adjustEvent);
@@ -178,7 +209,7 @@ be added by calling the `addPartnerParameter` method on your `ADJEvent2dx`
 instance.
 
 ```cpp
-ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 adjustEvent.addPartnerParameter("foo", "bar");
 Adjust2dx::trackEvent(adjustEvent);
 ```
@@ -193,13 +224,16 @@ app via a custom URL scheme. We will only read certain adjust specific
 parameters. This is essential if you are planning to run retargeting or
 re-engagement campaigns with deep links.
 
-In the Project Navigator open the source file of your App Controller. Find
+In the Project Navigator open the source file of your iOS App Controller. Find
 or add the method `openURL` and add the following call to adjust:
 
 ```objc
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url 
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    [Adjust appWillOpenUrl:url];
+    NSString *urlNSString = [url absoluteString];
+    std::string urlString = std::string([urlNSString UTF8String]);
+
+    Adjust2dx::appWillOpenUrl(urlString);
 
     return YES;
 }
@@ -211,7 +245,7 @@ You can read more about [deeplinking in our docs][deeplinking].
 
 If your app makes heavy use of event tracking, you might want to delay some
 HTTP requests in order to send them in one batch every minute. You can enable
-event buffering with your `ADJConfig2dx` instance:
+event buffering with your `AdjustConfig2dx` instance:
 
 ```cpp
 adjustConfig.setEventBufferingEnabled(true);
@@ -231,18 +265,18 @@ policies.][attribution-data]
    your app delegate implementation.
 
     ```cpp
-    void attributionCallbackMethod(ADJAttribution2dx attribution) {
+    void attributionCallbackMethod(AdjustAttribution2dx attribution) {
     }
     ```
 
-2. Set the delegate with your `ADJConfig2dx` instance:
+2. Set the delegate with your `AdjustConfig2dx` instance:
 
     ```cpp
     adjustConfig.setAttributionCallback(attributionCallbackMethod);
     ```
     
-As the delegate callback is configured using the `ADJConfig2dx` instance, you
-should call `setAttributionCallback` before calling `Adjust2dx::appDidLaunch(adjustConfig)`.
+As the delegate callback is configured using the `AdjustConfig2dx` instance, you
+should call `setAttributionCallback` before calling `Adjust2dx::start(adjustConfig)`.
 
 The delegate function will be called when the SDK receives final attribution data.
 Within the delegate function you have access to the `attribution` parameter.
@@ -293,11 +327,11 @@ even if the app was terminated in offline mode.
 [adjust.com]: http://adjust.com
 [dashboard]: http://adjust.com
 [releases]: https://github.com/adjust/cocos2dx_sdk/releases
-[add_ios_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
-[add_the_frameworks]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
-[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
-[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
-[run]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
+[add_ios_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_ios_files.png
+[add_the_frameworks]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_the_frameworks.png
+[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_other_linker_flags.png
+[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_adjust2dx.png
+[run]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/run.png
 [attribution-data]: https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
 [callbacks-guide]: https://docs.adjust.com/en/callbacks
 [event-tracking]: https://docs.adjust.com/en/event-tracking
