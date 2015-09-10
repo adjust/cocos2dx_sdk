@@ -1,6 +1,6 @@
 //
 //  ADJEvent2dx.mm
-//  AdjustDemo
+//  AdjustSDK
 //
 //  Created by Uglješa Erceg on 17/06/15.
 //

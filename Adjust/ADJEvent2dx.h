@@ -1,13 +1,13 @@
 //
 //  ADJEvent2dx.h
-//  AdjustDemo
+//  AdjustSDK
 //
 //  Created by Uglješa Erceg on 17/06/15.
 //
 //
 
-#ifndef __AdjustDemo__ADJEvent2dx__
-#define __AdjustDemo__ADJEvent2dx__
+#ifndef _ADJUST_ADJUSTEVENT2DX_H_
+#define _ADJUST_ADJUSTEVENT2DX_H_
 
 #include <iostream>
 
@@ -33,4 +33,4 @@ public:
     void* getEvent();
 };
 
-#endif /* defined(__AdjustDemo__ADJEvent2dx__) */
+#endif /* _ADJUST_ADJUSTEVENT2DX_H_ */
