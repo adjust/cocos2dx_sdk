@@ -60,7 +60,7 @@ these steps:
      the Android SDK directory.
 
 4. After you've added the Google Play services library as a dependency for your app project,
-open your app's manifest file and add the following tag as a child of the [<application>][application] element:
+open your app's manifest file and add the following tag as a child of the `manifest` element:
 
     ```xml
     <meta-data android:name="com.google.android.gms.version"
@@ -115,8 +115,8 @@ To start with, we'll set up basic session tracking.
 
 #### Basic Setup
 
-In the Project Navigator, open the source file of your application delegate.  Add the import statement at the top of
-the file, then add the following call to Adjust in the applicationDidFinishLaunching of your app delegate:
+In the Package Explorer, open the source file of your app delegate.  Add the import statement at the top of
+the file, then add the following call to Adjust in the `applicationDidFinishLaunching` of your app delegate:
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
@@ -166,11 +166,11 @@ adjustConfig.setLogLevel(AdjustLogLevel2dxError);   // disable warnings as well
 adjustConfig.setLogLevel(AdjustLogLevel2dxAssert);  // disable errors as well
 ```
 
-### 9. Update your activities
+### 9. Session tracking
 
 To provide proper session tracking it is required to call certain Adjust
-methods every time any Activity resumes or pauses. Otherwise the SDK might miss
-a session start or session end. In order to do so you should follow these steps:
+methods every time app goes to background or comes to foreground. Otherwise the SDK 
+might miss a session start or session end. In order to do so you should follow these steps:
 
 1. Open the app delegate file.
 2. Add call to `onResume` method in `applicationWillEnterForeground` method.
@@ -289,7 +289,7 @@ You can also add parameters to be transmitted to network partners, for the
 integrations that have been activated in your adjust dashboard.
 
 This works similarly to the callback parameters mentioned above, but can
-be added by calling the `addPartnerParameter` method on your `ADJEvent2dx`
+be added by calling the `addPartnerParameter` method on your `AdjustEvent2dx`
 instance.
 
 ```cpp
@@ -435,6 +435,7 @@ even if the app was terminated in offline mode.
 
 [referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
+[eclipse_library]:	http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject
 [google_play_services]: http://developer.android.com/google/play-services/setup.html
 [android_application]:  http://developer.android.com/reference/android/app/Application.html
 [application_name]:     http://developer.android.com/guide/topics/manifest/application-element.html#nm
