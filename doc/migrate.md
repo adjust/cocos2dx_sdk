@@ -187,7 +187,7 @@ Scenario used so far:
 }
 ```
 
-##### C++ code:
+##### C++ code
 
 Newly offered scenario:
 
