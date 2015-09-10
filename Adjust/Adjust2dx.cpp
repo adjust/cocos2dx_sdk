@@ -10,6 +10,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
+#include "AdjustProxy2dx.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJAdjust2dx.h"
 #endif
@@ -122,7 +123,7 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
 #endif
 }
 
-void Adjust2dx::appWillOpenUrl(std::string url) {
+void Adjust2dx::appWillOpenUrl(void* url) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

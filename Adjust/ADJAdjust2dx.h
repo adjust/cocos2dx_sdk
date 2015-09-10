@@ -24,7 +24,7 @@ public:
     static void trackSubsessionStart();
     static void trackSubsessionEnd();
     static void setEnabled(bool isEnabled);
-    static void appWillOpenUrl(std::string url);
+    static void appWillOpenUrl(void* url);
     static void setDeviceToken(std::string deviceToken);
     static void setOfflineMode(bool isOffline);
     static bool isEnabled();

@@ -32,8 +32,8 @@ void ADJAdjust2dx::setEnabled(bool isEnabled) {
     [Adjust setEnabled:isEnabled];
 }
 
-void ADJAdjust2dx::appWillOpenUrl(std::string url) {
-    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
+void ADJAdjust2dx::appWillOpenUrl(void* url) {
+    NSURL *pUrl = (NSURL *)url;
     [Adjust appWillOpenUrl:pUrl];
 }
 

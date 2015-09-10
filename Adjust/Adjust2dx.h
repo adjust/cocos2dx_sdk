@@ -23,7 +23,7 @@ public:
 	static void setEnabled(bool isEnabled);
 	static bool isEnabled();
 	static void setOfflineMode(bool isOffline);
-    static void appWillOpenUrl(std::string url);
+    static void appWillOpenUrl(void* url);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     static void onResume();
