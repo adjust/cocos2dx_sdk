@@ -14,11 +14,7 @@ Here is an example of how the setup might look before and after the migration:
 ```cpp
 #include "Adjust2dx.h"
 // ...
-std::string yourAppToken = "{YourAppToken}";
-std::string environment = ADJEnvironmentSandbox2dx;
-
 ADJConfig2dx adjustConfig = ADJConfig2dx(yourAppToken, environment);
-Adjust2dx::appDidLaunch(adjustConfig);
 ```
 
 ##### After:
@@ -26,12 +22,7 @@ Adjust2dx::appDidLaunch(adjustConfig);
 ```cpp
 #include "Adjust/Adjust2dx.h"
 // ...
-std::string appToken = "{YourAppToken}";
-std::string environment = AdjustEnvironmentSandbox2dx;
-
 AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-
-Adjust2dx::start(adjustConfig);
 ```
 
 #### Android
@@ -81,18 +72,14 @@ Again, an example of how it might look like before and after:
 
 ```cpp
 ADJEvent2dx adjustEvent = ADJEvent2dx("abc123");
-adjustEvent.addCallbackParameter("key", "value");
-adjustEvent.addCallbackParameter("foo", "bar");
-Adjust2dx::trackEvent(adjustEvent);
+// ...
 ```
 
 ##### After:
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
-adjustEvent.addCallbackParameter("key", "value");
-adjustEvent.addCallbackParameter("foo", "bar");
-Adjust2dx::trackEvent(adjustEvent);
+// ...
 ```
 
 ### Session tracking
