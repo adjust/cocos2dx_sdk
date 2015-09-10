@@ -172,9 +172,11 @@ Adjust2dx::start(adjustConfig);
 #### iOS
 
 Instead of opening URL directly from Objective-C, we now offer C++ interface for you to do this.
-Both should be still functional, though.
+Both are functional and you can choose one from those two methods.
 
-##### Before:
+##### Objective-C code
+
+Scenario used so far:
 
 ```objc
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url 
@@ -185,15 +187,14 @@ Both should be still functional, though.
 }
 ```
 
-##### After:
+##### C++ code:
+
+Newly offered scenario:
 
 ```objc
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url 
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    NSString *urlNSString = [url absoluteString];
-    std::string urlString = std::string([urlNSString UTF8String]);
-
-    Adjust2dx::appWillOpenUrl(urlString);
+    Adjust2dx::appWillOpenUrl(url);
 
     return YES;
 }
