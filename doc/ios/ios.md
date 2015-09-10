@@ -225,15 +225,16 @@ parameters. This is essential if you are planning to run retargeting or
 re-engagement campaigns with deep links.
 
 In the Project Navigator open the source file of your iOS App Controller. Find
-or add the method `openURL` and add the following call to adjust:
+or add the method `openURL` and add __one__ of the following calls to adjust:
 
 ```objc
 - (BOOL)application:(UIApplication *)application openURL:(NSURL *)url 
   sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    NSString *urlNSString = [url absoluteString];
-    std::string urlString = std::string([urlNSString UTF8String]);
-
-    Adjust2dx::appWillOpenUrl(urlString);
+    // Like it was in previous versions:
+    [Adjust appWillOpenUrl:url];
+    
+    // OR use new C++ interface:
+    Adjust2dx::appWillOpenUrl(url);
 
     return YES;
 }
