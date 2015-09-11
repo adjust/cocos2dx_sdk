@@ -39,7 +39,7 @@ Add `-ObjC` flag to it.
 
 In the Project Navigator, open the source file of your application delegate. 
 Add the import statement at the top of the file, then add the following call to 
-Adjust in the applicationDidFinishLaunching of your app delegate:
+Adjust in the `applicationDidFinishLaunching` of your app delegate:
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
