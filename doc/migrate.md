@@ -2,8 +2,8 @@
 
 ### SDK initialization
 
-We have changed API in comparison with 4.0.x versions and also some of the class names.
-We have changed how you configure and start the adjust SDK.
+We have changed the API in comparison with 4.0.x versions, as well as some of the class names.
+We also changed how you configure and start the adjust SDK.
 
 Here is an example of how the setup might look before and after the migration:
 
@@ -27,8 +27,7 @@ AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
 
 #### Android
 
-There is no need anymore for you to initialise and start our SDK from Java code. You can do that now
-entirely from C++ code.
+There is no longer a need for you to initialize and start our SDK using Java code. You can now use C++ code.
 
 ##### Before:
 
@@ -86,8 +85,9 @@ AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 
 #### Android
 
-Before, you needed to update each one of your activity with calls to `Adjust.onResume()` and `Adjust.onPause()`.
-Not anymore. Everything you need to do now is to update `applicationDidEnterBackground` and 
+Previously, you needed to update each activity with calls to `Adjust.onResume()` and `Adjust.onPause()`.
+
+Not anymore. All you need to do now is to update the `applicationDidEnterBackground` and
 `applicationWillEnterForeground` methods in your app delegate.
 
 ##### Before:
@@ -137,8 +137,7 @@ void AppDelegate::applicationWillEnterForeground() {
 
 #### Android
 
-Since SDK initialisation was done in Java code, attribution callback was needed to be implemented in there
-as well. Now, you can do everything in C++ code.
+Since the SDK initialization was done in Java code, attribution callbacks had to be implemented in Java as well. Now, you can do everything in C++ code.
 
 ##### Before:
 
@@ -171,7 +170,7 @@ Adjust2dx::start(adjustConfig);
 
 #### iOS
 
-Instead of opening URL directly from Objective-C, we now offer C++ interface for you to do this.
+Instead of opening a URL directly from Objective-C, we now offer a C++ interface for you to do this.
 Both are functional and you can choose one from those two methods.
 
 ##### Objective-C code

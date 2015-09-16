@@ -105,8 +105,8 @@ the following features.
 ### 6. Set up event tracking
 
 You can use adjust to track events. You would create a new event token in your [dashboard],
-which has an associated event token - looking something like `abc123`. In your
-game you would then add the following lines to track the event you are interested in:
+which has an associated event token - something like `abc123`. In your
+game, you would then add the following lines to track the event you are interested in:
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
@@ -121,7 +121,7 @@ it.
 #### Track revenue
 
 If your users can generate revenue by tapping on advertisements or making
-in-app purchases you can track those revenues with events. Lets say a tap is
+in-app purchases, you can track those revenues with events. Let's say a tap is
 worth one Euro cent. You could then track the revenue event like this:
 
 ```cpp
@@ -155,7 +155,7 @@ Adjust2dx::trackEvent(adjustEvent);
 
 ##### Receipt verification
 
-If you track in-app purchases, you can also attach the receipt to the tracked event. In that case our servers 
+If you track in-app purchases, you can also attach the receipt to the tracked event. In that case, our servers 
 will verify that receipt with Apple and discard the event if the verification failed. To make this work, you 
 also need to send us the transaction ID of the purchase. The transaction ID will also be used for SDK side 
 deduplication as explained [above](#deduplication):
@@ -170,7 +170,7 @@ Adjust2dx::trackEvent(adjustEvent);
 #### Add callback parameters
 
 You can register a callback URL for your events in your [dashboard]. We will
-send a GET request to that URL whenever the event gets tracked. You can add
+send a GET request to that URL whenever the event is tracked. You can add
 callback parameters to that event by calling `addCallbackParameter` on the
 event before tracking it. We will then append these parameters to your callback
 URL.
@@ -185,7 +185,7 @@ adjustEvent.addCallbackParameter("foo", "bar");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-In that case we would track the event and send a request to:
+In that case, we would track the event and send a request to:
 
     http://www.adjust.com/callback?key=value&foo=bar
 
@@ -219,7 +219,7 @@ You can read more about special partners and these integrations in our
 
 ### 7. Set up deep link reattributions
 
-You can set up the adjust SDK to handle deep links that are used to open your
+You can set up the adjust SDK to handle deep links used to open your
 app via a custom URL scheme. We will only read certain adjust specific
 parameters. This is essential if you are planning to run retargeting or
 re-engagement campaigns with deep links.
@@ -256,7 +256,7 @@ adjustConfig.setEventBufferingEnabled(true);
 
 You can register a delegate callback to be notified of tracker attribution
 changes. Due to the different sources considered for attribution, this
-information can not be provided synchronously. Follow these steps to implement
+information cannot be provided synchronously. Follow these steps to implement
 the optional delegate protocol in your app delegate:
 
 Please make sure to consider our [applicable attribution data

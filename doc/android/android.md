@@ -106,7 +106,7 @@ We use this broadcast receiver to retrieve the install referrer, in order to
 improve conversion tracking.
 
 If you are already using a different broadcast receiver for the
-`INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the
+`INSTALL_REFERRER` intent, then follow [these instructions][referrer] to add the
 Adjust receiver.
 
 ### 8. Integrate Adjust into your app
@@ -235,7 +235,7 @@ it.
 #### Track revenue
 
 If your users can generate revenue by tapping on advertisements or making
-in-app purchases you can track those revenues with events. Lets say a tap is
+in-app purchases, then you can track those revenues with events. Let's say a tap is
 worth one Euro cent. You could then track the revenue event like this:
 
 ```cpp
@@ -254,7 +254,7 @@ You can read more about revenue and event tracking in the [event tracking guide.
 #### Add callback parameters
 
 You can register a callback URL for your events in your [dashboard]. We will
-send a GET request to that URL whenever the event gets tracked. You can add
+send a GET request to that URL whenever the event is tracked. You can add
 callback parameters to that event by calling `addCallbackParameter` on the
 event before tracking it. We will then append these parameters to your callback
 URL.
@@ -273,9 +273,7 @@ In that case we would track the event and send a request to:
 
     http://www.adjust.com/callback?key=value&foo=bar
 
-It should be mentioned that we support a variety of placeholders like `{android_id}`
-that can be used as parameter values. In the resulting callback this
-placeholder would be replaced with the AndroidID of the current
+It should be mentioned that we support a variety of placeholders like `{android_id}`, which can be used as parameter values. In the resulting callback this placeholder would be replaced with the AndroidID of the current
 device. Also note that we don't store any of your custom parameters, but only
 append them to your callbacks. If you haven't registered a callback for an
 event, these parameters won't even be read.
@@ -285,7 +283,7 @@ values, in our [callbacks guide][callbacks-guide].
 
 #### Partner parameters
 
-You can also add parameters to be transmitted to network partners, for the
+You can also add parameters to be transmitted to network partners for
 integrations that have been activated in your adjust dashboard.
 
 This works similarly to the callback parameters mentioned above, but can
@@ -404,8 +402,7 @@ You can check if the adjust SDK is currently enabled by calling the function
 
 ### 16. Offline mode
 
-You can put the adjust SDK in offline mode to suspend transmission to our servers, 
-while retaining tracked data to be sent later. While in offline mode, all information is saved
+You can put the adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent later. While in offline mode, all information is saved
 in a file, so be careful not to trigger too many events while in offline mode.
 
 You can activate offline mode by calling `setOfflineMode` with the parameter `true`.
