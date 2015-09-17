@@ -1,17 +1,16 @@
 //
-//  ADJAttribution2dx.h
-//  AdjustDemo
+//  AdjustAttribution2dx.h
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg on 16/06/15.
 //
 
-#ifndef __AdjustDemo__ADJAttribution2dx__
-#define __AdjustDemo__ADJAttribution2dx__
+#ifndef ADJUST_ADJUSTATTRIBUTION2DX_H_
+#define ADJUST_ADJUSTATTRIBUTION2DX_H_
 
 #include <iostream>
 
-class ADJAttribution2dx {
+class AdjustAttribution2dx {
 private:
     std::string trackerToken;
     std::string trackerName;
@@ -21,10 +20,10 @@ private:
     std::string creative;
     std::string clickLabel;
 public:
-    ADJAttribution2dx() {}
-    ADJAttribution2dx(std::string trackerToken, std::string trackerName, std::string network,
-                      std::string campaign, std::string adgroup, std::string creative,
-                      std::string clickLabel) {
+    AdjustAttribution2dx() {}
+    AdjustAttribution2dx(std::string trackerToken, std::string trackerName, std::string network,
+                      	 std::string campaign, std::string adgroup, std::string creative,
+						 std::string clickLabel) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;
@@ -43,4 +42,4 @@ public:
     std::string getClickLabel();
 };
 
-#endif /* defined(__AdjustDemo__ADJAttribution2dx__) */
+#endif /* ADJUST_ADJUSTATTRIBUTION2DX_H_ */

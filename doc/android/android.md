@@ -14,7 +14,7 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your project
 
-Take the files from the `Android/Adjust` folder and add them to your Android project.
+Take the files from the `Adjust` folder and add them to your Android project.
 
 ![][add_android_files]
 
@@ -60,7 +60,7 @@ these steps:
      the Android SDK directory.
 
 4. After you've added the Google Play services library as a dependency for your app project,
-open your app's manifest file and add the following tag as a child of the [<application>][application] element:
+open your app's manifest file and add the following tag as a child of the `manifest` element:
 
     ```xml
     <meta-data android:name="com.google.android.gms.version"
@@ -106,7 +106,7 @@ We use this broadcast receiver to retrieve the install referrer, in order to
 improve conversion tracking.
 
 If you are already using a different broadcast receiver for the
-`INSTALL_REFERRER` intent, follow [these instructions][referrer] to add the
+`INSTALL_REFERRER` intent, then follow [these instructions][referrer] to add the
 Adjust receiver.
 
 ### 8. Integrate Adjust into your app
@@ -115,47 +115,21 @@ To start with, we'll set up basic session tracking.
 
 #### Basic Setup
 
-We recommend using a global Android [Application][android_application] class to
-initialize the SDK. If you don't have one in your app already, follow these steps:
+In the Package Explorer, open the source file of your app delegate.  Add the import statement at the top of
+the file, then add the following call to Adjust in the `applicationDidFinishLaunching` of your app delegate:
 
-1. Create a class that extends `Application`.
-    ![][application_class]
+```cpp
+#include "Adjust/Adjust2dx.h"
+// ...
+std::string appToken = "{YourAppToken}";
+std::string environment = AdjustEnvironmentSandbox2dx;
 
-2. Open the `AndroidManifest.xml` file of your app and locate the `<application>` element.
-3. Add the attribute `android:name` and set it to the name of your new application class prefixed by a dot.
+AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
 
-    In our example app we use an `Application` class named `GlobalApplication`, so the manifest file is configured as:
-    ```xml
-     <application
-       android:name="your.package.name.GlobalApplication"
-       ... >
-         ...
-    </application>
-    ```
-
-    ![][manifest_application]
-
-In your `Application` class find or create the `onCreate` method and add the
-following code to initialize the adjust SDK:
-
-```java
-import com.adjust.sdk.Adjust;
-import com.adjust.sdk.AdjustConfig;
-
-public class YourApplicationClass extends Application {
-    @Override
-    public void onCreate() {
-        super.onCreate();
-
-        String appToken = "{YourAppToken}";
-        String environment = AdjustConfig.ENVIRONMENT_SANDBOX;
-        AdjustConfig config = new AdjustConfig(this, appToken, environment);
-        Adjust.onCreate(config);
-    }
-}
+Adjust2dx::start(adjustConfig);
 ```
 
-![][application_config]
+![][add_adjust2dx]
 
 Replace `{YourAppToken}` with your app token. You can find this in your
 [dashboard].
@@ -163,16 +137,15 @@ Replace `{YourAppToken}` with your app token. You can find this in your
 Depending on whether you build your app for testing or for production, you must
 set `environment` with one of these values:
 
-```java
-String environment = AdjustConfig.ENVIRONMENT_SANDBOX;
-String environment = AdjustConfig.ENVIRONMENT_PRODUCTION;
+```cpp
+std::string environment = AdjustEnvironmentSandbox2dx;
+std::string environment = AdjustEnvironmentProduction2dx;
 ```
 
-**Important:** This value should be set to `AdjustConfig.ENVIRONMENT_SANDBOX`
-if and only if you or someone else is testing your app. Make sure to set the
-environment to `AdjustConfig.ENVIRONMENT_PRODUCTION` just before you publish
-the app. Set it back to `AdjustConfig.ENVIRONMENT_SANDBOX` when you start
-developing and testing it again.
+**Important:** This value should be set to `AdjustEnvironmentSandbox2dx` if and only
+if you or someone else is testing your app. Make sure to set the environment to
+`AdjustEnvironmentProduction2dx` just before you publish the app. Set it back to
+`AdjustEnvironmentSandbox2dx` when you start developing and testing it again.
 
 We use this environment to distinguish between real traffic and test traffic
 from test devices. It is very important that you keep this value meaningful at
@@ -181,55 +154,54 @@ all times! This is especially important if you are tracking revenue.
 #### Adjust Logging
 
 You can increase or decrease the amount of logs you see in tests by calling
-`setLogLevel` on your `AdjustConfig` instance with one of the following
+`setLogLevel` on your `AdjustConfig2dx` instance with one of the following
 parameters:
 
-```java
-config.setLogLevel(LogLevel.VERBOSE);   // enable all logging
-config.setLogLevel(LogLevel.DEBUG);     // enable more logging
-config.setLogLevel(LogLevel.INFO);      // the default
-config.setLogLevel(LogLevel.WARN);      // disable info logging
-config.setLogLevel(LogLevel.ERROR);     // disable warnings as well
-config.setLogLevel(LogLevel.ASSERT);    // disable errors as well
+```cpp
+adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose); // enable all logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxDebug);   // enable more logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxInfo);    // the default
+adjustConfig.setLogLevel(AdjustLogLevel2dxWarn);    // disable info logging
+adjustConfig.setLogLevel(AdjustLogLevel2dxError);   // disable warnings as well
+adjustConfig.setLogLevel(AdjustLogLevel2dxAssert);  // disable errors as well
 ```
 
-### 9. Update your activities
+### 9. Session tracking
 
 To provide proper session tracking it is required to call certain Adjust
-methods every time any Activity resumes or pauses. Otherwise the SDK might miss
-a session start or session end. In order to do so you should follow these steps
-for **each** Activity of your app:
+methods every time app goes to background or comes to foreground. Otherwise the SDK 
+might miss a session start or session end. In order to do so you should follow these steps:
 
-1. Open the source file of your Activity.
-2. Add the `import` statement at the top of the file.
-3. In your Activity's `onResume` method call `Adjust.onResume`. Create the
-  method if needed.
-4. In your Activity's `onPause` method call `Adjust.onPause`. Create the method
-  if needed.
+1. Open the app delegate file.
+2. Add call to `onResume` method in `applicationWillEnterForeground` method.
+3. Add call to `onPause` method in `applicationDidEnterBackground` method.
 
-After these steps your activity should look like this:
+After these steps your app delegate should look like this:
 
-```java
-import com.adjust.sdk.Adjust;
+```cpp
+#include "Adjust/Adjust2dx.h"
 // ...
-public class YourActivity extends Cocos2dxActivity {
-    protected void onResume() {
-        super.onResume();
-        Adjust.onResume();
-    }
-    protected void onPause() {
-        super.onPause();
-        Adjust.onPause();
-    }
+
+void AppDelegate::applicationDidEnterBackground() {
     // ...
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	Adjust2dx::onPause();
+#endif
 }
+
+void AppDelegate::applicationWillEnterForeground() {
+	// ...
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	Adjust2dx::onResume();
+#endif
+}
+
+// ...
 ```
 
-![][activity]
-
-Repeat these steps for **every** Activity of your app. Don't forget these steps
-when you create new Activities in the future. Depending on your coding style
-you might want to implement this in a common superclass of all your Activities.
+![][on_resume_on_pause]
 
 ### 10. Build your app
 
@@ -239,12 +211,12 @@ the following Adjust log: `Install tracked`
 
 ![][log_message]
 
-## Additional Features
+## Additional features
 
-Once you have integrated the adjust SDK into your project, you can take
-advantage of the following features.
+Once you integrate the adjust SDK into your project, you can take advantage of
+the following features.
 
-### 11. Add tracking of custom events
+### 11. Set up event tracking
 
 You can use adjust to track events. You would create a new event token in your [dashboard],
 which has an associated event token - looking something like `abc123`. In your
@@ -255,12 +227,15 @@ AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-The event instance can be used to configure the event even more before tracking it.
+When this event is triggered, you should see `Event tracked` in the logs.
 
-#### Add tracking of revenue
+The event instance can be used to configure the event further before tracking
+it.
+
+#### Track revenue
 
 If your users can generate revenue by tapping on advertisements or making
-in-app purchases you can track those revenues with events. Let's say a tap is
+in-app purchases, then you can track those revenues with events. Let's say a tap is
 worth one Euro cent. You could then track the revenue event like this:
 
 ```cpp
@@ -269,78 +244,72 @@ adjustEvent.setRevenue(0.01, "EUR");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-This can of course be combined with callback parameters.
+This can be combined with callback parameters of course.
 
-When you set a currency token, adjust will automatically convert the incoming revenues into 
-a reporting revenue of your choice. Read more about [currency conversion here.][currency-conversion]
+When you set a currency token, adjust will automatically convert the incoming revenues into a reporting 
+revenue of your choice. Read more about [currency conversion here.][currency-conversion]
 
-You can read more about revenue and event tracking in the [event tracking
-guide.][event-tracking]
+You can read more about revenue and event tracking in the [event tracking guide.][event-tracking]
 
 #### Add callback parameters
 
 You can register a callback URL for your events in your [dashboard]. We will
 send a GET request to that URL whenever the event is tracked. You can add
 callback parameters to that event by calling `addCallbackParameter` on the
-event instance before tracking it. We will then append these parameters to your
-callback URL.
+event before tracking it. We will then append these parameters to your callback
+URL.
 
 For example, suppose you have registered the URL
 `http://www.adjust.com/callback` then track an event like this:
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
-
 adjustEvent.addCallbackParameter("key", "value");
 adjustEvent.addCallbackParameter("foo", "bar");
-
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
 In that case we would track the event and send a request to:
 
-```
-http://www.adjust.com/callback?key=value&foo=bar
-```
+    http://www.adjust.com/callback?key=value&foo=bar
 
-It should be mentioned that we support a variety of placeholders like
-`{android_id}` that can be used as parameter values. In the resulting callback
-this placeholder would be replaced with the AndroidID of the current device.
-Also note that we don't store any of your custom parameters, but only append
-them to your callbacks. If you haven't registered a callback for an event,
-these parameters won't even be read.
+It should be mentioned that we support a variety of placeholders like `{android_id}`, which can be used as parameter values. In the resulting callback this placeholder would be replaced with the AndroidID of the current
+device. Also note that we don't store any of your custom parameters, but only
+append them to your callbacks. If you haven't registered a callback for an
+event, these parameters won't even be read.
 
 You can read more about using URL callbacks, including a full list of available
 values, in our [callbacks guide][callbacks-guide].
 
 #### Partner parameters
 
-You can also add parameters to be transmitted to network partners, for the
+You can also add parameters to be transmitted to network partners for
 integrations that have been activated in your adjust dashboard.
 
-This works similarly to the callback parameters mentioned above, but can be
-added by calling the `addPartnerParameter` method on your `AdjustEvent2dx` instance.
+This works similarly to the callback parameters mentioned above, but can
+be added by calling the `addPartnerParameter` method on your `AdjustEvent2dx`
+instance.
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
-
-adjustEvent.addPartnerParameter("key", "value");
 adjustEvent.addPartnerParameter("foo", "bar");
-
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-You can read more about special partners and these integrations in our [guide
-to special partners.][special-partners]
+You can read more about special partners and these integrations in our
+[guide to special partners.][special-partners]
 
 ### 12. Set up deep link reattributions
 
 You can set up the adjust SDK to handle deep links that are used to open your
-app. We will only read certain adjust specific parameters. This is essential if
-you are planning to run retargeting or re-engagement campaigns with deep links.
+app via a custom URL scheme. We will only read certain adjust specific
+parameters. This is essential if you are planning to run retargeting or
+re-engagement campaigns with deep links.
 
-For each activity that accepts deep links, find the `onCreate` method and add
-the following call to adjust:
+For each activity that accepts deep links, find the `onCreate` or `onNewIntent` 
+method and add the following call to adjust:
+
+##### For activities with `standard` launch mode
 
 ```java
 protected void onCreate(Bundle savedInstanceState) {
@@ -349,79 +318,82 @@ protected void onCreate(Bundle savedInstanceState) {
     Intent intent = getIntent();
     Uri data = intent.getData();
     Adjust.appWillOpenUrl(data);
-    //...
+    // ...
 }
 ```
 
+##### For activities with `singleTop` launch mode
+
+```java
+protected void onNewIntent(Intent intent) {
+    super.onNewIntent(intent);
+
+    Uri data = intent.getData();
+    Adjust.appWillOpenUrl(data);
+    // ...
+}
+```
+
+You can read more about activity launch mode on this [page][google-launch-modes].
 You can read more about [deeplinking in our docs][deeplinking].
 
 ### 13. Enable event buffering
 
 If your app makes heavy use of event tracking, you might want to delay some
 HTTP requests in order to send them in one batch every minute. You can enable
-event buffering with your `AdjustConfig` instance:
+event buffering with your `AdjustConfig2dx` instance:
 
-```java
-AdjustConfig config = new AdjustConfig(this, appToken, environment);
-
-config.setEventBufferingEnabled(true);
-
-Adjust.onCreate(config);
+```cpp
+adjustConfig.setEventBufferingEnabled(true);
 ```
 
-### 14. Set listener for attribution changes
+### 14. Implement the attribution callback
 
-You can register a listener to be notified of tracker attribution changes. Due
-to the different sources considered for attribution, this information can not
-by provided synchronously. The simplest way is to create a single anonymous
-listener:
+You can register a delegate callback to be notified of tracker attribution
+changes. Due to the different sources considered for attribution, this
+information can not be provided synchronously. Follow these steps to implement
+the optional delegate protocol in your app delegate:
 
 Please make sure to consider our [applicable attribution data
-policies][attribution-data].
+policies.][attribution-data]
 
-With the `AdjustConfig` instance, before starting the SDK, add the anonymous listener:
+1. Open `AppDelegate.cpp` and add the following delegate callback function to
+   your app delegate implementation.
 
-```java
-AdjustConfig config = new AdjustConfig(this, appToken, environment);
-
-config.setOnAttributionChangedListener(new OnAttributionChangedListener() {
-    @Override
-    public void onAttributionChanged(AdjustAttribution attribution) {
+    ```cpp
+    void attributionCallbackMethod(AdjustAttribution2dx attribution) {
     }
-});
+    ```
 
-Adjust.onCreate(config);
-```
+2. Set the delegate with your `AdjustConfig2dx` instance:
 
-Alternatively, you could implement the `OnAttributionChangedListener`
-interface in your `Application` class and set it as listener:
+    ```cpp
+    adjustConfig.setAttributionCallback(attributionCallbackMethod);
+    ```
+    
+As the delegate callback is configured using the `AdjustConfig2dx` instance, you
+should call `setAttributionCallback` before calling `Adjust2dx::start(adjustConfig)`.
 
-```java
-AdjustConfig config = new AdjustConfig(this, appToken, environment);
-config.setOnAttributionChangedListener(this);
-Adjust.onCreate(config);
-```
+The delegate function will be called when the SDK receives final attribution data.
+Within the delegate function you have access to the `attribution` parameter.
+Here is a quick summary of its properties:
 
-The listener function will be called when the SDK receives the final attribution
-information. Within the listener function you have access to the `attribution`
-parameter. Here is a quick summary of its properties:
-
-- `String trackerToken` the tracker token of the current install.
-- `String trackerName` the tracker name of the current install.
-- `String network` the network grouping level of the current install.
-- `String campaign` the campaign grouping level of the current install.
-- `String adgroup` the ad group grouping level of the current install.
-- `String creative` the creative grouping level of the current install.
-- `String clickLabel` the click label of the current install.
+- `std::string trackerToken` the tracker token of the current install.
+- `std::string trackerName` the tracker name of the current install.
+- `std::string network` the network grouping level of the current install.
+- `std::string campaign` the campaign grouping level of the current install.
+- `std::string adgroup` the ad group grouping level of the current install.
+- `std::string creative` the creative grouping level of the current install.
+- `std::string clickLabel` the click label of the current install.
 
 ### 15. Disable tracking
 
 You can disable the adjust SDK from tracking any activities of the current
-device by calling `setEnabled` with parameter `false`. This setting is
-remembered between sessions.
+device by calling `setEnabled` with parameter `false`. This setting is remembered
+between sessions, but it can only be activated after the first session.
 
-```java
-Adjust.setEnabled(false);
+```objc
+Adjust2dx::setEnabled(false);
 ```
 
 You can check if the adjust SDK is currently enabled by calling the function
@@ -430,14 +402,13 @@ You can check if the adjust SDK is currently enabled by calling the function
 
 ### 16. Offline mode
 
-You can put the adjust SDK in offline mode to suspend transmission to our servers, 
-while retaining tracked data to be sent later. While in offline mode, all information is saved
+You can put the adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent later. While in offline mode, all information is saved
 in a file, so be careful not to trigger too many events while in offline mode.
 
 You can activate offline mode by calling `setOfflineMode` with the parameter `true`.
 
-```java
-Adjust.setOfflineMode(true);
+```objc
+Adjust2dx::setOfflineMode(true);
 ```
 
 Conversely, you can deactivate offline mode by calling `setOfflineMode` with `false`.
@@ -450,19 +421,18 @@ even if the app was terminated in offline mode.
 
 [dashboard]:     http://adjust.com
 [releases]:      https://github.com/adjust/cocos2dx_sdk/releases
-[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/add_android_files.png
-[add_android_jar]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/add_android_jar.png
-[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/add_to_android_mk.png
-[manifest_permissions]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/manifest_permissions.png
-[receiver]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/receiver.png
-[application_class]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/application_class.png
-[manifest_application]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/manifest_application.png
-[application_config]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/application_config.png
-[activity]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/activity.png
-[log_message]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/log_message.png
+[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_android_files.png
+[add_android_jar]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_android_jar.png
+[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_to_android_mk.png
+[manifest_permissions]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/manifest_permissions.png
+[receiver]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/receiver.png
+[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_adjust2dx.png
+[on_resume_on_pause]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/on_resume_on_pause.png
+[log_message]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/log_message.png
 
 [referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
+[eclipse_library]:	http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject
 [google_play_services]: http://developer.android.com/google/play-services/setup.html
 [android_application]:  http://developer.android.com/reference/android/app/Application.html
 [application_name]:     http://developer.android.com/guide/topics/manifest/application-element.html#nm
@@ -474,7 +444,8 @@ even if the app was terminated in offline mode.
 [maven]:                http://maven.org
 [example]:              https://github.com/adjust/android_sdk/tree/master/Adjust/example
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
-[deeplinking]: https://docs.adjust.com/en/tracker-generation/#deeplinking
+[deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
+[google-launch-modes]:  http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 
 ## License
 

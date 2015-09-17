@@ -1,6 +1,10 @@
 MVNDIR = ./sdk/Adjust
 JARINDIR = ./sdk/Adjust/target
 JAROUTDIR = ../../Android
+PROXYDIR = ./proxy
+JAR = $(JAVA_6_PATH)/bin/jar
+JAVAC = $(JAVA_6_PATH)/bin/javac
+VERSION = $(shell cat ./sdk/VERSION)
 
 default: copy
 
@@ -11,8 +15,9 @@ clean:
 	cd $(MVNDIR); mvn clean
 
 copy: build
-	rm $(JAROUTDIR)/adjust-android*; \
-	cp $(JARINDIR)/adjust-android-*.*.*.jar $(JAROUTDIR); \
-	rm $(JAROUTDIR)/*-javadoc.jar; \
-	rm $(JAROUTDIR)/*-sources.jar; \
-	mv $(JAROUTDIR)/adjust-android-*.*.*.jar $(JAROUTDIR)/adjust-android.jar
+	cp $(JARINDIR)/adjust-android-$(VERSION).jar $(PROXYDIR); \
+	mv $(PROXYDIR)/adjust-android-$(VERSION).jar $(PROXYDIR)/adjust-android.jar; cd $(PROXYDIR); \
+	$(JAVAC) -cp adjust-android.jar com/adjust/sdk/*.java; \
+	$(JAR) uf adjust-android.jar com/adjust/sdk/*.class; cd ..; \
+	mv $(PROXYDIR)/adjust-android.jar $(JAROUTDIR)/adjust-android.jar; \
+	rm $(PROXYDIR)/com/adjust/sdk/*.class;
