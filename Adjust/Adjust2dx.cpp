@@ -108,6 +108,8 @@ bool Adjust2dx::isEnabled() {
 	}
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	return ADJAdjust2dx::isEnabled();
+#elif
+    return false;
 #endif
 }
 

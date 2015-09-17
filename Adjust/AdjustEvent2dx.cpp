@@ -131,6 +131,8 @@ bool AdjustEvent2dx::isValid() {
     } else {
         return false;
     }
+#elif
+    return false;
 #endif
 }
 
