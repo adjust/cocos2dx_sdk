@@ -9,6 +9,7 @@
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustProxy2dx.h"
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #else
 #include "cocos2d.h"
 #include <windows.h>

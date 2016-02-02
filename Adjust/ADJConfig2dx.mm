@@ -8,7 +8,7 @@
 
 #include "ADJConfig2dx.h"
 
-#include <Adjust/Adjust.h>
+#include <AdjustSdk/Adjust.h>
 
 @interface AttributionCallback : NSObject<AdjustDelegate>
 
@@ -86,10 +86,6 @@ void ADJConfig2dx::setDefaultTracker(std::string defaultTracker) {
 
 void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     ((ADJConfig *)config).eventBufferingEnabled = isEnabled;
-}
-
-void ADJConfig2dx::setMacMd5TrackingEnabled(bool isEnabled) {
-    ((ADJConfig *)config).macMd5TrackingEnabled = isEnabled;
 }
 
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {

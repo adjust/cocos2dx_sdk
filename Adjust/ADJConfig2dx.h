@@ -35,7 +35,6 @@ public:
     void setLogLevel(ADJLogLevel2dx logLevel);
     void setDefaultTracker(std::string defaultTracker);
     void setEventBufferingEnabled(bool isEnabled);
-    void setMacMd5TrackingEnabled(bool isEnabled);
 
     void setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution));
 

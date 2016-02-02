@@ -7,7 +7,7 @@
 //
 
 #include "ADJAdjust2dx.h"
-#include <Adjust/Adjust.h>
+#include <AdjustSdk/Adjust.h>
 
 const std::string ADJEnvironmentSandbox2dx = std::string([ADJEnvironmentSandbox UTF8String]);
 const std::string ADJEnvironmentProduction2dx = std::string([ADJEnvironmentProduction UTF8String]);
