@@ -18,22 +18,22 @@ extern const std::string AdjustEnvironmentProduction2dx;
 
 class Adjust2dx {
 public:
-	static void start(AdjustConfig2dx adjustConfig);
-	static void trackEvent(AdjustEvent2dx event);
-	static void setEnabled(bool isEnabled);
-	static bool isEnabled();
-	static void setOfflineMode(bool isOffline);
+    static void start(AdjustConfig2dx adjustConfig);
+    static void trackEvent(AdjustEvent2dx event);
+    static void setEnabled(bool isEnabled);
+    static bool isEnabled();
+    static void setOfflineMode(bool isOffline);
     static void appWillOpenUrl(void* url);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     static void onResume();
     static void onPause();
-	static void setReferrer(std::string referrer);
+    static void setReferrer(std::string referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void setDeviceToken(std::string deviceToken);
 #else
-	static void applicationPaused();
-	static void applicationResumed();
+    static void applicationPaused();
+    static void applicationResumed();
 #endif
 };
 

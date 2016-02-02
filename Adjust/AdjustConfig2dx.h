@@ -21,22 +21,22 @@ using namespace AdjustUAP10WinRT;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
-	AdjustLogLevel2dxDebug   = 2,
-	AdjustLogLevel2dxInfo    = 3,
-	AdjustLogLevel2dxWarn    = 4,
-	AdjustLogLevel2dxError   = 5,
-	AdjustLogLevel2dxAssert  = 6 };
+    AdjustLogLevel2dxDebug   = 2,
+    AdjustLogLevel2dxInfo    = 3,
+    AdjustLogLevel2dxWarn    = 4,
+    AdjustLogLevel2dxError   = 5,
+    AdjustLogLevel2dxAssert  = 6 };
 
 class AdjustConfig2dx {
 private:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject config;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	bool isConfigSet;
+    bool isConfigSet;
     ADJConfig2dx config;
 #else
-	bool isConfigSet;
-	WRTAdjustConfig^ config;
+    bool isConfigSet;
+    WRTAdjustConfig^ config;
 #endif
     void initConfig(std::string appToken, std::string environment);
 
@@ -49,12 +49,12 @@ public:
         isConfigSet = false;
         initConfig(appToken, environment);
 #else
-		isConfigSet = false;
-		initConfig(appToken, environment);
+        isConfigSet = false;
+        initConfig(appToken, environment);
 #endif
     }
 
-	void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
+    void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
     void setEventBufferingEnabled(bool isEnabled);
     void setDefaultTracker(std::string defaultTracker);
     void setAttributionCallback(void (*attributionCallback)(AdjustAttribution2dx attribution));
@@ -67,11 +67,11 @@ public:
     ADJConfig2dx getConfig();
 };
 #else
-	typedef void(*AttributionCallback)(AdjustAttribution2dx attribution);
+    typedef void(*AttributionCallback)(AdjustAttribution2dx attribution);
 
-	WRTAdjustConfig^ getConfig();
-	static AttributionCallback attributionCallbackSaved;
-	static void triggerSavedAttributionCallback(AdjustAttribution2dx attribution);
+    WRTAdjustConfig^ getConfig();
+    static AttributionCallback attributionCallbackSaved;
+    static void triggerSavedAttributionCallback(AdjustAttribution2dx attribution);
 };
 #endif
 
