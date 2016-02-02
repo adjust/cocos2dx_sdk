@@ -31,6 +31,9 @@ public:
 	static void setReferrer(std::string referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void setDeviceToken(std::string deviceToken);
+#else
+	static void applicationPaused();
+	static void applicationResumed();
 #endif
 };
 

@@ -32,6 +32,77 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
 	onResume();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 	ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
+#else
+	WRTAdjust::ApplicationLaunching(adjustConfig.getConfig());
+#endif
+}
+
+void Adjust2dx::trackEvent(AdjustEvent2dx event) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	cocos2d::JniMethodInfo miTrackEvent;
+
+	if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com.adjust.sdk.Adjust", "trackEvent",
+			"(Lcom/adjust/sdk/AdjustEvent;)V")) {
+		return;
+	}
+
+	miTrackEvent.env->CallStaticVoidMethod(miTrackEvent.classID, miTrackEvent.methodID, event.getEvent());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	ADJAdjust2dx::trackEvent(event.getEvent());
+#else
+	WRTAdjust::TrackEvent(event.getEvent());
+#endif
+}
+
+void Adjust2dx::setEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	cocos2d::JniMethodInfo miSetEnabled;
+
+	if (cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com.adjust.sdk.Adjust", "setEnabled", "(Z)V")) {
+		miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
+	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	ADJAdjust2dx::setEnabled(isEnabled);
+#else
+	WRTAdjust::SetEnabled(isEnabled);
+#endif
+}
+
+bool Adjust2dx::isEnabled() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	cocos2d::JniMethodInfo miIsEnabled;
+
+	if (cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com.adjust.sdk.Adjust", "isEnabled", "()Z")) {
+		jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
+
+		return jIsEnabled;
+	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	return ADJAdjust2dx::isEnabled();
+#else
+    return WRTAdjust::IsEnabled();
+#endif
+}
+
+void Adjust2dx::setOfflineMode(bool isOffline) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+	cocos2d::JniMethodInfo miIsOffline;
+
+	if (cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com.adjust.sdk.Adjust", "setOfflineMode", "(Z)V")) {
+		miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
+	}
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+	ADJAdjust2dx::setOfflineMode(isOffline);
+#else
+	WRTAdjust::SetOfflineMode(isOffline);
+#endif
+}
+
+void Adjust2dx::appWillOpenUrl(void* url) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::appWillOpenUrl(url);
 #endif
 }
 
@@ -60,7 +131,7 @@ void Adjust2dx::setReferrer(std::string referrer) {
 	cocos2d::JniMethodInfo miSetReferrer;
 
 	if (cocos2d::JniHelper::getStaticMethodInfo(miSetReferrer, "com.adjust.sdk.Adjust", "setReferrer",
-			"(Ljava/lang/String;)V")) {
+		"(Ljava/lang/String;)V")) {
 		jstring jReferrer = miSetReferrer.env->NewStringUTF(referrer.c_str());
 
 		miSetReferrer.env->CallStaticVoidMethod(miSetReferrer.classID, miSetReferrer.methodID, jReferrer);
@@ -68,67 +139,16 @@ void Adjust2dx::setReferrer(std::string referrer) {
 		miSetReferrer.env->DeleteLocalRef(jReferrer);
 	}
 }
-#endif
+#elif  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void Adjust2dx::setDeviceToken(std::string deviceToken) {
 
-void Adjust2dx::trackEvent(AdjustEvent2dx event) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	cocos2d::JniMethodInfo miTrackEvent;
-
-	if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com.adjust.sdk.Adjust", "trackEvent",
-			"(Lcom/adjust/sdk/AdjustEvent;)V")) {
-		return;
-	}
-
-	miTrackEvent.env->CallStaticVoidMethod(miTrackEvent.classID, miTrackEvent.methodID, event.getEvent());
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	ADJAdjust2dx::trackEvent(event.getEvent());
-#endif
 }
-
-void Adjust2dx::setEnabled(bool isEnabled) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	cocos2d::JniMethodInfo miSetEnabled;
-
-	if (cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com.adjust.sdk.Adjust", "setEnabled", "(Z)V")) {
-		miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
-	}
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	ADJAdjust2dx::setEnabled(isEnabled);
-#endif
-}
-
-bool Adjust2dx::isEnabled() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	cocos2d::JniMethodInfo miIsEnabled;
-
-	if (cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com.adjust.sdk.Adjust", "isEnabled", "()Z")) {
-		jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
-
-		return jIsEnabled;
-	}
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	return ADJAdjust2dx::isEnabled();
 #else
-    return false;
-#endif
+void Adjust2dx::applicationPaused() {
+	WRTAdjust::ApplicationDeactivated();
 }
 
-void Adjust2dx::setOfflineMode(bool isOffline) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	cocos2d::JniMethodInfo miIsOffline;
-
-	if (cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com.adjust.sdk.Adjust", "setOfflineMode", "(Z)V")) {
-		miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
-	}
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-	ADJAdjust2dx::setOfflineMode(isOffline);
-#endif
+void Adjust2dx::applicationResumed() {
+	WRTAdjust::ApplicationActivated();
 }
-
-void Adjust2dx::appWillOpenUrl(void* url) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::appWillOpenUrl(url);
 #endif
-}
