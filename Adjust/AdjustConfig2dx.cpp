@@ -9,9 +9,93 @@
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustProxy2dx.h"
+#else
+#include "cocos2d.h"
+#include <windows.h>
+#include <fstream>
+USING_NS_CC;
 #endif
 
 #include "AdjustConfig2dx.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#else
+AdjustConfig2dx::AttributionCallback AdjustConfig2dx::attributionCallbackSaved = NULL;
+
+static unsigned char* readBuffer;
+
+static void attributionCallbackGlobal(
+	const char* trackerToken, 
+	const char* trackerName, 
+	const char* network, 
+	const char* campaign, 
+	const char* adgroup, 
+	const char* creative, 
+	const char* clickLabel) {
+	std::string trackerTokenAsString;
+	std::string trackerNameAsString;
+	std::string networkAsString;
+	std::string campaignAsString;
+	std::string adgroupAsString;
+	std::string creativeAsString;
+	std::string clickLabelAsString;
+
+	if (trackerToken != NULL) {
+		trackerTokenAsString = std::string(trackerToken);
+	}
+
+	if (trackerName != NULL) {
+		trackerNameAsString = std::string(trackerName);
+	}
+
+	if (network != NULL) {
+		networkAsString = std::string(network);
+	}
+
+	if (campaign != NULL) {
+		campaignAsString = std::string(campaign);
+	}
+
+	if (adgroup != NULL) {
+		adgroupAsString = std::string(adgroup);
+	}
+
+	if (creative != NULL) {
+		creativeAsString = std::string(creative);
+	}
+
+	if (clickLabel != NULL) {
+		clickLabelAsString = std::string(clickLabel);
+	}
+
+	AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerTokenAsString, trackerNameAsString, networkAsString, campaignAsString, adgroupAsString, creativeAsString, clickLabelAsString);
+	AdjustConfig2dx::triggerSavedAttributionCallback(attribution2dx);
+}
+
+static void fileWriteCallback(const char* fileName, const char* newContent) {
+	std::string path = CCFileUtils::sharedFileUtils()->getWritablePath().append(std::string(fileName));
+	FILE *fp = fopen(path.c_str(), "w");
+
+	if (!fp) {
+		return;
+	}
+	else {
+		fputs(newContent, fp);
+		fclose(fp);
+	}
+}
+
+static int fileReadCallback(const char* fileName, int* size) {
+	ssize_t fileSize = 0;
+	std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath().append(fileName);
+	CCLog(filePath.c_str());
+
+	readBuffer = CCFileUtils::sharedFileUtils()->getFileData(filePath.c_str(), "r", &fileSize);
+	*size = fileSize;
+
+	return (int)readBuffer;
+}
+#endif
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) {
 	std::string sdkPrefix = "cocos2d-x4.1.0";
@@ -56,10 +140,20 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     config = ADJConfig2dx(appToken, environment, sdkPrefix);
     isConfigSet = true;
+#else
+	std::wstring wstrAppToken = std::wstring(appToken.begin(), appToken.end());
+	std::wstring wstrEnvironment = std::wstring(environment.begin(), environment.end());
+	const wchar_t* wcharAppToken = wstrAppToken.c_str();
+	const wchar_t* wcharEnvironment = wstrEnvironment.c_str();
+	config = ref new WRTAdjustConfig(ref new Platform::String(wcharAppToken), ref new Platform::String(wcharEnvironment));
+	config->SetFileWritingCallback((int64)&fileWriteCallback);
+	config->SetFileReadingCallback((int64)&fileReadCallback);
+
+	isConfigSet = true;
 #endif
 }
 
-void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel) {
+void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 	cocos2d::JniMethodInfo miSetLogLevel;
 
@@ -107,6 +201,10 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel) {
     if (isConfigSet) {
         config.setLogLevel((ADJLogLevel2dx)logLevel);
     }
+#else
+	if (isConfigSet) {
+		config->SetLogLevel(logLevel, (int64)logCallback);
+	}
 #endif
 }
 
@@ -124,6 +222,10 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     if (isConfigSet) {
         config.setEventBufferingEnabled(isEnabled);
     }
+#else
+	if (isConfigSet) {
+		config->SetEventBufferingEnabled(isEnabled);
+	}
 #endif
 }
 
@@ -145,12 +247,18 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
     if (isConfigSet) {
         config.setDefaultTracker(defaultTracker);
     }
+#else
+	if (isConfigSet) {
+		std::wstring wstrDefaultTracker = std::wstring(defaultTracker.begin(), defaultTracker.end());
+		const wchar_t* wcharDefaultTracker = wstrDefaultTracker.c_str();
+		config->SetDefaultTracker(ref new Platform::String(wcharDefaultTracker));
+	}
 #endif
 }
 
-void AdjustConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
+void AdjustConfig2dx::setAttributionCallback(void (*attributionCallback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	setAttributionCallbackMethod(callbackMethod);
+	setAttributionCallbackMethod(attributionCallback);
 
 	cocos2d::JniMethodInfo miSetCallback;
 
@@ -172,8 +280,13 @@ void AdjustConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttrib
 	}
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setAttributionCallback(callbackMethod);
+        config.setAttributionCallback(attributionCallback);
     }
+#else
+	if (isConfigSet) {
+		attributionCallbackSaved = attributionCallback;
+		config->SetAttributionCallback((int64)&attributionCallbackGlobal);
+	}
 #endif
 }
 
@@ -200,10 +313,12 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
 ADJConfig2dx AdjustConfig2dx::getConfig() {
     return config;
 }
+#else
+WRTAdjustConfig^ AdjustConfig2dx::getConfig() {
+	return config;
+}
 
-void AdjustConfig2dx::setMacMd5TrackingEnabled(bool isEnabled) {
-    if (isConfigSet) {
-        config.setMacMd5TrackingEnabled(isEnabled);
-    }
+void AdjustConfig2dx::triggerSavedAttributionCallback(AdjustAttribution2dx attribution) {
+	attributionCallbackSaved(attribution);
 }
 #endif
