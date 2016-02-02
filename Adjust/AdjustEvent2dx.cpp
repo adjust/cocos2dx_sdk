@@ -28,6 +28,11 @@ void AdjustEvent2dx::initEvent(std::string eventToken) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     event = ADJEvent2dx(eventToken);
     isEventSet = true;
+#else
+	std::wstring wstrEventToken = std::wstring(eventToken.begin(), eventToken.end());
+	const wchar_t* wcharEventToken = wstrEventToken.c_str();
+	event = ref new WRTAdjustEvent(ref new Platform::String(wcharEventToken));
+	isEventSet = true;
 #endif
 }
 
@@ -51,6 +56,15 @@ void AdjustEvent2dx::addCallbackParameter(std::string key, std::string value) {
     if (isEventSet) {
         event.addCallbackParameter(key, value);
     }
+#else
+	if (isEventSet) {
+		std::wstring wstrKey = std::wstring(key.begin(), key.end());
+		std::wstring wstrValue = std::wstring(value.begin(), value.end());
+		const wchar_t* wcharKey = wstrKey.c_str();
+		const wchar_t* wcharValue = wstrValue.c_str();
+
+		event->AddCallbackParameter(ref new Platform::String(wcharKey), ref new Platform::String(wcharValue));
+	}
 #endif
 }
 
@@ -74,6 +88,15 @@ void AdjustEvent2dx::addPartnerParameter(std::string key, std::string value) {
     if (isEventSet) {
         event.addPartnerParameter(key, value);
     }
+#else
+	if (isEventSet) {
+		std::wstring wstrKey = std::wstring(key.begin(), key.end());
+		std::wstring wstrValue = std::wstring(value.begin(), value.end());
+		const wchar_t* wcharKey = wstrKey.c_str();
+		const wchar_t* wcharValue = wstrValue.c_str();
+
+		event->AddPartnerParameter(ref new Platform::String(wcharKey), ref new Platform::String(wcharValue));
+	}
 #endif
 }
 
@@ -95,6 +118,13 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
     if (isEventSet) {
         event.setRevenue(amount, currency);
     }
+#else
+	if (isEventSet) {
+		std::wstring wstrCurrency = std::wstring(currency.begin(), currency.end());
+		const wchar_t* wcharCurrency = wstrCurrency.c_str();
+
+		event->SetRevenue(amount, ref new Platform::String(wcharCurrency));
+	}
 #endif
 }
 
@@ -132,7 +162,12 @@ bool AdjustEvent2dx::isValid() {
         return false;
     }
 #else
-    return false;
+	if (isEventSet) {
+		return event->IsValid();
+	}
+	else {
+		return false;
+	}
 #endif
 }
 
@@ -143,5 +178,9 @@ jobject AdjustEvent2dx::getEvent() {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 ADJEvent2dx AdjustEvent2dx::getEvent() {
     return event;
+}
+#else
+WRTAdjustEvent^ AdjustEvent2dx::getEvent() {
+	return event;
 }
 #endif
