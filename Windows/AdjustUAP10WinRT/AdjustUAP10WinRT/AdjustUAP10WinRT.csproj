@@ -115,32 +115,37 @@
     <Compile Include="WRTAdjustAttribution.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AdjustUAP10, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="AdjustUAP10, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ext\Windows\sdk\WindowsUAP10\bin\Debug\AdjustUAP10.dll</HintPath>
+      <HintPath>Libs\AdjustUAP10.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Threading.Tasks">
-      <HintPath>..\..\..\..\..\..\..\GitHub\cocos2dx_sdk\ext\Windows\sdk\WindowsPcl\bin\Release\Microsoft.Threading.Tasks.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.Threading.Tasks.Extensions">
-      <HintPath>..\..\..\..\..\..\..\GitHub\cocos2dx_sdk\ext\Windows\sdk\WindowsPcl\bin\Release\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
-    </Reference>
-    <Reference Include="Newtonsoft.Json">
-      <HintPath>..\..\..\..\..\..\..\GitHub\cocos2dx_sdk\ext\Windows\sdk\WindowsPcl\bin\Release\Newtonsoft.Json.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage">
-      <HintPath>..\..\..\ext\Windows\sdk\WindowsPcl\bin\Release\PCLStorage.dll</HintPath>
-    </Reference>
-    <Reference Include="PCLStorage.Abstractions">
-      <HintPath>..\..\..\ext\Windows\sdk\WindowsPcl\bin\Release\PCLStorage.Abstractions.dll</HintPath>
-    </Reference>
-    <Reference Include="WindowsPcl, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Threading.Tasks, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ext\Windows\sdk\WindowsPcl\bin\Debug\WindowsPcl.dll</HintPath>
+      <HintPath>Libs\Microsoft.Threading.Tasks.dll</HintPath>
     </Reference>
-    <Reference Include="WindowsUap, Version=4.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Microsoft.Threading.Tasks.Extensions, Version=1.0.12.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\ext\Windows\sdk\WindowsUap\bin\Debug\WindowsUap.dll</HintPath>
+      <HintPath>Libs\Microsoft.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=7.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\PCLStorage.dll</HintPath>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\PCLStorage.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsPcl, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\WindowsPcl.dll</HintPath>
+    </Reference>
+    <Reference Include="WindowsUap, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\WindowsUap.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
