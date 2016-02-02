@@ -7,27 +7,24 @@ namespace AdjustUAP10WinRT
     {
         public static void ApplicationLaunching(WRTAdjustConfig adjustConfig)
         {
-            System.Diagnostics.Debug.WriteLine("Initialisation start!");
             if (adjustConfig.GetLogDelegate() != null)
             {
                 Adjust.SetupLogging((Action<String>)adjustConfig.GetLogDelegate(), (LogLevel)adjustConfig.GetLogLevel());
             }
-            System.Diagnostics.Debug.WriteLine("Logging setup end!");
 
-            System.Diagnostics.Debug.WriteLine("Initialisation start!");
             adjustConfig.BuildNativeConfig();
 
-            if (adjustConfig.GetNativeConfig() == null)
-            {
-                System.Diagnostics.Debug.WriteLine("Native config is null!");
-            }
-            else
-            {
-                System.Diagnostics.Debug.WriteLine("Native config is NOT null!");
-            }
-
             Adjust.ApplicationLaunching((AdjustConfig)adjustConfig.GetNativeConfig());
-            System.Diagnostics.Debug.WriteLine("Initialisation end!");
+        }
+
+        public static void ApplicationActivated()
+        {
+            Adjust.ApplicationActivated();
+        }
+
+        public static void ApplicationDeactivated()
+        {
+            Adjust.ApplicationDeactivated();
         }
 
         public static void TrackEvent(WRTAdjustEvent adjustEvent)

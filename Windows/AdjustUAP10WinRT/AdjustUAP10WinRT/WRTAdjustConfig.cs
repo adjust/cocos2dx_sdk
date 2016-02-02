@@ -2,6 +2,7 @@
 
 using AdjustSdk;
 using System.Runtime.InteropServices;
+using System.IO;
 
 namespace AdjustUAP10WinRT
 {
@@ -16,6 +17,11 @@ namespace AdjustUAP10WinRT
             [MarshalAs(UnmanagedType.LPStr)] string adgroup, 
             [MarshalAs(UnmanagedType.LPStr)] string creative, 
             [MarshalAs(UnmanagedType.LPStr)] string clickLabel);
+        private delegate void FileWriteCallback(
+            [MarshalAs(UnmanagedType.LPStr)] string fileName,
+            [MarshalAs(UnmanagedType.LPArray)] byte[] newContent);
+        private delegate Int32 FileReadCallback(
+            [MarshalAs(UnmanagedType.LPStr)] string fileName, ref int size);
 
         private string appToken;
         private string sdkPrefix;
@@ -29,14 +35,17 @@ namespace AdjustUAP10WinRT
         private AdjustConfig nativeConfig;
 
         private LogCallback nativeLogCallback;
+        private FileReadCallback nativeFileReadCallback;
+        private FileWriteCallback nativeFileWriteCallback;
         private AttributionCallback nativeAttributionCallback;
 
         private Action<String> rtLogCallback;
+        private Func<String, byte[]> rtFileReadCallback;
+        private Action<String, byte[]> rtFileWriteCallback;
         private Action<AdjustAttribution> rtAttributionCallback;
 
         public WRTAdjustConfig(string appToken, string environment)
         {
-            System.Diagnostics.Debug.WriteLine("Constructor start!");
             this.appToken = appToken;
             this.environment = environment;
             this.sdkPrefix = "cocos2d-x4.2.0";
@@ -45,9 +54,10 @@ namespace AdjustUAP10WinRT
 
             this.rtLogCallback = null;
             this.defaultTracker = null;
+            this.rtFileReadCallback = null;
+            this.rtFileWriteCallback = null;
             this.rtAttributionCallback = null;
             this.isEventBufferingEnabled = null;
-            System.Diagnostics.Debug.WriteLine("Constructor end!");
         }
 
         public void BuildNativeConfig()
@@ -69,6 +79,16 @@ namespace AdjustUAP10WinRT
             {
                 this.nativeConfig.AttributionChanged = this.rtAttributionCallback;
             }
+
+            if (this.rtFileReadCallback != null)
+            {
+                this.nativeConfig.FileReader = this.rtFileReadCallback;
+            }
+
+            if (this.rtFileWriteCallback != null)
+            {
+                this.nativeConfig.FileWriter = this.rtFileWriteCallback;
+            }
         }
 
         public bool IsValid()
@@ -83,13 +103,11 @@ namespace AdjustUAP10WinRT
 
         public void SetLogLevel(int logLevel, Int64 logDelegate)
         {
-            System.Diagnostics.Debug.WriteLine("Log level and delegate start!");
             this.logLevel = (LogLevel)logLevel;
 
             IntPtr ptrLogDelegate = new IntPtr(logDelegate);
             this.nativeLogCallback = (LogCallback)Marshal.GetDelegateForFunctionPointer<LogCallback>(ptrLogDelegate);
             this.rtLogCallback = RTLogCallback;
-            System.Diagnostics.Debug.WriteLine("Log level and delegate end!");
         }
 
         public void SetDefaultTracker(string defaultTracker)
@@ -97,13 +115,25 @@ namespace AdjustUAP10WinRT
             nativeConfig.DefaultTracker = defaultTracker;
         }
 
+        public void SetFileWritingCallback(Int64 fileWriteCallback)
+        {
+            IntPtr ptrFileWriteDelegate = new IntPtr(fileWriteCallback);
+            this.nativeFileWriteCallback = (FileWriteCallback)Marshal.GetDelegateForFunctionPointer<FileWriteCallback>(ptrFileWriteDelegate);
+            this.rtFileWriteCallback = RTFileWriteCallback;
+        }
+
+        public void SetFileReadingCallback(Int64 fileReadCallback)
+        {
+            IntPtr ptrFileReadDelegate = new IntPtr(fileReadCallback);
+            this.nativeFileReadCallback = (FileReadCallback)Marshal.GetDelegateForFunctionPointer<FileReadCallback>(ptrFileReadDelegate);
+            this.rtFileReadCallback = RTFileReadCallback;
+        }
+
         public void SetAttributionCallback(Int64 attributionDelegate)
         {
-            System.Diagnostics.Debug.WriteLine("Attribution delegate start!");
             IntPtr ptrAttributionDelegate = new IntPtr(attributionDelegate);
             this.nativeAttributionCallback = (AttributionCallback)Marshal.GetDelegateForFunctionPointer<AttributionCallback>(ptrAttributionDelegate);
             this.rtAttributionCallback = RTAttributionCallback;
-            System.Diagnostics.Debug.WriteLine("Attribution delegate end!");
         }
 
         public int GetLogLevel()
@@ -124,6 +154,21 @@ namespace AdjustUAP10WinRT
         private void RTLogCallback(String logLine)
         {
             nativeLogCallback(logLine);
+        }
+
+        private byte[] RTFileReadCallback(String fileName)
+        {
+            int size = 0;
+            IntPtr ptrReadContent = new IntPtr(nativeFileReadCallback(fileName, ref size));
+            byte[] managedArray = new byte[size];
+            Marshal.Copy(ptrReadContent, managedArray, 0, size);
+
+            return managedArray;
+        }
+
+        private void RTFileWriteCallback(String fileName, byte[] newContent)
+        {
+            nativeFileWriteCallback(fileName, newContent);
         }
 
         private void RTAttributionCallback(AdjustAttribution attribution)
