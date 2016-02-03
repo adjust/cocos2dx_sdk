@@ -1,4 +1,4 @@
-## Migrate your adjust SDK for Cocos2d-x to 4.1.0 from 4.0.x
+## Migrate your adjust SDK for Cocos2d-x to 4.2.0 from 4.0.x
 
 ### SDK initialization
 
