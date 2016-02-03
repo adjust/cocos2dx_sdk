@@ -104,9 +104,9 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
 
-    if (cocos2d::JniHelper::getMethodInfo(miInit, "com.adjust.sdk.AdjustConfig", "<init>",
+    if (cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustConfig", "<init>",
             "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V")) {
-        jclass clsAdjustConfig = miInit.env->FindClass("com.adjust.sdk.AdjustConfig");
+        jclass clsAdjustConfig = miInit.env->FindClass("com/adjust/sdk/AdjustConfig");
         jmethodID midInit = miInit.env->GetMethodID(clsAdjustConfig, "<init>",
                 "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
 
@@ -128,7 +128,7 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) 
             // Set SDK prefix.
             cocos2d::JniMethodInfo miSetSdkPrefix;
 
-            if (cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com.adjust.sdk.AdjustConfig", "setSdkPrefix",
+            if (cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com/adjust/sdk/AdjustConfig", "setSdkPrefix",
                     "(Ljava/lang/String;)V")) {
                 jstring jSdkPrefix = miSetSdkPrefix.env->NewStringUTF(sdkPrefix.c_str());
 
@@ -159,7 +159,7 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
     cocos2d::JniMethodInfo miSetLogLevel;
 
     if (NULL != config) {
-        if (cocos2d::JniHelper::getMethodInfo(miSetLogLevel, "com.adjust.sdk.AdjustConfig", "setLogLevel",
+        if (cocos2d::JniHelper::getMethodInfo(miSetLogLevel, "com/adjust/sdk/AdjustConfig", "setLogLevel",
                 "(Lcom/adjust/sdk/LogLevel;)V")) {
             jclass clsLogLevel = miSetLogLevel.env->FindClass("com/adjust/sdk/LogLevel");
 
@@ -214,7 +214,7 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     cocos2d::JniMethodInfo miSetEventBufferingEnabled;
 
     if (NULL != config) {
-        if (cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com.adjust.sdk.AdjustConfig",
+        if (cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig",
                 "setEventBufferingEnabled", "(Z)V")) {
             miSetEventBufferingEnabled.env->CallVoidMethod(config, miSetEventBufferingEnabled.methodID, isEnabled);
         }
@@ -235,7 +235,7 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
     cocos2d::JniMethodInfo miSetDefaultTracker;
 
     if (NULL != config) {
-        if (cocos2d::JniHelper::getMethodInfo(miSetDefaultTracker, "com.adjust.sdk.AdjustConfig", "setDefaultTracker",
+        if (cocos2d::JniHelper::getMethodInfo(miSetDefaultTracker, "com/adjust/sdk/AdjustConfig", "setDefaultTracker",
                 "(Ljava/lang/String;)V")) {
             jstring jDefaultTracker = miSetDefaultTracker.env->NewStringUTF(defaultTracker.c_str());
 
@@ -264,11 +264,11 @@ void AdjustConfig2dx::setAttributionCallback(void (*attributionCallback)(AdjustA
     cocos2d::JniMethodInfo miSetCallback;
 
     if (NULL != config) {
-        if (cocos2d::JniHelper::getMethodInfo(miSetCallback, "com.adjust.sdk.AdjustConfig", "setOnAttributionChangedListener",
+        if (cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnAttributionChangedListener",
                 "(Lcom/adjust/sdk/OnAttributionChangedListener;)V")) {
             cocos2d::JniMethodInfo miInit;
 
-            if (cocos2d::JniHelper::getMethodInfo(miInit, "com.adjust.sdk.Adjust2dxAttributionCallback", "<init>", "()V")) {
+            if (cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxAttributionCallback", "<init>", "()V")) {
                 jclass clsAdjust2dxAttributionCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxAttributionCallback");
                 jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxAttributionCallback, "<init>", "()V");
                 jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxAttributionCallback, midInit);
@@ -300,7 +300,7 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
     cocos2d::JniMethodInfo miSetProcessName;
 
     if (NULL != config) {
-        if (cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com.adjust.sdk.AdjustConfig", "setProcessName",
+        if (cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com/adjust/sdk/AdjustConfig", "setProcessName",
                                               "(Ljava/lang/String;)V")) {
             jstring jProcessName = miSetProcessName.env->NewStringUTF(processName.c_str());
 
