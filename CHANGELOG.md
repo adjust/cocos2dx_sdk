@@ -6,7 +6,7 @@
 #### Changed
 - `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
 - Documentation updated.
-- Native iOS SDK updated to version **4.5.5**.
+- Native iOS SDK updated to version **4.5.4**.
 - Native Android SDK updated to version **4.2.2**.
 
 #### Native SDKs
