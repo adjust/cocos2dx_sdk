@@ -1,6 +1,7 @@
 ### Version 4.2.0 (xxth February 2016)
 ### Added
 - Added support for Windows platform.
+- Added `CHANGELOG.md` to the repository.
 
 #### Changed
 - `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
