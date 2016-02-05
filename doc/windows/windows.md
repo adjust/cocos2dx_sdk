@@ -14,19 +14,19 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your solution
 
-Take the files from the `Adjust` folder and add them to your Visual Studio project as the part of `Classes` folder.
+Take the files from the `Adjust` folder and add them to your Visual Studio project as part of the `Classes` folder.
 
 ![][add_windows_files]
 
 ### 3. Add adjust Windows Runtime Component project to your solution
 
-Project which Cocos2d-x generated for you is unmanaged and written in pure C++. On the other side, our Windows SDK
-is managed and written in C#. In order to make communication between your unmanaged app and our managed SDK possible,
-we made Windows Runtime Component project which can be added to your app as a reference. It wraps up our Windows SDK
-and can be used from unmanaged C++ code.
+The project which Cocos2d-x generated for you is unmanaged and written in pure C++. Our Windows SDK
+is managed and written in C#. In order to facilitate communication between your unmanaged app and our managed SDK,
+we created a Windows Runtime Component project that can be added to your app as a reference. It wraps our Windows SDK
+and can be used with unmanaged C++ code.
 
-Based on which platform you are building your app for, you should choose appropriate Windows Runtime Component project
-to add to your solution. Windows Runtime Component projects can be found in `Windows` folder and you can choose one of
+Depending on the platform you are building your app for, you should choose the appropriate Windows Runtime Component project
+to add to your solution. The Windows Runtime Component projects can be found in `Windows` folder> You can choose one of
 the following projects:
 
 * `AdjustUAP10WinRT` - Use this if you are developing your app for Windows 10
@@ -35,16 +35,16 @@ the following projects:
 
 ![][add_winrt_project]
 
-After you have added one of these projects to your solution, please add the reference to it in your app's project.
+After you have added one of these projects to your solution, add the reference to it in your app's project.
 
 ![][add_winrt_project_reference]
 
-By completing this step, you have successfully added adjust Cocos2d-x SDK for Windows in your Visual Studio project.
+By completing this step, you have successfully added the adjust Cocos2d-x SDK for Windows into your Visual Studio project.
 
 ### 4. Integrate Adjust into your app
 
 In the Project Navigator, open the source file of your application delegate. 
-Add the import statement at the top of the file, then add the following call to 
+Add the import statement at the top of the file. Next, add the following call to 
 Adjust in the `applicationDidFinishLaunching` of your app delegate:
 
 ```cpp
