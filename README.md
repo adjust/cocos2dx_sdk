@@ -13,7 +13,7 @@ To integrate the adjust SDK into your Cocos2d-x Android project, please read our
 
 ### Windows guide
 
-To integrate the adjust SDK into your Cocos2d-x Windows or Windows Phone project, please read our [Cocos2d-x Windows guide][cocos2dx_windws].
+To integrate the adjust SDK into your Cocos2d-x Windows or Windows Phone project, please read our [Cocos2d-x Windows guide][cocos2dx_windows].
 
 [adjust.com]: http://adjust.com
 [cocos2dx_ios]: https://github.com/adjust/cocos2dx_sdk/blob/master/doc/ios/ios.md
