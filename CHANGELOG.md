@@ -13,6 +13,8 @@
 - [Android@v4.2.2][android_sdk_v4.2.2]
 - [Windows@4.0.3][windows_sdk_v4.0.3]
 
+---
+
 ### Version 4.1.0 (17th September 2015)
 ### Added
 - Exposing additional methods to C++ interface.
