@@ -26,7 +26,7 @@ we created a Windows Runtime Component project that can be added to your app as 
 and can be used with unmanaged C++ code.
 
 Depending on the platform you are building your app for, you should choose the appropriate Windows Runtime Component project
-to add to your solution. The Windows Runtime Component projects can be found in `Windows` folder> You can choose one of
+to add to your solution. The Windows Runtime Component projects can be found in `Windows` folder. You can choose one of
 the following projects:
 
 * `AdjustUAP10WinRT` - Use this if you are developing your app for Windows 10
