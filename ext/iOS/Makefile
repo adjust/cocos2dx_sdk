@@ -9,5 +9,5 @@ build:
 
 copy: build
 	rm -rf $(LIBOUTDIR)/AdjustSdk.framework; \
-	cp -R $(SRCDIR)/AdjustSdk.framework $(LIBOUTDIR); \
+	cp -R $(SRCDIR)/Frameworks/Static/AdjustSdk.framework $(LIBOUTDIR); \
 	rm -rf $(SRCDIR)/AdjustSdk.framework
