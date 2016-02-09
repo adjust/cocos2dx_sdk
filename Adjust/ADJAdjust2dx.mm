@@ -51,7 +51,7 @@ bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];
 }
 
-std::string ADJAdjust2dx::getAdId() {
+std::string ADJAdjust2dx::getIdfa() {
     std::string idfa = std::string([[Adjust idfa] UTF8String]);
     return idfa;
 }

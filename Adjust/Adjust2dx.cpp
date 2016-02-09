@@ -176,8 +176,8 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
     ADJAdjust2dx::setDeviceToken(deviceToken);
 }
 
-std::string Adjust2dx::getAdId() {
-    return ADJAdjust2dx::getAdId();
+std::string Adjust2dx::getIdfa() {
+    return ADJAdjust2dx::getIdfa();
 }
 #else
 std::string Adjust2dx::getWindowsAdId() {
