@@ -13,7 +13,7 @@
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJEvent2dx.h"
 #else
-using namespace AdjustUAP10WinRT;
+using namespace AdjustWinRT;
 #endif
 
 #include <iostream>
