@@ -52,7 +52,7 @@ namespace AdjustWinRT
             Adjust.AppWillOpenUrl(uri);
         }
 
-        public static string GetAdId()
+        public static string GetWindowsAdId()
         {
             return Adjust.GetWindowsAdId();
         }

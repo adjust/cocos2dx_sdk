@@ -34,6 +34,7 @@ public:
     static std::string getAdId();
     static void setDeviceToken(std::string deviceToken);
 #else
+    static std::string getWindowsAdId();
     static void applicationPaused();
     static void applicationResumed();
 #endif
