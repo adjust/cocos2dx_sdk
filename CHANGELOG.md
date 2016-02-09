@@ -1,17 +1,18 @@
 ### Version 4.2.0 (xxth February 2016)
 ### Added
-- Added support for Windows platform.
+- Support for Windows platform.
 - Added `CHANGELOG.md` to the repository.
+- Methods for getting advertising identifiers for different platforms (`IDFA` on iOS, `Google Play Services Ad Id` on Android and `Windows Advertisement Id` on Windows).
 
 #### Changed
 - `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
 - Documentation updated.
 - Native iOS SDK updated to version **4.5.4**.
-- Native Android SDK updated to version **4.2.2**.
+- Native Android SDK updated to version **4.2.3**.
 
 #### Native SDKs
 - [iOS@v4.5.4][ios_sdk_v4.5.4]
-- [Android@v4.2.2][android_sdk_v4.2.2]
+- [Android@v4.2.2][android_sdk_v4.2.3]
 - [Windows@4.0.3][windows_sdk_v4.0.3]
 
 ---
@@ -60,6 +61,6 @@
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
 [android_sdk_v4.1.2]: https://github.com/adjust/android_sdk/tree/v4.1.2
-[android_sdk_v4.2.2]: https://github.com/adjust/android_sdk/tree/v4.2.2
+[android_sdk_v4.2.3]: https://github.com/adjust/android_sdk/tree/v4.2.3
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
