@@ -140,7 +140,7 @@ void Adjust2dx::setReferrer(std::string referrer) {
     }
 }
 
-void Adjust2dx::getAdId(void (*adIdCallback)(std::string adId)) {
+void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
     setAdIdCallbackMethod(adIdCallback);
 
     cocos2d::JniMethodInfo miGetAdIdCallback;

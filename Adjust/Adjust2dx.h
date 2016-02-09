@@ -29,7 +29,7 @@ public:
     static void onResume();
     static void onPause();
     static void setReferrer(std::string referrer);
-    static void getAdId(void (*adIdCallback)(std::string adId));
+    static void getGoogleAdId(void (*adIdCallback)(std::string adId));
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static std::string getIdfa();
     static void setDeviceToken(std::string deviceToken);
