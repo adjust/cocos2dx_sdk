@@ -51,5 +51,10 @@ namespace AdjustWinRT
         {
             Adjust.AppWillOpenUrl(uri);
         }
+
+        public static string GetAdId()
+        {
+            return Adjust.GetWindowsAdId();
+        }
     }
 }
