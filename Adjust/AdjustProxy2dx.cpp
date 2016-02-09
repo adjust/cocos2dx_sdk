@@ -10,7 +10,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attributionChanged
 (JNIEnv *env, jobject obj, jobject attributionObject) {
-    if (callbackToTrigger != NULL) {
+    if (attributionCallbackMethod != NULL) {
         std::string trackerToken;
         std::string trackerName;
         std::string network;
@@ -88,14 +88,32 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
 
         AdjustAttribution2dx attribution = AdjustAttribution2dx(trackerToken, trackerName, network,
                 campaign, adgroup, creative, clickLabel);
-        callbackToTrigger(attribution);
+        attributionCallbackMethod(attribution);
     }
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
+(JNIEnv *env, jobject obj, jstring jAdId) {
+	if (jAdId != NULL) {
+		const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
+		std::string adId = std::string(adIdCStr);
+
+		adIdCallbackMethod(adId);
+
+		env->ReleaseStringUTFChars(jAdId, adIdCStr);
+	}
+}
+
 void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
-    if (callbackToTrigger == NULL) {
-        callbackToTrigger = callbackMethod;
+    if (attributionCallbackMethod == NULL) {
+    	attributionCallbackMethod = callbackMethod;
     }
+}
+
+void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
+	if (adIdCallbackMethod == NULL) {
+		adIdCallbackMethod = callbackMethod;
+	}
 }
 
 #endif

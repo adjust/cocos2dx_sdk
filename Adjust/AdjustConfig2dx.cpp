@@ -74,35 +74,25 @@ static void attributionCallbackGlobal(
 }
 
 static void fileWriteCallback(const char* fileName, const char* newContent) {
-	try {
-		std::string path = CCFileUtils::sharedFileUtils()->getWritablePath().append(std::string(fileName));
-		FILE *fp = fopen(path.c_str(), "w");
+    std::string path = CCFileUtils::sharedFileUtils()->getWritablePath().append(std::string(fileName));
+    FILE *fp = fopen(path.c_str(), "w");
 
-		if (!fp) {
-			return;
-		}
-		else {
-			fputs(newContent, fp);
-			fclose(fp);
-		}
-	}
-	catch (int e) {
-		CCLog("Unable to write content to %s", fileName);
-	}
+    if (!fp) {
+        return;
+    }
+    else {
+        fputs(newContent, fp);
+        fclose(fp);
+    }
 }
 
 static int fileReadCallback(const char* fileName, int* size) {
-	try {
-		ssize_t fileSize = 0;
-		std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath().append(fileName);
-		CCLog(filePath.c_str());
+    ssize_t fileSize = 0;
+    std::string filePath = CCFileUtils::sharedFileUtils()->getWritablePath().append(fileName);
+    CCLog(filePath.c_str());
 
-		readBuffer = CCFileUtils::sharedFileUtils()->getFileData(filePath.c_str(), "r", &fileSize);
-		*size = fileSize;
-	}
-	catch (int e) {
-		CCLog("Unable to read content from %s", fileName);
-	}
+    readBuffer = CCFileUtils::sharedFileUtils()->getFileData(filePath.c_str(), "r", &fileSize);
+    *size = fileSize;
 
     return (int)readBuffer;
 }

@@ -50,3 +50,8 @@ void ADJAdjust2dx::setOfflineMode(bool isOffline) {
 bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];
 }
+
+std::string ADJAdjust2dx::getAdId() {
+    std::string idfa = std::string([[Adjust idfa] UTF8String]);
+    return idfa;
+}

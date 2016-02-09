@@ -16,7 +16,7 @@
 
 @implementation AttributionCallback
 
-void (*callbackToTrigger)(AdjustAttribution2dx attribution);
+void (*attributionCallbackMethod)(AdjustAttribution2dx attribution);
 
 - (id)init {
     self = [super init];
@@ -62,7 +62,7 @@ void (*callbackToTrigger)(AdjustAttribution2dx attribution);
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative,clickLabel);
 
-    callbackToTrigger(attribution2dx);
+    attributionCallbackMethod(attribution2dx);
 }
 
 @end
@@ -90,7 +90,7 @@ void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     callback = callbackMethod;
-    callbackToTrigger = callback;
+    attributionCallbackMethod = callback;
 
     AttributionCallback *attributionCallback = [[AttributionCallback alloc] init];
     ((ADJConfig *)config).delegate = attributionCallback;
