@@ -14,6 +14,9 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your project
 
+In this guide we assume that you are using `Android Studio` for development.
+If you are using `Eclipse`, please read our [Cocos2d-x Eclipse guide][eclipse_guide].
+
 Take the files from the `Adjust` folder and add them to your Android project.
 
 ![][add_android_files]
@@ -22,6 +25,14 @@ Take the files from the `Adjust` folder and add them to your Android project.
 
 Make sure to also add the paths of the adjust C++ files to the `LOCAL_SRC_FILES` section in your
 `Android.mk` file.
+
+```mk
+../../../Classes/Adjust/AdjustConfig2dx.cpp \
+../../../Classes/Adjust/AdjustAttribution2dx.cpp \
+../../../Classes/Adjust/AdjustProxy2dx.cpp \
+../../../Classes/Adjust/AdjustEvent2dx.cpp \
+../../../Classes/Adjust/Adjust2dx.cpp
+```
 
 ![][add_to_android_mk]
 
@@ -39,33 +50,27 @@ the adjust SDK to use the Google Advertising ID, you must integrate the [Google
 Play Services][google_play_services]. If you haven't done this yet, follow
 these steps:
 
-1. Copy the library project at
+1. Open the `build.gradle` file of your app and find the `dependencies` block. Add the
+following line:
 
     ```
-    <android-sdk>/extras/google/google_play_services/libproject/google-play-services_lib/
+    compile 'com.google.android.gms:play-services-analytics:8.3.0'
     ```
 
-    to the location where you maintain your Android app projects.
+    ![][gps_gradle]
 
-2. Import the library project into your Eclipse workspace. Click `File >
-   Import`, select `Android > Existing Android Code into Workspace`, and browse
-   to the copy of the library project to import it.
+2. Skip this step if you are using version 7 or later of Google Play Services:
+   In the Package Explorer open the `AndroidManifest.xml` of your Android
+   project.  Add the following `meta-data` tag inside the `<application>`
+   element.
 
-3. In your app project, reference Google Play services library project. See
-   [Referencing a Library Project for Eclipse][eclipse_library] for more
-   information on how to do this.
-
-     You should be referencing a copy of the library that you copied to your
-     development workspace. You should not reference the library directly from
-     the Android SDK directory.
-
-4. After you've added the Google Play services library as a dependency for your app project,
-open your app's manifest file and add the following tag as a child of the `manifest` element:
 
     ```xml
     <meta-data android:name="com.google.android.gms.version"
-          android:value="@integer/google_play_services_version" />
+               android:value="@integer/google_play_services_version" />
     ```
+
+    ![][gps_manifest]
 
 ### 6. Add permissions
 
@@ -85,6 +90,33 @@ If you are *not* targeting the Google Play Store, add both of these permissions 
 
 ![][manifest_permissions]
 
+If you are using Proguard, add these lines to your Proguard file:
+
+```
+-keep class com.adjust.sdk.plugin.MacAddressUtil { 
+    java.lang.String getMacAddress(android.content.Context); 
+}
+-keep class com.adjust.sdk.plugin.AndroidIdUtil { 
+    java.lang.String getAndroidId(android.content.Context); 
+}
+-keep class com.google.android.gms.common.ConnectionResult { 
+    int SUCCESS; 
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient {
+    com.google.android.gms.ads.identifier.AdvertisingIdClient$Info 
+        getAdvertisingIdInfo (android.content.Context);
+}
+-keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
+    java.lang.String getId ();
+    boolean isLimitAdTrackingEnabled();
+}
+```
+
+If you are *not* targeting the Google Play Store, you can remove the
+`com.google.android.gms` rules.
+
+![][proguard_rules]
+
 ### 7. Add broadcast receiver
 
 In your `AndroidManifest.xml` add the following `receiver` tag inside the
@@ -100,7 +132,7 @@ In your `AndroidManifest.xml` add the following `receiver` tag inside the
 </receiver>
 ```
 
-![][receiver]
+![][broadcast_receiver]
 
 We use this broadcast receiver to retrieve the install referrer, in order to
 improve conversion tracking.
@@ -421,15 +453,19 @@ even if the app was terminated in offline mode.
 
 [dashboard]:     http://adjust.com
 [releases]:      https://github.com/adjust/cocos2dx_sdk/releases
-[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_android_files.png
-[add_android_jar]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_android_jar.png
-[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_to_android_mk.png
-[manifest_permissions]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/manifest_permissions.png
-[receiver]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/receiver.png
-[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/add_adjust2dx.png
-[on_resume_on_pause]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/on_resume_on_pause.png
-[log_message]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/4.1.0/log_message.png
+[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_files.png
+[add_android_jar]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_jar.png
+[add_to_android_mk]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_to_android_mk.png
+[manifest_permissions]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/manifest_permissions.png
+[gps_gradle]:		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_gradle.png
+[gps_manifest]:		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_manifest.png
+[broadcast_receiver]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/broadcast_receiver.png
+[add_adjust2dx]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_adjust2dx.png
+[on_resume_on_pause]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/on_resume_on_pause.png
+[log_message]: 		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/log_message.png
+[proguard_rules]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/proguard_rules.png
 
+[eclipse_guide]:	https://github.com/adjust/cocos2dx_sdk/blob/master/doc/android/eclipse.md
 [referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
 [eclipse_library]:	http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject
