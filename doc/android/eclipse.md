@@ -23,6 +23,14 @@ Take the files from the `Adjust` folder and add them to your Android project.
 Make sure to also add the paths of the adjust C++ files to the `LOCAL_SRC_FILES` section in your
 `Android.mk` file.
 
+```mk
+../../Classes/Adjust/AdjustConfig2dx.cpp \
+../../Classes/Adjust/AdjustAttribution2dx.cpp \
+../../Classes/Adjust/AdjustProxy2dx.cpp \
+../../Classes/Adjust/AdjustEvent2dx.cpp \
+../../Classes/Adjust/Adjust2dx.cpp
+```
+
 ![][add_to_android_mk]
 
 ### 4. Add the adjust library to your project
@@ -451,7 +459,7 @@ even if the app was terminated in offline mode.
 
 The adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2015 adjust GmbH,
+Copyright (c) 2015-2016 adjust GmbH,
 http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
