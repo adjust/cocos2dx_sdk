@@ -1,7 +1,8 @@
 ### Version 4.2.0 (xxth February 2016)
 ### Added
 - Support for Windows platform.
-- Added `CHANGELOG.md` to the repository.
+- `CHANGELOG.md` is now added to the repository.
+- Instructions for Android Studio in Android README.
 - Methods for getting advertising identifiers for different platforms (`IDFA` on iOS, `Google Play Services Ad Id` on Android and `Windows Advertisement Id` on Windows).
 
 #### Changed
