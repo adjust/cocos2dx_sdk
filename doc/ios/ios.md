@@ -20,7 +20,7 @@ Take the files from the `Adjust` folder and add them to your iOS project.
 
 ### 3. Add the AdjustSdk, AdSupport and iAd frameworks to your solution
 
-Before adding `AdjustSdk.framework` to your project, please make sure that you copy it first to `proj.ios_mac`
+Before adding `AdjustSdk.framework` to your project, please make sure that you first copy it to the `proj.ios_mac`
 folder in your project.
 
 Select your project in the Project Navigator. In the left hand side of the main view, select your target. 
