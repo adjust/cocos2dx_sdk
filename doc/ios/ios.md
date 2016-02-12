@@ -18,18 +18,21 @@ Take the files from the `Adjust` folder and add them to your iOS project.
 
 ![][add_ios_files]
 
-### 3. Add the Adjust, AdSupport and iAd frameworks to your solution
+### 3. Add the AdjustSdk, AdSupport and iAd frameworks to your solution
+
+Before adding `AdjustSdk.framework` to your project, please make sure that you copy it first to `proj.ios_mac`
+folder in your project.
 
 Select your project in the Project Navigator. In the left hand side of the main view, select your target. 
 In the tab `Build Phases` expand the group `Link Binary With Libraries`. On the bottom of that section click 
-on the `+` button. Select the `Adjust.framework` and click the `Add` button. Repeat the same steps to add 
+on the `+` button. Select the `AdjustSdk.framework` and click the `Add` button. Repeat the same steps to add 
 the `AdSupport.framework` and `iAd.framework`.
 
 ![][add_the_frameworks]
 
 ### 4. Add additional linker flags
 
-In order to support categories from `Adjust.framework`, you should add an additional linker flag.
+In order to support categories from `AdjustSdk.framework`, you should add an additional linker flag.
 Go to the `Build Settings` part of Project Settings and look for `Other Linker Flags` option.
 Add `-ObjC` flag to it.
 
