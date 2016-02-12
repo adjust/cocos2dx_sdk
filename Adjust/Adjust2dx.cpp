@@ -63,7 +63,6 @@ void Adjust2dx::setEnabled(bool isEnabled) {
     }
 
     miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setEnabled(isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -82,7 +81,6 @@ bool Adjust2dx::isEnabled() {
     jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
 
     return jIsEnabled;
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::isEnabled();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -101,7 +99,6 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
     }
 
     miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setOfflineMode(isOffline);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -143,6 +140,7 @@ void Adjust2dx::setReferrer(std::string referrer) {
             "(Ljava/lang/String;)V")) {
         return;
     }
+
     jstring jReferrer = miSetReferrer.env->NewStringUTF(referrer.c_str());
 
     miSetReferrer.env->CallStaticVoidMethod(miSetReferrer.classID, miSetReferrer.methodID, jReferrer);
@@ -184,7 +182,6 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
     miGetAdIdCallback.env->CallStaticVoidMethod(miGetAdIdCallback.classID, miGetAdIdCallback.methodID, jContext, jCallbackProxy);
 
     miGetContext.env->DeleteLocalRef(jContext);
-
     miInit.env->DeleteLocalRef(jCallbackProxy);
 }
 #elif  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -99,6 +99,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
 	if (jAdId == NULL) {
         return;
     }
+
 	const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
 	std::string adId = std::string(adIdCStr);
 
@@ -118,5 +119,4 @@ void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
 		adIdCallbackMethod = callbackMethod;
 	}
 }
-
 #endif

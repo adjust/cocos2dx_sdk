@@ -6,7 +6,6 @@
 //
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
 #include <jni.h>
 #include "Adjust/AdjustAttribution2dx.h"
 
@@ -22,5 +21,4 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
 void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));
 void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
 }
-
 #endif

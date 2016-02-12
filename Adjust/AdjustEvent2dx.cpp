@@ -15,6 +15,7 @@
 void AdjustEvent2dx::initEvent(std::string eventToken) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
+
     if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustEvent", "<init>", "(Ljava/lang/String;)V")) {
         return;
     }
@@ -26,7 +27,6 @@ void AdjustEvent2dx::initEvent(std::string eventToken) {
     event = miInit.env->NewObject(clsAdjustEvent, midInit, jToken);
 
     miInit.env->DeleteLocalRef(jToken);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     event = ADJEvent2dx(eventToken);
     isEventSet = true;
@@ -45,6 +45,7 @@ void AdjustEvent2dx::addCallbackParameter(std::string key, std::string value) {
     }
 
     cocos2d::JniMethodInfo miAddCallbackParameter;
+
     if (!cocos2d::JniHelper::getMethodInfo(miAddCallbackParameter, "com/adjust/sdk/AdjustEvent", "addCallbackParameter",
             "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
@@ -57,7 +58,6 @@ void AdjustEvent2dx::addCallbackParameter(std::string key, std::string value) {
 
     miAddCallbackParameter.env->DeleteLocalRef(jKey);
     miAddCallbackParameter.env->DeleteLocalRef(jValue);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isEventSet) {
         event.addCallbackParameter(key, value);
@@ -81,6 +81,7 @@ void AdjustEvent2dx::addPartnerParameter(std::string key, std::string value) {
     }
 
     cocos2d::JniMethodInfo miAddPartnerParameter;
+
     if (!cocos2d::JniHelper::getMethodInfo(miAddPartnerParameter, "com/adjust/sdk/AdjustEvent", "addPartnerParameter",
             "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
@@ -93,7 +94,6 @@ void AdjustEvent2dx::addPartnerParameter(std::string key, std::string value) {
 
     miAddPartnerParameter.env->DeleteLocalRef(jKey);
     miAddPartnerParameter.env->DeleteLocalRef(jValue);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isEventSet) {
         event.addPartnerParameter(key, value);
@@ -117,6 +117,7 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
     }
 
     cocos2d::JniMethodInfo miSetRevenue;
+
     if (!cocos2d::JniHelper::getMethodInfo(miSetRevenue, "com/adjust/sdk/AdjustEvent", "setRevenue",
             "(DLjava/lang/String;)V")) {
         return;
@@ -127,7 +128,6 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
     miSetRevenue.env->CallVoidMethod(event, miSetRevenue.methodID, amount, jCurrency);
 
     miSetRevenue.env->DeleteLocalRef(jCurrency);
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isEventSet) {
         event.setRevenue(amount, currency);
@@ -163,6 +163,7 @@ bool AdjustEvent2dx::isValid() {
     }
 
     cocos2d::JniMethodInfo miIsValid;
+
     if (!cocos2d::JniHelper::getMethodInfo(miIsValid, "com/adjust/sdk/AdjustEvent", "isValid", "()Z")) {
         return false;
     }
@@ -170,7 +171,6 @@ bool AdjustEvent2dx::isValid() {
     jboolean jIsValid = miIsValid.env->CallBooleanMethod(event, miIsValid.methodID);
 
     return jIsValid;
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isEventSet) {
         return event.isValid();
@@ -180,8 +180,7 @@ bool AdjustEvent2dx::isValid() {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isEventSet) {
         return event->IsValid();
-    }
-    else {
+    } else {
         return false;
     }
 #else
