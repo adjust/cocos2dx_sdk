@@ -331,11 +331,11 @@ even if the app was terminated in offline mode.
 [adjust.com]: http://adjust.com
 [dashboard]: http://adjust.com
 [releases]: https://github.com/adjust/cocos2dx_sdk/releases
-[add_ios_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_ios_files.png
-[add_the_frameworks]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_the_frameworks.png
-[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_other_linker_flags.png
-[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/add_adjust2dx.png
-[run]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/4.1.0/run.png
+[add_ios_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
+[add_the_frameworks]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
+[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
+[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
+[run]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
 [attribution-data]: https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
 [callbacks-guide]: https://docs.adjust.com/en/callbacks
 [event-tracking]: https://docs.adjust.com/en/event-tracking
