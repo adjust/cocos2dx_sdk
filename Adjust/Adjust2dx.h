@@ -33,7 +33,7 @@ public:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static std::string getIdfa();
     static void setDeviceToken(std::string deviceToken);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     static std::string getWindowsAdId();
     static void applicationPaused();
     static void applicationResumed();

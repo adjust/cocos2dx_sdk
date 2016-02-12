@@ -25,7 +25,7 @@ private:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     bool isEventSet;
     ADJEvent2dx event;
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     bool isEventSet;
     WRTAdjustEvent^ event;
 #endif
@@ -38,7 +38,7 @@ public:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isEventSet = false;
         initEvent(eventToken);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
         isEventSet = false;
         initEvent(eventToken);
 #endif
@@ -55,7 +55,7 @@ public:
     ADJEvent2dx getEvent();
     void setTransactionId(std::string transactionId);
     void setReceipt(std::string receipt, std::string transactionId);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjustEvent^ getEvent();
 #endif
 };

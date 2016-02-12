@@ -12,7 +12,7 @@
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJConfig2dx.h"
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 using namespace AdjustWinRT;
 #endif
 
@@ -34,7 +34,7 @@ private:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     bool isConfigSet;
     ADJConfig2dx config;
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     bool isConfigSet;
     WRTAdjustConfig^ config;
 #endif
@@ -48,7 +48,7 @@ public:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isConfigSet = false;
         initConfig(appToken, environment);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
         isConfigSet = false;
         initConfig(appToken, environment);
 #endif
@@ -66,7 +66,7 @@ public:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJConfig2dx getConfig();
 };
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     typedef void(*AttributionCallback)(AdjustAttribution2dx attribution);
 
     WRTAdjustConfig^ getConfig();

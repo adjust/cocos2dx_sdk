@@ -32,7 +32,7 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
     onResume();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjust::ApplicationLaunching(adjustConfig.getConfig());
 #endif
 }
@@ -49,7 +49,7 @@ void Adjust2dx::trackEvent(AdjustEvent2dx event) {
     miTrackEvent.env->CallStaticVoidMethod(miTrackEvent.classID, miTrackEvent.methodID, event.getEvent());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackEvent(event.getEvent());
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjust::TrackEvent(event.getEvent());
 #endif
 }
@@ -66,7 +66,7 @@ void Adjust2dx::setEnabled(bool isEnabled) {
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setEnabled(isEnabled);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjust::SetEnabled(isEnabled);
 #endif
 }
@@ -85,8 +85,10 @@ bool Adjust2dx::isEnabled() {
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::isEnabled();
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     return WRTAdjust::IsEnabled();
+#else
+    return false;
 #endif
 }
 
@@ -102,15 +104,13 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setOfflineMode(isOffline);
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjust::SetOfflineMode(isOffline);
 #endif
 }
 
 void Adjust2dx::appWillOpenUrl(void* url) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appWillOpenUrl(url);
 #endif
 }
@@ -195,7 +195,7 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
 std::string Adjust2dx::getIdfa() {
     return ADJAdjust2dx::getIdfa();
 }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 std::string Adjust2dx::getWindowsAdId() {
     Platform::String^ managedAdId = WRTAdjust::GetWindowsAdId();
     std::wstring wstrAdId(managedAdId->Begin());

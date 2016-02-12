@@ -30,7 +30,7 @@ void AdjustEvent2dx::initEvent(std::string eventToken) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     event = ADJEvent2dx(eventToken);
     isEventSet = true;
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     std::wstring wstrEventToken = std::wstring(eventToken.begin(), eventToken.end());
     const wchar_t* wcharEventToken = wstrEventToken.c_str();
     event = ref new WRTAdjustEvent(ref new Platform::String(wcharEventToken));
@@ -62,7 +62,7 @@ void AdjustEvent2dx::addCallbackParameter(std::string key, std::string value) {
     if (isEventSet) {
         event.addCallbackParameter(key, value);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isEventSet) {
         std::wstring wstrKey = std::wstring(key.begin(), key.end());
         std::wstring wstrValue = std::wstring(value.begin(), value.end());
@@ -98,7 +98,7 @@ void AdjustEvent2dx::addPartnerParameter(std::string key, std::string value) {
     if (isEventSet) {
         event.addPartnerParameter(key, value);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isEventSet) {
         std::wstring wstrKey = std::wstring(key.begin(), key.end());
         std::wstring wstrValue = std::wstring(value.begin(), value.end());
@@ -132,7 +132,7 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
     if (isEventSet) {
         event.setRevenue(amount, currency);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isEventSet) {
         std::wstring wstrCurrency = std::wstring(currency.begin(), currency.end());
         const wchar_t* wcharCurrency = wstrCurrency.c_str();
@@ -177,13 +177,15 @@ bool AdjustEvent2dx::isValid() {
     } else {
         return false;
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isEventSet) {
         return event->IsValid();
     }
     else {
         return false;
     }
+#else
+    return false;
 #endif
 }
 
@@ -195,7 +197,7 @@ jobject AdjustEvent2dx::getEvent() {
 ADJEvent2dx AdjustEvent2dx::getEvent() {
     return event;
 }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 WRTAdjustEvent^ AdjustEvent2dx::getEvent() {
     return event;
 }

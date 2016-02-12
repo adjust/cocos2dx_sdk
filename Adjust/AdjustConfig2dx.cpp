@@ -9,8 +9,7 @@
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustProxy2dx.h"
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 #include "cocos2d.h"
 #include <windows.h>
 #include <fstream>
@@ -19,8 +18,7 @@ USING_NS_CC;
 
 #include "AdjustConfig2dx.h"
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID || CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#else
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 AdjustConfig2dx::AttributionCallback AdjustConfig2dx::attributionCallbackSaved = NULL;
 
 static unsigned char* readBuffer;
@@ -147,7 +145,7 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     config = ADJConfig2dx(appToken, environment, sdkPrefix);
     isConfigSet = true;
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     std::wstring wstrAppToken = std::wstring(appToken.begin(), appToken.end());
     std::wstring wstrEnvironment = std::wstring(environment.begin(), environment.end());
     const wchar_t* wcharAppToken = wstrAppToken.c_str();
@@ -211,7 +209,7 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
     if (isConfigSet) {
         config.setLogLevel((ADJLogLevel2dx)logLevel);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isConfigSet) {
         config->SetLogLevel(logLevel, (int64)logCallback);
     }
@@ -235,7 +233,7 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     if (isConfigSet) {
         config.setEventBufferingEnabled(isEnabled);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isConfigSet) {
         config->SetEventBufferingEnabled(isEnabled);
     }
@@ -263,7 +261,7 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
     if (isConfigSet) {
         config.setDefaultTracker(defaultTracker);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isConfigSet) {
         std::wstring wstrDefaultTracker = std::wstring(defaultTracker.begin(), defaultTracker.end());
         const wchar_t* wcharDefaultTracker = wstrDefaultTracker.c_str();
@@ -305,7 +303,7 @@ void AdjustConfig2dx::setAttributionCallback(void (*attributionCallback)(AdjustA
     if (isConfigSet) {
         config.setAttributionCallback(attributionCallback);
     }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     if (isConfigSet) {
         attributionCallbackSaved = attributionCallback;
         config->SetAttributionCallback((int64)&attributionCallbackGlobal);
@@ -338,7 +336,7 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
 ADJConfig2dx AdjustConfig2dx::getConfig() {
     return config;
 }
-#else
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 WRTAdjustConfig^ AdjustConfig2dx::getConfig() {
     return config;
 }
