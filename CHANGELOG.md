@@ -1,4 +1,4 @@
-### Version 4.2.0 (xxth February 2016)
+### Version 4.2.0 (12th February 2016)
 ### Added
 - Support for Windows platform.
 - `CHANGELOG.md` is now added to the repository.
@@ -8,6 +8,7 @@
 - `getWindowsAdId` method for getting `Windows Advertisement Id` on Windows device.
 
 #### Changed
+- `Adjust.framework` renamed to `AdjustSdk.framework`.
 - `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
 - Documentation updated.
 - Native iOS SDK updated to version **4.5.4**.
