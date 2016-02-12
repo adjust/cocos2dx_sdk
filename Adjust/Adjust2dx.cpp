@@ -58,9 +58,12 @@ void Adjust2dx::setEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetEnabled;
 
-    if (cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
-        miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
+        return;
     }
+
+    miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setEnabled(isEnabled);
 #else
@@ -72,11 +75,14 @@ bool Adjust2dx::isEnabled() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miIsEnabled;
 
-    if (cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
-        jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
-
-        return jIsEnabled;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
+        return false;
     }
+
+    jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
+
+    return jIsEnabled;
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::isEnabled();
 #else
@@ -88,9 +94,12 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miIsOffline;
 
-    if (cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
-        miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
+        return;
     }
+
+    miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setOfflineMode(isOffline);
 #else
@@ -130,14 +139,15 @@ void Adjust2dx::onPause() {
 void Adjust2dx::setReferrer(std::string referrer) {
     cocos2d::JniMethodInfo miSetReferrer;
 
-    if (cocos2d::JniHelper::getStaticMethodInfo(miSetReferrer, "com/adjust/sdk/Adjust", "setReferrer",
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetReferrer, "com/adjust/sdk/Adjust", "setReferrer",
             "(Ljava/lang/String;)V")) {
-        jstring jReferrer = miSetReferrer.env->NewStringUTF(referrer.c_str());
-
-        miSetReferrer.env->CallStaticVoidMethod(miSetReferrer.classID, miSetReferrer.methodID, jReferrer);
-
-        miSetReferrer.env->DeleteLocalRef(jReferrer);
+        return;
     }
+    jstring jReferrer = miSetReferrer.env->NewStringUTF(referrer.c_str());
+
+    miSetReferrer.env->CallStaticVoidMethod(miSetReferrer.classID, miSetReferrer.methodID, jReferrer);
+
+    miSetReferrer.env->DeleteLocalRef(jReferrer);
 }
 
 void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
@@ -145,31 +155,37 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
 
     cocos2d::JniMethodInfo miGetAdIdCallback;
 
-    if (cocos2d::JniHelper::getStaticMethodInfo(miGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId",
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId",
             "(Landroid/content/Context;Lcom/adjust/sdk/OnDeviceIdsRead;)V")) {
-        cocos2d::JniMethodInfo miInit;
-
-        if (cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
-            jclass clsAdjust2dxAdIdCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
-
-            jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
-            jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxAdIdCallback, midInit);
-
-            cocos2d::JniMethodInfo miGetContext;
-
-            if (cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext",
-                    "()Landroid/content/Context;")) {
-                // Get context and initialize config object.
-                jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-
-                miGetAdIdCallback.env->CallStaticVoidMethod(miGetAdIdCallback.classID, miGetAdIdCallback.methodID, jContext, jCallbackProxy);
-
-                miGetContext.env->DeleteLocalRef(jContext);
-            }
-
-            miInit.env->DeleteLocalRef(jCallbackProxy);
-        }
+        return;
     }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miGetContext;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext",
+            "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jclass clsAdjust2dxAdIdCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
+
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxAdIdCallback, midInit);
+
+    // Get context and initialize config object.
+    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
+
+    miGetAdIdCallback.env->CallStaticVoidMethod(miGetAdIdCallback.classID, miGetAdIdCallback.methodID, jContext, jCallbackProxy);
+
+    miGetContext.env->DeleteLocalRef(jContext);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 }
 #elif  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void Adjust2dx::setDeviceToken(std::string deviceToken) {
