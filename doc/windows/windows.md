@@ -14,8 +14,7 @@ archive into a directory of your choice.
 
 ### 2. Add adjust source files to your solution
 
-Take the `Adjust` folder, copy it to your project's `Classes` folder and add it with all the files inside
-to your Visual Studio project as part of the `Classes` folder.
+Take the `Adjust` folder and copy it to your project's `Classes` folder.  Add it, along with all the files inside, to your Visual Studio project as part of the `Classes` folder.
 
 ![][add_windows_files]
 
