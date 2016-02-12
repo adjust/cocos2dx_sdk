@@ -7,7 +7,7 @@
 //
 
 #include "ADJAdjust2dx.h"
-#include <Adjust/Adjust.h>
+#include <AdjustSdk/Adjust.h>
 
 const std::string ADJEnvironmentSandbox2dx = std::string([ADJEnvironmentSandbox UTF8String]);
 const std::string ADJEnvironmentProduction2dx = std::string([ADJEnvironmentProduction UTF8String]);
@@ -49,4 +49,9 @@ void ADJAdjust2dx::setOfflineMode(bool isOffline) {
 
 bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];
+}
+
+std::string ADJAdjust2dx::getIdfa() {
+    std::string idfa = std::string([[Adjust idfa] UTF8String]);
+    return idfa;
 }

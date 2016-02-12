@@ -12,6 +12,8 @@
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJEvent2dx.h"
+#else
+using namespace AdjustWinRT;
 #endif
 
 #include <iostream>
@@ -19,34 +21,42 @@
 class AdjustEvent2dx {
 private:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	jobject event;
+    jobject event;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJEvent2dx event;
     bool isEventSet;
+    ADJEvent2dx event;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    bool isEventSet;
+    WRTAdjustEvent^ event;
 #endif
-	void initEvent(std::string eventToken);
+    void initEvent(std::string eventToken);
 
 public:
-	AdjustEvent2dx(std::string eventToken) {
+    AdjustEvent2dx(std::string eventToken) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initEvent(eventToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isEventSet = false;
         initEvent(eventToken);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+        isEventSet = false;
+        initEvent(eventToken);
 #endif
-	}
+    }
 
-    void setRevenue(double amount, std::string currency);
-	void addCallbackParameter(std::string key, std::string value);
-	void addPartnerParameter(std::string key, std::string value);
     bool isValid();
+    void setRevenue(double amount, std::string currency);
+    void addCallbackParameter(std::string key, std::string value);
+    void addPartnerParameter(std::string key, std::string value);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	jobject getEvent();
+    jobject getEvent();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJEvent2dx getEvent();
     void setTransactionId(std::string transactionId);
     void setReceipt(std::string receipt, std::string transactionId);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    WRTAdjustEvent^ getEvent();
 #endif
 };
 

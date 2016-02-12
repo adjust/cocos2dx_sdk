@@ -22,8 +22,8 @@ private:
 public:
     AdjustAttribution2dx() {}
     AdjustAttribution2dx(std::string trackerToken, std::string trackerName, std::string network,
-                      	 std::string campaign, std::string adgroup, std::string creative,
-						 std::string clickLabel) {
+                         std::string campaign, std::string adgroup, std::string creative,
+                         std::string clickLabel) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;

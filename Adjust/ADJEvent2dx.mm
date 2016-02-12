@@ -7,7 +7,7 @@
 //
 
 #include "ADJEvent2dx.h"
-#include <Adjust/ADJEvent.h>
+#include <AdjustSdk/ADJEvent.h>
 
 void ADJEvent2dx::initEvent(std::string eventToken) {
     event = [[ADJEvent alloc] initWithEventToken:

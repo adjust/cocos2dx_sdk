@@ -6,3 +6,6 @@
 	path = ext/iOS/sdk
 	url = git@github.com:adjust/ios_sdk.git
 	branch = cocos2dx
+[submodule "ext/Windows/sdk"]
+	path = ext/Windows/sdk
+	url = git@github.com:adjust/windows_sdk.git

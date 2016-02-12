@@ -28,6 +28,7 @@ public:
     static void setDeviceToken(std::string deviceToken);
     static void setOfflineMode(bool isOffline);
     static bool isEnabled();
+    static std::string getIdfa();
 };
 
 #endif /* _ADJUST_ADJUST2DX_H_ */

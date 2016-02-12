@@ -8,7 +8,7 @@
 
 #include "ADJConfig2dx.h"
 
-#include <Adjust/Adjust.h>
+#include <AdjustSdk/Adjust.h>
 
 @interface AttributionCallback : NSObject<AdjustDelegate>
 
@@ -16,7 +16,7 @@
 
 @implementation AttributionCallback
 
-void (*callbackToTrigger)(AdjustAttribution2dx attribution);
+void (*attributionCallbackMethod)(AdjustAttribution2dx attribution);
 
 - (id)init {
     self = [super init];
@@ -62,7 +62,7 @@ void (*callbackToTrigger)(AdjustAttribution2dx attribution);
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative,clickLabel);
 
-    callbackToTrigger(attribution2dx);
+    attributionCallbackMethod(attribution2dx);
 }
 
 @end
@@ -88,13 +88,9 @@ void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     ((ADJConfig *)config).eventBufferingEnabled = isEnabled;
 }
 
-void ADJConfig2dx::setMacMd5TrackingEnabled(bool isEnabled) {
-    ((ADJConfig *)config).macMd5TrackingEnabled = isEnabled;
-}
-
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     callback = callbackMethod;
-    callbackToTrigger = callback;
+    attributionCallbackMethod = callback;
 
     AttributionCallback *attributionCallback = [[AttributionCallback alloc] init];
     ((ADJConfig *)config).delegate = attributionCallback;
