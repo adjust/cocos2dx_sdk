@@ -16,7 +16,7 @@
 
 #### Native SDKs
 - [iOS@v4.5.4][ios_sdk_v4.5.4]
-- [Android@v4.2.2][android_sdk_v4.2.3]
+- [Android@v4.2.3][android_sdk_v4.2.3]
 - [Windows@4.0.3][windows_sdk_v4.0.3]
 
 ---
