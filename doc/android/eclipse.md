@@ -177,7 +177,7 @@ adjustConfig.setLogLevel(AdjustLogLevel2dxAssert);  // disable errors as well
 ### 9. Session tracking
 
 To provide proper session tracking it is required to call certain Adjust
-methods every time app goes to background or comes to foreground. Otherwise the SDK 
+methods every time app goes to background or comes to foreground. Otherwise, the SDK 
 might miss a session start or session end. In order to do so you should follow these steps:
 
 1. Open the app delegate file.
@@ -226,7 +226,7 @@ the following features.
 
 ### 11. Set up event tracking
 
-You can use adjust to track events. You would create a new event token in your [dashboard],
+You can use adjust to track events. Create a new event token in your [dashboard],
 which has an associated event token - looking something like `abc123`. In your
 game you would then add the following lines to track the event you are interested in:
 
