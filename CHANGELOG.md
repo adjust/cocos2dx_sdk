@@ -3,7 +3,9 @@
 - Support for Windows platform.
 - `CHANGELOG.md` is now added to the repository.
 - Instructions for Android Studio in Android README.
-- Methods for getting advertising identifiers for different platforms (`IDFA` on iOS, `Google Play Services Ad Id` on Android and `Windows Advertisement Id` on Windows).
+- `getIdfa` method for getting `IDFA` on iOS device.
+- `getGoogleAdId` method for getting `Google Play Services Ad Id` on Android device.
+- `getWindowsAdId` method for getting `Windows Advertisement Id` on Windows device.
 
 #### Changed
 - `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
