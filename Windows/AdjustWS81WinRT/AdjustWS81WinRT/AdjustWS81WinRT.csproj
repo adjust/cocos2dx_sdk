@@ -108,8 +108,9 @@
     <Compile Include="WRTAdjustEvent.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="AdjustWP81">
-      <HintPath>..\..\AdjustWP81WinRT\AdjustWP81WinRT\Libs\AdjustWP81.dll</HintPath>
+    <Reference Include="AdjustWS, Version=4.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>Libs\AdjustWS.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.Threading.Tasks">
       <HintPath>..\..\AdjustWP81WinRT\AdjustWP81WinRT\Libs\Microsoft.Threading.Tasks.dll</HintPath>
