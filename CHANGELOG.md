@@ -1,18 +1,18 @@
 ### Version 4.2.0 (12th February 2016)
 ### Added
 - Support for Windows platform.
-- `CHANGELOG.md` is now added to the repository.
-- Instructions for Android Studio in Android README.
-- `getIdfa` method for getting `IDFA` on iOS device.
-- `getGoogleAdId` method for getting `Google Play Services Ad Id` on Android device.
-- `getWindowsAdId` method for getting `Windows Advertisement Id` on Windows device.
+- Added `CHANGELOG.md`.
+- Added instructions for Android Studio in Android README.
+- Added `getIdfa` method for getting `IDFA` on iOS device.
+- Added `getGoogleAdId` method for getting `Google Play Services Ad Id` on Android device.
+- Added `getWindowsAdId` method for getting `Windows Advertisement Id` on Windows device.
 
 #### Changed
-- `Adjust.framework` renamed to `AdjustSdk.framework`.
-- `MAC MD5` tracking feature for `iOS platform` is now completely **removed**.
-- Documentation updated.
-- Native iOS SDK updated to version **4.5.4**.
-- Native Android SDK updated to version **4.2.3**.
+- Renamed `Adjust.framework` to `AdjustSdk.framework`.
+- Removed `MAC MD5` tracking feature for `iOS platform` completely.
+- Updated documentation.
+- Updated Native iOS SDK to version **4.5.4**.
+- Updated Native Android SDK to version **4.2.3**.
 
 #### Native SDKs
 - [iOS@v4.5.4][ios_sdk_v4.5.4]
@@ -23,12 +23,12 @@
 
 ### Version 4.1.0 (17th September 2015)
 ### Added
-- Exposing additional methods to C++ interface.
+- Added additional methods to C++ interface.
 
 #### Changed
-- Moving calls from Java code to C++.
-- Native iOS SDK updated to version **4.3.0**.
-- Native Android SDK updated to version **4.1.2**.
+- Moved calls from Java code to C++.
+- Updated Native iOS SDK to version **4.3.0**.
+- Updated Native Android SDK to version **4.1.2**.
 
 #### Native SDKs
 - [iOS@v4.3.0][ios_sdk_v4.3.0]
@@ -38,9 +38,9 @@
 
 ### Version 4.0.1 (17th July 2015)
 #### Changed
-- Native iOS SDK updated to version **4.2.7**.
-- Native Android SDK updated to version **4.1.0**.
-- Documentation update
+- Updated Native iOS SDK to version **4.2.7**.
+- Updated Native Android SDK to version **4.1.0**.
+- Updated documentation
 
 #### Native SDKs
 - [iOS@v4.2.7][ios_sdk_v4.2.7]
