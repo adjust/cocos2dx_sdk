@@ -23,7 +23,16 @@ public:
     static void setEnabled(bool isEnabled);
     static bool isEnabled();
     static void setOfflineMode(bool isOffline);
-    static void appWillOpenUrl(void* url);
+    static void appWillOpenUrl(std::string url);
+    static void setDeviceToken(std::string deviceToken);
+    
+    static void sendFirstPackages();
+    static void addSessionCallbackParameter(std::string key, std::string value);
+    static void addSessionPartnerParameter(std::string key, std::string value);
+    static void removeSessionCallbackParameter(std::string key);
+    static void removeSessionPartnerParameter(std::string key);
+    static void resetSessionCallbackParameters();
+    static void resetSessionPartnerParameters();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     static void onResume();
@@ -32,7 +41,6 @@ public:
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static std::string getIdfa();
-    static void setDeviceToken(std::string deviceToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     static std::string getWindowsAdId();
     static void applicationPaused();
