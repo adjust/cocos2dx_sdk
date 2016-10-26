@@ -95,64 +95,66 @@ static int fileReadCallback(const char* fileName, int* size) {
 }
 #endif
 
-void AdjustConfig2dx::initConfig(std::string appToken, std::string environment) {
+// TODO: Handle suppress log level for Android and Windows.
+void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
     std::string sdkPrefix = "cocos2d-x4.2.0";
-
+    
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
-
+    
     if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustConfig", "<init>",
-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V")) {
+                                           "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
-
+    
     cocos2d::JniMethodInfo miGetContext;
-
+    
     if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext",
-            "()Landroid/content/Context;")) {
+                                                 "()Landroid/content/Context;")) {
         return;
     }
-
+    
     // Set SDK prefix.
     cocos2d::JniMethodInfo miSetSdkPrefix;
-
+    
     if (!cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com/adjust/sdk/AdjustConfig", "setSdkPrefix",
-            "(Ljava/lang/String;)V")) {
+                                           "(Ljava/lang/String;)V")) {
         return;
     }
-
+    
     jclass clsAdjustConfig = miInit.env->FindClass("com/adjust/sdk/AdjustConfig");
     jmethodID midInit = miInit.env->GetMethodID(clsAdjustConfig, "<init>",
-            "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
-
+                                                "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+    
     // Get context and initialize config object.
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
     jstring jAppToken = miInit.env->NewStringUTF(appToken.c_str());
     jstring jEnvironment = miInit.env->NewStringUTF(environment.c_str());
-
+    
     config = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment);
-
+    
     miGetContext.env->DeleteLocalRef(jContext);
     miInit.env->DeleteLocalRef(jAppToken);
     miInit.env->DeleteLocalRef(jEnvironment);
-
+    
     jstring jSdkPrefix = miSetSdkPrefix.env->NewStringUTF(sdkPrefix.c_str());
-
+    
     miSetSdkPrefix.env->CallVoidMethod(config, miSetSdkPrefix.methodID, jSdkPrefix);
-
+    
     miSetSdkPrefix.env->DeleteLocalRef(jSdkPrefix);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    config = ADJConfig2dx(appToken, environment, sdkPrefix);
+    config = ADJConfig2dx(appToken, environment, allowSuppressLogLevel, sdkPrefix);
     isConfigSet = true;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     std::wstring wstrAppToken = std::wstring(appToken.begin(), appToken.end());
     std::wstring wstrEnvironment = std::wstring(environment.begin(), environment.end());
     const wchar_t* wcharAppToken = wstrAppToken.c_str();
     const wchar_t* wcharEnvironment = wstrEnvironment.c_str();
+    
     config = ref new WRTAdjustConfig(ref new Platform::String(wcharAppToken), ref new Platform::String(wcharEnvironment));
     config->SetFileWritingCallback((int64)&fileWriteCallback);
     config->SetFileReadingCallback((int64)&fileReadCallback);
-
+    
     isConfigSet = true;
 #endif
 }
@@ -216,6 +218,30 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
 #endif
 }
 
+void AdjustConfig2dx::setDelayStart(double delayStart) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setDelayStart(delayStart);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setSendInBackground(isEnabled);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
 void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
@@ -238,6 +264,30 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     if (isConfigSet) {
         config->SetEventBufferingEnabled(isEnabled);
     }
+#endif
+}
+
+void AdjustConfig2dx::setLaunchDeferredDeeplink(bool shouldLaunch) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setLaunchDeferredDeeplink(shouldLaunch);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setUserAgent(std::string userAgent) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setUserAgent(userAgent);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
 #endif
 }
 
@@ -272,7 +322,7 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 #endif
 }
 
-void AdjustConfig2dx::setAttributionCallback(void (*attributionCallback)(AdjustAttribution2dx attribution)) {
+void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setAttributionCallbackMethod(attributionCallback);
 
@@ -309,6 +359,76 @@ void AdjustConfig2dx::setAttributionCallback(void (*attributionCallback)(AdjustA
         attributionCallbackSaved = attributionCallback;
         config->SetAttributionCallback((int64)&attributionCallbackGlobal);
     }
+#endif
+}
+
+void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setEventSuccessCallback(eventSuccessCallback);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setEventFailureCallback(eventFailureCallback);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setSessionSuccessCallback(sessionSuccessCallback);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setSessionFailureCallback(sessionFailureCallback);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setDeferredDeeplinkCallback(void(*deferredDeeplinkCallback)(std::string deeplink)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setAdvertisingIdCallback(void(*advertisingIdCallback)(std::string advertisingId)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    // No Google Play Services Advertising Identifier in iOS.
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    // No Google Play Services Advertising Identifier in Windows.
 #endif
 }
 

@@ -106,11 +106,94 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
 #endif
 }
 
-void Adjust2dx::appWillOpenUrl(void* url) {
+void Adjust2dx::appWillOpenUrl(std::string url) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appWillOpenUrl(url);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
 #endif
 }
+
+void Adjust2dx::setDeviceToken(std::string deviceToken) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::setDeviceToken(deviceToken);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::sendFirstPackages() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::sendFirstPackages();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::addSessionCallbackParameter(key, value);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::addSessionPartnerParameter(std::string key, std::string value) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::addSessionPartnerParameter(key, value);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::removeSessionCallbackParameter(std::string key) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::removeSessionCallbackParameter(key);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::removeSessionPartnerParameter(std::string key) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::removeSessionPartnerParameter(key);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::resetSessionCallbackParameters() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::resetSessionCallbackParameters();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void Adjust2dx::resetSessionPartnerParameters() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::resetSessionPartnerParameters();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 void Adjust2dx::onResume() {
@@ -185,10 +268,6 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
     miInit.env->DeleteLocalRef(jCallbackProxy);
 }
 #elif  (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-void Adjust2dx::setDeviceToken(std::string deviceToken) {
-    ADJAdjust2dx::setDeviceToken(deviceToken);
-}
-
 std::string Adjust2dx::getIdfa() {
     return ADJAdjust2dx::getIdfa();
 }
