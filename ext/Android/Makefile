@@ -2,8 +2,8 @@ MVNDIR = ./sdk/Adjust
 JARINDIR = ./sdk/Adjust/target
 JAROUTDIR = ../../Android
 PROXYDIR = ./proxy
-JAR = $(JAVA_6_PATH)/bin/jar
-JAVAC = $(JAVA_6_PATH)/bin/javac
+JAR = $(JAVA_JDK)/bin/jar
+JAVAC = $(JAVA_JDK)/bin/javac
 VERSION = $(shell cat ./sdk/VERSION)
 
 default: copy
