@@ -22,8 +22,7 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miOnCreate;
 
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miOnCreate, "com/adjust/sdk/Adjust", "onCreate",
-            "(Lcom/adjust/sdk/AdjustConfig;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miOnCreate, "com/adjust/sdk/Adjust", "onCreate", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
         return;
     }
 
@@ -41,8 +40,7 @@ void Adjust2dx::trackEvent(AdjustEvent2dx event) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miTrackEvent;
 
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com/adjust/sdk/Adjust", "trackEvent",
-            "(Lcom/adjust/sdk/AdjustEvent;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com/adjust/sdk/Adjust", "trackEvent", "(Lcom/adjust/sdk/AdjustEvent;)V")) {
         return;
     }
 

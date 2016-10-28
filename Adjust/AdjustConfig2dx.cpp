@@ -1,4 +1,4 @@
-//
+
 //  AdjustConfig2dx.cpp
 //  Adjust SDK
 //
@@ -95,43 +95,38 @@ static int fileReadCallback(const char* fileName, int* size) {
 }
 #endif
 
-// TODO: Handle suppress log level for Android and Windows.
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
     std::string sdkPrefix = "cocos2d-x4.2.0";
     
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
     
-    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustConfig", "<init>",
-                                           "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustConfig", "<init>", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Z)V")) {
         return;
     }
     
     cocos2d::JniMethodInfo miGetContext;
     
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext",
-                                                 "()Landroid/content/Context;")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
     
     // Set SDK prefix.
     cocos2d::JniMethodInfo miSetSdkPrefix;
     
-    if (!cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com/adjust/sdk/AdjustConfig", "setSdkPrefix",
-                                           "(Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com/adjust/sdk/AdjustConfig", "setSdkPrefix", "(Ljava/lang/String;)V")) {
         return;
     }
     
     jclass clsAdjustConfig = miInit.env->FindClass("com/adjust/sdk/AdjustConfig");
-    jmethodID midInit = miInit.env->GetMethodID(clsAdjustConfig, "<init>",
-                                                "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjustConfig, "<init>", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Z)V");
     
     // Get context and initialize config object.
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
     jstring jAppToken = miInit.env->NewStringUTF(appToken.c_str());
     jstring jEnvironment = miInit.env->NewStringUTF(environment.c_str());
     
-    config = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment);
+    config = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment, allowSuppressLogLevel);
     
     miGetContext.env->DeleteLocalRef(jContext);
     miInit.env->DeleteLocalRef(jAppToken);
@@ -167,8 +162,7 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
 
     cocos2d::JniMethodInfo miSetLogLevel;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetLogLevel, "com/adjust/sdk/AdjustConfig", "setLogLevel",
-            "(Lcom/adjust/sdk/LogLevel;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetLogLevel, "com/adjust/sdk/AdjustConfig", "setLogLevel", "(Lcom/adjust/sdk/LogLevel;)V")) {
         return;
     }
 
@@ -177,31 +171,41 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
     std::string enumValue;
 
     switch (logLevel) {
-    case AdjustLogLevel2dxAssert:
-        enumValue = "ASSERT";
-        break;
-    case AdjustLogLevel2dxDebug:
-        enumValue = "DEBUG";
-        break;
-    case AdjustLogLevel2dxError:
-        enumValue = "ERROR";
-        break;
-    case AdjustLogLevel2dxInfo:
-        enumValue = "INFO";
-        break;
-    case AdjustLogLevel2dxVerbose:
-        enumValue = "VERBOSE";
-        break;
-    case AdjustLogLevel2dxWarn:
-        enumValue = "WARN";
-        break;
-    default:
-        enumValue = "INFO";
-        break;
+        case AdjustLogLevel2dxSuppress: {
+            enumValue = "SUPRESS";
+            break;
+        }
+        case AdjustLogLevel2dxAssert: {
+            enumValue = "ASSERT";
+            break;
+        }
+        case AdjustLogLevel2dxError: {
+            enumValue = "ERROR";
+            break;
+        }
+        case AdjustLogLevel2dxWarn: {
+            enumValue = "WARN";
+            break;
+        }
+        case AdjustLogLevel2dxInfo: {
+            enumValue = "INFO";
+            break;
+        }
+        case AdjustLogLevel2dxDebug: {
+            enumValue = "DEBUG";
+            break;
+        }
+        case AdjustLogLevel2dxVerbose: {
+            enumValue = "VERBOSE";
+            break;
+        }
+        default: {
+            enumValue = "INFO";
+            break;
+        }
     }
 
-    jfieldID fidValue = miSetLogLevel.env->GetStaticFieldID(clsLogLevel, enumValue.c_str(),
-            "Lcom/adjust/sdk/LogLevel;");
+    jfieldID fidValue = miSetLogLevel.env->GetStaticFieldID(clsLogLevel, enumValue.c_str(), "Lcom/adjust/sdk/LogLevel;");
     jobject jLogLevel = miSetLogLevel.env->GetStaticObjectField(clsLogLevel, fidValue);
 
     miSetLogLevel.env->CallVoidMethod(config, miSetLogLevel.methodID, jLogLevel);
@@ -220,7 +224,17 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
 
 void AdjustConfig2dx::setDelayStart(double delayStart) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miSetDelayStart;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetDelayStart, "com/adjust/sdk/AdjustConfig", "setDelayStart", "(D)V")) {
+        return;
+    }
+
+    miSetDelayStart.env->CallVoidMethod(config, miSetDelayStart.methodID, delayStart);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setDelayStart(delayStart);
@@ -232,7 +246,17 @@ void AdjustConfig2dx::setDelayStart(double delayStart) {
 
 void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miSetSendInBackground;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetSendInBackground, "com/adjust/sdk/AdjustConfig", "setSendInBackground", "(Z)V")) {
+        return;
+    }
+
+    miSetSendInBackground.env->CallVoidMethod(config, miSetSendInBackground.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setSendInBackground(isEnabled);
@@ -250,8 +274,7 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 
     cocos2d::JniMethodInfo miSetEventBufferingEnabled;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig",
-            "setEventBufferingEnabled", "(Z)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig", "setEventBufferingEnabled", "(Z)V")) {
         return;
     }
 
@@ -324,16 +347,15 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 
 void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setAttributionCallbackMethod(attributionCallback);
-
     if (config == NULL) {
         return;
     }
 
+    setAttributionCallbackMethod(attributionCallback);
+
     cocos2d::JniMethodInfo miSetCallback;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnAttributionChangedListener",
-            "(Lcom/adjust/sdk/OnAttributionChangedListener;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnAttributionChangedListener", "(Lcom/adjust/sdk/OnAttributionChangedListener;)V")) {
         return;
     }
 
@@ -364,7 +386,31 @@ void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAt
 
 void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    setEventTrackingSucceededCallbackMethod(eventSuccessCallback);
+
+    cocos2d::JniMethodInfo miSetCallback;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnEventTrackingSucceededListener", "(Lcom/adjust/sdk/OnEventTrackingSucceededListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxEventTrackingSucceededCallback", "<init>", "()V")) {
+        return;
+    }
+
+    jclass clsAdjust2dxEventTrackingSucceededCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxEventTrackingSucceededCallback");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxEventTrackingSucceededCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxEventTrackingSucceededCallback, midInit);
+
+    miSetCallback.env->CallVoidMethod(config, miSetCallback.methodID, jCallbackProxy);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setEventSuccessCallback(eventSuccessCallback);
@@ -376,7 +422,31 @@ void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(Adjust
 
 void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    setEventTrackingFailedCallbackMethod(eventFailureCallback);
+
+    cocos2d::JniMethodInfo miSetCallback;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnEventTrackingFailedListener", "(Lcom/adjust/sdk/OnEventTrackingFailedListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxEventTrackingFailedCallback", "<init>", "()V")) {
+        return;
+    }
+
+    jclass clsAdjust2dxEventTrackingFailedCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxEventTrackingFailedCallback");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxEventTrackingFailedCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxEventTrackingFailedCallback, midInit);
+
+    miSetCallback.env->CallVoidMethod(config, miSetCallback.methodID, jCallbackProxy);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setEventFailureCallback(eventFailureCallback);
@@ -388,7 +458,31 @@ void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(Adjust
 
 void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    setSessionTrackingSucceededCallbackMethod(sessionSuccessCallback);
+
+    cocos2d::JniMethodInfo miSetCallback;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnSessionTrackingSucceededListener", "(Lcom/adjust/sdk/OnSessionTrackingSucceededListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxSessionTrackingSucceededCallback", "<init>", "()V")) {
+        return;
+    }
+
+    jclass clsAdjust2dxSessionTrackingSucceededCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxSessionTrackingSucceededCallback");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxSessionTrackingSucceededCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxSessionTrackingSucceededCallback, midInit);
+
+    miSetCallback.env->CallVoidMethod(config, miSetCallback.methodID, jCallbackProxy);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setSessionSuccessCallback(sessionSuccessCallback);
@@ -400,7 +494,31 @@ void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(Ad
 
 void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    setSessionTrackingFailedCallbackMethod(sessionFailureCallback);
+
+    cocos2d::JniMethodInfo miSetCallback;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnSessionTrackingFailedListener", "(Lcom/adjust/sdk/OnSessionTrackingFailedListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxSessionTrackingFailedCallback", "<init>", "()V")) {
+        return;
+    }
+
+    jclass clsAdjust2dxSessionTrackingFailedCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxSessionTrackingFailedCallback");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxSessionTrackingFailedCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxSessionTrackingFailedCallback, midInit);
+
+    miSetCallback.env->CallVoidMethod(config, miSetCallback.methodID, jCallbackProxy);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setSessionFailureCallback(sessionFailureCallback);
@@ -410,25 +528,39 @@ void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(Ad
 #endif
 }
 
-void AdjustConfig2dx::setDeferredDeeplinkCallback(void(*deferredDeeplinkCallback)(std::string deeplink)) {
+void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+    if (config == NULL) {
+        return;
+    }
+
+    setDeferredDeeplinkCallbackMethod(deferredDeeplinkCallback);
+
+    cocos2d::JniMethodInfo miSetCallback;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallback, "com/adjust/sdk/AdjustConfig", "setOnDeeplinkResponseListener", "(Lcom/adjust/sdk/OnDeeplinkResponseListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miInit;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxDeferredDeeplinkCallback", "<init>", "()V")) {
+        return;
+    }
+
+    jclass clsAdjust2dxDeferredDeeplinkCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxDeferredDeeplinkCallback");
+    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxDeferredDeeplinkCallback, "<init>", "()V");
+    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxDeferredDeeplinkCallback, midInit);
+
+    miSetCallback.env->CallVoidMethod(config, miSetCallback.methodID, jCallbackProxy);
+
+    miInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     
-#endif
-}
-
-void AdjustConfig2dx::setAdvertisingIdCallback(void(*advertisingIdCallback)(std::string advertisingId)) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // No Google Play Services Advertising Identifier in iOS.
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    // No Google Play Services Advertising Identifier in Windows.
 #endif
 }
 
@@ -444,8 +576,7 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
 
     cocos2d::JniMethodInfo miSetProcessName;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com/adjust/sdk/AdjustConfig", "setProcessName",
-                                          "(Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com/adjust/sdk/AdjustConfig", "setProcessName", "(Ljava/lang/String;)V")) {
         return;
     }
 
