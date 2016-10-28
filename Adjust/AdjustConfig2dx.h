@@ -89,8 +89,7 @@ public:
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
-    void setDeferredDeeplinkCallback(void(*deferredDeeplinkCallback)(std::string deeplink));
-    void setAdvertisingIdCallback(void(*advertisingIdCallback)(std::string advertisingId));
+    void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();
