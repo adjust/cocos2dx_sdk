@@ -888,10 +888,10 @@ If nothing is set, **the adjust SDK will always try to launch the URL by default
 
 ### <a id="deeplinking-android">Deep linking handling for Android app
 
-**This should be done in native Xcode project.**
+**This should be done in native Android project.**
 
-To set up your iOS app to handle deep linking on native level, please follow our [guide][android-deeplinking] in the official 
-Android SDK README.
+To set up your Android app to handle deep linking on native level, please follow our [guide][android-deeplinking] in the 
+official Android SDK README.
 
 [adjust]:	http://adjust.com
 [dashboard]:    http://adjust.com
