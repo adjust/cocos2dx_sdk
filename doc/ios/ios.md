@@ -7,9 +7,11 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
 * [Basic integration](#basic-integration)
    * [Get the SDK](#sdk-get)
    * [Add the SDK to your project](#sdk-add)
+   * [Add the frameworks to your project](#sdk-frameworks)
+   * [Add additional linker flags](#sdk-linker-flags)
    * [Integrate the SDK into your app](#sdk-integrate)
-   * [Adjust logging](#adjust-logging)
-   * [Android manifest](#android-manifest)
+   * [Adjust logging](#sdk-logging)
+   * [Build your app](#sdk-build)
    * [Google Play Services](#google-play-services)
 * [Additional features](#additional-features)
    * [Event tracking](#event-tracking)
@@ -109,7 +111,8 @@ keep this value meaningful at all times! This is especially important if you are
 
 ### <a id="sdk-logging">Adjust logging
 
-You can increase or decrease the amount of logs you see in tests by calling `setLogLevel` on your `AdjustConfig2dx` instance with one of the following parameters:
+You can increase or decrease the amount of logs you see in tests by calling `setLogLevel` on your `AdjustConfig2dx` instance 
+with one of the following parameters:
 
 ```cpp
 adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);     // enable all logging
@@ -328,80 +331,18 @@ added to the delayed install session and events and the adjust SDK will resume a
 
 **The maximum delay start time of the adjust SDK is 10 seconds**.
 
+### <a id="attribution-callback">Attribution callback
 
+adjust can also send you a callback upon change of attribution. Due to the different sources considered for attribution, this 
+information cannot be provided synchronously. Follow these steps to implement the optional callback in your application:
 
+1. Create void method which receives parameter of type `AdjustAttribution2dx`.
 
+2. After creating instance of `AdjustConfig2dx`, call its `setAttributionCallback` method with the previously created method 
+   as parameter.
 
-
-
-
-
-
-### 7. Set up deep link reattributions
-
-You can set up the adjust SDK to handle deep links used to open your
-app via a custom URL scheme. We will only read certain adjust specific
-parameters. This is essential if you are planning to run retargeting or
-re-engagement campaigns with deep links.
-
-In the Project Navigator open the source file of your iOS App Controller. Find
-or add the method `openURL` and add __one__ of the following calls to adjust:
-
-```objc
-- (BOOL)application:(UIApplication *)application openURL:(NSURL *)url 
-  sourceApplication:(NSString *)sourceApplication annotation:(id)annotation {
-    // Like it was in previous versions:
-    [Adjust appWillOpenUrl:url];
-    
-    // OR use new C++ interface:
-    Adjust2dx::appWillOpenUrl(url);
-
-    return YES;
-}
-```
-
-You can read more about [deeplinking in our docs][deeplinking].
-
-### 8. Enable event buffering
-
-If your app makes heavy use of event tracking, you might want to delay some
-HTTP requests in order to send them in one batch every minute. You can enable
-event buffering with your `AdjustConfig2dx` instance:
-
-```cpp
-adjustConfig.setEventBufferingEnabled(true);
-```
-
-### 9. Implement the attribution callback
-
-You can register a delegate callback to be notified of tracker attribution
-changes. Due to the different sources considered for attribution, this
-information cannot be provided synchronously. Follow these steps to implement
-the optional delegate protocol in your app delegate:
-
-Please make sure to consider our [applicable attribution data
-policies.][attribution-data]
-
-1. Open `AppDelegate.cpp` and add the following delegate callback function to
-   your app delegate implementation.
-
-    ```cpp
-    void attributionCallbackMethod(AdjustAttribution2dx attribution) {
-    }
-    ```
-
-2. Set the delegate with your `AdjustConfig2dx` instance:
-
-    ```cpp
-    adjustConfig.setAttributionCallback(attributionCallbackMethod);
-    ```
-    
-As the delegate callback is configured using the `AdjustConfig2dx` instance, you
-should call `setAttributionCallback` before calling `Adjust2dx::start(adjustConfig)`.
-
-The delegate function will be called when the SDK receives final attribution data.
-Within the delegate function you have access to the `attribution` parameter.
-Here is a quick summary of its properties:
+The callback function will get called when the SDK receives final attribution data. Within the callback function you have 
+access to the `attribution` parameter. Here is a quick summary of its properties:
 
 - `std::string trackerToken` the tracker token of the current install.
 - `std::string trackerName` the tracker name of the current install.
@@ -411,60 +352,411 @@ Here is a quick summary of its properties:
 - `std::string creative` the creative grouping level of the current install.
 - `std::string clickLabel` the click label of the current install.
 
-### 10. Disable tracking
+```cpp
+#include "Adjust/Adjust2dx.h"
 
-You can disable the adjust SDK from tracking any activities of the current
-device by calling `setEnabled` with parameter `false`. This setting is remembered
-between sessions, but it can only be activated after the first session.
+//...
 
-```objc
+static void attributionCallbackMethod(AdjustAttribution2dx attribution) {
+    // Printing all attribution properties.
+    CCLOG("\nAttribution changed!");
+    CCLOG("\nTracker token: %s", attribution.getTrackerToken().c_str());
+    CCLOG("\nTracker name: %s", attribution.getTrackerName().c_str());
+    CCLOG("\nNetwork: %s", attribution.getNetwork().c_str());
+    CCLOG("\nCampaign: %s", attribution.getCampaign().c_str());
+    CCLOG("\nAdgroup: %s", attribution.getAdgroup().c_str());
+    CCLOG("\nCreative: %s", attribution.getCreative().c_str());
+    CCLOG("\nClick label: %s", attribution.getClickLabel().c_str());
+    CCLOG("\n");
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setAttributionCallback(attributionCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+Please make sure to consider [applicable attribution data policies][attribution-data].
+
+### <a id="session-event-callbacks">Session and event callbacks
+
+You can register a callback to be notified of successful and failed tracked events and/or sessions.
+
+Follow the same steps to implement the following callback function for successfully tracked events:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static void eventSuccessCallbackMethod(AdjustEventSuccess2dx eventSuccess) {
+    CCLOG("\nEvent successfully tracked!");
+    CCLOG("\nADID: %s", eventSuccess.getAdid().c_str());
+    CCLOG("\nMessage: %s", eventSuccess.getMessage().c_str());
+    CCLOG("\nTimestamp: %s", eventSuccess.getTimestamp().c_str());
+    CCLOG("\nEvent token: %s", eventSuccess.getEventToken().c_str());
+    CCLOG("\nJSON response: %s", eventSuccess.getJsonResponse().c_str());
+    CCLOG("\n");
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setEventSuccessCallback(eventSuccessCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+The following callback function for failed tracked events:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static void eventFailureCallbackMethod(AdjustEventFailure2dx eventFailure) {
+    CCLOG("\nEvent tracking failed!");
+    CCLOG("\nADID: %s", eventFailure.getAdid().c_str());
+    CCLOG("\nMessage: %s", eventFailure.getMessage().c_str());
+    CCLOG("\nTimestamp: %s", eventFailure.getTimestamp().c_str());
+    CCLOG("\nWill retry: %s", eventFailure.getWillRetry().c_str());
+    CCLOG("\nEvent token: %s", eventFailure.getEventToken().c_str());
+    CCLOG("\nJSON response: %s", eventFailure.getJsonResponse().c_str());
+    CCLOG("\n");
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setEventFailureCallback(eventFailureCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+For successfully tracked sessions:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static void sessionSuccessCallbackMethod(AdjustSessionSuccess2dx sessionSuccess) {
+    CCLOG("\nSession successfully tracked!");
+    CCLOG("\nADID: %s", sessionSuccess.getAdid().c_str());
+    CCLOG("\nMessage: %s", sessionSuccess.getMessage().c_str());
+    CCLOG("\nTimestamp: %s", sessionSuccess.getTimestamp().c_str());
+    CCLOG("\nJSON response: %s", sessionSuccess.getJsonResponse().c_str());
+    CCLOG("\n");
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setSessionSuccessCallback(sessionSuccessCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+And for failed tracked sessions:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static void sessionFailureCallbackMethod(AdjustSessionFailure2dx sessionFailure) {
+    CCLOG("\nSession tracking failed!");
+    CCLOG("\nADID: %s", sessionFailure.getAdid().c_str());
+    CCLOG("\nMessage: %s", sessionFailure.getMessage().c_str());
+    CCLOG("\nTimestamp: %s", sessionFailure.getTimestamp().c_str());
+    CCLOG("\nWill retry: %s", sessionFailure.getWillRetry().c_str());
+    CCLOG("\nJSON response: %s", sessionFailure.getJsonResponse().c_str());
+    CCLOG("\n");
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setSessionFailureCallback(sessionFailureCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+The callback functions will be called after the SDK tries to send a package to the server. Within the callback you have
+access to a response data object specifically for the callback. Here is a quick summary of the session response data
+properties:
+
+- `std::string message` the message from the server or the error logged by the SDK.
+- `std::string timestamp` timestamp from the server.
+- `std::string adid` a unique device identifier provided by adjust.
+- `std::string jsonResponse` the JSON object with the response from the server.
+
+Both event response data objects contain:
+
+- `std::string eventToken` the event token, if the package tracked was an event.
+
+And both event and session failed objects also contain:
+
+- `std::string willRetry` indicates there will be an attempt to resend the package at a later time.
+
+### <a id="disable-tracking">Disable tracking
+
+You can disable the adjust SDK from tracking by invoking the method `Adjust2dx::setEnabled` with the enabled parameter as
+`false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
+
+```cpp
 Adjust2dx::setEnabled(false);
 ```
 
-You can check if the adjust SDK is currently enabled by calling the function
-`isEnabled`. It is always possible to activate the adjust SDK by invoking
-`setEnabled` with the enabled parameter as `true`.
+You can verify if the adjust SDK is currently active with the method `Adjust2dx::isEnabled()`. It is always possible to 
+activate the adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
 
-### 11. Offline mode
+### <a id="offline-mode">Offline mode
 
-You can put the adjust SDK in offline mode to suspend transmission to our servers, 
-while retaining tracked data to be sent later. While in offline mode, all information is saved
-in a file, so be careful not to trigger too many events while in offline mode.
+You can put the adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent
+later. When in offline mode, all information is saved in a file, so be careful not to trigger too many events while in
+offline mode.
 
-You can activate offline mode by calling `setOfflineMode` with the parameter `true`.
+You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter `true`.
 
-```objc
+```cpp
 Adjust2dx::setOfflineMode(true);
 ```
 
-Conversely, you can deactivate offline mode by calling `setOfflineMode` with `false`.
-When the adjust SDK is put back in online mode, all saved information is send to our servers 
-with the correct time information.
+Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with `false`. When the adjust SDK is put 
+back in online mode, all saved information is send to our servers with the correct time information.
 
-Unlike disabling tracking, this setting is *not remembered*
-bettween sessions. This means that the SDK is in online mode whenever it is started,
-even if the app was terminated in offline mode.
+Unlike disabling tracking, **this setting is not remembered** between sessions. This means that the SDK is in online mode
+whenever it is started, even if the app was terminated in offline mode.
 
+### <a id="event-buffering">Event buffering
+
+If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch
+every minute. You can enable event buffering with your `AdjustConfig2dx` instance by calling `setEventBufferingEnabled` 
+method:
+
+```cpp
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setEventBufferingEnabled(true);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+If nothing set, event buffering is **disabled by default**.
+
+### <a id="background-tracking">Background tracking
+
+The default behaviour of the adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can 
+change this in your `AdjustConfig2dx` instance by calling `setSendInBackground` method:
+
+```cpp
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setSendInBackground(true);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+If nothing is set, sending in background is **disabled by default**.
+
+### <a id="device-ids">Device IDs
+
+Certain services (such as Google Analytics) require you to coordinate Device and Client IDs in order to prevent duplicated
+reporting.
+
+You can access to IDFA value on iOS device by invoking `getIdfa()` method of the `Adjust2dx` instance.
+
+```cpp
+std::string idfa = Adjust2dx::getIdfa();
+```
+
+### <a id="push-token">Push token
+
+To send us the push notifications token, then add the following call to Adjust **whenever you get your token in the app or 
+when it gets updated**:
+
+```cpp
+Adjust2dx::setDeviceToken("YourPushNotificationToken");
+```
+
+### <a id="pre-installed-trackers">Pre-installed trackers
+
+If you want to use the adjust SDK to recognize users that found your app pre-installed on their device, follow these steps.
+
+1. Create a new tracker in your [dashboard]. Let's assume that new tracker token is `abc123`.
+2. Open your app delegate and add set the default tracker of your `AdjustConfig2dx` instance:
+
+    ```cpp
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+
+    adjustConfig.setDefaultTracker("abc123");
+    
+    Adjust2dx::adjustConfig(config);
+    ```
+
+  Replace `{TrackerToken}` with the tracker token you created in step 2. Please note that the dashboard displays a tracker 
+  URL (including `http://app.adjust.com/`). In your source code, you should specify only the six-character token and not the
+  entire URL.
+
+3. Build and run your app. You should see a line like the following in the app's log output:
+
+    ```
+    Default tracker: 'abc123'
+    ```
+
+### <a id="deeplinking">Deep linking
+
+If you are using the adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to
+get info about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed
+(standard deep linking scenario) or if they don't have the app on their device (deferred deep linking scenario). In the
+standard deep linking scenario, Android platform natively offers the possibility for you to get the info about the deep link
+content. Deferred deep linking scenario is something which Android platform doesn't support out of box and for this case,
+the adjust SDK will offer you the mechanism to get the info about the deep link content.
+
+You need to set up deep linking handling in your app **on native level** - in your generated Xcode project.
+
+#### <a id="deeplinking-standard">Standard deep linking scenario
+
+Unfortunatelly, in this scenario the information about the deep link can not be delivered to you in your Cocos2d-x C++ code.
+Once you enable your app to handle deep linking, you will get information about the deep link on native level. For more
+information check our chapters below on how to enable deep linking for iOS apps.
+
+#### <a id="deeplinking-deferred">Deferred deep linking scenario
+
+In order to get info about the URL content in a deferred deep linking scenario, you should set a callback method on the
+`AdjustConfig2dx` object which will receive one `std::string` parameter where the content of the URL will be delivered. You
+should set this method on the `AdjustConfig2dx` object instance by calling the method `setDeferredDeeplinkCallback`:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+//...
+
+static bool deferredDeeplinkCallbackMethod(std::string deeplink) {
+    CCLOG("\nDeferred deep link received!");
+    CCLOG("\nURL: %s", deeplink.c_str());
+    CCLOG("\n");
+    
+    Adjust2dx::appWillOpenUrl(deeplink);
+
+    return true;
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setDeferredDeeplinkCallback(deferredDeeplinkCallbackMethod);
+    
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
+```
+
+<a id="deeplinking-deferred-open">In deferred deep linking scenario, there is one additional setting which can be set on the
+deferred deep link callback method. Once the adjust SDK gets the deferred deep link info, we are offering you the possibility 
+to choose whether our SDK should open this URL or not. You can choose to set this option by setting the return value of your 
+deferred deep link callback method.
+
+If nothing is set, **the adjust SDK will always try to launch the URL by default**.
+
+#### <a id="deeplinking-app-ios">Deep linking handling for iOS app
+
+**This should be done in native Xcode project.**
+
+To set up your iOS app to handle deep linking on native level, please follow our [guide][ios-deeplinking] in the official iOS 
+SDK README.
+
+
+[dashboard]:  http://adjust.com
 [adjust.com]: http://adjust.com
-[dashboard]: http://adjust.com
-[releases]: https://github.com/adjust/cocos2dx_sdk/releases
-[add_ios_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
-[add_the_frameworks]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
-[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
-[add_adjust2dx]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
-[run]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
-[attribution-data]: https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
-[callbacks-guide]: https://docs.adjust.com/en/callbacks
-[event-tracking]: https://docs.adjust.com/en/event-tracking
-[special-partners]: https://docs.adjust.com/en/special-partners
-[currency-conversion]: https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
-[deeplinking]: https://docs.adjust.com/en/tracker-generation/#deeplinking
 
-## License
+[releases]:             https://github.com/adjust/cocos2dx_sdk/releases
+[deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
+[event-tracking]:       https://docs.adjust.com/en/event-tracking
+[callbacks-guide]:      https://docs.adjust.com/en/callbacks
+[ios-deeplinking]:      https://github.com/adjust/ios_sdk/#deeplink-reattributions
+[special-partners]:     https://docs.adjust.com/en/special-partners
+[attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
+[currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
+
+[run]:                    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
+[add_ios_files]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
+[add_adjust2dx]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
+[add_the_frameworks]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
+[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
+
+## <a id="license">License
 
 The adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2015-2016 adjust GmbH,
+Copyright (c) 2012-2016 adjust GmbH,
 http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
