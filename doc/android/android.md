@@ -896,23 +896,9 @@ official Android SDK README.
 [adjust]:	http://adjust.com
 [dashboard]:    http://adjust.com
 
-[releases]:      https://github.com/adjust/cocos2dx_sdk/releases
-
-[gps_gradle]:	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_gradle.png
-[log_message]: 	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/log_message.png
-[gps_manifest]:      https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_manifest.png
-[add_adjust2dx]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_adjust2dx.png
-[proguard_rules]:    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/proguard_rules.png
-[add_android_jar]:   https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_jar.png
-[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_files.png
-[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_to_android_mk.png
-
-[broadcast_receiver]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/broadcast_receiver.png
-[on_resume_on_pause]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/on_resume_on_pause.png
-[manifest_permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/manifest_permissions.png
-
 [maven]:                http://maven.org
 [example]:              https://github.com/adjust/android_sdk/tree/master/Adjust/example
+[releases]:      	https://github.com/adjust/cocos2dx_sdk/releases
 [multidex]:             https://developer.android.com/tools/building/multidex.html
 [referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
@@ -929,6 +915,19 @@ official Android SDK README.
 [android_application]:  http://developer.android.com/reference/android/app/Application.html
 [google-launch-modes]:  http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 [google_play_services]: http://developer.android.com/google/play-services/setup.html
+
+[gps_gradle]:	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_gradle.png
+[log_message]: 	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/log_message.png
+[gps_manifest]:      https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_manifest.png
+[add_adjust2dx]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_adjust2dx.png
+[proguard_rules]:    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/proguard_rules.png
+[add_android_jar]:   https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_jar.png
+[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_files.png
+[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_to_android_mk.png
+
+[broadcast_receiver]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/broadcast_receiver.png
+[on_resume_on_pause]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/on_resume_on_pause.png
+[manifest_permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/manifest_permissions.png
 
 ## <a id="license">License
 
