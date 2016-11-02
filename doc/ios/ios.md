@@ -35,9 +35,7 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
     * [Deep linking](#deeplinking)
         * [Standard deep linking scenario](#deeplinking-standard)
         * [Deferred deep linking scenario](#deeplinking-deferred)
-        * [Deep linking setup for Android](#deeplinking-android)
-        * [Deep linking setup for iOS](#deeplinking-ios)
-        * [Reattribution via deep links](#deeplinking-reattribution)
+        * [Deep linking handling for iOS app](#deeplinking-ios)
 * [License](#license)
 
 ## <a id="basic-integration">Basic integration
@@ -725,7 +723,7 @@ deferred deep link callback method.
 
 If nothing is set, **the adjust SDK will always try to launch the URL by default**.
 
-#### <a id="deeplinking-app-ios">Deep linking handling for iOS app
+#### <a id="deeplinking-ios">Deep linking handling for iOS app
 
 **This should be done in native Xcode project.**
 
