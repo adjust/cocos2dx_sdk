@@ -742,8 +742,9 @@ To set up your iOS app to handle deep linking on native level, please follow our
 SDK README.
 
 
-[dashboard]:  http://adjust.com
-[adjust.com]: http://adjust.com
+[adjust]:	http://adjust.com
+[dashboard]:    http://adjust.com
+[adjust.com]:  	http://adjust.com
 
 [releases]:             https://github.com/adjust/cocos2dx_sdk/releases
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
