@@ -121,6 +121,17 @@ adjustConfig.setLogLevel(AdjustLogLevel2dxAssert);      // disable errors as wel
 adjustConfig.setLogLevel(AdjustLogLevel2dxSuppress);    // disable all log output
 ```
 
+In case you want to use suppress log level, you should initialise `AdjustConfig2dx` instance with usage of constructor which 
+receives additional `bool` parameter which indicates whether suppress log level should be enabled or not:
+
+```cpp
+std::string appToken = "{YourAppToken}";
+std::string environment = AdjustEnvironmentSandbox2dx;
+
+AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment, true);
+adjustConfig.setLogLevel(AdjustLogLevel2dxSuppress);
+```
+
 ## <a id="sdk-build">Build your app
 
 Build and run your app. If the build succeeds, you should carefully read the SDK logs in the console. After the app launched 
