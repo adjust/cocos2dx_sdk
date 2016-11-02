@@ -749,7 +749,7 @@ SDK README.
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
 [event-tracking]:       https://docs.adjust.com/en/event-tracking
 [callbacks-guide]:      https://docs.adjust.com/en/callbacks
-[ios-deeplinking]:      https://github.com/adjust/ios_sdk/#deeplink-reattributions
+[ios-deeplinking]:      https://github.com/adjust/ios_sdk/#deeplinking
 [special-partners]:     https://docs.adjust.com/en/special-partners
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
