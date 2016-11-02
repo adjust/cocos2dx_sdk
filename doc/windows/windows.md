@@ -139,7 +139,7 @@ adjustConfig.setLogLevel(AdjustLogLevel2dxError, printLog);   // disable warning
 adjustConfig.setLogLevel(AdjustLogLevel2dxAssert, printLog);  // disable errors as well
 ```
 
-## <a id="sdk-build">Build your app
+### <a id="sdk-build">Build your app
 
 Build and run your app. If the build succeeds, you should carefully read the SDK logs in the console. After the app launched 
 for the first time, you should see the info log `Install tracked`.
