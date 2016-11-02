@@ -895,6 +895,7 @@ official Android SDK README.
 
 [adjust]:	http://adjust.com
 [dashboard]:    http://adjust.com
+[adjust.com]:  	http://adjust.com
 
 [maven]:                http://maven.org
 [example]:              https://github.com/adjust/android_sdk/tree/master/Adjust/example
