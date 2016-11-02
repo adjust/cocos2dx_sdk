@@ -198,7 +198,7 @@ Adjust2dx::trackEvent(adjustEvent);
 In-App purchase verification can be done with Cocos2d-x purchase SDK which is currently being developed and will soon be 
 publicly available. For more information, please contact support@adjust.com.
 
-#### Add callback parameters
+### <a id="callback-parameters">Callback parameters
 
 You can register a callback URL for your events in your [dashboard]. We will send a GET request to that URL whenever the event 
 is tracked. You can add callback parameters to that event by calling `addCallbackParameter` on the event before tracking it. 
@@ -684,13 +684,13 @@ the adjust SDK will offer you the mechanism to get the info about the deep link 
 
 You need to set up deep linking handling in your app **on native level** - in your generated Xcode project.
 
-#### <a id="deeplinking-standard">Standard deep linking scenario
+### <a id="deeplinking-standard">Standard deep linking scenario
 
 Unfortunatelly, in this scenario the information about the deep link can not be delivered to you in your Cocos2d-x C++ code.
 Once you enable your app to handle deep linking, you will get information about the deep link on native level. For more
 information check our chapters below on how to enable deep linking for iOS apps.
 
-#### <a id="deeplinking-deferred">Deferred deep linking scenario
+### <a id="deeplinking-deferred">Deferred deep linking scenario
 
 In order to get info about the URL content in a deferred deep linking scenario, you should set a callback method on the
 `AdjustConfig2dx` object which will receive one `std::string` parameter where the content of the URL will be delivered. You
@@ -734,7 +734,7 @@ deferred deep link callback method.
 
 If nothing is set, **the adjust SDK will always try to launch the URL by default**.
 
-#### <a id="deeplinking-ios">Deep linking handling for iOS app
+### <a id="deeplinking-ios">Deep linking handling for iOS app
 
 **This should be done in native Xcode project.**
 
