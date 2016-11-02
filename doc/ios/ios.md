@@ -12,7 +12,6 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Adjust logging](#sdk-logging)
    * [Build your app](#sdk-build)
-   * [Google Play Services](#google-play-services)
 * [Additional features](#additional-features)
    * [Event tracking](#event-tracking)
       * [Revenue tracking](#revenue-tracking)
