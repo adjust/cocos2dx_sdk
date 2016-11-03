@@ -143,9 +143,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     jstring jWillRetry = JNI_TRUE == jWillRetryObj ? env->NewStringUTF("true") : env->NewStringUTF("false");
 
     jobject jJsonResponseObj = env->GetObjectField(eventFailureObject, fJsonResponseID);
-    jclass jcJsonObject = env->FindClass("org/json/JSONObject");
-    jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
-    jstring jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+    jstring jJsonResponse;
 
     if (NULL != jMessage) {
         const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
@@ -185,20 +183,26 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
 
     if (NULL != jWillRetry) {
         const char *willRetryCStr = env->GetStringUTFChars(jWillRetry, NULL);
-        eventToken = std::string(willRetryCStr);
+        willRetry = std::string(willRetryCStr);
         env->ReleaseStringUTFChars(jWillRetry, willRetryCStr);
         env->DeleteLocalRef(jWillRetry);
     } else {
         willRetry = "";
     }
 
-    if (NULL != jJsonResponse) {
-        const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
-        jsonResponse = std::string(jsonResponseCStr);
-        env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
-        env->DeleteLocalRef(jJsonResponse);
-    } else {
-        jsonResponse = "";
+    if (NULL != jJsonResponseObj) {
+        jclass jcJsonObject = env->FindClass("org/json/JSONObject");
+        jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
+        jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+
+        if (NULL != jJsonResponse) {
+            const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
+            jsonResponse = std::string(jsonResponseCStr);
+            env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
+            env->DeleteLocalRef(jJsonResponse);
+        } else {
+            jsonResponse = "";
+        }
     }
 
     AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, jsonResponse);
@@ -234,11 +238,8 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     jstring jTimestamp = (jstring)env->GetObjectField(eventSuccessObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(eventSuccessObject, fAdidID);
     jstring jEventToken = (jstring)env->GetObjectField(eventSuccessObject, fEventTokenID);
-    
     jobject jJsonResponseObj = (jobject)env->GetObjectField(eventSuccessObject, fJsonResponseID);
-    jclass jcJsonObject = env->FindClass("org/json/JSONObject");
-    jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
-    jstring jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+    jstring jJsonResponse;
 
     if (NULL != jMessage) {
         const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
@@ -276,13 +277,19 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
         eventToken = "";
     }
 
-    if (NULL != jJsonResponse) {
-        const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
-        jsonResponse = std::string(jsonResponseCStr);
-        env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
-        env->DeleteLocalRef(jJsonResponse);
-    } else {
-        jsonResponse = "";
+    if (NULL != jJsonResponseObj) {
+        jclass jcJsonObject = env->FindClass("org/json/JSONObject");
+        jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
+        jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+
+        if (NULL != jJsonResponse) {
+            const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
+            jsonResponse = std::string(jsonResponseCStr);
+            env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
+            env->DeleteLocalRef(jJsonResponse);
+        } else {
+            jsonResponse = "";
+        }
     }
 
     AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, jsonResponse);
@@ -322,9 +329,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
     jstring jWillRetry = JNI_TRUE == jWillRetryObj ? env->NewStringUTF("true") : env->NewStringUTF("false");
     
     jobject jJsonResponseObj = env->GetObjectField(sessionFailureObject, fJsonResponseID);
-    jclass jcJsonObject = env->FindClass("org/json/JSONObject");
-    jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
-    jstring jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+    jstring jJsonResponse;
 
     if (NULL != jMessage) {
         const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
@@ -362,13 +367,19 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
         willRetry = "";
     }
 
-    if (NULL != jJsonResponse) {
-        const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
-        jsonResponse = std::string(jsonResponseCStr);
-        env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
-        env->DeleteLocalRef(jJsonResponse);
-    } else {
-        jsonResponse = "";
+    if (NULL != jJsonResponseObj) {
+        jclass jcJsonObject = env->FindClass("org/json/JSONObject");
+        jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
+        jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+
+        if (NULL != jJsonResponse) {
+            const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
+            jsonResponse = std::string(jsonResponseCStr);
+            env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
+            env->DeleteLocalRef(jJsonResponse);
+        } else {
+            jsonResponse = "";
+        }
     }
 
     AdjustSessionFailure2dx sessionFailure = AdjustSessionFailure2dx(adid, message, timestamp, willRetry, jsonResponse);
@@ -402,11 +413,8 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     jstring jMessage = (jstring)env->GetObjectField(sessionSuccessObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(sessionSuccessObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(sessionSuccessObject, fAdidID);
-    
     jobject jJsonResponseObj = (jobject)env->GetObjectField(sessionSuccessObject, fJsonResponseID);
-    jclass jcJsonObject = env->FindClass("org/json/JSONObject");
-    jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
-    jstring jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+    jstring jJsonResponse;
 
     if (NULL != jMessage) {
         const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
@@ -435,13 +443,19 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
         adid = "";
     }
 
-    if (NULL != jJsonResponse) {
-        const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
-        jsonResponse = std::string(jsonResponseCStr);
-        env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
-        env->DeleteLocalRef(jJsonResponse);
-    } else {
-        jsonResponse = "";
+    if (NULL != jJsonResponseObj) {
+        jclass jcJsonObject = env->FindClass("org/json/JSONObject");
+        jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
+        jJsonResponse = (jstring)env->CallObjectMethod(jJsonResponseObj, jToStringID);
+
+        if (NULL != jJsonResponse) {
+            const char *jsonResponseCStr = env->GetStringUTFChars(jJsonResponse, NULL);
+            jsonResponse = std::string(jsonResponseCStr);
+            env->ReleaseStringUTFChars(jJsonResponse, jsonResponseCStr);
+            env->DeleteLocalRef(jJsonResponse);
+        } else {
+            jsonResponse = "";
+        }
     }
 
     AdjustSessionSuccess2dx sessionSuccess = AdjustSessionSuccess2dx(adid, message, timestamp, jsonResponse);
