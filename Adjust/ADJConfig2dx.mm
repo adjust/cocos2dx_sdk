@@ -16,14 +16,12 @@
 
 @implementation AdjustDelegate2dx
 
-static BOOL shouldLaunchDeferredDeeplink = YES;
-
 void (*attributionCallbackMethod)(AdjustAttribution2dx attribution);
 void (*eventSuccessCallbackMethod)(AdjustEventSuccess2dx eventSuccess);
 void (*eventFailureCallbackMethod)(AdjustEventFailure2dx eventFailure);
 void (*sessionSuccessCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
 void (*sessionFailureCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
-void (*deferredDeeplinkCallbackMethod)(std::string deeplink);
+bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
 
 - (id)init {
     self = [super init];
@@ -218,10 +216,10 @@ void (*deferredDeeplinkCallbackMethod)(std::string deeplink);
 
 - (BOOL)adjustDeeplinkResponse:(NSURL *)deeplink {
     if (nil != deferredDeeplinkCallbackMethod) {
-        deferredDeeplinkCallbackMethod(nil != deeplink ? std::string([[deeplink absoluteString] UTF8String]) : "");
+        return deferredDeeplinkCallbackMethod(nil != deeplink ? std::string([[deeplink absoluteString] UTF8String]) : "");
     }
-
-    return shouldLaunchDeferredDeeplink;
+    
+    return YES;
 }
 
 @end
@@ -250,10 +248,6 @@ void ADJConfig2dx::setSendInBackground(bool isEnabled) {
 
 void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     ((ADJConfig *)config).eventBufferingEnabled = isEnabled;
-}
-
-void ADJConfig2dx::setLaunchDeferredDeeplink(bool shouldLaunch) {
-    shouldLaunchDeferredDeeplink = shouldLaunch;
 }
 
 void ADJConfig2dx::setUserAgent(std::string userAgent) {
@@ -289,7 +283,7 @@ void ADJConfig2dx::setSessionFailureCallback(void(*callbackMethod)(AdjustSession
     sessionFailureCallbackMethod = sessionFailureCallback;
 }
 
-void ADJConfig2dx::setDeferredDeeplinkCallback(void(*callbackMethod)(std::string deeplink)) {
+void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink)) {
     deferredDeeplinkCallback = callbackMethod;
     deferredDeeplinkCallbackMethod = deferredDeeplinkCallback;
 }

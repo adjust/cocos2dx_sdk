@@ -35,7 +35,7 @@ private:
     void (*eventFailureCallback)(AdjustEventFailure2dx eventFailure);
     void (*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess);
     void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure);
-    void (*deferredDeeplinkCallback)(std::string deeplink);
+    bool (*deferredDeeplinkCallback)(std::string deeplink);
 
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix);
 
@@ -55,7 +55,6 @@ public:
 
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
-    void setLaunchDeferredDeeplink(bool shouldLaunch);
 
     void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
@@ -65,7 +64,7 @@ public:
     void setEventFailureCallback(void(*callbackMethod)(AdjustEventFailure2dx eventFailure));
     void setSessionSuccessCallback(void(*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
-    void setDeferredDeeplinkCallback(void(*callbackMethod)(std::string deeplink));
+    void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
 
     void* getConfig();
 };

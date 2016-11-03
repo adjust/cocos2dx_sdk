@@ -290,18 +290,6 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 #endif
 }
 
-void AdjustConfig2dx::setLaunchDeferredDeeplink(bool shouldLaunch) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setLaunchDeferredDeeplink(shouldLaunch);
-    }
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
-#endif
-}
-
 void AdjustConfig2dx::setUserAgent(std::string userAgent) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     
