@@ -77,7 +77,6 @@ public:
     void setDelayStart(double delayStart);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
-    void setLaunchDeferredDeeplink(bool shouldLaunch);
     
     void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
