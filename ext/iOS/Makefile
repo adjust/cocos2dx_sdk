@@ -5,7 +5,7 @@ default: copy
 
 build:	
 	cd $(SRCDIR); \
-	xcodebuild -target AdjustStatic -configuration Release
+	xcodebuild -target AdjustStatic -configuration Release clean build
 
 copy: build
 	rm -rf $(LIBOUTDIR)/AdjustSdk.framework; \
