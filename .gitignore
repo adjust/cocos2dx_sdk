@@ -1,4 +1,7 @@
-$ cat .gitignore
+# OS X
+.DS_Store
+
+# Nuget
 nuget
 *.nupkg
 

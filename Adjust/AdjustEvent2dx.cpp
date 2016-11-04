@@ -142,13 +142,19 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void AdjustEvent2dx::setTransactionId(std::string transactionId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isEventSet) {
         event.setTransactionId(transactionId);
     }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+
+#endif
 }
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
     if (isEventSet) {
         event.setReceipt(receipt, transactionId);
