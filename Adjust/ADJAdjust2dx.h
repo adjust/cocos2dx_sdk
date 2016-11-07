@@ -24,9 +24,18 @@ public:
     static void trackSubsessionStart();
     static void trackSubsessionEnd();
     static void setEnabled(bool isEnabled);
-    static void appWillOpenUrl(void* url);
+    static void appWillOpenUrl(std::string url);
     static void setDeviceToken(std::string deviceToken);
     static void setOfflineMode(bool isOffline);
+    
+    static void sendFirstPackages();
+    static void addSessionCallbackParameter(std::string key, std::string value);
+    static void addSessionPartnerParameter(std::string key, std::string value);
+    static void removeSessionCallbackParameter(std::string key);
+    static void removeSessionPartnerParameter(std::string key);
+    static void resetSessionCallbackParameters();
+    static void resetSessionPartnerParameters();
+    
     static bool isEnabled();
     static std::string getIdfa();
 };

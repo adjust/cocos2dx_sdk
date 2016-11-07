@@ -17,15 +17,21 @@ using namespace AdjustWinRT;
 #endif
 
 #include <iostream>
+
 #include "AdjustAttribution2dx.h"
+#include "AdjustEventFailure2dx.h"
+#include "AdjustEventSuccess2dx.h"
+#include "AdjustSessionSuccess2dx.h"
+#include "AdjustSessionFailure2dx.h"
 
 enum AdjustLogLevel2dx {
-    AdjustLogLevel2dxVerbose = 1,
-    AdjustLogLevel2dxDebug   = 2,
-    AdjustLogLevel2dxInfo    = 3,
-    AdjustLogLevel2dxWarn    = 4,
-    AdjustLogLevel2dxError   = 5,
-    AdjustLogLevel2dxAssert  = 6 };
+    AdjustLogLevel2dxVerbose    = 1,
+    AdjustLogLevel2dxDebug      = 2,
+    AdjustLogLevel2dxInfo       = 3,
+    AdjustLogLevel2dxWarn       = 4,
+    AdjustLogLevel2dxError      = 5,
+    AdjustLogLevel2dxAssert     = 6,
+    AdjustLogLevel2dxSuppress   = 7 };
 
 class AdjustConfig2dx {
 private:
@@ -38,26 +44,51 @@ private:
     bool isConfigSet;
     WRTAdjustConfig^ config;
 #endif
-    void initConfig(std::string appToken, std::string environment);
+
+    void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel);
 
 public:
     AdjustConfig2dx() {}
+
     AdjustConfig2dx(std::string appToken, std::string environment) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-        initConfig(appToken, environment);
+        initConfig(appToken, environment, false);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isConfigSet = false;
-        initConfig(appToken, environment);
+        initConfig(appToken, environment, false);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
         isConfigSet = false;
-        initConfig(appToken, environment);
+        initConfig(appToken, environment, false);
 #endif
     }
 
-    void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
+    AdjustConfig2dx(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        initConfig(appToken, environment, allowSuppressLogLevel);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        isConfigSet = false;
+        initConfig(appToken, environment, allowSuppressLogLevel);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+        isConfigSet = false;
+        initConfig(appToken, environment, allowSuppressLogLevel);
+#endif
+    }
+
+    void setDelayStart(double delayStart);
+    void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
+    
+    void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
-    void setAttributionCallback(void (*attributionCallback)(AdjustAttribution2dx attribution));
+    
+    void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
+    
+    void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
+    void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
+    void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
+    void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
+    void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
+    void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

@@ -2,8 +2,9 @@ MVNDIR = ./sdk/Adjust
 JARINDIR = ./sdk/Adjust/target
 JAROUTDIR = ../../Android
 PROXYDIR = ./proxy
-JAR = $(JAVA_6_PATH)/bin/jar
-JAVAC = $(JAVA_6_PATH)/bin/javac
+JAR = $(JAVA_JDK_7)/bin/jar
+JAVAC = $(JAVA_JDK_7)/bin/javac
+ANDROIDJAR = $(ANDROID_HOME)/platforms/android-9/android.jar
 VERSION = $(shell cat ./sdk/VERSION)
 
 default: copy
@@ -17,7 +18,7 @@ clean:
 copy: build
 	cp $(JARINDIR)/adjust-android-$(VERSION).jar $(PROXYDIR); \
 	mv $(PROXYDIR)/adjust-android-$(VERSION).jar $(PROXYDIR)/adjust-android.jar; cd $(PROXYDIR); \
-	$(JAVAC) -cp adjust-android.jar com/adjust/sdk/*.java; \
+	$(JAVAC) -cp "adjust-android.jar:$(ANDROIDJAR)" com/adjust/sdk/*.java; \
 	$(JAR) uf adjust-android.jar com/adjust/sdk/*.class; cd ..; \
 	mv $(PROXYDIR)/adjust-android.jar $(JAROUTDIR)/adjust-android.jar; \
 	rm $(PROXYDIR)/com/adjust/sdk/*.class;
