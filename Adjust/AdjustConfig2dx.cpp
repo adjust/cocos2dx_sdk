@@ -274,11 +274,15 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 
     cocos2d::JniMethodInfo miSetEventBufferingEnabled;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig", "setEventBufferingEnabled", "(Z)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig", "setEventBufferingEnabled", "(Ljava/lang/Boolean;)V")) {
         return;
     }
 
-    miSetEventBufferingEnabled.env->CallVoidMethod(config, miSetEventBufferingEnabled.methodID, isEnabled);
+    jclass jcBoolean = miSetEventBufferingEnabled.env->FindClass("java/lang/Boolean");
+    jmethodID midValueOf = miSetEventBufferingEnabled.env->GetStaticMethodID(jcBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
+    jobject jIsEnabled = miSetEventBufferingEnabled.env->CallStaticObjectMethod(jcBoolean, midValueOf, isEnabled);
+
+    miSetEventBufferingEnabled.env->CallVoidMethod(config, miSetEventBufferingEnabled.methodID, jIsEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setEventBufferingEnabled(isEnabled);
@@ -310,8 +314,7 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 
     cocos2d::JniMethodInfo miSetDefaultTracker;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetDefaultTracker, "com/adjust/sdk/AdjustConfig", "setDefaultTracker",
-            "(Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetDefaultTracker, "com/adjust/sdk/AdjustConfig", "setDefaultTracker", "(Ljava/lang/String;)V")) {
         return;
     }
 
