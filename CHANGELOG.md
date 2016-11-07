@@ -1,4 +1,4 @@
-### Version 4.10.0 (4th November 2016)
+### Version 4.10.0 (7th November 2016)
 **Note: All changes in this release are for iOS and Android platform only.**
 #### Added
 - Added support for iOS 10.
@@ -16,6 +16,9 @@
 - Added callback method to get deferred deep link content into the app.
 - Added possibility to decide whether the SDK should launch the deferred deep link or not.
 - Added possibility to set user agent manually on adjust config instance.
+
+#### Fixed
+- Fixed `setEventBufferingEnabled` JNI signature.
 
 #### Changed
 - Deferred deep link info will now arrive as part of the attribution response and not as part of the answer to first session.
