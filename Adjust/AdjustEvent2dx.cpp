@@ -46,8 +46,7 @@ void AdjustEvent2dx::addCallbackParameter(std::string key, std::string value) {
 
     cocos2d::JniMethodInfo miAddCallbackParameter;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miAddCallbackParameter, "com/adjust/sdk/AdjustEvent", "addCallbackParameter",
-            "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miAddCallbackParameter, "com/adjust/sdk/AdjustEvent", "addCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
@@ -82,8 +81,7 @@ void AdjustEvent2dx::addPartnerParameter(std::string key, std::string value) {
 
     cocos2d::JniMethodInfo miAddPartnerParameter;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miAddPartnerParameter, "com/adjust/sdk/AdjustEvent", "addPartnerParameter",
-            "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miAddPartnerParameter, "com/adjust/sdk/AdjustEvent", "addPartnerParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
@@ -118,8 +116,7 @@ void AdjustEvent2dx::setRevenue(double amount, std::string currency) {
 
     cocos2d::JniMethodInfo miSetRevenue;
 
-    if (!cocos2d::JniHelper::getMethodInfo(miSetRevenue, "com/adjust/sdk/AdjustEvent", "setRevenue",
-            "(DLjava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(miSetRevenue, "com/adjust/sdk/AdjustEvent", "setRevenue", "(DLjava/lang/String;)V")) {
         return;
     }
 
@@ -148,7 +145,21 @@ void AdjustEvent2dx::setTransactionId(std::string transactionId) {
         event.setTransactionId(transactionId);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (event == NULL) {
+        return;
+    }
 
+    cocos2d::JniMethodInfo miSetTransactionId;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetTransactionId, "com/adjust/sdk/AdjustEvent", "setOrderId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jTransactionId = miSetTransactionId.env->NewStringUTF(transactionId.c_str());
+
+    miSetTransactionId.env->CallVoidMethod(event, miSetTransactionId.methodID, jTransactionId);
+
+    miSetTransactionId.env->DeleteLocalRef(jTransactionId);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 
 #endif
