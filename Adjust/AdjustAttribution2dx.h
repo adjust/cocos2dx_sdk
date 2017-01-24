@@ -19,11 +19,12 @@ private:
     std::string adgroup;
     std::string creative;
     std::string clickLabel;
+    std::string adid;
 public:
     AdjustAttribution2dx() {}
     AdjustAttribution2dx(std::string trackerToken, std::string trackerName, std::string network,
                          std::string campaign, std::string adgroup, std::string creative,
-                         std::string clickLabel) {
+                         std::string clickLabel, std::string adid) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;
@@ -31,6 +32,7 @@ public:
         this->adgroup = adgroup;
         this->creative = creative;
         this->clickLabel = clickLabel;
+        this->adid = adid;
     }
 
     std::string getTrackerToken();
@@ -40,6 +42,7 @@ public:
     std::string getAdgroup();
     std::string getCreative();
     std::string getClickLabel();
+    std::string getAdid();
 };
 
 #endif /* ADJUST_ADJUSTATTRIBUTION2DX_H_ */

@@ -30,12 +30,12 @@ class ADJConfig2dx {
 private:
     void* config;
 
-    void (*attributionCallback)(AdjustAttribution2dx attribution);
-    void (*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess);
-    void (*eventFailureCallback)(AdjustEventFailure2dx eventFailure);
-    void (*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess);
-    void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure);
-    bool (*deferredDeeplinkCallback)(std::string deeplink);
+    void (*attributionCallback)(AdjustAttribution2dx attribution) = NULL;
+    void (*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess) = NULL;
+    void (*eventFailureCallback)(AdjustEventFailure2dx eventFailure) = NULL;
+    void (*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess) = NULL;
+    void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure) = NULL;
+    bool (*deferredDeeplinkCallback)(std::string deeplink) = NULL;
 
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix);
 
@@ -67,6 +67,13 @@ public:
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
 
     void* getConfig();
+    
+    void(*getAttributionCallback())(AdjustAttribution2dx);
+    void(*getEventSuccessCallback())(AdjustEventSuccess2dx);
+    void(*getEventFailureCallback())(AdjustEventFailure2dx);
+    void(*getSessionSuccessCallback())(AdjustSessionSuccess2dx);
+    void(*getSessionFailureCallback())(AdjustSessionFailure2dx);
+    bool(*getDeferredDeeplinkCallback())(std::string);
 };
 
 #endif /* _ADJUST_ADJUSTCONFIG2DX_H_ */

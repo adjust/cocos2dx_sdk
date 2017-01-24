@@ -21,6 +21,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string adgroup;
     std::string creative;
     std::string clickLabel;
+    std::string adid;
 
     jclass clsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
 
@@ -31,6 +32,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID fAdgroupID = env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
     jfieldID fCreativeID = env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
     jfieldID fClickLabelID = env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
+    jfieldID fAdidID = env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
 
     jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, fTrackerTokenID);
     jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, fTrackerNameID);
@@ -39,6 +41,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jstring jAdgroup = (jstring)env->GetObjectField(attributionObject, fAdgroupID);
     jstring jCreative = (jstring)env->GetObjectField(attributionObject, fCreativeID);
     jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, fClickLabelID);
+    jstring jAdid = (jstring)env->GetObjectField(attributionObject, fAdidID);
 
     if (NULL != jTrackerToken) {
         const char *trackerTokenCStr = env->GetStringUTFChars(jTrackerToken, NULL);
@@ -103,7 +106,16 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         clickLabel = "";
     }
 
-    AdjustAttribution2dx attribution = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel);
+    if (NULL != jAdid) {
+        const char *adidCStr = env->GetStringUTFChars(jAdid, NULL);
+        adid = std::string(adidCStr);
+        env->ReleaseStringUTFChars(jAdid, adidCStr);
+        env->DeleteLocalRef(jAdid);
+    } else {
+        adid = "";
+    }
+
+    AdjustAttribution2dx attribution = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
     
     attributionCallbackMethod(attribution);
 }
@@ -132,7 +144,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     jfieldID fAdidID = env->GetFieldID(clsAdjustEventFailure, "adid", "Ljava/lang/String;");
     jfieldID fEventTokenID = env->GetFieldID(clsAdjustEventFailure, "eventToken", "Ljava/lang/String;");
     jfieldID fWillRetryID = env->GetFieldID(clsAdjustEventFailure, "willRetry", "Z");
-    jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventFailure, "jsonResponse", "Lorg.json.JSONObject;");
+    jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventFailure, "jsonResponse", "Lorg/json/JSONObject;");
 
     jstring jMessage = (jstring)env->GetObjectField(eventFailureObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(eventFailureObject, fTimestampID);
@@ -319,7 +331,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
     jfieldID fTimestampID = env->GetFieldID(clsAdjustSessionFailure, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustSessionFailure, "adid", "Ljava/lang/String;");
     jfieldID fWillRetryID = env->GetFieldID(clsAdjustSessionFailure, "willRetry", "Z");
-    jfieldID fJsonResponseID = env->GetFieldID(clsAdjustSessionFailure, "jsonResponse", "Lorg.json.JSONObject;");
+    jfieldID fJsonResponseID = env->GetFieldID(clsAdjustSessionFailure, "jsonResponse", "Lorg/json/JSONObject;");
 
     jstring jMessage = (jstring)env->GetObjectField(sessionFailureObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(sessionFailureObject, fTimestampID);

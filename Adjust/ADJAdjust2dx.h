@@ -13,6 +13,7 @@
 
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
+#include "AdjustAttribution2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
 extern const std::string ADJEnvironmentProduction2dx;
@@ -38,6 +39,8 @@ public:
     
     static bool isEnabled();
     static std::string getIdfa();
+    static std::string getAdid();
+    static AdjustAttribution2dx getAttribution();
 };
 
 #endif /* _ADJUST_ADJUST2DX_H_ */

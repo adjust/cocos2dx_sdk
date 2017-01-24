@@ -12,6 +12,7 @@
 
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
+#include "AdjustAttribution2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -33,6 +34,9 @@ public:
     static void removeSessionPartnerParameter(std::string key);
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
+
+    static std::string getAdid();
+    static AdjustAttribution2dx getAttribution();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     static void onResume();
