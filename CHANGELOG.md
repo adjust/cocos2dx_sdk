@@ -1,3 +1,34 @@
+### Version 4.11.0 (xxth January 2017)
+**Note: All changes in this release are for iOS and Android platform only.**
+#### Added
+- Added `adid` property to the attribution callback response.
+- Added `getAdid()` method of the `Adjust2dx` instance to be able to get adid value at any time after obtaining it, not only when session/event callbacks have been triggered.
+- Added `getAttribution()` method of the `Adjust2dx` instance to be able to get current attribution value at any time after obtaining it, not only when attribution callback has been triggered.
+- Added method swizzling for iOS platform so that only implemented callbacks in Cocos2d-x are getting implemented and called in the iOS.
+- Added sending of **Amazon Fire Advertising Identifier** for Android platform.
+- Added possibility to set default tracker for the app by adding `adjust_config.properties` file to the `assets` folder of your Android app. Mostly meant to be used by the `Adjust Store & Pre-install Tracker Tool` (https://github.com/adjust/android_sdk/blob/master/doc/english/pre_install_tracker_tool.md).
+
+#### Fixed
+- Now reading push token value from activity state file when sending package.
+- Fixed memory leak by closing network session for iOS platform.
+- Fixed `TARGET_OS_TV` pre processor check for iOS platform.
+
+#### Changed
+- Firing attribution request as soon as install has been tracked, regardless of presence of attribution callback implementation in user's app.
+- Saving iAd/AdSearch details to prevent sending duplicated `sdk_click` packages for iOS platform.
+- Changed Makefiles with bash scripts.
+- Updated docs.
+- Updated native iOS SDK to version **4.11.0**.
+- Updated native Android SDK to version **4.11.0**.
+- Native SDKs stability updates and improvements.
+
+#### Native SDKs
+- [iOS SDK 4.11.0][ios_sdk_v4.11.0]
+- [Android SDK 4.11.0][android_sdk_v4.11.0]
+- [Windows@4.0.3][windows_sdk_v4.0.3]
+
+---
+
 ### Version 4.10.0 (7th November 2016)
 **Note: All changes in this release are for iOS and Android platform only.**
 #### Added
@@ -98,11 +129,13 @@
 [ios_sdk_v4.3.0]: https://github.com/adjust/ios_sdk/tree/v4.3.0
 [ios_sdk_v4.5.4]: https://github.com/adjust/ios_sdk/tree/v4.5.4
 [ios_sdk_v4.10.2]: https://github.com/adjust/ios_sdk/tree/v4.10.2
+[ios_sdk_v4.11.0]: https://github.com/adjust/ios_sdk/tree/v4.11.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
 [android_sdk_v4.1.2]: https://github.com/adjust/android_sdk/tree/v4.1.2
 [android_sdk_v4.2.3]: https://github.com/adjust/android_sdk/tree/v4.2.3
 [android_sdk_v4.10.2]: https://github.com/adjust/android_sdk/tree/v4.10.2
+[android_sdk_v4.11.0]: https://github.com/adjust/android_sdk/tree/v4.11.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
