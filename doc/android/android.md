@@ -11,8 +11,8 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
    * [Add the adjust library to your project](#sdk-library)
    * [Add Google Play Services](#sdk-gps)
    * [Add permissions](#sdk-permissions)
-   * [Proguard settings](#sdk-proguard)
    * [Add broadcast receiver](#sdk-broadcast-receiver)
+   * [Proguard settings](#sdk-proguard)
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Adjust logging](#sdk-logging)
    * [Session tracking](#sdk-session-tracking)
@@ -57,11 +57,11 @@ Download the latest version from our [releases page][releases]. Extract the arch
 
 ### <a id="sdk-add">Add the SDK to your project
 
-In this guide we assume that you are using `Android Studio` for development. If you are using `Eclipse`, please read our [Cocos2d-x Eclipse guide][eclipse_guide].
+In this guide we assume that you are using `Android Studio` for development. If you are using `Eclipse`, please read our [Cocos2d-x Eclipse guide][eclipse-guide].
 
 Take the files from the `Adjust` folder and add them to your Android project.
 
-![][add_android_files]
+![][add-android-files]
 
 ### <a id="sdk-cpp-files">Add the C++ source file definitions
 
@@ -79,17 +79,17 @@ Make sure to also add the paths of the adjust C++ files to the `LOCAL_SRC_FILES`
 ../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp
 ```
 
-![][add_to_android_mk]
+![][add-to-android-mk]
 
 ### <a id="sdk-library">Add the adjust library to your project
 
 Take the `adjust-android.jar` library and copy it to your project's `libs` folder.
 
-![][add_android_jar]
+![][add-android-jar]
 
 ### <a id="sdk-gps">Add Google Play Services
 
-Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the adjust SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
+Since the 1st of August of 2014, apps in the Google Play Store must use the [Google Advertising ID][google-ad-id] to uniquely identify devices. To allow the adjust SDK to use the Google Advertising ID, you must integrate the [Google Play Services][google-play-services]. If you haven't done this yet, follow these steps:
 
 1. Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
@@ -97,7 +97,7 @@ Since the 1st of August of 2014, apps in the Google Play Store must use the [Goo
     compile 'com.google.android.gms:play-services-analytics:9.3.0'
     ```
 
-    ![][gps_gradle]
+    ![][gps-gradle]
 
 2. Skip this step if you are using version 7 or later of Google Play Services:
    In the Package Explorer open the `AndroidManifest.xml` of your Android project.  Add the following `meta-data` tag inside
@@ -105,10 +105,10 @@ Since the 1st of August of 2014, apps in the Google Play Store must use the [Goo
 
     ```xml
     <meta-data android:name="com.google.android.gms.version"
-               android:value="@integer/google_play_services_version" />
+               android:value="@integer/google-play-services_version" />
     ```
 
-    ![][gps_manifest]
+    ![][gps-manifest]
 
 ### <a id="sdk-permissions">Add permissions
 
@@ -125,7 +125,27 @@ If you are **not targeting the Google Play Store**, add both of these permission
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
 ```
 
-![][manifest_permissions]
+![][manifest-permissions]
+
+### <a id="sdk-broadcast-receiver">Add broadcast receiver
+
+In your `AndroidManifest.xml` add the following `receiver` tag inside the `application` tag.
+
+```xml
+<receiver
+    android:name="com.adjust.sdk.AdjustReferrerReceiver"
+    android:exported="true" >
+    <intent-filter>
+        <action android:name="com.android.vending.INSTALL_REFERRER" />
+    </intent-filter>
+</receiver>
+```
+
+![][broadcast-receiver]
+
+We use this broadcast receiver to retrieve the install referrer, in order to improve conversion tracking.
+
+If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, then follow [these instructions][referrer] to add the call to the Adjust broadcast receiver.
 
 ### <a id="sdk-proguard"></a>Proguard settings
 
@@ -161,26 +181,6 @@ If you are using Proguard, add these lines to your Proguard file:
 
 If you are **not targeting the Google Play Store**, you can remove the `com.google.android.gms` rules.
 
-### <a id="sdk-permissions">Add broadcast receiver
-
-In your `AndroidManifest.xml` add the following `receiver` tag inside the `application` tag.
-
-```xml
-<receiver
-    android:name="com.adjust.sdk.AdjustReferrerReceiver"
-    android:exported="true" >
-    <intent-filter>
-        <action android:name="com.android.vending.INSTALL_REFERRER" />
-    </intent-filter>
-</receiver>
-```
-
-![][broadcast_receiver]
-
-We use this broadcast receiver to retrieve the install referrer, in order to improve conversion tracking.
-
-If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, then follow [these instructions][referrer] to add the call to the Adjust broadcast receiver.
-
 ### <a id="sdk-integrate">Integrate the SDK into your app
 
 In the Package Explorer, open the source file of your app delegate. Add the import statement at the top of the file, then add the following call to Adjust in the `applicationDidFinishLaunching` of your app delegate:
@@ -196,7 +196,7 @@ AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
 Adjust2dx::start(adjustConfig);
 ```
 
-![][add_adjust2dx]
+![][add-adjust2dx]
 
 Replace `{YourAppToken}` with your app token. You can find this in your [dashboard].
 
@@ -255,28 +255,28 @@ void AppDelegate::applicationDidEnterBackground() {
     // ...
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	Adjust2dx::onPause();
+    Adjust2dx::onPause();
 #endif
 }
 
 void AppDelegate::applicationWillEnterForeground() {
-	// ...
+    // ...
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	Adjust2dx::onResume();
+    Adjust2dx::onResume();
 #endif
 }
 
 // ...
 ```
 
-![][on_resume_on_pause]
+![][on-resume-on-pause]
 
 ## <a id="sdk-build">Build your app
 
 Build and run your Android app. In your LogCat viewer you can set the filter `tag:Adjust` to hide all other logs. After your app has launched you should see the following Adjust log: `Install tracked`
 
-![][log_message]
+![][log-message]
 
 ## <a id="additional-features">Additional features
 
@@ -844,42 +844,42 @@ If nothing is set, **the adjust SDK will always try to launch the URL by default
 
 To set up your Android app to handle deep linking on native level, please follow our [guide][android-deeplinking] in the official Android SDK README.
 
-[adjust]:	http://adjust.com
+[adjust]: 	http://adjust.com
 [dashboard]:    http://adjust.com
-[adjust.com]:  	http://adjust.com
+[adjust.com]:   http://adjust.com
 
 [maven]:                http://maven.org
 [example]:              https://github.com/adjust/android_sdk/tree/master/Adjust/example
-[releases]:      	https://github.com/adjust/cocos2dx_sdk/releases
+[releases]:       	https://github.com/adjust/cocos2dx_sdk/releases
 [multidex]:             https://developer.android.com/tools/building/multidex.html
 [referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
-[google_ad_id]:         https://developer.android.com/google/play-services/id.html
-[eclipse_guide]:	https://github.com/adjust/cocos2dx_sdk/blob/master/doc/android/eclipse.md
+[google-ad-id]:         https://developer.android.com/google/play-services/id.html
+[eclipse-guide]:  	https://github.com/adjust/cocos2dx_sdk/blob/master/doc/android/eclipse.md
 [event-tracking]:       https://docs.adjust.com/en/event-tracking
-[eclipse_library]:	http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject
+[eclipse-library]:  	http://developer.android.com/tools/projects/projects-eclipse.html#ReferencingLibraryProject
 [callbacks-guide]:      https://docs.adjust.com/en/callbacks
 [special-partners]:     https://docs.adjust.com/en/special-partners
 [attribution-data]:     https://github.com/adjust/sdks/blob/master/doc/attribution-data.md
-[application_name]:     http://developer.android.com/guide/topics/manifest/application-element.html#nm
+[application-name]:     http://developer.android.com/guide/topics/manifest/application-element.html#nm
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
-[android-deeplinking]:	https://github.com/adjust/android_sdk#deeplinking
-[android_application]:  http://developer.android.com/reference/android/app/Application.html
+[android-deeplinking]:  https://github.com/adjust/android_sdk#deeplinking
+[android-application]:  http://developer.android.com/reference/android/app/Application.html
 [google-launch-modes]:  http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
-[google_play_services]: http://developer.android.com/google/play-services/setup.html
+[google-play-services]: http://developer.android.com/google/play-services/setup.html
 
-[gps_gradle]:	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_gradle.png
-[log_message]: 	     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/log_message.png
-[gps_manifest]:      https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_manifest.png
-[add_adjust2dx]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_adjust2dx.png
-[proguard_rules]:    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/proguard_rules.png
-[add_android_jar]:   https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_jar.png
-[add_android_files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_files.png
-[add_to_android_mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_to_android_mk.png
+[gps-gradle]:        https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_gradle.png
+[log-message]:       https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/log_message.png
+[gps-manifest]:      https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/gps_manifest.png
+[add-adjust2dx]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_adjust2dx.png
+[proguard-rules]:    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/proguard_rules.png
+[add-android-jar]:   https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_jar.png
 
-[broadcast_receiver]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/broadcast_receiver.png
-[on_resume_on_pause]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/on_resume_on_pause.png
-[manifest_permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/manifest_permissions.png
+[add-android-files]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_android_files.png
+[add-to-android-mk]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/add_to_android_mk.png
+[broadcast-receiver]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/broadcast_receiver.png
+[on-resume-on-pause]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/on_resume_on_pause.png
+[manifest-permissions]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/android_studio/manifest_permissions.png
 
 ## <a id="license">License
 
