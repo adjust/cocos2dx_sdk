@@ -53,7 +53,7 @@ Download the latest version from our [releases page][releases]. Extract the arch
 
 Take the files from the `Adjust` folder and add them to your iOS project.
 
-![][add_ios_files]
+![][add-ios-files]
 
 ### <a id="sdk-frameworks">Add the frameworks to your project
 
@@ -63,13 +63,13 @@ Before adding `AdjustSdk.framework` to your project, please make sure that you f
 
 Select your project in the Project Navigator. In the left hand side of the main view, select your target. In the tab `Build Phases` expand the group `Link Binary With Libraries`. On the bottom of that section click on the `+` button. Select the `AdjustSdk.framework` and click the `Add` button. Repeat the same steps to add the `AdSupport.framework` and `iAd.framework`.
 
-![][add_the_frameworks]
+![][add-the-frameworks]
 
 ### <a id="sdk-linker-flags">Add additional linker flags
 
 In order to support categories from `AdjustSdk.framework`, you should add an additional linker flag. Go to the `Build Settings` part of Project Settings and look for `Other Linker Flags` option. Add `-ObjC` flag to it.
 
-![][add_other_linker_flags]
+![][add-other-linker-flags]
 
 ### <a id="sdk-integrate">Integrate the SDK into your app
 
@@ -86,7 +86,7 @@ AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
 Adjust2dx::start(adjustConfig);
 ```
 
-![][add_adjust2dx]
+![][add-adjust2dx]
 
 Replace `{YourAppToken}` with your app token. You can find this in your [dashboard].
 
@@ -691,9 +691,9 @@ If nothing is set, **the adjust SDK will always try to launch the URL by default
 To set up your iOS app to handle deep linking on native level, please follow our [guide][ios-deeplinking] in the official iOS SDK README.
 
 
-[adjust]:	      http://adjust.com
+[adjust]:       http://adjust.com
 [dashboard]:    http://adjust.com
-[adjust.com]:  	http://adjust.com
+[adjust.com]:   http://adjust.com
 
 [releases]:             https://github.com/adjust/cocos2dx_sdk/releases
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
@@ -705,10 +705,10 @@ To set up your iOS app to handle deep linking on native level, please follow our
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
 
 [run]:                    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
-[add_ios_files]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
-[add_adjust2dx]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
-[add_the_frameworks]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
-[add_other_linker_flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
+[add-ios-files]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
+[add-adjust2dx]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
+[add-the-frameworks]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
+[add-other-linker-flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
 
 ## <a id="license">License
 
