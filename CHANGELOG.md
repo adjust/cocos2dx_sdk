@@ -3,15 +3,15 @@
 #### Added
 - Added `adid` property to the attribution callback response.
 - Added `getAdid()` method of the `Adjust2dx` instance to be able to get adid value at any time after obtaining it, not only when session/event callbacks have been triggered.
-- Added `getAttribution()` method of the `Adjust2dx` instance to be able to get current attribution value at any time after obtaining it, not only when attribution callback has been triggered.
-- Added method swizzling for iOS platform so that only implemented callbacks in Cocos2d-x are getting implemented and called in the iOS.
+- Added `getAttribution()` method of the `Adjust2dx` instance to be able to get current attribution value at any time after obtaining it, not only when an attribution callback has been triggered.
+- Added method swizzling for iOS platform so that only implemented callbacks in Cocos2d-x are getting implemented and called in iOS.
 - Added sending of **Amazon Fire Advertising Identifier** for Android platform.
 - Added possibility to set default tracker for the app by adding `adjust_config.properties` file to the `assets` folder of your Android app. Mostly meant to be used by the `Adjust Store & Pre-install Tracker Tool` (https://github.com/adjust/android_sdk/blob/master/doc/english/pre_install_tracker_tool.md).
 
 #### Fixed
 - Now reading push token value from activity state file when sending package.
 - Fixed memory leak by closing network session for iOS platform.
-- Fixed `TARGET_OS_TV` pre processor check for iOS platform.
+- Fixed `TARGET_OS_TV` pre-processor check for iOS platform.
 
 #### Changed
 - Firing attribution request as soon as install has been tracked, regardless of presence of attribution callback implementation in user's app.

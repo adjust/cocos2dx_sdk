@@ -1,18 +1,18 @@
 ## Summary
 
-This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [adjust.com].
+This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [adjust.com].
 
 ### iOS guide
 
-To integrate the adjust SDK into your Cocos2d-x iOS project, please read our [Cocos2d-x iOS guide][cocos2dx-ios].
+To integrate the Adjust SDK into your Cocos2d-x iOS project, please read our [Cocos2d-x iOS guide][cocos2dx-ios].
 
 ### Android guide
 
-To integrate the adjust SDK into your Cocos2d-x Android project, please read our [Cocos2d-x Android guide][cocos2dx-android].
+To integrate the Adjust SDK into your Cocos2d-x Android project, please read our [Cocos2d-x Android guide][cocos2dx-android].
 
 ### Windows guide
 
-To integrate the adjust SDK into your Cocos2d-x Windows or Windows Phone project, please read our [Cocos2d-x Windows guide][cocos2dx-windows].
+To integrate the Adjust SDK into your Cocos2d-x Windows or Windows Phone project, please read our [Cocos2d-x Windows guide][cocos2dx-windows].
 
 [adjust.com]:       http://adjust.com
 [cocos2dx-ios]:     https://github.com/adjust/cocos2dx_sdk/blob/master/doc/ios/ios.md
@@ -21,9 +21,9 @@ To integrate the adjust SDK into your Cocos2d-x Windows or Windows Phone project
 
 ## License
 
-The adjust-SDK is licensed under the MIT License.
+The Adjust-SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2017 adjust GmbH,
+Copyright (c) 2012-2017 Adjust GmbH,
 http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of

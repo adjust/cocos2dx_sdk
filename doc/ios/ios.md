@@ -1,6 +1,6 @@
 ## Summary
 
-This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [adjust.com].
+This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [adjust.com].
 
 ## Table of contents
 
@@ -30,7 +30,7 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
     * [Event buffering](#event-buffering)
     * [Background tracking](#background-tracking)
     * [Device IDs](#device-ids)
-      * [iOS Advertising Identifier](#di-idfa)
+      * [iOS advertising identifier](#di-idfa)
       * [Adjust device identifier](#di-adid)
     * [User attribution](#user-attribution)
     * [Push token](#push-token)
@@ -43,7 +43,7 @@ This is the Cocos2d-x SDK of adjust™. You can read more about adjust™ at [ad
 
 ## <a id="basic-integration">Basic integration
 
-We will describe the steps to integrate the adjust SDK into your Cocos2d-x iOS project.
+We will describe the steps to integrate the Adjust SDK into your Cocos2d-x iOS project.
 
 ### <a id="sdk-get">Get the SDK
 
@@ -59,15 +59,15 @@ Take the files from the `Adjust` folder and add them to your iOS project.
 
 You need to add the AdjustSdk, AdSupport and iAd frameworks to your project.
 
-Before adding `AdjustSdk.framework` to your project, please make sure that you first copy it to the `proj.ios_mac` folder of your project.
+Before adding `AdjustSdk.framework` to your project, please make sure that you first copy and paste it into the `proj.ios_mac` folder of your project.
 
-Select your project in the Project Navigator. In the left hand side of the main view, select your target. In the tab `Build Phases` expand the group `Link Binary With Libraries`. On the bottom of that section click on the `+` button. Select the `AdjustSdk.framework` and click the `Add` button. Repeat the same steps to add the `AdSupport.framework` and `iAd.framework`.
+Select your project in the Project Navigator. In the left-hand side of the main view, select your target. In the tab `Build Phases`, expand the group `Link Binary With Libraries`. At the bottom of that section, click on the `+` button. Select the `AdjustSdk.framework` and click the `Add` button. Repeat the same steps to add `AdSupport.framework` and `iAd.framework`.
 
 ![][add-the-frameworks]
 
 ### <a id="sdk-linker-flags">Add additional linker flags
 
-In order to support categories from `AdjustSdk.framework`, you should add an additional linker flag. Go to the `Build Settings` part of Project Settings and look for `Other Linker Flags` option. Add `-ObjC` flag to it.
+In order to support categories from `AdjustSdk.framework`, you should add an additional linker flag. Go to the `Build Settings` part of Project Settings and look for the `Other Linker Flags` option. Add an `-ObjC` flag to it.
 
 ![][add-other-linker-flags]
 
@@ -133,11 +133,11 @@ Build and run your app. If the build succeeds, you should carefully read the SDK
 
 ## <a id="additional-features">Additional features
 
-Once you integrate the adjust SDK into your project, you can take advantage of the following features.
+Once you integrate the Adjust SDK into your project, you can take advantage of the following features.
 
 ### <a id="event-tracking">Event tracking
 
-With adjust, you can track any event that you want. Suppose you want to track every tap on a button. Simply create a new event token in your [dashboard]. Let's say that event token is `abc123`. You can add the following line in your button’s click handler method to track the click:
+With Adjust, you can track any event that you want. Suppose you want to track every tap on a button. Simply create a new event token in your [dashboard]. Let's say that event token is `abc123`. You can add the following line in your button’s click handler method to track the click:
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
@@ -156,7 +156,7 @@ adjustEvent.setRevenue(0.01, "EUR");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-When you set a currency token, adjust will automatically convert the incoming revenues into a reporting revenue of your choice. Read more about [currency conversion here][currency-conversion].
+When you set a currency token, Adjust will automatically convert the incoming revenues into a reporting revenue of your choice. Read more about [currency conversion here][currency-conversion].
 
 You can read more about revenue and event tracking in the [event tracking guide][event-tracking].
 
@@ -208,7 +208,7 @@ You can read more about using URL callbacks, including a full list of available 
 
 ### <a id="partner-parameters">Partner parameters
 
-You can also add parameters to be transmitted to network partners, for the integrations that have been activated in your adjust dashboard.
+You can also add parameters to be transmitted to network partners, for the integrations that have been activated in your Adjust dashboard.
 
 This works similarly to the callback parameters mentioned above, but can be added by calling the `addPartnerParameter` method on your `AdjustEvent2dx` instance.
 
@@ -225,13 +225,13 @@ You can read more about special partners and these integrations in our [guide to
 
 ### <a id="session-parameters">Session parameters
 
-Some parameters are saved to be sent in every event and session of the adjust SDK. Once you have added any of these parameters, you don't need to add them every time, since they will be saved locally. If you add the same parameter twice, there will be no effect.
+Some parameters are saved to be sent in every event and session of the Adjust SDK. Once you have added any of these parameters, you don't need to add them every time, since they will be saved locally. If you add the same parameter twice, there will be no effect.
 
-These session parameters can be called before the adjust SDK is launched to make sure they are sent even on install. If you need to send them with an install, but can only obtain the needed values after launch, it's possible to [delay](#delay-start) the first launch of the adjust SDK to allow this behaviour.
+These session parameters can be called before the Adjust SDK is launched to make sure they are sent even on install. If you need to send them with an install, but can only obtain the needed values after launch, it's possible to [delay](#delay-start) the first launch of the Adjust SDK to allow this behaviour.
 
 ### <a id="session-callback-parameters"> Session callback parameters
 
-The same callback parameters that are registered for [events](#callback-parameters) can be also saved to be sent in every event or session of the adjust SDK.
+The same callback parameters that are registered for [events](#callback-parameters) can be also saved to be sent in every event or session of the Adjust SDK.
 
 The session callback parameters have a similar interface of the event callback parameters. Instead of adding the key and it's value to an event, it's added through a call to method `addSessionCallbackParameter` of the `Adjust2dx` instance.
 
@@ -255,9 +255,9 @@ Adjust2dx::resetSessionCallbackParameters();
 
 ### <a id="session-partner-parameters">Session partner parameters
 
-In the same way that there is [session callback parameters](#session-callback-parameters) that are sent for every event or session of the adjust SDK, there is also session partner parameters.
+In the same way that there is [session callback parameters](#session-callback-parameters) that are sent for every event or session of the Adjust SDK, there is also session partner parameters.
 
-These will be transmitted to network partners, for the integrations that have been activated in your adjust [dashboard].
+These will be transmitted to network partners, for the integrations that have been activated in your Adjust [dashboard].
 
 The session partner parameters have a similar interface to the event partner parameters. Instead of adding the key and it's value to an event, it's added through a call to method `addSessionPartnerParameter` of the `Adjust2dx` instance.
 
@@ -281,7 +281,7 @@ Adjust2dx::resetSessionPartnerParameters();
 
 ### <a id="delay-start">Delay start
 
-Delaying the start of the adjust SDK allows your app some time to obtain session parameters, such as unique identifiers, to be sent on install.
+Delaying the start of the Adjust SDK allows your app some time to obtain session parameters, such as unique identifiers, to be sent on install.
 
 Set the initial delay time in seconds with the `setDelayStart` method of the `AdjustConfig2dx` instance:
 
@@ -289,13 +289,13 @@ Set the initial delay time in seconds with the `setDelayStart` method of the `Ad
 config.setDelayStart(5.5);
 ```
 
-In this case this will make the adjust SDK not send the initial install session and any event created for 5.5 seconds. After this time is expired or if you call `Adjust2dx::sendFirstPackages()` in the meanwhile, every session parameter will be added to the delayed install session and events and the adjust SDK will resume as usual.
+In this case this will make the Adjust SDK not send the initial install session and any event created for 5.5 seconds. After this time is expired or if you call `Adjust2dx::sendFirstPackages()` in the meanwhile, every session parameter will be added to the delayed install session and events and the Adjust SDK will resume as usual.
 
-**The maximum delay start time of the adjust SDK is 10 seconds**.
+**The maximum delay start time of the Adjust SDK is 10 seconds**.
 
 ### <a id="attribution-callback">Attribution callback
 
-adjust can also send you a callback upon change of attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps to implement the optional callback in your application:
+Adjust can also send you a callback upon change of attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps to implement the optional callback in your application:
 
 1. Create void method which receives parameter of type `AdjustAttribution2dx`.
 
@@ -489,7 +489,7 @@ The callback functions will be called after the SDK tries to send a package to t
 
 - `std::string message` the message from the server or the error logged by the SDK.
 - `std::string timestamp` timestamp from the server.
-- `std::string adid` a unique device identifier provided by adjust.
+- `std::string adid` a unique device identifier provided by Adjust.
 - `std::string jsonResponse` the JSON object with the response from the server.
 
 Both event response data objects contain:
@@ -502,17 +502,17 @@ And both event and session failed objects also contain:
 
 ### <a id="disable-tracking">Disable tracking
 
-You can disable the adjust SDK from tracking by invoking the method `Adjust2dx::setEnabled` with the enabled parameter as `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
+You can disable the Adjust SDK from tracking by invoking the method `Adjust2dx::setEnabled` with the enabled parameter as `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
 
 ```cpp
 Adjust2dx::setEnabled(false);
 ```
 
-You can verify if the adjust SDK is currently active with the method `Adjust2dx::isEnabled()`. It is always possible to activate the adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
+You can verify if the Adjust SDK is currently active with the method `Adjust2dx::isEnabled()`. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
 
 ### <a id="offline-mode">Offline mode
 
-You can put the adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so be careful not to trigger too many events while in offline mode.
+You can put the Adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so be careful not to trigger too many events while in offline mode.
 
 You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter `true`.
 
@@ -520,7 +520,7 @@ You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the pa
 Adjust2dx::setOfflineMode(true);
 ```
 
-Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with `false`. When the adjust SDK is put back in online mode, all saved information is sent to our servers with the correct time information.
+Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with `false`. When the Adjust SDK is put back in online mode, all saved information is sent to our servers with the correct time information.
 
 Unlike disabling tracking, **this setting is not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
 
@@ -549,7 +549,7 @@ If nothing set, event buffering is **disabled by default**.
 
 ### <a id="background-tracking">Background tracking
 
-The default behaviour of the adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling `setSendInBackground` method:
+The default behaviour of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling `setSendInBackground` method:
 
 ```cpp
 // ...
@@ -584,27 +584,27 @@ std::string idfa = Adjust2dx::getIdfa();
 
 ### <a id="di-adid"></a>Adjust device identifier
 
-For each device with your app installed, adjust backend generates unique **adjust device identifier** (**adid**). In order to obtain this identifier, you can make a call to following the method on the `Adjust2dx` instance:
+For every device with your app installed, the Adjust backend generates a unique **Adjust device identifier** (**adid**). In order to obtain this identifier, you can make a call to the following method on the `Adjust2dx` instance:
 
 ```cpp
 std::string adid = Adjust2dx::getAdid();
 ```
 
-**Note**: Information about the **adid** is available after the app's installation has been tracked by the adjust backend. From that moment on, the adjust SDK has information about the device **adid** and you can access it with this method. So, **it is not possible** to access the **adid** before the SDK has been initialised and the installation of your app has been tracked successfully.
+**Note**: Information about the **adid** is available after the app's installation has been tracked by the Adjust backend. From that moment on, the Adjust SDK has information about the device **adid** and you can access it with this method. So, **it is not possible** to access the **adid** before the SDK has been initialised and the installation of your app has been tracked successfully.
 
 ### <a id="user-attribution"></a>User attribution
 
-The attribution callback will be triggered as described in the [attribution callback section](#attribution-callback), providing you with the information about any new attribution when ever it changes. In any other case, where you want to access information about your user's current attribution, you can make a call to the following method of the `Adjust2dx` instance:
+The attribution callback will be triggered as described in the [attribution callback section](#attribution-callback), providing you with information about any new attributions whenever they change. If you want to access information about a user's current attribution at any other time, you can make a call to the following method of the `Adjust2dx` instance:
 
 ```cpp
 AdjustAttribution2dx attribution = Adjust2dx::getAttribution();
 ```
 
-**Note**: Information about current attribution is available after app installation has been tracked by the adjust backend and attribution callback has been initially triggered. From that moment on, adjust SDK has information about your user's attribution and you can access it with this method. So, **it is not possible** to access user's attribution value before the SDK has been initialised and attribution callback has been initially triggered.
+**Note**: Information about a user's current attribution is available after an app installation has been tracked by the Adjust backend and the attribution callback has been triggered. From that moment on, the Adjust SDK has information about the user's attribution and you can access it with this method. So, **it is not possible** to access a user's attribution value before the SDK has been initialised and attribution callback has been initially triggered.
 
 ### <a id="push-token">Push token
 
-To send us the push notifications token, then add the following call to Adjust **whenever you get your token in the app or when it gets updated**:
+To send us the push notifications token, add the following call to Adjust **whenever you get your token in the app or when it gets updated**:
 
 ```cpp
 Adjust2dx::setDeviceToken("YourPushNotificationToken");
@@ -612,10 +612,10 @@ Adjust2dx::setDeviceToken("YourPushNotificationToken");
 
 ### <a id="pre-installed-trackers">Pre-installed trackers
 
-If you want to use the adjust SDK to recognize users that found your app pre-installed on their device, follow these steps.
+If you want to use the Adjust SDK to recognize users whose devices came with you app pre-installed, follow these steps:
 
-1. Create a new tracker in your [dashboard]. Let's assume that new tracker token is `abc123`.
-2. Open your app delegate and add set the default tracker of your `AdjustConfig2dx` instance:
+1. Create a new tracker in your [dashboard]. Let's assume that the new tracker token is `abc123`.
+2. Open your app delegate and set the default tracker of your `AdjustConfig2dx` instance:
 
     ```cpp
     AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
@@ -625,9 +625,7 @@ If you want to use the adjust SDK to recognize users that found your app pre-ins
     Adjust2dx::adjustConfig(config);
     ```
 
-  Replace `{TrackerToken}` with the tracker token you created in step 2. Please note that the dashboard displays a tracker
-  URL (including `http://app.adjust.com/`). In your source code, you should specify only the six-character token and not the
-  entire URL.
+  Replace `{TrackerToken}` with the tracker token you created in step 1. Please note that the dashboard displays a tracker URL (including `http://app.adjust.com/`). In your source code, you should specify only the six-character token and not the entire URL.
 
 3. Build and run your app. You should see a line like the following in the app's log output:
 
@@ -637,17 +635,17 @@ If you want to use the adjust SDK to recognize users that found your app pre-ins
 
 ### <a id="deeplinking">Deep linking
 
-If you are using the adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get info about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep linking scenario) or if they don't have the app on their device (deferred deep linking scenario). In the standard deep linking scenario, Android platform natively offers the possibility for you to get the info about the deep link content. Deferred deep linking scenario is something which Android platform doesn't support out of box and for this case, the adjust SDK will offer you the mechanism to get the info about the deep link content.
+If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep-linking scenario) or if they don't have the app on their device (deferred deep-linking scenario). In the standard deep-linking scenario, the Android platform offers native support for you to get information about the deep link content. The deferred deep-linking scenario is something which the Android platform doesn't support out of the box. In this scenario, the Adjust SDK offers you the necessary mechanism to get information about the deep link content.
 
-You need to set up deep linking handling in your app **on native level** - in your generated Xcode project.
+You need to set up deep link handling in your app **at a native level** - in your generated Xcode project.
 
-### <a id="deeplinking-standard">Standard deep linking scenario
+### <a id="deeplinking-standard">Standard deep-linking scenario
 
-Unfortunatelly, in this scenario the information about the deep link can not be delivered to you in your Cocos2d-x C++ code. Once you enable your app to handle deep linking, you will get information about the deep link on native level. For more information check our chapters below on how to enable deep linking for iOS apps.
+Unfortunately, in this scenario, the information about the deep link can not be delivered to you in your Cocos2d-x C++ code. Once you enable your app to handle deep linking, you will get information about the deep link at a native level. For more information, check our chapters below on how to enable deep linking for iOS apps.
 
-### <a id="deeplinking-deferred">Deferred deep linking scenario
+### <a id="deeplinking-deferred">Deferred deep-linking scenario
 
-In order to get info about the URL content in a deferred deep linking scenario, you should set a callback method on the `AdjustConfig2dx` object which will receive one `std::string` parameter where the content of the URL will be delivered. You should set this method on the `AdjustConfig2dx` object instance by calling the method `setDeferredDeeplinkCallback`:
+In order to get information about the URL content in a deferred deep-linking scenario, you should set a callback method on the `AdjustConfig2dx` object which will receive an `std::string` parameter where the content of the URL will be delivered. You should set this method on the `AdjustConfig2dx` object instance by calling the `setDeferredDeeplinkCallback` method:
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
@@ -680,15 +678,15 @@ bool AppDelegate::applicationDidFinishLaunching() {
 }
 ```
 
-<a id="deeplinking-deferred-open">In deferred deep linking scenario, there is one additional setting which can be set on the deferred deep link callback method. Once the adjust SDK gets the deferred deep link info, we offer you the possibility to choose whether our SDK should open this URL or not. You can choose to set this option by setting the return value of your deferred deep link callback method.
+<a id="deeplinking-deferred-open">In the deferred deep-linking scenario, there is one additional setting which can be set on the deferred deep link callback method. Once the Adjust SDK gets the deferred deep link information, we offer you the possibility to choose whether our SDK should open this URL or not. You can choose to set this option by setting the return value of your deferred deep link callback method.
 
-If nothing is set, **the adjust SDK will always try to launch the URL by default**.
+If nothing is set, **the Adjust SDK will always try to launch the URL by default**.
 
-### <a id="deeplinking-ios">Deep linking handling for iOS app
+### <a id="deeplinking-ios">Deep link handling for iOS apps
 
 **This should be done in native Xcode project.**
 
-To set up your iOS app to handle deep linking on native level, please follow our [guide][ios-deeplinking] in the official iOS SDK README.
+To set up your iOS app to handle deep linking at a native level, please follow our [guide][ios-deeplinking] in the official iOS SDK README.
 
 
 [adjust]:       http://adjust.com
@@ -712,9 +710,9 @@ To set up your iOS app to handle deep linking on native level, please follow our
 
 ## <a id="license">License
 
-The adjust SDK is licensed under the MIT License.
+The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2017 adjust GmbH,
+Copyright (c) 2012-2017 Adjust GmbH,
 http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
