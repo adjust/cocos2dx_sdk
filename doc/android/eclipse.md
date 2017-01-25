@@ -127,7 +127,7 @@ If you are **not targeting the Google Play Store**, add both of these permission
 
 ![][manifest-permissions]
 
-### <a id="sdk-permissions">Add broadcast receiver
+### <a id="sdk-broadcast-receiver">Add broadcast receiver
 
 In your `AndroidManifest.xml` add the following `receiver` tag inside the `application` tag.
 
@@ -870,13 +870,13 @@ To set up your Android app to handle deep linking on native level, please follow
 [google-play-services]: http://developer.android.com/google/play-services/setup.html
 
 [receiver]: 		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/receiver.png
-[log-message]: 		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/log-message.png
-[add-adjust2dx]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add-adjust2dx.png
-[add-android-jar]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add-android-jar.png
-[add-to-android-mk]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add-to-android-mk.png
-[add-android-files]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add-android-files.png
-[on-resume-on-pause]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/on-resume-on-pause.png
-[manifest-permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/manifest-permissions.png
+[log-message]: 		https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/log_message.png
+[add-adjust2dx]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add_adjust2dx.png
+[add-android-jar]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add_android_jar.png
+[add-to-android-mk]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add_to_android_mk.png
+[add-android-files]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/add_android_files.png
+[on-resume-on-pause]: 	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/on_resume_on_pause.png
+[manifest-permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/manifest_permissions.png
 
 ## <a id="license">License
 
