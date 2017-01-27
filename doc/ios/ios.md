@@ -635,7 +635,7 @@ If you want to use the Adjust SDK to recognize users whose devices came with you
 
 ### <a id="deeplinking">Deep linking
 
-If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep-linking scenario) or if they don't have the app on their device (deferred deep-linking scenario). In the standard deep-linking scenario, the Android platform offers native support for you to get information about the deep link content. The deferred deep-linking scenario is something which the Android platform doesn't support out of the box. In this scenario, the Adjust SDK offers you the necessary mechanism to get information about the deep link content.
+If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. Hitting the URL can happen when the user has your app already installed (standard deep-linking scenario) or if they don't have the app on their device (deferred deep-linking scenario). In the standard deep-linking scenario, the iOS platform offers native support for you to get information about the deep link content. The deferred deep-linking scenario is something which the iOS platform doesn't support out of the box. In this scenario, the Adjust SDK offers you the necessary mechanism to get information about the deep link content.
 
 You need to set up deep link handling in your app **at a native level** - in your generated Xcode project.
 
