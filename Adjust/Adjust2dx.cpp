@@ -291,10 +291,14 @@ std::string Adjust2dx::getAdid() {
 
     jstring jAdid = (jstring)miGetAdid.env->CallStaticObjectMethod(miGetAdid.classID, miGetAdid.methodID);
 
-    const char *adidCStr = miGetAdid.env->GetStringUTFChars(jAdid, NULL);
-    std::string adid = std::string(adidCStr);
-    miGetAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
-    miGetAdid.env->DeleteLocalRef(jAdid);
+    std::string adid = "";
+
+    if (NULL != jAdid) {
+        const char *adidCStr = miGetAdid.env->GetStringUTFChars(jAdid, NULL);
+        adid = std::string(adidCStr);
+        miGetAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
+        miGetAdid.env->DeleteLocalRef(jAdid);
+    }
 
     return adid;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -324,96 +328,99 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
     }
 
     jobject jAttribution = miGetAttribution.env->CallStaticObjectMethod(miGetAttribution.classID, miGetAttribution.methodID);
-    jclass clsAdjustAttribution = miGetAttribution.env->FindClass("com/adjust/sdk/AdjustAttribution");
 
-    jfieldID fTrackerTokenID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
-    jfieldID fTrackerNameID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
-    jfieldID fNetworkID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
-    jfieldID fCampaignID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "campaign", "Ljava/lang/String;");
-    jfieldID fAdgroupID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
-    jfieldID fCreativeID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
-    jfieldID fClickLabelID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
-    jfieldID fAdidID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
+    if (NULL != jAttribution) {
+        jclass clsAdjustAttribution = miGetAttribution.env->FindClass("com/adjust/sdk/AdjustAttribution");
 
-    jstring jTrackerToken = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerTokenID);
-    jstring jTrackerName = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerNameID);
-    jstring jNetwork = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fNetworkID);
-    jstring jCampaign = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCampaignID);
-    jstring jAdgroup = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdgroupID);
-    jstring jCreative = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCreativeID);
-    jstring jClickLabel = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fClickLabelID);
-    jstring jAdid = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdidID);
+        jfieldID fTrackerTokenID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
+        jfieldID fTrackerNameID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
+        jfieldID fNetworkID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
+        jfieldID fCampaignID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "campaign", "Ljava/lang/String;");
+        jfieldID fAdgroupID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
+        jfieldID fCreativeID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
+        jfieldID fClickLabelID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
+        jfieldID fAdidID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
 
-    if (NULL != jTrackerToken) {
-        const char *trackerTokenCStr = miGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
-        trackerToken = std::string(trackerTokenCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
-        miGetAttribution.env->DeleteLocalRef(jTrackerToken);
-    } else {
-        trackerToken = "";
-    }
+        jstring jTrackerToken = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerTokenID);
+        jstring jTrackerName = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerNameID);
+        jstring jNetwork = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fNetworkID);
+        jstring jCampaign = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCampaignID);
+        jstring jAdgroup = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdgroupID);
+        jstring jCreative = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCreativeID);
+        jstring jClickLabel = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fClickLabelID);
+        jstring jAdid = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdidID);
 
-    if (NULL != jTrackerName) {
-        const char *trackerNameCStr = miGetAttribution.env->GetStringUTFChars(jTrackerName, NULL);
-        trackerName = std::string(trackerNameCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
-        miGetAttribution.env->DeleteLocalRef(jTrackerName);
-    } else {
-        trackerName = "";
-    }
+        if (NULL != jTrackerToken) {
+            const char *trackerTokenCStr = miGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
+            trackerToken = std::string(trackerTokenCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
+            miGetAttribution.env->DeleteLocalRef(jTrackerToken);
+        } else {
+            trackerToken = "";
+        }
 
-    if (NULL != jNetwork) {
-        const char *networkCStr = miGetAttribution.env->GetStringUTFChars(jNetwork, NULL);
-        network = std::string(networkCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jNetwork, networkCStr);
-        miGetAttribution.env->DeleteLocalRef(jNetwork);
-    } else {
-        network = "";
-    }
+        if (NULL != jTrackerName) {
+            const char *trackerNameCStr = miGetAttribution.env->GetStringUTFChars(jTrackerName, NULL);
+            trackerName = std::string(trackerNameCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
+            miGetAttribution.env->DeleteLocalRef(jTrackerName);
+        } else {
+            trackerName = "";
+        }
 
-    if (NULL != jCampaign) {
-        const char *campaignCStr = miGetAttribution.env->GetStringUTFChars(jCampaign, NULL);
-        campaign = std::string(campaignCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jCampaign, campaignCStr);
-        miGetAttribution.env->DeleteLocalRef(jCampaign);
-    } else {
-        campaign = "";
-    }
+        if (NULL != jNetwork) {
+            const char *networkCStr = miGetAttribution.env->GetStringUTFChars(jNetwork, NULL);
+            network = std::string(networkCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jNetwork, networkCStr);
+            miGetAttribution.env->DeleteLocalRef(jNetwork);
+        } else {
+            network = "";
+        }
 
-    if (NULL != jAdgroup) {
-        const char *adgroupCStr = miGetAttribution.env->GetStringUTFChars(jAdgroup, NULL);
-        adgroup = std::string(adgroupCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
-        miGetAttribution.env->DeleteLocalRef(jAdgroup);
-    } else {
-        adgroup = "";
-    }
+        if (NULL != jCampaign) {
+            const char *campaignCStr = miGetAttribution.env->GetStringUTFChars(jCampaign, NULL);
+            campaign = std::string(campaignCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jCampaign, campaignCStr);
+            miGetAttribution.env->DeleteLocalRef(jCampaign);
+        } else {
+            campaign = "";
+        }
 
-    if (NULL != jCreative) {
-        const char *creativeCStr = miGetAttribution.env->GetStringUTFChars(jCreative, NULL);
-        creative = std::string(creativeCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jCreative, creativeCStr);
-        miGetAttribution.env->DeleteLocalRef(jCreative);
-    } else {
-        creative = "";
-    }
+        if (NULL != jAdgroup) {
+            const char *adgroupCStr = miGetAttribution.env->GetStringUTFChars(jAdgroup, NULL);
+            adgroup = std::string(adgroupCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
+            miGetAttribution.env->DeleteLocalRef(jAdgroup);
+        } else {
+            adgroup = "";
+        }
 
-    if (NULL != jClickLabel) {
-        const char *clickLabelCStr = miGetAttribution.env->GetStringUTFChars(jClickLabel, NULL);
-        clickLabel = std::string(clickLabelCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
-        miGetAttribution.env->DeleteLocalRef(jClickLabel);
-    } else {
-        clickLabel = "";
-    }
+        if (NULL != jCreative) {
+            const char *creativeCStr = miGetAttribution.env->GetStringUTFChars(jCreative, NULL);
+            creative = std::string(creativeCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jCreative, creativeCStr);
+            miGetAttribution.env->DeleteLocalRef(jCreative);
+        } else {
+            creative = "";
+        }
 
-    if (NULL != jAdid) {
-        const char *adidCStr = miGetAttribution.env->GetStringUTFChars(jAdid, NULL);
-        adid = std::string(adidCStr);
-        miGetAttribution.env->ReleaseStringUTFChars(jAdid, adidCStr);
-        miGetAttribution.env->DeleteLocalRef(jAdid);
-    } else {
-        adid = "";
+        if (NULL != jClickLabel) {
+            const char *clickLabelCStr = miGetAttribution.env->GetStringUTFChars(jClickLabel, NULL);
+            clickLabel = std::string(clickLabelCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
+            miGetAttribution.env->DeleteLocalRef(jClickLabel);
+        } else {
+            clickLabel = "";
+        }
+
+        if (NULL != jAdid) {
+            const char *adidCStr = miGetAttribution.env->GetStringUTFChars(jAdid, NULL);
+            adid = std::string(adidCStr);
+            miGetAttribution.env->ReleaseStringUTFChars(jAdid, adidCStr);
+            miGetAttribution.env->DeleteLocalRef(jAdid);
+        } else {
+            adid = "";
+        }
     }
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
