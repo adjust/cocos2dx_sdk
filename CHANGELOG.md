@@ -1,4 +1,4 @@
-### Version 4.11.0 (xxth January 2017)
+### Version 4.11.0 (6th February 2017)
 **Note: All changes in this release are for iOS and Android platform only.**
 #### Added
 - Added `adid` property to the attribution callback response.
