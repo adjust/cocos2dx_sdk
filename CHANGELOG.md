@@ -153,5 +153,6 @@
 [android_sdk_v4.2.3]: https://github.com/adjust/android_sdk/tree/v4.2.3
 [android_sdk_v4.10.2]: https://github.com/adjust/android_sdk/tree/v4.10.2
 [android_sdk_v4.11.0]: https://github.com/adjust/android_sdk/tree/v4.11.0
+[android_sdk_v4.11.1]: https://github.com/adjust/android_sdk/tree/v4.11.1
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
