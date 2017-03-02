@@ -1,3 +1,18 @@
+### Version 4.11.1 (xth March 2017)
+#### Fixed
+- Fixed issue of creating and destroying lots of threads on certain Android API levels (https://github.com/adjust/android_sdk/issues/265).
+
+#### Changed
+- Updated native Android SDK to version **4.11.1**.
+- Native SDKs stability updates and improvements.
+
+#### Native SDKs
+- [iOS SDK 4.11.0][ios_sdk_v4.11.0]
+- [Android SDK 4.11.1][android_sdk_v4.11.1]
+- [Windows@4.0.3][windows_sdk_v4.0.3]
+
+---
+
 ### Version 4.11.0 (6th February 2017)
 **Note: All changes in this release are for iOS and Android platform only.**
 #### Added
