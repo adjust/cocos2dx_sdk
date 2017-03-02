@@ -5,6 +5,7 @@
 #### Changed
 - Updated native Android SDK to version **4.11.1**.
 - Native SDKs stability updates and improvements.
+- Updated docs.
 
 #### Native SDKs
 - [iOS SDK 4.11.0][ios_sdk_v4.11.0]
