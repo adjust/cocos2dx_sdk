@@ -24,7 +24,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [ad
 
 ## <a id="basic-integration">Basic integration
 
-We will describe the steps to integrate the Adjust SDK into your Cocos2d-x Windows or Windows Phone project.
+How to integrate the Adjust SDK into your Cocos2d-x Windows or Windows Phone project.
 
 ### <a id="sdk-get">Get the SDK
 
@@ -32,13 +32,13 @@ Download the latest version from our [releases page][releases]. Extract the arch
 
 ### <a id="sdk-add">Add the SDK to your project
 
-Take the `Adjust` folder and copy it to your project's `Classes` folder.  Add it, along with all the files inside, to your Visual Studio project as part of the `Classes` folder.
+Take the `Adjust` folder and copy it to your project's `Classes` folder. Add it, along with all the files inside, to your Visual Studio project as part of the `Classes` folder.
 
 ![][add-windows-files]
 
 ### <a id="sdk-winrt">Add the Adjust Windows Runtime Component project to your solution
 
-The project which Cocos2d-x generated for you is unmanaged and written in pure C++. Our Windows SDK is managed and written in C#. In order to facilitate communication between your unmanaged app and our managed SDK, we created a Windows Runtime Component project that can be added to your app as a reference. It wraps our Windows SDK and can be used with unmanaged C++ code.
+The project which Cocos2d-x generates for you is unmanaged and written in pure C++. Our Windows SDK is managed and written in C#. In order to facilitate communication between your unmanaged app and our managed SDK, we created a Windows Runtime Component project that can be added to your app as a reference. It wraps our Windows SDK and can be used with unmanaged C++ code.
 
 Depending on the platform you are building your app for, you should choose the appropriate Windows Runtime Component project to add to your solution. The Windows Runtime Component projects can be found in the `Windows` folder. You can choose one of the following projects:
 
@@ -52,7 +52,7 @@ After you have added one of these projects to your solution, add the reference t
 
 ![][add-winrt-project-reference]
 
-By completing this step, you have successfully added the Adjust Cocos2d-x SDK for Windows into your Visual Studio project.
+With this, you have implemented the Adjust Cocos2d-x SDK for Windows into your Visual Studio project.
 
 ### <a id="sdk-integrate">Integrate the SDK into your app
 
@@ -82,15 +82,15 @@ std::string environment = AdjustEnvironmentSandbox2dx;
 std::string environment = AdjustEnvironmentProduction2dx;
 ```
 
-**Important:** This value should be set to `AdjustEnvironmentSandbox2dx` if and only if you or someone else is testing your app. Make sure to set the environment to `AdjustEnvironmentProduction2dx` just before you publish the app. Set it back to `AdjustEnvironmentSandbox2dx` when you start developing and testing it again.
+**Important:** This value should be set to `AdjustEnvironmentSandbox2dx` if and only if you or someone else is testing your app. Make sure to set the environment to `AdjustEnvironmentProduction2dx` before you publish your app. Set it back to `AdjustEnvironmentSandbox2dx` when you start developing and testing it again.
 
-We use this environment to distinguish between real traffic and test traffic from test devices. It is very important that you keep this value meaningful at all times! This is especially important if you are tracking revenue.
+We use this environment to distinguish between real traffic and test traffic from test devices. It is imperative that you keep this value meaningful at all times, especially if you are tracking revenue.
 
 ### <a id="sdk-logging">Adjust logging
 
-To see the compiled logs from our library in `released` mode, it is necessary to redirect the log output to your app while it's being tested in `debug` mode.
+To see the log output from our library, which is created in `released mode`, you need to redirect the log output to your app while testing it in `debug mode`.
 
-In order to do this, set your custom method which is going to handle log output and set it on the config object as the second parameter of the `setLogLevel` method. Method should be defined with no return value (void) and it should get one parameter of `const char*` type.
+To do this, define a custom method to handle the log output and set this as the second parameter of the `setLogLevel` method of the config object. The custom method you create should be defined with no return value (void) and it should get one parameter of a `const char*` type.
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
@@ -127,17 +127,17 @@ adjustConfig.setLogLevel(AdjustLogLevel2dxAssert, printLog);  // disable errors 
 
 ### <a id="sdk-build">Build your app
 
-Build and run your app. If the build succeeds, you should carefully read the SDK logs in the console. After the app launched for the first time, you should see the info log `Install tracked`.
+Build and run your app. If the build succeeds, you should carefully read the SDK logs in the console. After your app has launched, you should see the following info log: `Install tracked`.
 
 ![][run]
 
 ## <a id="additional-features">Additional features
 
-Once you integrate the Adjust SDK into your project, you can take advantage of the following features.
+Once you have integrated the Adjust SDK into your project, you can take advantage of the following features.
 
 ### <a id="event-tracking">Event tracking
 
-With Adjust, you can track every event that you want. Suppose you want to track every tap on a button. Simply create a new event token in your [dashboard]. Let's say that event token is `abc123`. You can add the following line in your button’s click handler method to track the click:
+Adjust lets you track any event that you want. Suppose you want to track every tap on a button. If you create a new event token in your [dashboard] - let's say that event token is `abc123` - you can add the following line in your button’s click handler method to track the click:
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
@@ -146,7 +146,7 @@ Adjust2dx::trackEvent(adjustEvent);
 
 When this event is triggered, you should see `Event tracked` in the logs.
 
-The event instance can be used to configure the event further before tracking it.
+The event instance can be used to configure the event before tracking it.
 
 ### <a id="revenue-tracking">Revenue tracking
 
@@ -185,15 +185,15 @@ In that case, we would track the event and send a request to:
 http://www.adjust.com/callback?key=value&foo=bar
 ```
 
-It should be mentioned that we support a variety of placeholders like `{idfa}` that can be used as parameter values. In the resulting callback this placeholder would be replaced with the ID for Advertisers of the current device. Also note that we don't store any of your custom parameters, but only append them to your callbacks. If you haven't registered a callback for an event, these parameters won't even be read.
+It should be mentioned that we support a variety of placeholders, like `{idfa}`, that can be used as parameter values. In the resulting callback this placeholder would be replaced with the current device's ID for Advertisers. Adjust does not store any of your custom parameters, but only appends them to your callbacks. If you haven't registered a callback for an event, these parameters won't even be read.
 
 You can read more about using URL callbacks, including a full list of available values, in our [callbacks guide][callbacks-guide].
 
 ### <a id="partner-parameters">Partner parameters
 
-You can also add parameters to be transmitted to network partners, for the integrations that have been activated in your Adjust dashboard.
+For any integrations that have been activated in your Adjust dashboard, you can add parameters to send to these network partners.
 
-This works similarly to the callback parameters mentioned above, but can be added by calling the `addPartnerParameter` method on your `AdjustEvent2dx` instance.
+Partner parameters work similarly to the callback parameters mentioned above, but can be added by calling the `addPartnerParameter` method on your `AdjustEvent2dx` instance.
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
@@ -204,18 +204,17 @@ adjustEvent.addPartnerParameter("foo", "bar");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-You can read more about special partners and these integrations in our [guide to special partners][special-partners].
+You can read more about special partners and how to integrate them in our [guide to special partners][special-partners].
 
 ### <a id="attribution-callback">Attribution callback
 
-Adjust can also send you a callback upon change of attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps to implement the optional callback in your application:
+Adjust can also send you a callback upon any change in attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps if you wish to implement the callback in your application:
 
-1. Create void method which receives parameter of type `AdjustAttribution2dx`.
+1. Create a void method which receives an `AdjustAttribution2dx` parameter.
 
-2. After creating instance of `AdjustConfig2dx`, call its `setAttributionCallback` method with the previously created method as parameter.
+2. After creating an `AdjustConfig2dx` instance, call its `setAttributionCallback` method with the previously created method as parameter.
 
-The callback function will get called when the SDK receives final attribution data. Within the callback function you have 
-access to the `attribution` parameter. Here is a quick summary of its properties:
+The callback function will be called when the SDK receives the final attribution data. Within the callback function you have access to the `attribution` parameter. Here is a quick summary of its properties:
 
 - `std::string trackerToken` the tracker token of the current install.
 - `std::string trackerName` the tracker name of the current install.
@@ -259,35 +258,35 @@ bool AppDelegate::applicationDidFinishLaunching() {
 }
 ```
 
-Please make sure to consider [applicable attribution data policies][attribution-data].
+Please make sure to consider the [applicable attribution data policies][attribution-data].
 
 ### <a id="disable-tracking">Disable tracking
 
-You can disable the Adjust SDK from tracking by invoking the method `Adjust2dx::setEnabled` with the enabled parameter as `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
+You can disable the Adjust SDK from tracking by invoking the `Adjust2dx::setEnabled` method with the enabled parameter set to `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
 
 ```cpp
 Adjust2dx::setEnabled(false);
 ```
 
-You can verify if the Adjust SDK is currently active with the method `Adjust2dx::isEnabled()`. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
+You can verify if the Adjust SDK is currently active by using the `Adjust2dx::isEnabled()` method. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
 
 ### <a id="offline-mode">Offline mode
 
-You can put the Adjust SDK in offline mode to suspend transmission to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so be careful not to trigger too many events while in offline mode.
+You can put the Adjust SDK in offline mode, suspending transmission to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so it is best not to trigger too many events while in offline mode.
 
-You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter `true`.
+You can activate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `true`.
 
 ```cpp
 Adjust2dx::setOfflineMode(true);
 ```
 
-Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with `false`. When the Adjust SDK is put back in online mode, all saved information is send to our servers with the correct time information.
+Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `false`. When the Adjust SDK is put back in online mode, all saved information is send to our servers with the correct time information.
 
-Unlike disabling tracking, **this setting is not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
+Unlike when disabling tracking, **this setting is not remembered** between sessions. This means that the SDK always starts in online mode, even if the app was terminated in offline mode.
 
 ### <a id="event-buffering">Event buffering
 
-If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering with your `AdjustConfig2dx` instance by calling `setEventBufferingEnabled` method:
+If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering through your `AdjustConfig2dx` instance by calling the `setEventBufferingEnabled` method:
 
 ```cpp
 // ...
@@ -306,7 +305,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 }
 ```
 
-If nothing set, event buffering is **disabled by default**.
+If nothing set here, event buffering is **disabled by default**.
 
 
 [dashboard]:    http://adjust.com
@@ -350,4 +349,3 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
-
