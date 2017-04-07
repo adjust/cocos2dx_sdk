@@ -13,6 +13,7 @@
 - **[AND]** Protected `Package Manager` from throwing unexpected exceptions (https://github.com/adjust/android_sdk/issues/266).
 
 #### Changed
+- **[iOS]** If `adid` and `idfa` values are not available, return empty string.
 - **[AND]** Refactored native networking code.
 - **[iOS]** Updated native iOS SDK to version **4.11.3**.
 - **[AND]** Updated native Android SDK to version **4.11.3**.
