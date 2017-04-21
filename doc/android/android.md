@@ -94,7 +94,7 @@ Since August 1, 2014, apps in the Google Play Store must use the [Google Adverti
 1. Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
     ```
-    compile 'com.google.android.gms:play-services-analytics:9.3.0'
+    compile 'com.google.android.gms:play-services-analytics:10.2.1'
     ```
 
     ![][gps-gradle]
