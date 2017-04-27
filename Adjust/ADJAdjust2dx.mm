@@ -107,12 +107,20 @@ bool ADJAdjust2dx::isEnabled() {
 }
 
 std::string ADJAdjust2dx::getIdfa() {
+    if (nil == [Adjust idfa]) {
+        return "";
+    }
+
     std::string idfa = std::string([[Adjust idfa] UTF8String]);
 
     return idfa;
 }
 
 std::string ADJAdjust2dx::getAdid() {
+    if (nil == [Adjust adid]) {
+        return "";
+    }
+
     std::string adid = std::string([[Adjust adid] UTF8String]);
 
     return adid;

@@ -1,9 +1,8 @@
-## Migrate your adjust SDK for Cocos2d-x to 4.11.0 from 4.0.x
+## Migrate your adjust SDK for Cocos2d-x to 4.11.1 from 4.0.x
 
 ### SDK initialization
 
-We have changed the API in comparison with 4.0.x versions, as well as some of the class names.
-We also changed how you configure and start the adjust SDK.
+We have changed the API, as well as some of the class names, from 4.0.x versions. We have also changed how you configure and start the Adjust SDK.
 
 Here is an example of how the setup might look before and after the migration:
 
@@ -27,7 +26,7 @@ AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
 
 #### Android
 
-There is no longer a need for you to initialize and start our SDK using Java code. You can now use C++ code.
+You no longer need to initialize and start our SDK using Java code. You can now use C++ code.
 
 ##### Before:
 
@@ -118,15 +117,15 @@ void AppDelegate::applicationDidEnterBackground() {
     // ...
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	Adjust2dx::onPause();
+    Adjust2dx::onPause();
 #endif
 }
 
 void AppDelegate::applicationWillEnterForeground() {
-	// ...
+    // ...
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	Adjust2dx::onResume();
+    Adjust2dx::onResume();
 #endif
 }
 
@@ -137,7 +136,7 @@ void AppDelegate::applicationWillEnterForeground() {
 
 #### Android
 
-Since the SDK initialization was done in Java code, attribution callbacks had to be implemented in Java as well. Now, you can do everything in C++ code.
+Since the SDK initialization previously occurred in Java code, attribution callbacks had to be implemented in Java as well. Now, you can do everything in C++ code.
 
 ##### Before:
 
@@ -171,7 +170,8 @@ Adjust2dx::start(adjustConfig);
 #### iOS
 
 Instead of opening a URL directly from Objective-C, we now offer a C++ interface for you to do this.
-Both are functional and you can choose one from those two methods.
+
+Objective-C and C++ both function, and you are free to choose the method that suits you best.
 
 ##### Objective-C code
 
