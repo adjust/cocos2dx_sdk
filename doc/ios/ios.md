@@ -707,10 +707,10 @@ To set up your iOS app to handle deep linking at a native level, please follow o
 [currency-conversion]:  https://docs.adjust.com/en/event-tracking/#tracking-purchases-in-different-currencies
 
 [run]:                    https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/run.png
-[add-ios-files]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add-ios-files.png
-[add-adjust2dx]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add-adjust2dx.png
-[add-the-frameworks]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add-the-frameworks.png
-[add-other-linker-flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add-other-linker-flags.png
+[add-ios-files]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_ios_files.png
+[add-adjust2dx]:          https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_adjust2dx.png
+[add-the-frameworks]:     https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_the_frameworks.png
+[add-other-linker-flags]: https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/ios/add_other_linker_flags.png
 
 ## <a id="license">License
 
