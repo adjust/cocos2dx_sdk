@@ -10,6 +10,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
+#include "platform/android/jni/JniHelper.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJConfig2dx.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
@@ -49,6 +50,10 @@ private:
 
 public:
     AdjustConfig2dx() {}
+    ~AdjustConfig2dx() {
+	    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(this->config);
+        this->config = NULL;
+    }
 
     AdjustConfig2dx(std::string appToken, std::string environment) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
