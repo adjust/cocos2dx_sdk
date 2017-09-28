@@ -52,7 +52,7 @@ namespace AdjustWinRT
         {
             this.appToken = appToken;
             this.environment = environment;
-            this.sdkPrefix = "cocos2d-x4.11.2";
+            this.sdkPrefix = "cocos2d-x4.11.3";
             
             this.logLevel = LogLevel.Info;
 
