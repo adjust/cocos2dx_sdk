@@ -144,7 +144,7 @@ In your `AndroidManifest.xml` file, add the following `receiver` tag inside the 
 
 We use this broadcast receiver to retrieve the install referrer in order to improve conversion tracking.
 
-If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, then follow [these instructions][referrer] to add the call to the Adjust broadcast receiver.
+If you are already using a different broadcast receiver for the `INSTALL_REFERRER` intent, then follow [these instructions](https://github.com/adjust/android_sdk/blob/master/doc/english/referrer.md) to add the call to the Adjust broadcast receiver.
 
 ### <a id="sdk-proguard"></a>Proguard settings
 
