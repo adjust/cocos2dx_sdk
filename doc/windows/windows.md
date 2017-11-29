@@ -216,13 +216,13 @@ Adjust can also send you a callback upon any change in attribution. Due to the d
 
 The callback function will be called when the SDK receives the final attribution data. Within the callback function you have access to the `attribution` parameter. Here is a quick summary of its properties:
 
-- `std::string trackerToken` the tracker token of the current install.
-- `std::string trackerName` the tracker name of the current install.
-- `std::string network` the network grouping level of the current install.
-- `std::string campaign` the campaign grouping level of the current install.
-- `std::string adgroup` the ad group grouping level of the current install.
-- `std::string creative` the creative grouping level of the current install.
-- `std::string clickLabel` the click label of the current install.
+- `std::string trackerToken` the tracker token of the current attribution.
+- `std::string trackerName` the tracker name of the current attribution.
+- `std::string network` the network grouping level of the current attribution.
+- `std::string campaign` the campaign grouping level of the current attribution.
+- `std::string adgroup` the ad group grouping level of the current attribution.
+- `std::string creative` the creative grouping level of the current attribution.
+- `std::string clickLabel` the click label of the current attribution.
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
