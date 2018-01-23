@@ -27,6 +27,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
     * [Session and event callbacks](#session-event-callbacks)
     * [Disable tracking](#disable-tracking)
     * [Offline mode](#offline-mode)
+    * [SDK signature](#sdk-signature)
     * [Event buffering](#event-buffering)
     * [Background tracking](#background-tracking)
     * [Device IDs](#device-ids)
@@ -523,6 +524,22 @@ Adjust2dx::setOfflineMode(true);
 Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMode` with the parameter set to `false`. When the Adjust SDK is put back in online mode, all saved information is sent to our servers with the correct time information.
 
 Unlike when disabling tracking, **this setting is not remembered** between sessions. This means that the Adjust SDK always starts in online mode, even if the app was terminated in offline mode.
+
+### <a id="sdk-signature"></a>SDK signature
+
+An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
+
+If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
+
+An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
+
+```cpp
+auto adjustConfig = AdjustConfig2dx(appToken, environment);
+
+adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
+
+Adjust2dx::start(adjustConfig);
+```
 
 ### <a id="event-buffering">Event buffering
 

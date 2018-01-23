@@ -23,7 +23,7 @@ To integrate the Adjust SDK into your Cocos2d-x Windows or Windows Phone project
 
 The Adjust-SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2017 Adjust GmbH,
+Copyright (c) 2012-2018 Adjust GmbH,
 http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
