@@ -143,7 +143,7 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
 
     miSetPushToken.env->DeleteLocalRef(jPushToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -159,7 +159,7 @@ void Adjust2dx::sendFirstPackages() {
 
     miSendFirstPackages.env->CallStaticVoidMethod(miSendFirstPackages.classID, miSendFirstPackages.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -181,7 +181,7 @@ void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) 
     miAddSessionCallbackParameter.env->DeleteLocalRef(jKey);
     miAddSessionCallbackParameter.env->DeleteLocalRef(jValue);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -203,7 +203,7 @@ void Adjust2dx::addSessionPartnerParameter(std::string key, std::string value) {
     miAddSessionPartnerParameter.env->DeleteLocalRef(jKey);
     miAddSessionPartnerParameter.env->DeleteLocalRef(jValue);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -223,7 +223,7 @@ void Adjust2dx::removeSessionCallbackParameter(std::string key) {
 
     miRemoveSessionCallbackParameter.env->DeleteLocalRef(jKey);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -243,7 +243,7 @@ void Adjust2dx::removeSessionPartnerParameter(std::string key) {
 
     miRemoveSessionPartnerParameter.env->DeleteLocalRef(jKey);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -259,7 +259,7 @@ void Adjust2dx::resetSessionCallbackParameters() {
 
     miResetSessionCallbackParameters.env->CallStaticVoidMethod(miResetSessionCallbackParameters.classID, miResetSessionCallbackParameters.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -275,7 +275,7 @@ void Adjust2dx::resetSessionPartnerParameters() {
 
     miResetSessionPartnerParameters.env->CallStaticVoidMethod(miResetSessionPartnerParameters.classID, miResetSessionPartnerParameters.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -302,7 +302,7 @@ std::string Adjust2dx::getAdid() {
 
     return adid;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 

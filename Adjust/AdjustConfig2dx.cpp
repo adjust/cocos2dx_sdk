@@ -97,45 +97,45 @@ static int fileReadCallback(const char* fileName, int* size) {
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
     std::string sdkPrefix = "cocos2d-x4.11.3";
-    
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
-    
+
     if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustConfig", "<init>", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Z)V")) {
         return;
     }
-    
+
     cocos2d::JniMethodInfo miGetContext;
-    
+
     if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
-    
+
     // Set SDK prefix.
     cocos2d::JniMethodInfo miSetSdkPrefix;
-    
+
     if (!cocos2d::JniHelper::getMethodInfo(miSetSdkPrefix, "com/adjust/sdk/AdjustConfig", "setSdkPrefix", "(Ljava/lang/String;)V")) {
         return;
     }
-    
+
     jclass clsAdjustConfig = miInit.env->FindClass("com/adjust/sdk/AdjustConfig");
     jmethodID midInit = miInit.env->GetMethodID(clsAdjustConfig, "<init>", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Z)V");
-    
+
     // Get context and initialize config object.
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
     jstring jAppToken = miInit.env->NewStringUTF(appToken.c_str());
     jstring jEnvironment = miInit.env->NewStringUTF(environment.c_str());
-    
+
     config = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment, allowSuppressLogLevel);
-    
+
     miGetContext.env->DeleteLocalRef(jContext);
     miInit.env->DeleteLocalRef(jAppToken);
     miInit.env->DeleteLocalRef(jEnvironment);
-    
+
     jstring jSdkPrefix = miSetSdkPrefix.env->NewStringUTF(sdkPrefix.c_str());
-    
+
     miSetSdkPrefix.env->CallVoidMethod(config, miSetSdkPrefix.methodID, jSdkPrefix);
-    
+
     miSetSdkPrefix.env->DeleteLocalRef(jSdkPrefix);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     config = ADJConfig2dx(appToken, environment, allowSuppressLogLevel, sdkPrefix);
@@ -240,7 +240,7 @@ void AdjustConfig2dx::setDelayStart(double delayStart) {
         config.setDelayStart(delayStart);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -262,7 +262,7 @@ void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
         config.setSendInBackground(isEnabled);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -296,13 +296,12 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 
 void AdjustConfig2dx::setUserAgent(std::string userAgent) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setUserAgent(userAgent);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
 #endif
 }
 
@@ -468,7 +467,7 @@ void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(Adjust
         config.setEventSuccessCallback(eventSuccessCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -504,7 +503,7 @@ void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(Adjust
         config.setEventFailureCallback(eventFailureCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -540,7 +539,7 @@ void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(Ad
         config.setSessionSuccessCallback(sessionSuccessCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -576,7 +575,7 @@ void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(Ad
         config.setSessionFailureCallback(sessionFailureCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -612,7 +611,7 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
         config.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
@@ -638,10 +637,12 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
 
     miSetProcessName.env->DeleteLocalRef(jProcessName);
 }
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 ADJConfig2dx AdjustConfig2dx::getConfig() {
     return config;
 }
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 WRTAdjustConfig^ AdjustConfig2dx::getConfig() {
     return config;
@@ -651,3 +652,4 @@ void AdjustConfig2dx::triggerSavedAttributionCallback(AdjustAttribution2dx attri
     attributionCallbackSaved(attribution);
 }
 #endif
+
