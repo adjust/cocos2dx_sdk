@@ -30,4 +30,4 @@ echo -e "${GREEN}>>> Moving classes to ${COCOS_EXAMPLES_APP} ${NC}"
 cd ${ROOT_DIR}
 cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/Adjust/
 
-echo -e "${GREEN}>>> Success. Make sure AdjustSdk.framework is linked in \'Build Phases\'. Run it with Xcode from `proj.ios_mac` directory ${NC}"
+echo -e "${GREEN}>>> Success. Make sure AdjustSdk.framework is linked in 'Build Phases'. Run it with Xcode from \`proj.ios_mac\` directory ${NC}"

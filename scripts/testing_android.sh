@@ -37,6 +37,7 @@ rm -rfv com/adjust/sdk/*.class
 
 echo -e "${GREEN}>>> Moving jar to ${COCOS_EXAMPLES_APP} ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
+mkdir ${COCOS_EXAMPLES_APP}/proj.android-studio/app/libs
 cp -v adjust-android.jar ${COCOS_EXAMPLES_APP}/proj.android-studio/app/libs/
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
@@ -48,4 +49,4 @@ echo -e "${GREEN}>>> Moving classes to ${COCOS_EXAMPLES_APP} ${NC}"
 cd ${ROOT_DIR}
 cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/Adjust/
 
-echo -e "${GREEN}>>> Success. Build & run with Android Studio from `proj.android-studio` directory. Make sure Android.mk file is modified per README instructions ${NC}"
+echo -e "${GREEN}>>> Success. Build & run with Android Studio from \`proj.android-studio\` directory. Make sure Android.mk file is modified per README instructions ${NC}"
