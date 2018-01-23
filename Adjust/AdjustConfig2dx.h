@@ -77,12 +77,15 @@ public:
     void setDelayStart(double delayStart);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
-    
+
     void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
-    
+    void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
+    void setDeviceKnown(bool isDeviceKnown);
+    void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
+
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
-    
+
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));

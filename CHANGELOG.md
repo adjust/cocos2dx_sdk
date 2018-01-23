@@ -1,3 +1,4 @@
+- **[iOS][AND]** Added `setAppSecret` method to `AdjustConfig` interface.
 ### Version 4.11.3 (28th September 2017)
 #### Added
 - **[iOS]** Improved iOS 11 support.

@@ -336,6 +336,67 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 #endif
 }
 
+void AdjustConfig2dx::setAppSecret(long secretId, long info1, long info2, long info3, long info4) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miSetAppSecret;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetAppSecret, "com/adjust/sdk/AdjustConfig", "setAppSecret", "(JJJJJ)V")) {
+        return;
+    }
+
+    miSetAppSecret.env->CallVoidMethod(config, miSetAppSecret.methodID, secretId, info1, info2, info3, info4);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setAppSecret(secretId, info1, info2, info3, info4);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+
+#endif
+}
+
+void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    
+    cocos2d::JniMethodInfo miSetDeviceKnown;
+    
+    if (!cocos2d::JniHelper::getMethodInfo(miSetDeviceKnown, "com/adjust/sdk/AdjustConfig", "setDeviceKnown", "(Z)V")) {
+        return;
+    }
+    
+    miSetDeviceKnown.env->CallVoidMethod(config, miSetDeviceKnown.methodID, isDeviceKnown);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setIsDeviceKnown(isDeviceKnown);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+#endif
+}
+
+void AdjustConfig2dx::setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    
+    cocos2d::JniMethodInfo miSetReadMobileEquipmentIdentity;
+    
+    if (!cocos2d::JniHelper::getMethodInfo(miSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
+        return;
+    }
+    
+    miSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, miSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
+#endif
+}
+
+
 void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
