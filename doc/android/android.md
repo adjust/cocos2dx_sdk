@@ -169,7 +169,7 @@ This feature is supported if you are using the **Adjust SDK v4.12.0 or above**.
 
 #### <a id="android-referrer-gps-intent"></a>Google Play Store intent
 
-The Google Play Store `INSTALL_REFERRER` intent should be captured with a broadcast receiver. The Adjust install referrer broadcast receiver is added to your app by default. For more information, you can check our native [Android SDK README][broadcast-receiver]. You can see this in the `AndroidManifest.xml` file which is part of our React Native plugin:
+The Google Play Store `INSTALL_REFERRER` intent should be captured with a broadcast receiver. The Adjust install referrer broadcast receiver is added to your app by default. For more information, you can check our native [Android SDK README][broadcast-receiver]. You should implement this in your app's `AndroidManifest.xml`
 
 ```xml
 <receiver android:name="com.adjust.sdk.AdjustReferrerReceiver" 
