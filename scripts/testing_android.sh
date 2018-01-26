@@ -37,7 +37,7 @@ rm -rfv com/adjust/sdk/*.class
 
 echo -e "${GREEN}>>> Moving jar to ${COCOS_EXAMPLES_APP} ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
-mkdir ${COCOS_EXAMPLES_APP}/proj.android-studio/app/libs
+mkdir ${COCOS_EXAMPLES_APP}/proj.android-studio/app/libs || true
 cp -v adjust-android.jar ${COCOS_EXAMPLES_APP}/proj.android-studio/app/libs/
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
