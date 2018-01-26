@@ -24,12 +24,12 @@ AdjustConfig2dx::AttributionCallback AdjustConfig2dx::attributionCallbackSaved =
 static unsigned char* readBuffer;
 
 static void attributionCallbackGlobal(
-    const char* trackerToken, 
-    const char* trackerName, 
-    const char* network, 
-    const char* campaign, 
-    const char* adgroup, 
-    const char* creative, 
+    const char* trackerToken,
+    const char* trackerName,
+    const char* network,
+    const char* campaign,
+    const char* adgroup,
+    const char* creative,
     const char* clickLabel) {
     std::string trackerTokenAsString;
     std::string trackerNameAsString;
@@ -146,11 +146,11 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, 
     std::wstring wstrEnvironment = std::wstring(environment.begin(), environment.end());
     const wchar_t* wcharAppToken = wstrAppToken.c_str();
     const wchar_t* wcharEnvironment = wstrEnvironment.c_str();
-    
+
     config = ref new WRTAdjustConfig(ref new Platform::String(wcharAppToken), ref new Platform::String(wcharEnvironment));
     config->SetFileWritingCallback((int64)&fileWriteCallback);
     config->SetFileReadingCallback((int64)&fileReadCallback);
-    
+
     isConfigSet = true;
 #endif
 }
@@ -374,20 +374,20 @@ void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
     if (config == NULL) {
         return;
     }
-    
+
     cocos2d::JniMethodInfo miSetDeviceKnown;
-    
+
     if (!cocos2d::JniHelper::getMethodInfo(miSetDeviceKnown, "com/adjust/sdk/AdjustConfig", "setDeviceKnown", "(Z)V")) {
         return;
     }
-    
+
     miSetDeviceKnown.env->CallVoidMethod(config, miSetDeviceKnown.methodID, isDeviceKnown);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setIsDeviceKnown(isDeviceKnown);
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
+
 #endif
 }
 
