@@ -396,17 +396,36 @@ void AdjustConfig2dx::setReadMobileEquipmentIdentity(bool readMobileEquipmentIde
     if (config == NULL) {
         return;
     }
-    
+
     cocos2d::JniMethodInfo miSetReadMobileEquipmentIdentity;
-    
+
     if (!cocos2d::JniHelper::getMethodInfo(miSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
         return;
     }
-    
+
     miSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, miSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
 #endif
 }
 
+void AdjustConfig2dx::setProcessName(std::string processName) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miSetProcessName;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com/adjust/sdk/AdjustConfig", "setProcessName", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jProcessName = miSetProcessName.env->NewStringUTF(processName.c_str());
+
+    miSetProcessName.env->CallVoidMethod(config, miSetProcessName.methodID, jProcessName);
+
+    miSetProcessName.env->DeleteLocalRef(jProcessName);
+#endif
+}
 
 void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -630,24 +649,6 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject AdjustConfig2dx::getConfig() {
     return config;
-}
-
-void AdjustConfig2dx::setProcessName(std::string processName) {
-    if (config == NULL) {
-        return;
-    }
-
-    cocos2d::JniMethodInfo miSetProcessName;
-
-    if (!cocos2d::JniHelper::getMethodInfo(miSetProcessName, "com/adjust/sdk/AdjustConfig", "setProcessName", "(Ljava/lang/String;)V")) {
-        return;
-    }
-
-    jstring jProcessName = miSetProcessName.env->NewStringUTF(processName.c_str());
-
-    miSetProcessName.env->CallVoidMethod(config, miSetProcessName.methodID, jProcessName);
-
-    miSetProcessName.env->DeleteLocalRef(jProcessName);
 }
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

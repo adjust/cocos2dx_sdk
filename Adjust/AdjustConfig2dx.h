@@ -83,6 +83,7 @@ public:
     void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
     void setDeviceKnown(bool isDeviceKnown);
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
+    void setProcessName(std::string processName);
 
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
 
@@ -95,7 +96,6 @@ public:
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();
-    void setProcessName(std::string processName);
 };
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJConfig2dx getConfig();
