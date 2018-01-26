@@ -297,6 +297,17 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 
 void AdjustConfig2dx::setUserAgent(std::string userAgent) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miSetUserAgent;
+
+    if (!cocos2d::JniHelper::getMethodInfo(miSetUserAgent, "com/adjust/sdk/AdjustConfig", "setUserAgent", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jUserAgent = miSetUserAgent.env->NewStringUTF(userAgent.c_str());
+
+    miSetUserAgent.env->CallVoidMethod(config, miSetUserAgent.methodID, jUserAgent);
+
+    miSetUserAgent.env->DeleteLocalRef(jUserAgent);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
