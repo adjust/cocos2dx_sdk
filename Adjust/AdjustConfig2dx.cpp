@@ -126,7 +126,8 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, 
     jstring jAppToken = miInit.env->NewStringUTF(appToken.c_str());
     jstring jEnvironment = miInit.env->NewStringUTF(environment.c_str());
 
-    config = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment, allowSuppressLogLevel);
+    jobject tmp = miInit.env->NewObject(clsAdjustConfig, midInit, jContext, jAppToken, jEnvironment, allowSuppressLogLevel);
+    this->config = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
 
     miGetContext.env->DeleteLocalRef(jContext);
     miInit.env->DeleteLocalRef(jAppToken);

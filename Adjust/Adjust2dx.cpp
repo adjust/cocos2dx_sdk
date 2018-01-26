@@ -27,8 +27,9 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
     }
 
     miOnCreate.env->CallStaticVoidMethod(miOnCreate.classID, miOnCreate.methodID, adjustConfig.getConfig());
-
     onResume();
+
+    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
