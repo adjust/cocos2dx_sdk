@@ -16,7 +16,9 @@
 USING_NS_CC;
 #endif
 
+#define COCOS2D_DEBUG 1
 #include "AdjustConfig2dx.h"
+USING_NS_CC;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 AdjustConfig2dx::AttributionCallback AdjustConfig2dx::attributionCallbackSaved = NULL;
@@ -347,7 +349,7 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 #endif
 }
 
-void AdjustConfig2dx::setAppSecret(long secretId, long info1, long info2, long info3, long info4) {
+void AdjustConfig2dx::setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
