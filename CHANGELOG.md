@@ -1,18 +1,21 @@
-### Version 4.12.0 (29th December 2017)
+### Version 4.12.0 (5th March 2017)
 #### Native changes:
-- **[iOS]** https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4120-13th-december-2017
-- **[iOS]** https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4121-13th-december-2017
-- **[AND]** https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md#version-4120-13th-december-2017
+- https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4120-13th-december-2017
+- https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4121-13th-december-2017
+- https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4122-13th-february-2018
+- https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md#version-4120-13th-december-2017
+- https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md#version-4121-31st-january-2018
+- https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md#version-4122-28th-february-2018
 
 #### Added
-- **[AND]** Added support for new Google referrer API (https://developer.android.com/google/play/installreferrer/library.html).
-- **[AND]** Added `getAmazonAdId` method to `Adjust` interface.
-- **[AND]** Added `setReadMobileEquipmentIdentity` method to `AdjustConfig` interface.
-- **[iOS][AND]** Added `setAppSecret` method to `AdjustConfig` interface.
+- Added `getAmazonAdId` method to `Adjust` interface.
+- Added `setReadMobileEquipmentIdentity` method to `AdjustConfig` interface.
+- Added `setAppSecret` method to `AdjustConfig` interface (**iOS and Android only**).
 
 #### Native SDKs
-- **[iOS]** [iOS@v4.12.1][ios_sdk_v4.12.1]
-- **[AND]** [Android@v4.12.0][android_sdk_v4.12.0]
+- [iOS@v4.12.3][ios_sdk_v4.12.3]
+- [Android@v4.12.2][android_sdk_v4.12.2]
+- [Windows SDK 4.0.3][windows_sdk_v4.0.3]
 
 ---
 
@@ -207,6 +210,7 @@
 [ios_sdk_v4.11.4]: https://github.com/adjust/ios_sdk/tree/v4.11.4
 [ios_sdk_v4.11.5]: https://github.com/adjust/ios_sdk/tree/v4.11.5
 [ios_sdk_v4.12.1]: https://github.com/adjust/ios_sdk/tree/v4.12.1
+[ios_sdk_v4.12.3]: https://github.com/adjust/ios_sdk/tree/v4.12.3
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -218,5 +222,6 @@
 [android_sdk_v4.11.3]: https://github.com/adjust/android_sdk/tree/v4.11.3
 [android_sdk_v4.11.4]: https://github.com/adjust/android_sdk/tree/v4.11.4
 [android_sdk_v4.12.0]: https://github.com/adjust/android_sdk/tree/v4.12.0
+[android_sdk_v4.12.2]: https://github.com/adjust/android_sdk/tree/v4.12.2
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
