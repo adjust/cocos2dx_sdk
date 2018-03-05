@@ -58,6 +58,8 @@ public:
 
     void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
+    void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
+    void setIsDeviceKnown(bool isDeviceKnown);
 
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*callbackMethod)(AdjustEventSuccess2dx eventSuccess));

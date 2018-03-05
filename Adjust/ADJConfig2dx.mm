@@ -70,6 +70,14 @@ void* ADJConfig2dx::getConfig() {
     return config;
 }
 
+void ADJConfig2dx::setAppSecret(long secretId, long info1, long info2, long info3, long info4) {
+    [((ADJConfig *)config) setAppSecret:secretId info1:info1 info2:info2 info3:info3 info4:info4];
+}
+
+void ADJConfig2dx::setIsDeviceKnown(bool isDeviceKnown) {
+    [((ADJConfig *)config) setIsDeviceKnown:isDeviceKnown];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

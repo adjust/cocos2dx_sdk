@@ -74,15 +74,19 @@ public:
 #endif
     }
 
-    void setDelayStart(double delayStart);
+    void setDeviceKnown(bool isDeviceKnown);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
-    
+    void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
+
     void setUserAgent(std::string userAgent);
+    void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
-    
+
+    void setDelayStart(double delayStart);    
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
-    
+    void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
+
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
@@ -92,7 +96,6 @@ public:
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();
-    void setProcessName(std::string processName);
 };
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJConfig2dx getConfig();

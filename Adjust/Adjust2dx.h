@@ -37,19 +37,21 @@ public:
 
     static std::string getAdid();
     static AdjustAttribution2dx getAttribution();
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    static void onResume();
-    static void onPause();
+    
+    // Android-specific
     static void setReferrer(std::string referrer);
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    static std::string getAmazonAdId();
+    static void onResume();
+    static void onPause();
+    
+    // iOS-specific
     static std::string getIdfa();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+    
+    // Windows-specific
     static std::string getWindowsAdId();
     static void applicationPaused();
     static void applicationResumed();
-#endif
 };
 
 #endif /* ADJUST_ADJUST2DX_H_ */

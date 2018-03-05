@@ -1,6 +1,9 @@
 # OS X
 .DS_Store
 
+# vi swap files
+*.swp
+
 # Nuget
 nuget
 *.nupkg

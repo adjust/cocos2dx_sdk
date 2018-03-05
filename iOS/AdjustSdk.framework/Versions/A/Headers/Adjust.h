@@ -2,14 +2,27 @@
 //  Adjust.h
 //  Adjust
 //
-//  V4.11.5
-//  Created by Christian Wellenbrock on 2012-07-23.
-//  Copyright (c) 2012-2014 adjust GmbH. All rights reserved.
+//  V4.12.3
+//  Created by Christian Wellenbrock (wellle) on 23rd July 2013.
+//  Copyright © 2012-2017 Adjust GmbH. All rights reserved.
 //
 
 #import "ADJEvent.h"
 #import "ADJConfig.h"
 #import "ADJAttribution.h"
+
+@interface AdjustTestOptions : NSObject
+
+@property (nonatomic, copy, nullable) NSString *baseUrl;
+@property (nonatomic, copy, nullable) NSString *basePath;
+@property (nonatomic, copy, nullable) NSNumber *timerIntervalInMilliseconds;
+@property (nonatomic, copy, nullable) NSNumber *timerStartInMilliseconds;
+@property (nonatomic, copy, nullable) NSNumber *sessionIntervalInMilliseconds;
+@property (nonatomic, copy, nullable) NSNumber *subsessionIntervalInMilliseconds;
+@property (nonatomic, assign) BOOL teardown;
+@property (nonatomic, assign) BOOL deleteState;
+
+@end
 
 /**
  * Constants for our supported tracking environments
@@ -193,10 +206,11 @@ extern NSString * __nonnull const ADJEnvironmentProduction;
 + (void)resetSessionPartnerParameters;
 
 /**
- * Obtain singleton Adjust object
+ * Obtain singleton Adjust object.
  */
 + (nullable id)getInstance;
 
++ (void)setTestOptions:(nullable AdjustTestOptions *)testOptions;
 
 - (void)appDidLaunch:(nullable ADJConfig *)adjustConfig;
 
@@ -204,7 +218,7 @@ extern NSString * __nonnull const ADJEnvironmentProduction;
 
 - (void)setEnabled:(BOOL)enabled;
 
-- (void)teardown:(BOOL)deleteState;
+- (void)teardown;
 
 - (void)appWillOpenUrl:(nonnull NSURL *)url;
 
