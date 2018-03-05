@@ -12,8 +12,8 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [ad
    * [Add Google Play Services](#sdk-gps)
    * [Add permissions](#sdk-permissions)
    * [Install referrer](#android-referrer)
-     * [Google Play Referrer API](#android-referrer-gpr-api)
-     * [Google Play Store intent](#android-referrer-gps-intent)
+      * [Google Play Referrer API](#android-referrer-gpr-api)
+      * [Google Play Store intent](#android-referrer-gps-intent)
    * [Proguard settings](#sdk-proguard)
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Adjust logging](#sdk-logging)
@@ -26,47 +26,47 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [ad
       * [In-App Purchase verification](#iap-verification)
       * [Callback parameters](#callback-parameters)
       * [Partner parameters](#partner-parameters)
-    * [Session parameters](#session-parameters)
+   * [Session parameters](#session-parameters)
       * [Session callback parameters](#session-callback-parameters)
       * [Session partner parameters](#session-partner-parameters)
       * [Delay start](#delay-start)
-    * [Attribution callback](#attribution-callback)
-    * [Session and event callbacks](#session-event-callbacks)
-    * [Disable tracking](#disable-tracking)
-    * [Offline mode](#offline-mode)
-    * [SDK signature](#sdk-signature)
-    * [Event buffering](#event-buffering)
-    * [Background tracking](#background-tracking)
-    * [Device IDs](#device-ids)
-        * [Google Play Services advertising identifier](#di-gps-adid)
-        * [Amazon advertising identifier](#di-fire-adid)
-        * [Adjust device identifier](#di-adid)
-    * [User attribution](#user-attribution)
-    * [Push token](#push-token)
-    * [Track additional device identifiers](#track-additional-ids)
-    * [Pre-installed trackers](#pre-installed-trackers)
-    * [Deep linking](#deeplinking)
-        * [Standard deep linking](#deeplinking-standard)
-        * [Deferred deep linking](#deeplinking-deferred)
-        * [Deep link handling for Android apps](#deeplinking-android)
+   * [Attribution callback](#attribution-callback)
+   * [Session and event callbacks](#session-event-callbacks)
+   * [Disable tracking](#disable-tracking)
+   * [Offline mode](#offline-mode)
+   * [Event buffering](#event-buffering)
+   * [SDK signature](#sdk-signature)
+   * [Background tracking](#background-tracking)
+   * [Device IDs](#device-ids)
+      * [Google Play Services advertising identifier](#di-gps-adid)
+      * [Amazon advertising identifier](#di-fire-adid)
+      * [Adjust device identifier](#di-adid)
+   * [User attribution](#user-attribution)
+   * [Push token](#push-token)
+   * [Track additional device identifiers](#track-additional-ids)
+   * [Pre-installed trackers](#pre-installed-trackers)
+   * [Deep linking](#deeplinking)
+      * [Standard deep linking](#deeplinking-standard)
+      * [Deferred deep linking](#deeplinking-deferred)
+      * [Deep link handling for Android apps](#deeplinking-android)
 * [License](#license)
 
 
-## <a id="basic-integration">Basic integration
+## <a id="basic-integration"></a>Basic integration
 
 How to integrate the Adjust SDK into your Cocos2d-x Android project.
 
-### <a id="sdk-get">Get the SDK
+### <a id="sdk-get"></a>Get the SDK
 
 Download the latest version from our [releases page][releases]. Extract the archive into a directory of your choosing.
 
-### <a id="sdk-add">Add the SDK to your project
+### <a id="sdk-add"></a>Add the SDK to your project
 
 Take the files from the `Adjust` folder and add them to your Android project.
 
 ![][add-android-files]
 
-### <a id="sdk-cpp-files">Add the C++ source file definitions
+### <a id="sdk-cpp-files"></a>Add the C++ source file definitions
 
 Make sure to also add the paths of the Adjust C++ files to the `LOCAL_SRC_FILES` section in your `Android.mk` file.
 
@@ -84,13 +84,13 @@ Make sure to also add the paths of the Adjust C++ files to the `LOCAL_SRC_FILES`
 
 ![][add-to-android-mk]
 
-### <a id="sdk-library">Add the Adjust library to your project
+### <a id="sdk-library"></a>Add the Adjust library to your project
 
 Take the `adjust-android.jar` library and copy it to your project's `libs` folder.
 
 ![][add-android-jar]
 
-### <a id="sdk-gps">Add Google Play Services
+### <a id="sdk-gps"></a>Add Google Play Services
 
 Since August 1, 2014, apps in the Google Play Store must use the [Google Advertising ID][google_ad_id] to uniquely identify devices. To allow the Adjust SDK to use the Google Advertising ID, you must integrate [Google Play Services][google_play_services]. If you haven't done this yet, follow these steps:
 
@@ -115,20 +115,19 @@ Since August 1, 2014, apps in the Google Play Store must use the [Google Adverti
           android:value="@integer/google-play-services_version" />
     ```
 
-### <a id="sdk-permissions">Add permissions
+### <a id="sdk-permissions"></a>Add permissions
 
-In the Package Explorer, open your Android project's `AndroidManifest.xml` file. Add the `uses-permission` tag for `INTERNET` if it's not present already.
+Please add the following permissions, which the Adjust SDK needs, if they are not already present in your `AndroidManifest.xml` file:
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.INTERNET"/>
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 ```
 
-If you are **not targeting the Google Play Store**, add both of these permissions instead:
+If you are **not targeting the Google Play Store**, please also add the following permission:
 
 ```xml
-<uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
-<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+<uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 ```
 
 ![][manifest-permissions]
@@ -219,7 +218,7 @@ If you are using Proguard, add these lines to your Proguard file:
 
 If you are **not targeting the Google Play Store**, you can remove the `com.google.android.gms` rules.
 
-### <a id="sdk-integrate">Integrate the SDK into your app
+### <a id="sdk-integrate"></a>Integrate the SDK into your app
 
 In the Package Explorer, open the source file of your app delegate.  Add the import statement at the top of the file, then add the following call to Adjust in the `applicationDidFinishLaunching` method of your app delegate:
 
@@ -249,7 +248,7 @@ std::string environment = AdjustEnvironmentProduction2dx;
 
 We use this environment to distinguish between real traffic and test traffic from test devices. It is imperative that you keep this value meaningful at all times, especially if you are tracking revenue.
 
-### <a id="sdk-logging">Adjust logging
+### <a id="sdk-logging"></a>Adjust logging
 
 You can increase or decrease the amount of logs you see in tests by calling `setLogLevel` on your `AdjustConfig2dx` instance with one of the following parameters:
 
@@ -273,7 +272,7 @@ AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment, true);
 adjustConfig.setLogLevel(AdjustLogLevel2dxSuppress);
 ```
 
-### <a id="sdk-session-tracking">Session tracking
+### <a id="sdk-session-tracking"></a>Session tracking
 
 **Please pay close attention to this chapter and ensure that you implement session tracking correctly in your app**.
 
@@ -310,17 +309,17 @@ void AppDelegate::applicationWillEnterForeground() {
 
 ![][on-resume-on-pause]
 
-## <a id="sdk-build">Build your app
+## <a id="sdk-build"></a>Build your app
 
 Build and run your Android app. In your LogCat viewer, you can set the filter to `tag:Adjust` to hide all other logs. After your app has launched you should see the following Adjust log: `Install tracked`.
 
 ![][log-message]
 
-## <a id="additional-features">Additional features
+## <a id="additional-features"></a>Additional features
 
 Once you integrate the Adjust SDK into your project, you can take advantage of the following features.
 
-### <a id="event-tracking">Event tracking
+### <a id="event-tracking"></a>Event tracking
 
 Adjust lets you track any event that you want. Suppose you want to track every tap on a button. If you create a new event token in your [dashboard] - let's say that event token is `abc123` - you can add the following line in your button’s click handler method to track the click:
 
@@ -329,7 +328,7 @@ AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
-### <a id="revenue-tracking">Revenue tracking
+### <a id="revenue-tracking"></a>Revenue tracking
 
 If your users can generate revenue by tapping on advertisements or making in-app purchases, then you can this revenue through events. Let's say a tap is worth €0.01. You could track the revenue event like this:
 
@@ -362,11 +361,11 @@ Adjust2dx::trackEvent(adjustEvent);
 
 **Note**: Transaction ID is the iOS term; the unique identifier for successfully completed Android in-app purchases is **Order ID**.
 
-### <a id="iap-verification">In-app purchase verification
+### <a id="iap-verification"></a>In-app purchase verification
 
 In-app purchase verification can be done with Cocos2d-x purchase SDK which is currently being developed and will soon be publicly available. For more information, please contact support@adjust.com.
 
-### <a id="callback-parameters">Callback parameters
+### <a id="callback-parameters"></a>Callback parameters
 
 You can register a callback URL for an event in your [dashboard]. We will send a GET request to that URL whenever the event is tracked. You can add callback parameters to an event by calling the `addCallbackParameter` method of the event before tracking it. We will then append these parameters to your callback URL.
 
@@ -391,7 +390,7 @@ Adjust supports a variety of placeholders, like `{idfa}`, that can be used as pa
 
 You can read more about using URL callbacks, including a full list of available values, in our [callbacks guide][callbacks-guide].
 
-### <a id="partner-parameters">Partner parameters
+### <a id="partner-parameters"></a>Partner parameters
 
 You can also add parameters to be transmitted to network partners. These will work for integrations that have been activated in your Adjust dashboard.
 
@@ -408,13 +407,13 @@ Adjust2dx::trackEvent(adjustEvent);
 
 You can read more about special partners and how to integration them in our [guide to special partners][special-partners].
 
-### <a id="session-parameters">Session parameters
+### <a id="session-parameters"></a>Session parameters
 
 Some parameters are saved to be sent in every event and session of the Adjust SDK. Once you have added any of these parameters, you don't need to add them again, since they will be saved locally. If you add the same parameter twice, there will be no effect.
 
 These session parameters can be called before the Adjust SDK is launched to make sure they are sent even on install. If you need to send them with an install but can only obtain the needed values after launch, it's possible to [delay](#delay-start) the first launch of the Adjust SDK to allow for this.
 
-### <a id="session-callback-parameters"> Session callback parameters
+### <a id="session-callback-parameters"></a>Session callback parameters
 
 The same callback parameters that are registered for [events](#callback-parameters) can be also saved to be sent in every event or session of the Adjust SDK.
 
@@ -438,7 +437,7 @@ If you wish to remove all key and values from the session callback parameters, y
 Adjust2dx::resetSessionCallbackParameters();
 ```
 
-### <a id="session-partner-parameters">Session partner parameters
+### <a id="session-partner-parameters"></a>Session partner parameters
 
 In the same way that there are [session callback parameters](#session-callback-parameters) that are sent for every event or session of the Adjust SDK, there are also session partner parameters.
 
@@ -464,7 +463,7 @@ If you wish to remove all keys and values from the session partner parameters, y
 Adjust2dx::resetSessionPartnerParameters();
 ```
 
-### <a id="delay-start">Delay start
+### <a id="delay-start"></a>Delay start
 
 Delaying the start of the Adjust SDK allows your app some time to obtain session parameters, such as unique identifiers, so they can be sent on install.
 
@@ -478,7 +477,7 @@ In this case, the Adjust SDK will wait 5.5 seconds before sending the initial in
 
 **The maximum delay start time of the Adjust SDK is 10 seconds**.
 
-### <a id="attribution-callback">Attribution callback
+### <a id="attribution-callback"></a>Attribution callback
 
 Adjust can send you a callback upon any change in attribution. Due to the different sources considered for attribution, this information cannot be provided synchronously. Follow these steps to implement an attribution callback in your application:
 
@@ -534,7 +533,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 Please make sure to consider the [applicable attribution data policies][attribution-data].
 
-### <a id="session-event-callbacks">Session and event callbacks
+### <a id="session-event-callbacks"></a>Session and event callbacks
 
 You can register a callback to be notified of successfully tracked, as well as failed, events and/or sessions.
 
@@ -685,7 +684,7 @@ And both event- and session-failed objects also contain:
 
 - `std::string willRetry` indicates there will be an attempt to resend the package at a later time.
 
-### <a id="disable-tracking">Disable tracking
+### <a id="disable-tracking"></a>Disable tracking
 
 You can disable the Adjust SDK from tracking by invoking the `Adjust2dx::setEnabled` method with the enabled parameter set to `false`. This setting is **remembered between sessions**, but it can only be activated after the first session.
 
@@ -695,7 +694,7 @@ Adjust2dx::setEnabled(false);
 
 You can verify if the Adjust SDK is currently active with the `Adjust2dx::isEnabled()` method. It is always possible to activate the Adjust SDK by invoking `Adjust2dx::setEnabled` with the parameter set to `true`.
 
-### <a id="offline-mode">Offline mode
+### <a id="offline-mode"></a>Offline mode
 
 You can put the Adjust SDK in offline mode to suspend transmissions to our servers while retaining tracked data to be sent later. When in offline mode, all information is saved in a file, so it is best not to trigger too many events while in offline mode.
 
@@ -709,24 +708,7 @@ Conversely, you can deactivate offline mode by calling `Adjust2dx::setOfflineMod
 
 Unlike when disabling tracking, **this setting is not remembered** between sessions. This means that the SDK is in online mode whenever it is started, even if the app was terminated in offline mode.
 
-### <a id="sdk-signature"></a>SDK signature
-
-An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
-
-If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
-
-An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
-
-```cpp
-auto adjustConfig = AdjustConfig2dx(appToken, environment);
-
-adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
-
-Adjust2dx::start(adjustConfig);
-```
-
-
-### <a id="event-buffering">Event buffering
+### <a id="event-buffering"></a>Event buffering
 
 If your app makes heavy use of event tracking, you might want to delay some HTTP requests in order to send them in one batch every minute. You can enable event buffering through your `AdjustConfig2dx` instance by calling the `setEventBufferingEnabled` method:
 
@@ -749,7 +731,23 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 If nothing is set here, event buffering is **disabled by default**.
 
-### <a id="background-tracking">Background tracking
+### <a id="sdk-signature"></a>SDK signature
+
+An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
+
+If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
+
+An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
+
+```cpp
+auto adjustConfig = AdjustConfig2dx(appToken, environment);
+
+adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
+
+Adjust2dx::start(adjustConfig);
+```
+
+### <a id="background-tracking"></a>Background tracking
 
 The default behavior of the Adjust SDK is to **pause sending HTTP requests while the app is in the background**. You can change this in your `AdjustConfig2dx` instance by calling the `setSendInBackground` method:
 
@@ -772,7 +770,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 If nothing is set here, sending in the background is **disabled by default**.
 
-### <a id="device-ids">Device IDs
+### <a id="device-ids"></a>Device IDs
 
 Certain services (such as Google Analytics) require you to coordinate device and client IDs in order to prevent duplicated reporting.
 
@@ -847,7 +845,7 @@ You will also need to add the `READ_PHONE_STATE` permission to your `AndroidMani
 
 In order to use this feature, additional steps are required within your Adjust Dashboard. For more information, please contact your dedicated account manager or write an email to support@adjust.com.
 
-### <a id="pre-installed-trackers">Pre-installed trackers
+### <a id="pre-installed-trackers"></a>Pre-installed trackers
 
 If you want to use the Adjust SDK to recognize users device's came with your app pre-installed, follow these steps:
 
@@ -872,7 +870,7 @@ If you want to use the Adjust SDK to recognize users device's came with your app
     Default tracker: 'abc123'
     ```
 
-### <a id="deeplinking">Deep linking
+### <a id="deeplinking"></a>Deep linking
 
 If you are using the Adjust tracker URL with an option to deep link into your app from the URL, there is the possibility to get information about the deep link URL and its content. There are two scenarios when it comes to deep linking: standard and deferred.
 
@@ -882,11 +880,11 @@ Deferred deep linking is when a user does not have your app installed. Android d
 
 You need to set up deep link handling in your app **at a native level** - in your generated Android project.
 
-### <a id="deeplinking-standard">Standard deep linking
+### <a id="deeplinking-standard"></a>Standard deep linking
 
 Unfortunately, in this scenario, the information about the deep link can not be delivered to you in your Cocos2d-x C++ code. Once you enable your app to handle deep linking, you will get information about the deep link at a native level. For more information, check our chapters below on how to enable deep linking in Android apps.
 
-### <a id="deeplinking-deferred">Deferred deep linking
+### <a id="deeplinking-deferred"></a>Deferred deep linking
 
 In order to get information about the URL content in a deferred deep-linking scenario, you will need to set a callback method on the `AdjustConfig2dx` object which will receive a `std::string` parameter, where the content of the URL will be delivered. You should set this method on the `AdjustConfig2dx` object instance by calling the `setDeferredDeeplinkCallback` method:
 
@@ -925,7 +923,7 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
 If nothing is set here, **the Adjust SDK will always try to launch the URL by default**.
 
-### <a id="deeplinking-android">Deep link handling for Android apps
+### <a id="deeplinking-android"></a>Deep link handling for Android apps
 
 **This should be done in a native Android project.**
 
@@ -966,12 +964,11 @@ official Android SDK README.
 [manifest_permissions]:	https://raw.github.com/adjust/sdks/master/Resources/cocos2dx/android/eclipse/manifest_permissions.png
 [broadcast-receiver-custom]:  https://github.com/adjust/android_sdk/blob/master/doc/english/referrer.md
 
-## <a id="license">License
+## <a id="license"></a>License
 
 The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2018 Adjust GmbH,
-http://www.adjust.com
+Copyright (c) 2012-2018 Adjust GmbH, http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
