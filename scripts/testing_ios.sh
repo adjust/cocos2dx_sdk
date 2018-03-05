@@ -19,15 +19,15 @@ echo -e "${GREEN}>>> Build successful. Removing old .framework ${NC}"
 rm -rfv ${COCOS_EXAMPLES_APP}/proj.ios_mac/AdjustSdk.framework
 
 echo -e "${GREEN}>>> Copying new .framework to examples app ${NC}"
-cp -Rv ${LIB_DIR}/AdjustSdk.framework ${COCOS_EXAMPLES_APP}/proj.ios_mac/
+cp -Rv ${ROOT_DIR}/iOS/AdjustSdk.framework ${COCOS_EXAMPLES_APP}/proj.ios_mac/
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
 cd $COCOS_EXAMPLES_APP
-rm -rfv Classes/Adjust/
-mkdir Classes/Adjust/
+rm -rfv Classes/Adjust
+mkdir Classes/Adjust
 
 echo -e "${GREEN}>>> Moving classes to ${COCOS_EXAMPLES_APP} ${NC}"
 cd ${ROOT_DIR}
-cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/Adjust/
+cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/Adjust
 
 echo -e "${GREEN}>>> Success. Make sure AdjustSdk.framework is linked in 'Build Phases'. Run it with Xcode from \`proj.ios_mac\` directory ${NC}"
