@@ -16,10 +16,10 @@ echo -e "${GREEN}>>> Building Adjust .framework file ${NC}"
 ${ROOT_DIR}/ext/ios/build.sh
 
 echo -e "${GREEN}>>> Build successful. Removing old .framework ${NC}"
-rm -rfv ${COCOS_EXAMPLES_APP}/proj.ios_mac/AdjustSdk.framework
+rm -rfv ${COCOS_EXAMPLES_APP}/proj.ios_mac/ios/AdjustSdk.framework
 
 echo -e "${GREEN}>>> Copying new .framework to examples app ${NC}"
-cp -Rv ${ROOT_DIR}/iOS/AdjustSdk.framework ${COCOS_EXAMPLES_APP}/proj.ios_mac/
+cp -Rv ${ROOT_DIR}/iOS/AdjustSdk.framework ${COCOS_EXAMPLES_APP}/proj.ios_mac/ios
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
 cd $COCOS_EXAMPLES_APP
