@@ -98,7 +98,7 @@ static int fileReadCallback(const char* fileName, int* size) {
 #endif
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
-    std::string sdkPrefix = "cocos2d-x4.12.0";
+    std::string sdkPrefix = "cocos2d-x4.12.1";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miInit;
