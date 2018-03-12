@@ -1,3 +1,14 @@
+### Version 4.12.1 (12th March 2018)
+#### Native changes
+- Updated Android SDK to `v4.12.4`.
+
+#### Native SDKs
+- [iOS@v4.12.3][ios_sdk_v4.12.3]
+- [Android@v4.12.4][android_sdk_v4.12.4]
+- [Windows SDK 4.0.3][windows_sdk_v4.0.3]
+
+---
+
 ### Version 4.12.0 (5th March 2017)
 #### Native changes:
 - https://github.com/adjust/ios_sdk/blob/master/CHANGELOG.md#version-4120-13th-december-2017
@@ -223,5 +234,6 @@
 [android_sdk_v4.11.4]: https://github.com/adjust/android_sdk/tree/v4.11.4
 [android_sdk_v4.12.0]: https://github.com/adjust/android_sdk/tree/v4.12.0
 [android_sdk_v4.12.2]: https://github.com/adjust/android_sdk/tree/v4.12.2
+[android_sdk_v4.12.4]: https://github.com/adjust/android_sdk/tree/v4.12.4
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
