@@ -28,6 +28,7 @@ public:
     static void setDeviceToken(std::string deviceToken);
     
     static void sendFirstPackages();
+    static void gdprForgetMe();
     static void addSessionCallbackParameter(std::string key, std::string value);
     static void addSessionPartnerParameter(std::string key, std::string value);
     static void removeSessionCallbackParameter(std::string key);
