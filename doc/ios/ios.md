@@ -559,7 +559,6 @@ Adjust2dx::gdprForgetMe();
 
 Upon receiving this information, Adjust will erase the user's data and the Adjust SDK will stop tracking the user. No requests from this device will be sent to Adjust in the future.
 
-
 ### <a id="sdk-signature"></a>SDK signature
 
 An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
