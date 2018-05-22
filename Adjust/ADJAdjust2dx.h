@@ -30,6 +30,7 @@ public:
     static void setOfflineMode(bool isOffline);
     
     static void sendFirstPackages();
+    static void gdprForgetMe();
     static void addSessionCallbackParameter(std::string key, std::string value);
     static void addSessionPartnerParameter(std::string key, std::string value);
     static void removeSessionCallbackParameter(std::string key);

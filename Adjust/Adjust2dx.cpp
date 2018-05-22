@@ -164,6 +164,31 @@ void Adjust2dx::sendFirstPackages() {
 #endif
 }
 
+void Adjust2dx::gdprForgetMe() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::gdprForgetMe();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo miGdprForgetMe;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGdprForgetMe, "com/adjust/sdk/Adjust", "gdprForgetMe", "(Landroid/content/Context;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miGetContext;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
+    miGdprForgetMe.env->CallStaticVoidMethod(miGdprForgetMe.classID, miGdprForgetMe.methodID, jContext);
+
+    miGetContext.env->DeleteLocalRef(jContext);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+
+#endif
+}
+
 void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addSessionCallbackParameter(key, value);

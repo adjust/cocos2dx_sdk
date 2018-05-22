@@ -77,6 +77,10 @@ void ADJAdjust2dx::sendFirstPackages() {
     [Adjust sendFirstPackages];
 }
 
+void ADJAdjust2dx::gdprForgetMe() {
+    [Adjust gdprForgetMe];
+}
+
 void ADJAdjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
     [Adjust addSessionCallbackParameter:[NSString stringWithUTF8String:key.c_str()] value:[NSString stringWithUTF8String:value.c_str()]];
 }
