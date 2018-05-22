@@ -1,3 +1,14 @@
+### Version 4.13.0 (22nd May 2018)
+#### Added
+- Added `gdprForgetMe` method to `Adjust2dx` interface to enable possibility for user to be forgotten in accordance with GDPR law.
+
+#### Native SDKs
+- [iOS@v4.13.0][ios_sdk_v4.13.0]
+- [Android@v4.13.0][android_sdk_v4.13.0]
+- [Windows SDK 4.0.3][windows_sdk_v4.0.3]
+
+---
+
 ### Version 4.12.1 (12th March 2018)
 #### Native changes
 - Updated Android SDK to `v4.12.4`.
@@ -19,9 +30,9 @@
 - https://github.com/adjust/android_sdk/blob/master/CHANGELOG.md#version-4122-28th-february-2018
 
 #### Added
-- Added `getAmazonAdId` method to `Adjust` interface.
-- Added `setReadMobileEquipmentIdentity` method to `AdjustConfig` interface.
-- Added `setAppSecret` method to `AdjustConfig` interface (**iOS and Android only**).
+- Added `getAmazonAdId` method to `Adjust2dx` interface.
+- Added `setReadMobileEquipmentIdentity` method to `AdjustConfig2dx` interface.
+- Added `setAppSecret` method to `AdjustConfig2dx` interface (**iOS and Android only**).
 
 #### Native SDKs
 - [iOS@v4.12.3][ios_sdk_v4.12.3]
@@ -222,6 +233,7 @@
 [ios_sdk_v4.11.5]: https://github.com/adjust/ios_sdk/tree/v4.11.5
 [ios_sdk_v4.12.1]: https://github.com/adjust/ios_sdk/tree/v4.12.1
 [ios_sdk_v4.12.3]: https://github.com/adjust/ios_sdk/tree/v4.12.3
+[ios_sdk_v4.13.0]: https://github.com/adjust/ios_sdk/tree/v4.13.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -235,5 +247,6 @@
 [android_sdk_v4.12.0]: https://github.com/adjust/android_sdk/tree/v4.12.0
 [android_sdk_v4.12.2]: https://github.com/adjust/android_sdk/tree/v4.12.2
 [android_sdk_v4.12.4]: https://github.com/adjust/android_sdk/tree/v4.12.4
+[android_sdk_v4.13.0]: https://github.com/adjust/android_sdk/tree/v4.13.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
