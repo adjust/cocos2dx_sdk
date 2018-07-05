@@ -39,7 +39,6 @@ echo -e "${CYAN}[ADJUST][ANDROID][EXAMPLE]:${GREEN} Done! ${NC}"
 
 # ======================================== #
 
-echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
 echo -e "${CYAN}[ADJUST][ANDROID][EXAMPLE]:${GREEN} Updating Adjust SDK C++ source files in ${COCOS_EXAMPLES_APP}/Classes/Adjust fodler ... ${NC}"
 cd $COCOS_EXAMPLES_APP
 rm -rfv Classes/Adjust/
