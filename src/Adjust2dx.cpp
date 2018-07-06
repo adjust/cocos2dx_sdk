@@ -142,15 +142,23 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miSetPushToken;
 
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetPushToken, "com/adjust/sdk/Adjust", "setPushToken", "(Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetPushToken, "com/adjust/sdk/Adjust", "setPushToken", "(Ljava/lang/String;Landroid/content/Context;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miGetContext;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
     jstring jPushToken = miSetPushToken.env->NewStringUTF(deviceToken.c_str());
+    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
 
-    miSetPushToken.env->CallStaticVoidMethod(miSetPushToken.classID, miSetPushToken.methodID, jPushToken);
+    miSetPushToken.env->CallStaticVoidMethod(miSetPushToken.classID, miSetPushToken.methodID, jPushToken, jContext);
 
     miSetPushToken.env->DeleteLocalRef(jPushToken);
+    miGetContext.env->DeleteLocalRef(jContext);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
 
 #endif
