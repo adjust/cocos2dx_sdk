@@ -111,7 +111,13 @@ void Adjust2dx::appWillOpenUrl(std::string url) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miAppWillOpenUrl;
 
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miAppWillOpenUrl, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Landroid/net/Uri;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miAppWillOpenUrl, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo miGetContext;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
@@ -120,11 +126,13 @@ void Adjust2dx::appWillOpenUrl(std::string url) {
 
     jstring jUrl = miAppWillOpenUrl.env->NewStringUTF(url.c_str());
     jobject jUri = miAppWillOpenUrl.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
+    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
 
-    miAppWillOpenUrl.env->CallStaticVoidMethod(miAppWillOpenUrl.classID, miAppWillOpenUrl.methodID, jUri);
+    miAppWillOpenUrl.env->CallStaticVoidMethod(miAppWillOpenUrl.classID, miAppWillOpenUrl.methodID, jUri, jContext);
 
     miAppWillOpenUrl.env->DeleteLocalRef(jUrl);
     miAppWillOpenUrl.env->DeleteLocalRef(jUri);
+    miGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
