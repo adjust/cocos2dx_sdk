@@ -2,7 +2,8 @@
 //  AdjustAttribution2dx.h
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 16/06/15.
+//  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTATTRIBUTION2DX_H_
@@ -22,9 +23,15 @@ private:
     std::string adid;
 public:
     AdjustAttribution2dx() {}
-    AdjustAttribution2dx(std::string trackerToken, std::string trackerName, std::string network,
-                         std::string campaign, std::string adgroup, std::string creative,
-                         std::string clickLabel, std::string adid) {
+    AdjustAttribution2dx(
+        std::string trackerToken,
+        std::string trackerName,
+        std::string network,
+        std::string campaign,
+        std::string adgroup,
+        std::string creative,
+        std::string clickLabel,
+        std::string adid) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;

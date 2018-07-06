@@ -2,7 +2,8 @@
 //  AdjustProxy2dx.h
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 03/09/15.
+//  Created by Uglješa Erceg (@uerceg) on 3rd September 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

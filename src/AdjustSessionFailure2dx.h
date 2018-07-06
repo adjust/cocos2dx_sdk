@@ -2,8 +2,8 @@
 //  AdjustSessionFailure2dx.h
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 06/10/2016.
-//
+//  Created by Uglješa Erceg (@uerceg) on 6th October 2016.
+//  Copyright © 2016-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTSESSIONFAILURE2DX_H_
@@ -20,14 +20,19 @@ private:
     std::string jsonResponse;
 public:
     AdjustSessionFailure2dx() {}
-    AdjustSessionFailure2dx(std::string adid, std::string message, std::string timestamp, std::string willRetry, std::string jsonResponse) {
+    AdjustSessionFailure2dx(
+        std::string adid,
+        std::string message,
+        std::string timestamp,
+        std::string willRetry,
+        std::string jsonResponse) {
         this->adid = adid;
         this->message = message;
         this->timestamp = timestamp;
         this->willRetry = willRetry;
         this->jsonResponse = jsonResponse;
     }
-    
+
     std::string getAdid();
     std::string getMessage();
     std::string getWillRetry();

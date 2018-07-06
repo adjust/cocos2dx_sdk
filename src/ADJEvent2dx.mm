@@ -1,9 +1,9 @@
 //
 //  ADJEvent2dx.mm
-//  AdjustSDK
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "ADJEvent2dx.h"
@@ -36,7 +36,7 @@ void ADJEvent2dx::addPartnerParameter(std::string key, std::string value) {
 void ADJEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
     [((ADJEvent *)event) setReceipt:
      [[NSString stringWithUTF8String:receipt.c_str()] dataUsingEncoding:NSUTF8StringEncoding]
-                      transactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
+                       transactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
 }
 
 bool ADJEvent2dx::isValid() {

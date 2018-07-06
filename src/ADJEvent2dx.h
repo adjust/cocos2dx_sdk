@@ -1,9 +1,9 @@
 //
 //  ADJEvent2dx.h
-//  AdjustSDK
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef _ADJUST_ADJUSTEVENT2DX_H_
@@ -27,9 +27,7 @@ public:
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
     void setReceipt(std::string receipt, std::string transactionId);
-
     bool isValid();
-
     void* getEvent();
 };
 

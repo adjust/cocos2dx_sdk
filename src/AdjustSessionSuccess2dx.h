@@ -2,8 +2,8 @@
 //  AdjustSessionSuccess2dx.h
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 06/10/2016.
-//
+//  Created by Uglješa Erceg (@uerceg) on 6th October 2016.
+//  Copyright © 2016-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTSESSIONSUCCESS2DX_H_
@@ -19,13 +19,17 @@ private:
     std::string jsonResponse;
 public:
     AdjustSessionSuccess2dx() {}
-    AdjustSessionSuccess2dx(std::string adid, std::string message, std::string timestamp, std::string jsonResponse) {
+    AdjustSessionSuccess2dx(
+        std::string adid,
+        std::string message,
+        std::string timestamp,
+        std::string jsonResponse) {
         this->adid = adid;
         this->message = message;
         this->timestamp = timestamp;
         this->jsonResponse = jsonResponse;
     }
-    
+
     std::string getAdid();
     std::string getMessage();
     std::string getTimestamp();

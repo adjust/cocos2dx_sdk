@@ -1,14 +1,13 @@
 //
 //  ADJConfig2dx.mm
-//  AdjustSDK
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "ADJConfig2dx.h"
 #include "ADJDelegate2dx.h"
-
 #include <AdjustSdk/Adjust.h>
 
 void ADJConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix) {

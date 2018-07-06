@@ -2,7 +2,8 @@
 //  AdjustProxy2dx.cpp
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 03/09/15.
+//  Created by Uglješa Erceg (@uerceg) on 3rd September 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustProxy2dx.h"
@@ -24,7 +25,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string adid;
 
     jclass clsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
-
     jfieldID fTrackerTokenID = env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
     jfieldID fTrackerNameID = env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
     jfieldID fNetworkID = env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
@@ -33,7 +33,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID fCreativeID = env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
     jfieldID fClickLabelID = env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
-
     jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, fTrackerTokenID);
     jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, fTrackerNameID);
     jstring jNetwork = (jstring)env->GetObjectField(attributionObject, fNetworkID);
@@ -116,7 +115,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     }
 
     AdjustAttribution2dx attribution = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
-    
     attributionCallbackMethod(attribution);
 }
 
@@ -125,7 +123,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     if (NULL == eventTrackingFailedCallbackMethod) {
         return;
     }
-
     if (NULL == eventFailureObject) {
         return;
     }
@@ -138,22 +135,18 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     std::string jsonResponse;
 
     jclass clsAdjustEventFailure = env->FindClass("com/adjust/sdk/AdjustEventFailure");
-
     jfieldID fMessageID = env->GetFieldID(clsAdjustEventFailure, "message", "Ljava/lang/String;");
     jfieldID fTimestampID = env->GetFieldID(clsAdjustEventFailure, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustEventFailure, "adid", "Ljava/lang/String;");
     jfieldID fEventTokenID = env->GetFieldID(clsAdjustEventFailure, "eventToken", "Ljava/lang/String;");
     jfieldID fWillRetryID = env->GetFieldID(clsAdjustEventFailure, "willRetry", "Z");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventFailure, "jsonResponse", "Lorg/json/JSONObject;");
-
     jstring jMessage = (jstring)env->GetObjectField(eventFailureObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(eventFailureObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(eventFailureObject, fAdidID);
     jstring jEventToken = (jstring)env->GetObjectField(eventFailureObject, fEventTokenID);
-    
     jboolean jWillRetryObj = env->GetBooleanField(eventFailureObject, fWillRetryID);
     jstring jWillRetry = JNI_TRUE == jWillRetryObj ? env->NewStringUTF("true") : env->NewStringUTF("false");
-
     jobject jJsonResponseObj = env->GetObjectField(eventFailureObject, fJsonResponseID);
     jstring jJsonResponse;
 
@@ -218,7 +211,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     }
 
     AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, jsonResponse);
-    
     eventTrackingFailedCallbackMethod(eventFailure);
 }
 
@@ -227,7 +219,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     if (NULL == eventTrackingSucceededCallbackMethod) {
         return;
     }
-
     if (NULL == eventSuccessObject) {
         return;
     }
@@ -239,13 +230,11 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     std::string jsonResponse;
 
     jclass clsAdjustEventSuccess = env->FindClass("com/adjust/sdk/AdjustEventSuccess");
-
     jfieldID fMessageID = env->GetFieldID(clsAdjustEventSuccess, "message", "Ljava/lang/String;");
     jfieldID fTimestampID = env->GetFieldID(clsAdjustEventSuccess, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustEventSuccess, "adid", "Ljava/lang/String;");
     jfieldID fEventTokenID = env->GetFieldID(clsAdjustEventSuccess, "eventToken", "Ljava/lang/String;");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventSuccess, "jsonResponse", "Lorg/json/JSONObject;");
-
     jstring jMessage = (jstring)env->GetObjectField(eventSuccessObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(eventSuccessObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(eventSuccessObject, fAdidID);
@@ -305,7 +294,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     }
 
     AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, jsonResponse);
-    
     eventTrackingSucceededCallbackMethod(eventSuccess);
 }
 
@@ -314,7 +302,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
     if (NULL == sessionTrackingFailedCallbackMethod) {
         return;
     }
-
     if (NULL == sessionFailureObject) {
         return;
     }
@@ -326,20 +313,16 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
     std::string jsonResponse;
 
     jclass clsAdjustSessionFailure = env->FindClass("com/adjust/sdk/AdjustSessionFailure");
-
     jfieldID fMessageID = env->GetFieldID(clsAdjustSessionFailure, "message", "Ljava/lang/String;");
     jfieldID fTimestampID = env->GetFieldID(clsAdjustSessionFailure, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustSessionFailure, "adid", "Ljava/lang/String;");
     jfieldID fWillRetryID = env->GetFieldID(clsAdjustSessionFailure, "willRetry", "Z");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustSessionFailure, "jsonResponse", "Lorg/json/JSONObject;");
-
     jstring jMessage = (jstring)env->GetObjectField(sessionFailureObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(sessionFailureObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(sessionFailureObject, fAdidID);
-    
     jboolean jWillRetryObj = env->GetBooleanField(sessionFailureObject, fWillRetryID);
     jstring jWillRetry = JNI_TRUE == jWillRetryObj ? env->NewStringUTF("true") : env->NewStringUTF("false");
-    
     jobject jJsonResponseObj = env->GetObjectField(sessionFailureObject, fJsonResponseID);
     jstring jJsonResponse;
 
@@ -395,7 +378,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
     }
 
     AdjustSessionFailure2dx sessionFailure = AdjustSessionFailure2dx(adid, message, timestamp, willRetry, jsonResponse);
-    
     sessionTrackingFailedCallbackMethod(sessionFailure);
 }
 
@@ -404,7 +386,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     if (NULL == sessionTrackingSucceededCallbackMethod) {
         return;
     }
-
     if (NULL == sessionSuccessObject) {
         return;
     }
@@ -416,12 +397,10 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     std::string jsonResponse;
 
     jclass clsAdjustSessionSuccess = env->FindClass("com/adjust/sdk/AdjustSessionSuccess");
-
     jfieldID fMessageID = env->GetFieldID(clsAdjustSessionSuccess, "message", "Ljava/lang/String;");
     jfieldID fTimestampID = env->GetFieldID(clsAdjustSessionSuccess, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustSessionSuccess, "adid", "Ljava/lang/String;");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustSessionSuccess, "jsonResponse", "Lorg/json/JSONObject;");
-
     jstring jMessage = (jstring)env->GetObjectField(sessionSuccessObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(sessionSuccessObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(sessionSuccessObject, fAdidID);
@@ -471,7 +450,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     }
 
     AdjustSessionSuccess2dx sessionSuccess = AdjustSessionSuccess2dx(adid, message, timestamp, jsonResponse);
-    
     sessionTrackingSucceededCallbackMethod(sessionSuccess);
 }
 
@@ -480,16 +458,13 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     if (NULL == adIdCallbackMethod) {
         return;
     }
-
 	if (NULL == jAdId) {
         return;
     }
 
 	const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
 	std::string adId = std::string(adIdCStr);
-
 	adIdCallbackMethod(adId);
-
 	env->ReleaseStringUTFChars(jAdId, adIdCStr);	
 }
 
@@ -498,16 +473,13 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     if (NULL == deferredDeeplinkCallbackMethod) {
         return true;
     }
-
     if (NULL == jDeeplink) {
         return true;
     }
 
     const char *deeplinkCStr = env->GetStringUTFChars(jDeeplink, NULL);
     std::string deeplink = std::string(deeplinkCStr);
-
     env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
-
     return deferredDeeplinkCallbackMethod(deeplink);
 }
 

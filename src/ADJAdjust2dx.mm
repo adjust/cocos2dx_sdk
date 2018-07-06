@@ -1,14 +1,13 @@
 //
 //  ADJAdjust2dx.mm
-//  AdjustSDK
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "ADJAdjust2dx.h"
 #include "ADJDelegate2dx.h"
-
 #include <AdjustSdk/Adjust.h>
 
 const std::string ADJEnvironmentSandbox2dx = std::string([ADJEnvironmentSandbox UTF8String]);
@@ -22,21 +21,24 @@ void ADJAdjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
     BOOL isSessionFailureCallbackImplemented = NULL != adjustConfig.getSessionFailureCallback() ? YES : NO;
     BOOL isDeferredDeeplinkCallbackImplemented = NULL != adjustConfig.getDeferredDeeplinkCallback() ? YES : NO;
     
-    if (isAttributionCallbackImplemented || isEventSuccessCallbackImplemented ||
-        isEventFailureCallbackImplemented || isSessionSuccessCallbackImplemented ||
-        isSessionFailureCallbackImplemented || isDeferredDeeplinkCallbackImplemented) {
+    if (isAttributionCallbackImplemented
+        || isEventSuccessCallbackImplemented
+        || isEventFailureCallbackImplemented
+        || isSessionSuccessCallbackImplemented
+        || isSessionFailureCallbackImplemented
+        || isDeferredDeeplinkCallbackImplemented) {
         ((ADJConfig *)adjustConfig.getConfig()).delegate = [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
-                                                                       swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
-                                                                       swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
-                                                                     swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
-                                                                     swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
-                                                                   swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
-                                                                            andAttributionCallbackId:adjustConfig.getAttributionCallback()
-                                                                              eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
-                                                                              eventFailureCallbackId:adjustConfig.getEventFailureCallback()
-                                                                            sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
-                                                                            sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
-                                                                          deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()];
+                                                                                         swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
+                                                                                         swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
+                                                                                       swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
+                                                                                       swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
+                                                                                     swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
+                                                                                              andAttributionCallbackId:adjustConfig.getAttributionCallback()
+                                                                                                eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
+                                                                                                eventFailureCallbackId:adjustConfig.getEventFailureCallback()
+                                                                                              sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
+                                                                                              sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
+                                                                                            deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()];
     }
 
     [Adjust appDidLaunch:(ADJConfig *)adjustConfig.getConfig()];
@@ -115,7 +117,6 @@ std::string ADJAdjust2dx::getIdfa() {
     }
 
     std::string idfa = std::string([[Adjust idfa] UTF8String]);
-
     return idfa;
 }
 
@@ -125,13 +126,11 @@ std::string ADJAdjust2dx::getAdid() {
     }
 
     std::string adid = std::string([[Adjust adid] UTF8String]);
-
     return adid;
 }
 
 AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     ADJAttribution *attribution = [Adjust attribution];
-
     std::string trackerToken;
     std::string trackerName;
     std::string network;
@@ -145,37 +144,29 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
         if (attribution.trackerToken != NULL) {
             trackerToken = std::string([attribution.trackerToken UTF8String]);
         }
-
         if (attribution.trackerName != NULL) {
             trackerName = std::string([attribution.trackerName UTF8String]);
         }
-
         if (attribution.network != NULL) {
             network = std::string([attribution.network UTF8String]);
         }
-
         if (attribution.campaign != NULL) {
             campaign = std::string([attribution.campaign UTF8String]);
         }
-
         if (attribution.adgroup != NULL) {
             adgroup = std::string([attribution.adgroup UTF8String]);
         }
-
         if (attribution.creative != NULL) {
             creative = std::string([attribution.creative UTF8String]);
         }
-
         if (attribution.clickLabel != NULL) {
             clickLabel = std::string([attribution.clickLabel UTF8String]);
         }
-
         if (attribution.adid != NULL) {
             adid = std::string([attribution.adid UTF8String]);
         }
     }
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
-
     return attribution2dx;
 }

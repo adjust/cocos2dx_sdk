@@ -1,9 +1,9 @@
 //
 //  ADJDelegate2dx.h
-//  Adjust
+//  Adjust SDK
 //
-//  Created by uerceg on 12/20/16.
-//  Copyright (c) 2012-2016 adjust GmbH. All rights reserved.
+//  Created by Uglješa Erceg (@uerceg) on 20th December 2016.
+//  Copyright © 2016-2018 Adjust GmbH. All rights reserved.
 //
 
 #import <AdjustSdk/Adjust.h>
@@ -23,11 +23,11 @@
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-						 andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
+						             andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
-					   deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId;
+					             deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId;
 
 @end

@@ -2,8 +2,8 @@
 //  AdjustEventFailure2dx.cpp
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 06/10/2016.
-//
+//  Created by Uglješa Erceg (@uerceg) on 6th October 2016.
+//  Copyright © 2016-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustEventFailure2dx.h"

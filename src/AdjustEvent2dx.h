@@ -2,7 +2,8 @@
 //  AdjustEvent2dx.h
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 16/06/15.
+//  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTEVENT2DX_H_
@@ -45,7 +46,6 @@ public:
     }
 
     bool isValid();
-
     void setRevenue(double amount, std::string currency);
     void setTransactionId(std::string transactionId);
     void addCallbackParameter(std::string key, std::string value);

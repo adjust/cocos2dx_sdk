@@ -2,7 +2,8 @@
 //  AdjustAttribution2dx.cpp
 //  Adjust SDK
 //
-//  Created by Uglješa Erceg on 16/06/15.
+//  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustAttribution2dx.h"

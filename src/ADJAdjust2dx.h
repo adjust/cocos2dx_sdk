@@ -1,16 +1,15 @@
 //
 //  ADJAdjust2dx.h
-//  AdjustSDK
+//  Adjust SDK
 //
-//  Created by Uglješa Erceg on 17/06/15.
-//
+//  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
+//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef _ADJUST_ADJUST2DX_H_
 #define _ADJUST_ADJUST2DX_H_
 
 #include <iostream>
-
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
 #include "AdjustAttribution2dx.h"
@@ -28,7 +27,6 @@ public:
     static void appWillOpenUrl(std::string url);
     static void setDeviceToken(std::string deviceToken);
     static void setOfflineMode(bool isOffline);
-    
     static void sendFirstPackages();
     static void gdprForgetMe();
     static void addSessionCallbackParameter(std::string key, std::string value);
@@ -37,7 +35,7 @@ public:
     static void removeSessionPartnerParameter(std::string key);
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
-    
+
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
