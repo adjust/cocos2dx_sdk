@@ -64,9 +64,8 @@ void ADJAdjust2dx::appWillOpenUrl(std::string url) {
 }
 
 void ADJAdjust2dx::setDeviceToken(std::string deviceToken) {
-    NSData *pDeviceToken = [[NSString stringWithUTF8String:deviceToken.c_str()]
-                            dataUsingEncoding:NSUTF8StringEncoding];
-    [Adjust setDeviceToken:pDeviceToken];
+    NSString *pPushToken = [NSString stringWithUTF8String:deviceToken.c_str()];
+    [Adjust setPushToken:pPushToken];
 }
 
 void ADJAdjust2dx::setOfflineMode(bool isOffline) {
