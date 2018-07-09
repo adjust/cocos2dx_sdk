@@ -112,10 +112,18 @@ Since August 1, 2014, apps in the Google Play Store must use the [Google adverti
 Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
 ```
-compile 'com.google.android.gms:play-services-analytics:16.0.1'
+implementation 'com.google.android.gms:play-services-analytics:16.0.1'
 ```
 
 To check whether the analytics part of the Google Play Services library has been successfully added to your app, you should start your app by configuring the SDK to run in **sandbox** mode and set the log level to **verbose**. After that, track a session or some events in your app and observe the list of parameters in the verbose logs which are being read once the session or event has been tracked. If you see a parameter called `gps_adid` in there, you have successfully added the analytics part of the Google Play Services library to your app and our SDK is reading the necessary information from it.
+
+**If you are using Eclipse as your IDE:**
+
+In order to add Google Play Services to your project, you should add `google-play-services_lib` from Android SDK folder into your app project in Eclipse. `google-play-services_lib` is part of the Android SDK, which you may already have installed.
+
+There are two main ways to download the Android SDK. If you are using any tool which has the `Android SDK Manager`, you should download `Android SDK Tools`. Once installed, you can find the libraries in the `SDK_FOLDER/extras/google/google_play_services/libproject/` folder.
+
+If you are not using any tool which has Android SDK Manager, you should download the standalone version of Android SDK from [official page][android-sdk-download]. By downloading this, you will have only a basic version of the Android SDK which doesn't include the Android SDK Tools. There are more detailed instructions on how to download these in the readme file provided by Google, called `SDK Readme.txt`, which is placed in Android SDK folder.
 
 ### <a id="android-proguard"></a>[Android] Proguard settings
 
@@ -161,7 +169,7 @@ In order to correctly attribute an install of your Android app to its source, Ad
 In order to support this in your app, please make sure to add following dependency to your `build.gradle` file:
 
 ```
-compile 'com.android.installreferrer:installreferrer:1.0'
+implementation 'com.android.installreferrer:installreferrer:1.0'
 ```
 
 Also, make sure that you have paid attention to the [Proguard settings](#android-proguard) chapter and that you have added all the rules mentioned in it, especially the one needed for this feature:
@@ -171,6 +179,10 @@ Also, make sure that you have paid attention to the [Proguard settings](#android
 ```
 
 This feature is supported if you are using the **Adjust SDK v4.12.0 or above**.
+
+**If you are using Eclipse as your IDE:**
+
+Google doesn't have any official documentation on how to integrate install referrer library in Eclipse project since Android Studio is official IDE for Android development. However, install library is an AAR library which can be downloaded and added to your Eclipse project (either as AAR library or JAR library if you extract it). Official install referrer library AAR library can be downloaded from [here][install-referrer-aar].
 
 #### <a id="android-referrer-gps-intent"></a>Google Play Store intent
 
@@ -908,6 +920,8 @@ To set up your Android app to handle deep linking at a native level, please foll
 [android-application]:  http://developer.android.com/reference/android/app/Application.html
 [google-launch-modes]:  http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 [google-play-services]: http://developer.android.com/google/play-services/setup.html
+[android-sdk-download]: https://developer.android.com/sdk/index.html#Other
+[install-referrer-aar]: https://maven.google.com/com/android/installreferrer/installreferrer/1.0/installreferrer-1.0.aar
 [broadcast-receiver-custom]:  https://github.com/adjust/android_sdk/blob/master/doc/english/referrer.md
 
 ## <a id="license"></a>License
