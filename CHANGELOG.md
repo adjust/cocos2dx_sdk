@@ -1,3 +1,18 @@
+### Version 4.14.0 (9th July 2018)
+#### Added
+- Added deep link caching in case `appWillOpenUrl` method is called before SDK is initialised.
+
+#### Changed
+- Removed support for Windows platform.
+- Updated the way how iOS native bridge handles push tokens from React Native interface - they are now being passed directly as strings to native iOS SDK.
+- Merged different platform `README` files into one.
+
+#### Native SDKs
+- [iOS@v4.14.1][ios_sdk_v4.14.1]
+- [Android@v4.14.0][android_sdk_v4.14.0]
+
+---
+
 ### Version 4.13.0 (22nd May 2018)
 #### Added
 - Added `gdprForgetMe` method to `Adjust2dx` interface to enable possibility for user to be forgotten in accordance with GDPR law.
@@ -234,6 +249,7 @@
 [ios_sdk_v4.12.1]: https://github.com/adjust/ios_sdk/tree/v4.12.1
 [ios_sdk_v4.12.3]: https://github.com/adjust/ios_sdk/tree/v4.12.3
 [ios_sdk_v4.13.0]: https://github.com/adjust/ios_sdk/tree/v4.13.0
+[ios_sdk_v4.14.1]: https://github.com/adjust/ios_sdk/tree/v4.14.1
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -248,5 +264,6 @@
 [android_sdk_v4.12.2]: https://github.com/adjust/android_sdk/tree/v4.12.2
 [android_sdk_v4.12.4]: https://github.com/adjust/android_sdk/tree/v4.12.4
 [android_sdk_v4.13.0]: https://github.com/adjust/android_sdk/tree/v4.13.0
+[android_sdk_v4.14.0]: https://github.com/adjust/android_sdk/tree/v4.14.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
