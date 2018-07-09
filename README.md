@@ -125,6 +125,13 @@ There are two main ways to download the Android SDK. If you are using any tool w
 
 If you are not using any tool which has Android SDK Manager, you should download the standalone version of Android SDK from [official page][android-sdk-download]. By downloading this, you will have only a basic version of the Android SDK which doesn't include the Android SDK Tools. There are more detailed instructions on how to download these in the readme file provided by Google, called `SDK Readme.txt`, which is placed in Android SDK folder.
 
+After this, open the `AndroidManifest.xml` file of your Android project and add the following `meta-data` tag inside the `<application>` element:
+
+```xml
+<meta-data android:name="com.google.android.gms.version"
+           android:value="@integer/google-play-services_version" />
+```
+
 ### <a id="android-proguard"></a>[Android] Proguard settings
 
 If you are using Proguard, add these lines to your Proguard file:
