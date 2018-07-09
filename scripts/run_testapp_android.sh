@@ -18,10 +18,10 @@ GREEN='\033[0;32m' # Green color
 NC='\033[0m' # No Color
 
 echo -e "${GREEN}>>> Removing test app from test device ${NC}"
-# adb uninstall com.adjust.testapp || true
+adb uninstall com.adjust.testapp || true
 
 echo -e "${GREEN}>>> Building Adjust Android JAR file ${NC}"
-# ${ROOT_DIR}/ext/android/build.sh release
+${ROOT_DIR}/ext/android/build.sh release
 
 echo -e "${GREEN}>>> Unpacking adjust-android.jar file ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
