@@ -10,7 +10,11 @@
 
 #include <iostream>
 
-#include "ICommandJsonListener2dx.h"
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+#endif
 
 class TestLib2dx {
 private:

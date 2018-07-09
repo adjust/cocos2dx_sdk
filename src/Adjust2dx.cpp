@@ -562,7 +562,7 @@ void Adjust2dx::applicationResumed() {
 
 void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    jobject jobjTestOptions = testOptions->getTestOptions();
+    jobject jobjTestOptions = testOptions.getTestOptions();
     
     cocos2d::JniMethodInfo miSetTestOptions;
     if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
@@ -570,9 +570,8 @@ void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
     }
 
     miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jobjTestOptions);
-    miSetReferrer.env->DeleteLocalRef(jobjTestOptions);
+    miSetTestOptions.env->DeleteLocalRef(jobjTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // TODO:
-
+    
 #endif
 }
