@@ -126,6 +126,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     jfieldID fNoBackoffWait = miInit.env->GetFieldID(clsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
     miInit.env->SetObjectField(jobjTestOptions, fNoBackoffWait, jobjNoBackoffWait);
     miInit.env->DeleteLocalRef(jobjNoBackoffWait);
+
+    return jobjTestOptions;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 ADJAdjustTestOptions2dx AdjustTestOptions2dx::getTestOptions() {

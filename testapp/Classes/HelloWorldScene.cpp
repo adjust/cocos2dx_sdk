@@ -17,12 +17,10 @@ Scene *TestApp::createScene() {
 }
 
 void TestApp::initTestLibrary() {
-    // TestLib2dx(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
     std::string baseUrl = "https://192.168.8.68:8443";
     std::string gdprUrl = "https://192.168.8.68:8443";
-    void (*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters) = &TestApp::executeCommnad;
 
-    this->testLibrary = new TestLib2dx(baseUrl, executeCommandCallback);
+    this->testLibrary = new TestLib2dx(baseUrl, this->executeCommnad);
 
     this->adjustCommandExecutor = new AdjustCommandExecutor(this->testLibrary, baseUrl, gdprUrl);
 }
@@ -30,7 +28,7 @@ void TestApp::initTestLibrary() {
 void TestApp::executeCommnad(std::string className, std::string methodName, std::string jsonParameters) {
     CCLOG(" >>>>>> EXECUTING COMMAND: " + className + "." + methodName + " <<<<<<<");
     Command *command = new Command(className, methodName, jsonParameters);
-    this->adjustCommandExecutor->executeCommnad(command);
+    this->adjustCommandExecutor->executeCommand(command);
 }
 
 // on "init" you need to initialize your instance
@@ -86,7 +84,7 @@ void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG(">>> Start test session called! <<<");
 
     // call testLib.startTestSession
-    testLibrary->startTestSession("cocos2dx4.14.0@android4.14.0");
+    this->testLibrary->startTestSession("cocos2dx4.14.0@android4.14.0");
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {

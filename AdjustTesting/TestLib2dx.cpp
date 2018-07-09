@@ -9,6 +9,7 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
+#include <Adjust/AdjustProxy2dx.h>
 #include "platform/android/jni/JniHelper.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
@@ -19,10 +20,10 @@
 void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
     std::cout << "TestLib2dx Object is being created and initialized..." << std::endl;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
+    setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
-	//public TestLibrary(String baseUrl, ICommandJsonListener commandJsonListener)
-	cocos2d::JniMethodInfo miInit;
+    //public TestLibrary(String baseUrl, ICommandJsonListener commandJsonListener)
+    cocos2d::JniMethodInfo miInit;
     if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/testlibrary/TestLibrary", "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V")) {
         return;
     }
@@ -55,7 +56,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
 
 void TestLib2dx::addTest(std::string testName) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (testLibrary == NULL) {
+    if (testLibrary == NULL) {
         return;
     }
 
@@ -74,7 +75,7 @@ void TestLib2dx::addTest(std::string testName) {
 
 void TestLib2dx::addTestDirectory(std::string testDirectory) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (testLibrary == NULL) {
+    if (testLibrary == NULL) {
         return;
     }
 
@@ -93,7 +94,7 @@ void TestLib2dx::addTestDirectory(std::string testDirectory) {
 
 void TestLib2dx::startTestSession(std::string clientSdk) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (testLibrary == NULL) {
+    if (testLibrary == NULL) {
         return;
     }
 
@@ -103,8 +104,8 @@ void TestLib2dx::startTestSession(std::string clientSdk) {
     }
 
     jstring jClientSdk = miStartTestSession.env->NewStringUTF(clientSdk.c_str());
-    miAddTestDir.env->CallVoidMethod(testLibrary, miStartTestSession.methodID, jClientSdk);
-    miAddTestDir.env->DeleteLocalRef(jClientSdk);
+    miStartTestSession.env->CallVoidMethod(testLibrary, miStartTestSession.methodID, jClientSdk);
+    miStartTestSession.env->DeleteLocalRef(jClientSdk);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #endif
@@ -112,7 +113,7 @@ void TestLib2dx::startTestSession(std::string clientSdk) {
 
 void TestLib2dx::addInfoToSend(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (testLibrary == NULL) {
+    if (testLibrary == NULL) {
         return;
     }
 
@@ -123,9 +124,9 @@ void TestLib2dx::addInfoToSend(std::string key, std::string value) {
 
     jstring jKey = miAddInfoToSend.env->NewStringUTF(key.c_str());
     jstring jValue = miAddInfoToSend.env->NewStringUTF(value.c_str());
-    miAddTestDir.env->CallVoidMethod(testLibrary, miAddInfoToSend.methodID, jKey, jValue);
-    miAddTestDir.env->DeleteLocalRef(jKey);
-    miAddTestDir.env->DeleteLocalRef(jValue);
+    miAddInfoToSend.env->CallVoidMethod(testLibrary, miAddInfoToSend.methodID, jKey, jValue);
+    miAddInfoToSend.env->DeleteLocalRef(jKey);
+    miAddInfoToSend.env->DeleteLocalRef(jValue);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #endif    
@@ -133,7 +134,7 @@ void TestLib2dx::addInfoToSend(std::string key, std::string value) {
 
 void TestLib2dx::sendInfoToServer(std::string basePath) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-	if (testLibrary == NULL) {
+    if (testLibrary == NULL) {
         return;
     }
 
@@ -143,8 +144,8 @@ void TestLib2dx::sendInfoToServer(std::string basePath) {
     }
 
     jstring jBasePath = miSendInfoToServer.env->NewStringUTF(basePath.c_str());
-    miAddTestDir.env->CallVoidMethod(testLibrary, miSendInfoToServer.methodID, jBasePath);
-    miAddTestDir.env->DeleteLocalRef(jBasePath);
+    miSendInfoToServer.env->CallVoidMethod(testLibrary, miSendInfoToServer.methodID, jBasePath);
+    miSendInfoToServer.env->DeleteLocalRef(jBasePath);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #endif

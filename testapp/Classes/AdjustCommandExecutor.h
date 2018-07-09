@@ -8,10 +8,10 @@
 #ifndef  _ADJUST_COMMAND_EXECUTOR_H_
 #define  _ADJUST_COMMAND_EXECUTOR_H_
 
-// TODO: includes
 #include "Command.h"
 #include <string>
 #include <vector>
+#include <map>
 
 #include "Adjust/AdjustEvent2dx.h"
 #include "Adjust/AdjustConfig2dx.h"
@@ -23,16 +23,14 @@
 
 class AdjustCommandExecutor {
 private:
-    TestLib2dx testLibrary;
+    TestLib2dx *testLibrary;
     std::string baseUrl;
     std::string gdprUrl;
     std::string basePath;
     std::string gdprPath;
     std::map<std::int8_t, AdjustEvent2dx> savedEvents;
     std::map<std::int8_t, AdjustConfig2dx> savedConfigs;
-    Command command;
-
-    AdjustCommandExecutor(TestLib2dx testLibrary, std::string baseUrl, std::string gdprUrl);
+    Command *command;
 
     void testOptions();
     void config();
@@ -42,7 +40,6 @@ private:
     void setReferrer();
     void pause();
     void resume();
-    void setEnabled();
     void setOfflineMode();
     void sendFirstPackages();
     void addSessionCallbackParameter();
@@ -56,8 +53,9 @@ private:
     void sendReferrer();
     void gdprForgetMe();
 public:
-	static const std::string TAG;
-	void executeCommand(Command command);
-}
+    AdjustCommandExecutor(TestLib2dx *testLibrary, std::string baseUrl, std::string gdprUrl);
+    static const std::string TAG;
+    void executeCommand(Command *command);
+};
 
 #endif // _ADJUST_COMMAND_EXECUTOR_H_

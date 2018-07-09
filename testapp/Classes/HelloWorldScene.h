@@ -14,8 +14,8 @@
 
 class TestApp : public cocos2d::Scene {
 private:
-    TestLib2dx testLibrary;
-    AdjustCommandExecutor adjustCommandExecutor;
+    TestLib2dx *testLibrary;
+    AdjustCommandExecutor *adjustCommandExecutor;
     void initTestLibrary();
     void executeCommnad(std::string className, std::string methodName, std::string jsonParameters);
 
