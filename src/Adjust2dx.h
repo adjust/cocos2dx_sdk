@@ -12,6 +12,7 @@
 #include <iostream>
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
+#include "AdjustTestOptions2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
@@ -51,6 +52,9 @@ public:
     static std::string getWindowsAdId();
     static void applicationPaused();
     static void applicationResumed();
+
+    // TestApp-specific
+    static void setTestOptions(AdjustTestOptions2dx testOptions);
 };
 
 #endif /* ADJUST_ADJUST2DX_H_ */

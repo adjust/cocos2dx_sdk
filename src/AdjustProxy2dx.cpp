@@ -9,6 +9,26 @@
 #include "AdjustProxy2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+JNIEXPORT void Java_com_adjust_testlibrary_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
+(JNIEnv *env, jobject obj, jstring jClassName, jstring jMethodName, jstring jJsonParameters) {
+    if (NULL == executeTestLibCommandCallbackMethod) {
+        return;
+    }
+
+    const char *classNameCStr = env->GetStringUTFChars(jClassName, NULL);
+    const char *methodNameCStr = env->GetStringUTFChars(jMethodName, NULL);
+    const char *jsonParametersCStr = env->GetStringUTFChars(jJsonParameters, NULL);
+    std::string className = std::string(classNameCStr);
+    std::string methodName = std::string(methodNameCStr);
+    std::string jsonParameters = std::string(jsonParametersCStr);
+
+    executeTestLibCommandCallbackMethod(className, methodName, jsonParameters);
+
+    env->ReleaseStringUTFChars(jClassName, classNameCStr);
+    env->ReleaseStringUTFChars(jMethodName, methodNameCStr);
+    env->ReleaseStringUTFChars(jJsonParameters, jsonParametersCStr);
+}
+
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attributionChanged
 (JNIEnv *env, jobject obj, jobject attributionObject) {
     if (NULL == attributionCallbackMethod) {
@@ -481,6 +501,12 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     std::string deeplink = std::string(deeplinkCStr);
     env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
     return deferredDeeplinkCallbackMethod(deeplink);
+}
+
+void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
+    if (NULL == executeTestLibCommandCallbackMethod) {
+        executeTestLibCommandCallbackMethod = callbackMethod;
+    }
 }
 
 void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {

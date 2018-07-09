@@ -559,3 +559,20 @@ void Adjust2dx::applicationResumed() {
     WRTAdjust::ApplicationActivated();
 #endif
 }
+
+void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    jobject jobjTestOptions = testOptions->getTestOptions();
+    
+    cocos2d::JniMethodInfo miSetTestOptions;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
+        return;
+    }
+
+    miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jobjTestOptions);
+    miSetReferrer.env->DeleteLocalRef(jobjTestOptions);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    // TODO:
+
+#endif
+}
