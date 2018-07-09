@@ -23,12 +23,12 @@ adb uninstall com.adjust.testapp || true
 echo -e "${GREEN}>>> Building Adjust Android JAR file ${NC}"
 ${ROOT_DIR}/ext/android/build.sh release
 
-echo -e "${GREEN}>>> Unpacking adjust-android.jar file ${NC}"
+echo -e "${GREEN}>>> Unpacking adjust-android.jar & adjust-testing.jar files ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
 $JAVAC -cp "adjust-android.jar:$ANDROIDJAR" com/adjust/sdk/*.java
 $JAVAC -cp "adjust-testing.jar:$ANDROIDJAR" com/adjust/testlibrary/*.java
 
-echo -e "${GREEN}>>> Injecting c++ bridge to adjust-android.jar ${NC}"
+echo -e "${GREEN}>>> Injecting c++ bridge to adjust-android.jar & adjust-testing.jar ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
 $JAR uf adjust-android.jar com/adjust/sdk/*.class
 $JAR uf adjust-testing.jar com/adjust/testlibrary/*.class
@@ -38,22 +38,22 @@ cd ${ROOT_DIR}/${PROXY_DIR}
 rm -rfv com/adjust/sdk/*.class
 rm -rfv com/adjust/testlibrary/*.class
 
-echo -e "${GREEN}>>> Moving adjust jar to ${COCOS_EXAMPLES_APP} ${NC}"
+echo -e "${GREEN}>>> Moving adjust jar to ${COCOS_TEST_APP} ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
-mkdir ${COCOS_EXAMPLES_APP}/proj.android/app/libs || true
-cp -v adjust-android.jar ${COCOS_EXAMPLES_APP}/proj.android/app/libs/
-cp -v adjust-testing.jar ${COCOS_EXAMPLES_APP}/proj.android/app/libs/
+mkdir ${COCOS_TEST_APP}/proj.android/app/libs || true
+cp -v adjust-android.jar ${COCOS_TEST_APP}/proj.android/app/libs/
+cp -v adjust-testing.jar ${COCOS_TEST_APP}/proj.android/app/libs/
 
-echo -e "${GREEN}>>> Removing and recreating ${COCOS_EXAMPLES_APP}/Classes/Adjust ${NC}"
-cd $COCOS_EXAMPLES_APP
+echo -e "${GREEN}>>> Removing and recreating ${COCOS_TEST_APP}/Classes/Adjust ${NC}"
+cd $COCOS_TEST_APP
 rm -rfv Classes/Adjust/
 rm -rfv Classes/AdjustTesting/
 mkdir -p Classes/Adjust/
 mkdir -p Classes/AdjustTesting/
 
-echo -e "${GREEN}>>> Moving classes to ${COCOS_EXAMPLES_APP} ${NC}"
+echo -e "${GREEN}>>> Moving classes to ${COCOS_TEST_APP} ${NC}"
 cd ${ROOT_DIR}
-cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/Adjust/
-cp -Rfv Adjust/* ${COCOS_EXAMPLES_APP}/Classes/AdjustTesting/
+cp -Rfv Adjust/* ${COCOS_TEST_APP}/Classes/Adjust/
+cp -Rfv AdjustTesting/* ${COCOS_TEST_APP}/Classes/AdjustTesting/
 
 echo -e "${GREEN}>>> Success. Build & run with Android Studio from \`proj.android\` directory. Make sure Android.mk file is modified per README instructions ${NC}"

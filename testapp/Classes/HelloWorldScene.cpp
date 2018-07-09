@@ -1,12 +1,12 @@
 //
-//  TestAppScene.cpp
+//  HelloWorldScene.cpp
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin on 04/06/18.
 //
 
 #include <platform/CCApplication.h>
-#include "TestAppScene.h"
+#include "HelloWorldScene.h"
 #include "AppDelegate.h"
 #include "AdjustTesting/TestLib2dx.h"
 

@@ -1,5 +1,5 @@
 //
-//  TestAppScene.h
+//  HelloWorldScene.h
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin on 04/06/18.
