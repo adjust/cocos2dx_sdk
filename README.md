@@ -211,7 +211,6 @@ std::string appToken = "{YourAppToken}";
 std::string environment = AdjustEnvironmentSandbox2dx;
 
 AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-
 Adjust2dx::start(adjustConfig);
 ```
 
@@ -909,6 +908,7 @@ To set up your Android app to handle deep linking at a native level, please foll
 [android-application]:  http://developer.android.com/reference/android/app/Application.html
 [google-launch-modes]:  http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
 [google-play-services]: http://developer.android.com/google/play-services/setup.html
+[broadcast-receiver-custom]:  https://github.com/adjust/android_sdk/blob/master/doc/english/referrer.md
 
 ## <a id="license"></a>License
 
