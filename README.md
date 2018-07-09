@@ -914,7 +914,7 @@ To set up your Android app to handle deep linking at a native level, please foll
 
 [releases]:             https://github.com/adjust/cocos2dx_sdk/releases
 [multidex]:             https://developer.android.com/tools/building/multidex.html
-[referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/referrer.md
+[referrer]:             https://github.com/adjust/android_sdk/blob/master/doc/english/referrer.md
 [deeplinking]:          https://docs.adjust.com/en/tracker-generation/#deeplinking
 [google-ad-id]:         https://developer.android.com/google/play-services/id.html
 [event-tracking]:       https://docs.adjust.com/en/event-tracking
