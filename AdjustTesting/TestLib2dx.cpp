@@ -45,7 +45,8 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     jobject jCommListenerCallbackProxy = miInitCommJsonListener.env->NewObject(clsAdjust2dxCommandJsonListenerCallback, midInitCommJsonListener);
 
     // tet library init
-    testLibrary = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCommListenerCallbackProxy);
+    jobject jobjTestLib = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCommListenerCallbackProxy);
+    testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(jobjTestLib);
 
     miInit.env->DeleteLocalRef(jBaseUrl);
     miInit.env->DeleteLocalRef(jCommListenerCallbackProxy);

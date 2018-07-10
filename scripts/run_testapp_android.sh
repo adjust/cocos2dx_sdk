@@ -43,6 +43,7 @@ cd ${ROOT_DIR}/${PROXY_DIR}
 mkdir ${COCOS_TEST_APP}/proj.android/app/libs || true
 cp -v adjust-android.jar ${COCOS_TEST_APP}/proj.android/app/libs/
 cp -v adjust-testing.jar ${COCOS_TEST_APP}/proj.android/app/libs/
+cp -v ../Android/gson-2.8.1.jar ${COCOS_TEST_APP}/proj.android/app/libs/
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_TEST_APP}/Classes/Adjust ${NC}"
 cd $COCOS_TEST_APP
