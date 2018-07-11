@@ -6,7 +6,6 @@
 #include <string>
 
 #include "jsonParser/json.hpp"
-using json = nlohmann::json;
 
 class Command {
 public:

@@ -12,23 +12,24 @@
 
 USING_NS_CC;
 
+#define COCOS2D_DEBUG 1
+
 Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
+static std::string baseUrl = "https://192.168.9.165:8443";
+static std::string gdprUrl = "https://192.168.9.165:8443";
+static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);
+
 void TestApp::initTestLibrary() {
-    std::string baseUrl = "https://192.168.8.68:8443";
-    std::string gdprUrl = "https://192.168.8.68:8443";
+    auto func = [](std::string className, std::string methodName, std::string jsonParameters) {
+        CCLOG(">>>>>> EXECUTING COMMAND: %s.%s <<<<<<", className.c_str(), methodName.c_str());
+        Command *command = new Command(className, methodName, jsonParameters);
+        commandExecutorInstance->executeCommand(command);
+    };
 
-    this->testLibrary = new TestLib2dx(baseUrl, this->executeCommnad);
-
-    this->adjustCommandExecutor = new AdjustCommandExecutor(this->testLibrary, baseUrl, gdprUrl);
-}
-
-void TestApp::executeCommnad(std::string className, std::string methodName, std::string jsonParameters) {
-    CCLOG(" >>>>>> EXECUTING COMMAND: " + className + "." + methodName + " <<<<<<<");
-    Command *command = new Command(className, methodName, jsonParameters);
-    this->adjustCommandExecutor->executeCommand(command);
+    this->testLibrary = new TestLib2dx(baseUrl, func);
 }
 
 // on "init" you need to initialize your instance

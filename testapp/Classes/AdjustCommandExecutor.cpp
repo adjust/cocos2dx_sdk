@@ -6,17 +6,12 @@
 //
 
 #include <regex>
-#include "Adjust/Adjust2dx.h"
-#include "Adjust/AdjustConfig2dx.h"
-#include "Adjust/AdjustTestOptions2dx.h"
+
 #include "AdjustCommandExecutor.h"
-#include "AdjustTesting/TestLib2dx.h"
-#include "command.h"
 
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
-AdjustCommandExecutor::AdjustCommandExecutor(TestLib2dx *testLibrary, std::string baseUrl, std::string gdprUrl) {
-    this->testLibrary = testLibrary;
+AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl) {
     this->baseUrl = baseUrl;
     this->gdprUrl = gdprUrl;
 }
@@ -63,7 +58,7 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->sendReferrer();
     } else if (command->methodName == "gdprForgetMe") {
         this->gdprForgetMe();
-    } 
+    }
 }
 
 void AdjustCommandExecutor::testOptions() {
@@ -123,13 +118,13 @@ void AdjustCommandExecutor::testOptions() {
             }
             if (teardownOption == "sdk") {
                 testOptions.teardown = true;
-                testOptions.basePath = NULL;
-                testOptions.gdprPath = NULL;
+                testOptions.basePath = "";
+                testOptions.gdprPath = "";
                 testOptions.useTestConnectionOptions = false;
             }
             if (teardownOption == "test") {
-                savedEvents = NULL;
-                savedConfigs = NULL;
+                savedEvents.clear();
+                savedConfigs.clear();
                 testOptions.timerIntervalInMilliseconds = (long) -1;
                 testOptions.timerStartInMilliseconds = (long) -1;
                 testOptions.sessionIntervalInMilliseconds = (long) -1;
@@ -172,7 +167,7 @@ void AdjustCommandExecutor::config() {
 
     if (this->command->containsParameter("logLevel")) {
         std::string logLevelString = command->getFirstParameterValue("logLevel");
-        AdjustLogLevel2dx logLevel = NULL;
+        AdjustLogLevel2dx logLevel;
         if (logLevelString == "verbose") {
             logLevel = AdjustLogLevel2dxVerbose;
         } else if (logLevelString == "debug") {
@@ -187,8 +182,8 @@ void AdjustCommandExecutor::config() {
             logLevel = AdjustLogLevel2dxAssert;
         }  else if (logLevelString == "suppress") {
             logLevel = AdjustLogLevel2dxSuppress;
-        } 
-        
+        }
+
         std::cout << "TestApp: logLevel: " << logLevelString << std::endl;
         adjustConfig.setLogLevel(logLevel);
     }
@@ -246,7 +241,7 @@ void AdjustCommandExecutor::config() {
 
     if (this->command->containsParameter("deferredDeeplinkCallback")) {
         adjustConfig.setDeferredDeeplinkCallback([](std::string deeplink) {
-            if (deeplink == NULL) {
+            if (deeplink.empty()) {
                 std::cout << "TestApp: Deeplink Response, uri = NULL" << std::endl;
                 return false;
             }
@@ -264,15 +259,15 @@ void AdjustCommandExecutor::config() {
         adjustConfig.setAttributionCallback([](AdjustAttribution2dx attribution){
             std::cout << "TestApp: attribution received: " << attribution.getTrackerToken() << std::endl;
 
-            this->testLibrary->addInfoToSend("trackerToken", attribution.getTrackerToken());
-            this->testLibrary->addInfoToSend("trackerName", attribution.getTrackerName());
-            this->testLibrary->addInfoToSend("network", attribution.getNetwork());
-            this->testLibrary->addInfoToSend("campaign", attribution.getCampaign());
-            this->testLibrary->addInfoToSend("adgroup", attribution.getAdgroup());
-            this->testLibrary->addInfoToSend("creative", attribution.getCreative());
-            this->testLibrary->addInfoToSend("clickLabel", attribution.getClickLabel());
-            this->testLibrary->addInfoToSend("adid", attribution.getAdid());
-            this->testLibrary->sendInfoToServer(this->basePath);
+            TestLib2dx::addInfoToSend("trackerToken", attribution.getTrackerToken());
+            TestLib2dx::addInfoToSend("trackerName", attribution.getTrackerName());
+            TestLib2dx::addInfoToSend("network", attribution.getNetwork());
+            TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
+            TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
+            TestLib2dx::addInfoToSend("creative", attribution.getCreative());
+            TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
+            TestLib2dx::addInfoToSend("adid", attribution.getAdid());
+            // TestLib2dx::sendInfoToServer(this->basePath);
         });
     }
 
@@ -280,13 +275,13 @@ void AdjustCommandExecutor::config() {
         adjustConfig.setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
             std::cout << "TestApp: session_success received: " << adjustSessionSuccess.getMessage() << std::endl;
 
-            this->testLibrary->addInfoToSend("message", adjustSessionSuccess.getMessage());
-            this->testLibrary->addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
-            this->testLibrary->addInfoToSend("adid", adjustSessionSuccess.getAdid());
-            if(adjustSessionSuccess.getJsonResponse() != NULL) {
-                this->testLibrary->addInfoToSend("jsonResponse", adjustSessionSuccess.getJsonResponse());
+            TestLib2dx::addInfoToSend("message", adjustSessionSuccess.getMessage());
+            TestLib2dx::addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
+            TestLib2dx::addInfoToSend("adid", adjustSessionSuccess.getAdid());
+            if(!adjustSessionSuccess.getJsonResponse().empty()) {
+                TestLib2dx::addInfoToSend("jsonResponse", adjustSessionSuccess.getJsonResponse());
             }
-            this->testLibrary->sendInfoToServer(this->basePath);
+            //TestLib2dx::sendInfoToServer(this->basePath);
         });
     }
 
@@ -294,14 +289,14 @@ void AdjustCommandExecutor::config() {
         adjustConfig.setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
             std::cout << "TestApp: session_fail received: " << adjustSessionFailure.getMessage() << std::endl;
 
-            this->testLibrary->addInfoToSend("message", adjustSessionFailure.getMessage());
-            this->testLibrary->addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
-            this->testLibrary->addInfoToSend("adid", adjustSessionFailure.getAdid());
-            this->testLibrary->addInfoToSend("willRetry", adjustSessionFailure.getWillRetry());
-            if(adjustSessionFailure.getJsonResponse() != NULL) {
-                this->testLibrary->addInfoToSend("jsonResponse", adjustSessionFailure.getJsonResponse());
+            TestLib2dx::addInfoToSend("message", adjustSessionFailure.getMessage());
+            TestLib2dx::addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
+            TestLib2dx::addInfoToSend("adid", adjustSessionFailure.getAdid());
+            TestLib2dx::addInfoToSend("willRetry", adjustSessionFailure.getWillRetry());
+            if(!adjustSessionFailure.getJsonResponse().empty()) {
+                TestLib2dx::addInfoToSend("jsonResponse", adjustSessionFailure.getJsonResponse());
             }
-            this->testLibrary->sendInfoToServer(this->basePath);
+            // TestLib2dx::sendInfoToServer(this->basePath);
         });
     }
 
@@ -309,30 +304,31 @@ void AdjustCommandExecutor::config() {
         adjustConfig.setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
             std::cout << "TestApp: event_success received: " << adjustEventSuccess.getMessage() << std::endl;
 
-            this->testLibrary->addInfoToSend("message", adjustEventSuccess.getMessage());
-            this->testLibrary->addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
-            this->testLibrary->addInfoToSend("adid", adjustEventSuccess.getAdid());
-            this->testLibrary->addInfoToSend("eventToken", adjustEventSuccess.getEventToken());
-            if(adjustEventSuccess.getJsonResponse() != NULL) {
-                this->testLibrary->addInfoToSend("jsonResponse", adjustEventSuccess.getJsonResponse());
+            TestLib2dx::addInfoToSend("message", adjustEventSuccess.getMessage());
+            TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
+            TestLib2dx::addInfoToSend("adid", adjustEventSuccess.getAdid());
+            TestLib2dx::addInfoToSend("eventToken", adjustEventSuccess.getEventToken());
+            if(!adjustEventSuccess.getJsonResponse().empty()) {
+                TestLib2dx::addInfoToSend("jsonResponse", adjustEventSuccess.getJsonResponse());
             }
-            this->testLibrary->sendInfoToServer(this->basePath);
+            // TestLib2dx::sendInfoToServer(this->basePath);
         });
     }
 
     if (this->command->containsParameter("eventCallbackSendFailure")) {
+        // std::string localBasePath = this->basePath;
         adjustConfig.setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
             std::cout << "TestApp: event_fail received: " << adjustEventFailure.getMessage() << std::endl;
 
-            this->testLibrary->addInfoToSend("message", adjustEventFailure.getMessage());
-            this->testLibrary->addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
-            this->testLibrary->addInfoToSend("adid", adjustEventFailure.getAdid());
-            this->testLibrary->addInfoToSend("eventToken", adjustEventFailure.getEventToken());
-            this->testLibrary->addInfoToSend("willRetry", adjustEventFailure.getWillRetry());
-            if(adjustEventFailure.getJsonResponse() != NULL) {
-                this->testLibrary->addInfoToSend("jsonResponse", adjustEventFailure.getJsonResponse());
+            TestLib2dx::addInfoToSend("message", adjustEventFailure.getMessage());
+            TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
+            TestLib2dx::addInfoToSend("adid", adjustEventFailure.getAdid());
+            TestLib2dx::addInfoToSend("eventToken", adjustEventFailure.getEventToken());
+            TestLib2dx::addInfoToSend("willRetry", adjustEventFailure.getWillRetry());
+            if(!adjustEventFailure.getJsonResponse().empty()) {
+                TestLib2dx::addInfoToSend("jsonResponse", adjustEventFailure.getJsonResponse());
             }
-            this->testLibrary->sendInfoToServer(this->basePath);
+            // TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 }
@@ -361,13 +357,13 @@ void AdjustCommandExecutor::event() {
         eventNumber = std::stoi(eventNumberStr);
     }
 
-    AdjustEvent2dx adjustEvent = NULL;
+    AdjustEvent2dx *adjustEvent;
     if (this->savedEvents.count(eventNumber) > 0) {
         adjustEvent = this->savedEvents[eventNumber];
     } else {
         std::string eventToken = command->getFirstParameterValue("eventToken");
 
-        adjustEvent = AdjustEvent2dx(eventToken);
+        adjustEvent = new AdjustEvent2dx(eventToken);
         savedEvents[eventNumber] = adjustEvent;
     }
 
@@ -375,7 +371,7 @@ void AdjustCommandExecutor::event() {
         std::vector<std::string> revenueParams = command->getParameters("revenue");
         std::string currency = revenueParams[0];
         double revenue = std::stod(revenueParams[1]);
-        adjustEvent.setRevenue(revenue, currency);
+        adjustEvent->setRevenue(revenue, currency);
     }
 
     if (this->command->containsParameter("callbackParams")) {
@@ -383,7 +379,7 @@ void AdjustCommandExecutor::event() {
         for (int i = 0; i < callbackParams.size(); i = i + 2) {
             std::string key = callbackParams[i];
             std::string value = callbackParams[i + 1];
-            adjustEvent.addCallbackParameter(key, value);
+            adjustEvent->addCallbackParameter(key, value);
         }
     }
 
@@ -392,13 +388,13 @@ void AdjustCommandExecutor::event() {
         for (int i = 0; i < partnerParams.size(); i = i + 2) {
             std::string key = partnerParams[i];
             std::string value = partnerParams[i + 1];
-            adjustEvent.addPartnerParameter(key, value);
+            adjustEvent->addPartnerParameter(key, value);
         }
     }
 
     if (this->command->containsParameter("orderId")) {
         std::string orderId = command->getFirstParameterValue("orderId");
-        adjustEvent.setTransactionId(orderId);
+        adjustEvent->setTransactionId(orderId);
     }
 }
 
@@ -411,8 +407,8 @@ void AdjustCommandExecutor::trackEvent() {
         eventNumber = std::stoi(eventNameStr);
     }
 
-    AdjustEvent2dx adjustEvent = this->savedEvents[eventNumber];
-    Adjust2dx::trackEvent(adjustEvent);
+    AdjustEvent2dx *adjustEvent = this->savedEvents[eventNumber];
+    Adjust2dx::trackEvent(*adjustEvent);
 
     this->savedEvents.erase(0);
 }
@@ -421,7 +417,7 @@ void AdjustCommandExecutor::resume() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::onResume();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
+
 #endif
 }
 
@@ -429,7 +425,7 @@ void AdjustCommandExecutor::pause() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::onPause();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
+
 #endif
 }
 
@@ -438,7 +434,7 @@ void AdjustCommandExecutor::setReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
+
 #endif
 }
 

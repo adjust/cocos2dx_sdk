@@ -1,3 +1,10 @@
+//
+//  AppDelegate.h
+//  Adjust SDK
+//
+//  Created by Srdjan Tubin on 04/06/18.
+//
+
 #ifndef  _APP_DELEGATE_H_
 #define  _APP_DELEGATE_H_
 

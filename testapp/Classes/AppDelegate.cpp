@@ -1,3 +1,10 @@
+//
+//  AppDelegate.cpp
+//  Adjust SDK
+//
+//  Created by Srdjan Tubin on 04/06/18.
+//
+
 #include "AppDelegate.h"
 #include "HelloWorldScene.h"
 
