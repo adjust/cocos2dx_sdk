@@ -15,14 +15,17 @@
 
 #endif
 
-// using namespace std;
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+static jobject testLibrary;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+#endif
 
 void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
     std::cout << "TestLib2dx Object is being created and initialized..." << std::endl;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
-    //public TestLibrary(String baseUrl, ICommandJsonListener commandJsonListener)
     cocos2d::JniMethodInfo miInit;
     if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/testlibrary/TestLibrary", "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V")) {
         return;

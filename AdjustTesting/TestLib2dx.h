@@ -18,14 +18,6 @@
 
 class TestLib2dx {
 private:
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    jobject testLibrary;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    
-#endif
-    
     void initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
 
 public:
@@ -36,8 +28,8 @@ public:
     void addTest(std::string testName);
     void addTestDirectory(std::string testDirectory);
     void startTestSession(std::string clientSdk);
-    void addInfoToSend(std::string key, std::string value);
-    void sendInfoToServer(std::string basePath);
+    static void addInfoToSend(std::string key, std::string value);
+    static void sendInfoToServer(std::string basePath);
 };
 
 #endif /* ADJUST_TESTLIB2DX_H_ */
