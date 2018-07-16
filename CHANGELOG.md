@@ -4,7 +4,7 @@
 
 #### Changed
 - Removed support for Windows platform.
-- Updated the way how iOS native bridge handles push tokens from React Native interface - they are now being passed directly as strings to native iOS SDK.
+- Updated the way how iOS native bridge handles push tokens from Cocos2d-x interface - they are now being passed directly as strings to native iOS SDK.
 - Merged different platform `README` files into one.
 
 #### Native SDKs
