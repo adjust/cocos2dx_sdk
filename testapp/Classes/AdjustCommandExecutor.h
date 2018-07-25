@@ -32,7 +32,7 @@ private:
     std::string basePath;
     std::string gdprPath;
     std::map<std::int8_t, AdjustEvent2dx*> savedEvents;
-    std::map<std::int8_t, AdjustConfig2dx> savedConfigs;
+    std::map<std::int8_t, AdjustConfig2dx*> savedConfigs;
     Command *command;
 
     void testOptions();

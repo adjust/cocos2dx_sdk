@@ -1,3 +1,10 @@
+//
+//  Command.h
+//  Adjust SDK
+//
+//  Created by Srdjan Tubin on 04/06/18.
+//
+
 #ifndef  _TESTAPP_COMMAND_H_
 #define  _TESTAPP_COMMAND_H_
 
@@ -8,6 +15,8 @@
 #include "jsonParser/json.hpp"
 
 class Command {
+private:
+	bool replaceSubString(std::string& str, const std::string& from, const std::string& to);
 public:
 	std::string className;
 	std::string methodName;

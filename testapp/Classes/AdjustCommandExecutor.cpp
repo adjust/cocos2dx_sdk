@@ -5,11 +5,17 @@
 //  Created by Srdjan Tubin on 04/06/18.
 //
 
+#define COCOS2D_DEBUG 1
+
 #include <regex>
+#include <platform/CCStdC.h>
+#include <base/CCConsole.h>
 
 #include "AdjustCommandExecutor.h"
 
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
+
+static std::string localBasePath;
 
 AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl) {
     this->baseUrl = baseUrl;
@@ -145,7 +151,7 @@ void AdjustCommandExecutor::config() {
         configNumber = std::stoi(configNumberStr);
     }
 
-    AdjustConfig2dx adjustConfig;
+    AdjustConfig2dx *adjustConfig;
     if (this->savedConfigs.count(configNumber) > 0) {
         adjustConfig = this->savedConfigs[configNumber];
     } else {
@@ -159,94 +165,98 @@ void AdjustCommandExecutor::config() {
             environment = AdjustEnvironmentSandbox2dx;
         }
 
-        auto adjustConfig = AdjustConfig2dx(appToken, environment);
-        adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+        adjustConfig = new AdjustConfig2dx(appToken, environment);
+        adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
 
         savedConfigs[configNumber] = adjustConfig;
     }
 
     if (this->command->containsParameter("logLevel")) {
         std::string logLevelString = command->getFirstParameterValue("logLevel");
-        AdjustLogLevel2dx logLevel;
-        if (logLevelString == "verbose") {
-            logLevel = AdjustLogLevel2dxVerbose;
-        } else if (logLevelString == "debug") {
-            logLevel = AdjustLogLevel2dxDebug;
-        }  else if (logLevelString == "info") {
-            logLevel = AdjustLogLevel2dxInfo;
-        }  else if (logLevelString == "warn") {
-            logLevel = AdjustLogLevel2dxWarn;
-        }  else if (logLevelString == "error") {
-            logLevel = AdjustLogLevel2dxError;
-        }  else if (logLevelString == "assert") {
-            logLevel = AdjustLogLevel2dxAssert;
-        }  else if (logLevelString == "suppress") {
-            logLevel = AdjustLogLevel2dxSuppress;
-        }
 
-        std::cout << "TestApp: logLevel: " << logLevelString << std::endl;
-        adjustConfig.setLogLevel(logLevel);
+        CCLOG("\nTestApp: logLevel: %s", logLevelString.c_str());
+
+        if (logLevelString == "verbose") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
+        } else if (logLevelString == "debug") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxDebug);
+        }  else if (logLevelString == "info") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxInfo);
+        }  else if (logLevelString == "warn") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxWarn);
+        }  else if (logLevelString == "error") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxError);
+        }  else if (logLevelString == "assert") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxAssert);
+        }  else if (logLevelString == "suppress") {
+            adjustConfig->setLogLevel(AdjustLogLevel2dxSuppress);
+        }
     }
 
     if (this->command->containsParameter("sdkPrefix")) {
         //std::string sdkPrefix = command->getFirstParameterValue("sdkPrefix");
-        //adjustConfig.setSdkPrefix(sdkPrefix);
+        //adjustConfig->setSdkPrefix(sdkPrefix);
     }
 
     if (this->command->containsParameter("defaultTracker")) {
         std::string defaultTracker = command->getFirstParameterValue("defaultTracker");
-        adjustConfig.setDefaultTracker(defaultTracker);
+        adjustConfig->setDefaultTracker(defaultTracker);
     }
 
     if (this->command->containsParameter("appSecret")) {
-        std::vector<std::string> appSecretArray = command->getParameters("appSecret");
+        try {
+            std::vector<std::string> appSecretArray = command->getParameters("appSecret");
 
-        unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
-        unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
-        unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
-        unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
-        unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
+            unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
+            unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
+            unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
+            unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
+            unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
 
-        adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
+             adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
+        }
+        catch (const std::exception &e) {
+            CCLOG("\nTestApp: appSecret EXCEPTION: %s", e.what());
+        }
     }
 
     if (this->command->containsParameter("delayStart")) {
         std::string delayStartString = command->getFirstParameterValue("delayStart");
         double delayStart = std::stod(delayStartString);
-        adjustConfig.setDelayStart(delayStart);
+        adjustConfig->setDelayStart(delayStart);
     }
 
     if (this->command->containsParameter("deviceKnown")) {
         std::string deviceKnownString = command->getFirstParameterValue("deviceKnown");
         bool deviceKnown = (deviceKnownString == "true");
-        adjustConfig.setDeviceKnown(deviceKnown);
+        adjustConfig->setDeviceKnown(deviceKnown);
     }
 
     if (this->command->containsParameter("eventBufferingEnabled")) {
         std::string eventBufferingEnabledString = command->getFirstParameterValue("eventBufferingEnabled");
         bool eventBufferingEnabled = (eventBufferingEnabledString == "true");
-        adjustConfig.setEventBufferingEnabled(eventBufferingEnabled);
+        adjustConfig->setEventBufferingEnabled(eventBufferingEnabled);
     }
 
     if (this->command->containsParameter("sendInBackground")) {
         std::string sendInBackgroundString = command->getFirstParameterValue("sendInBackground");
         bool sendInBackground = (sendInBackgroundString == "true");
-        adjustConfig.setSendInBackground(sendInBackground);
+        adjustConfig->setSendInBackground(sendInBackground);
     }
 
     if (this->command->containsParameter("userAgent")) {
         std::string userAgent = command->getFirstParameterValue("userAgent");
-        adjustConfig.setUserAgent(userAgent);
+        adjustConfig->setUserAgent(userAgent);
     }
 
     if (this->command->containsParameter("deferredDeeplinkCallback")) {
-        adjustConfig.setDeferredDeeplinkCallback([](std::string deeplink) {
+        adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
             if (deeplink.empty()) {
-                std::cout << "TestApp: Deeplink Response, uri = NULL" << std::endl;
+                CCLOG("\nTestApp: Deeplink Response, uri is EMPTY");
                 return false;
             }
 
-            std::cout << "TestApp: Deeplink Response, uri = " << deeplink << std::endl;
+            CCLOG("\nTestApp: Deeplink Response, uri = %s", deeplink.c_str());
 
             // if starts with "adjusttest"
             std::smatch match;
@@ -256,8 +266,9 @@ void AdjustCommandExecutor::config() {
     }
 
     if (this->command->containsParameter("attributionCallbackSendAll")) {
-        adjustConfig.setAttributionCallback([](AdjustAttribution2dx attribution){
-            std::cout << "TestApp: attribution received: " << attribution.getTrackerToken() << std::endl;
+        localBasePath = this->basePath;
+        adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
+             CCLOG("\nTestApp: attribution received: %s", attribution.getTrackerToken().c_str());
 
             TestLib2dx::addInfoToSend("trackerToken", attribution.getTrackerToken());
             TestLib2dx::addInfoToSend("trackerName", attribution.getTrackerName());
@@ -267,13 +278,14 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("creative", attribution.getCreative());
             TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
             TestLib2dx::addInfoToSend("adid", attribution.getAdid());
-            // TestLib2dx::sendInfoToServer(this->basePath);
+            TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 
     if (this->command->containsParameter("sessionCallbackSendSuccess")) {
-        adjustConfig.setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
-            std::cout << "TestApp: session_success received: " << adjustSessionSuccess.getMessage() << std::endl;
+        localBasePath = this->basePath;
+        adjustConfig->setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
+            CCLOG("\nTestApp: session_success received: %s", adjustSessionSuccess.getMessage().c_str());
 
             TestLib2dx::addInfoToSend("message", adjustSessionSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
@@ -281,13 +293,14 @@ void AdjustCommandExecutor::config() {
             if(!adjustSessionSuccess.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustSessionSuccess.getJsonResponse());
             }
-            //TestLib2dx::sendInfoToServer(this->basePath);
+            TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 
     if (this->command->containsParameter("sessionCallbackSendFailure")) {
-        adjustConfig.setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
-            std::cout << "TestApp: session_fail received: " << adjustSessionFailure.getMessage() << std::endl;
+        localBasePath = this->basePath;
+        adjustConfig->setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
+            CCLOG("\nTestApp: session_fail received: %s", adjustSessionFailure.getMessage().c_str());
 
             TestLib2dx::addInfoToSend("message", adjustSessionFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
@@ -296,13 +309,14 @@ void AdjustCommandExecutor::config() {
             if(!adjustSessionFailure.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustSessionFailure.getJsonResponse());
             }
-            // TestLib2dx::sendInfoToServer(this->basePath);
+            TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 
     if (this->command->containsParameter("eventCallbackSendSuccess")) {
-        adjustConfig.setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
-            std::cout << "TestApp: event_success received: " << adjustEventSuccess.getMessage() << std::endl;
+        localBasePath = this->basePath;
+        adjustConfig->setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
+            CCLOG("\nTestApp: event_success received: %s", adjustEventSuccess.getMessage().c_str());
 
             TestLib2dx::addInfoToSend("message", adjustEventSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
@@ -311,14 +325,14 @@ void AdjustCommandExecutor::config() {
             if(!adjustEventSuccess.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventSuccess.getJsonResponse());
             }
-            // TestLib2dx::sendInfoToServer(this->basePath);
+            TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 
     if (this->command->containsParameter("eventCallbackSendFailure")) {
-        // std::string localBasePath = this->basePath;
-        adjustConfig.setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
-            std::cout << "TestApp: event_fail received: " << adjustEventFailure.getMessage() << std::endl;
+        localBasePath = this->basePath;
+        adjustConfig->setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
+            CCLOG("\nTestApp: event_fail received: %s", adjustEventFailure.getMessage().c_str());
 
             TestLib2dx::addInfoToSend("message", adjustEventFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
@@ -328,13 +342,14 @@ void AdjustCommandExecutor::config() {
             if(!adjustEventFailure.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventFailure.getJsonResponse());
             }
-            // TestLib2dx::sendInfoToServer(localBasePath);
+            TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
 }
 
 void AdjustCommandExecutor::start() {
     config();
+
     int configNumber = 0;
     if (this->command->containsParameter("configName")) {
         std::string configName = command->getFirstParameterValue("configName");
@@ -342,9 +357,8 @@ void AdjustCommandExecutor::start() {
         configNumber = std::stoi(configNumberStr);
     }
 
-    AdjustConfig2dx adjustConfig = this->savedConfigs[configNumber];
-
-    Adjust2dx::start(adjustConfig);
+    AdjustConfig2dx *adjustConfig = this->savedConfigs[configNumber];
+    Adjust2dx::start(*adjustConfig);
 
     this->savedConfigs.erase(0);
 }
