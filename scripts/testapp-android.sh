@@ -21,7 +21,7 @@ echo -e "${GREEN}>>> Removing test app from test device ${NC}"
 adb uninstall com.adjust.testapp || true
 
 echo -e "${GREEN}>>> Building Adjust Android JAR file ${NC}"
-${ROOT_DIR}/ext/android/build.sh release
+${ROOT_DIR}/ext/android/build-sdk.sh release
 
 echo -e "${GREEN}>>> Unpacking adjust-android.jar & adjust-testing.jar files ${NC}"
 cd ${ROOT_DIR}/${PROXY_DIR}
@@ -43,7 +43,7 @@ cd ${ROOT_DIR}/${PROXY_DIR}
 mkdir ${COCOS_TEST_APP}/proj.android/app/libs || true
 cp -v adjust-android.jar ${COCOS_TEST_APP}/proj.android/app/libs/
 cp -v adjust-testing.jar ${COCOS_TEST_APP}/proj.android/app/libs/
-cp -v ../../../Android/gson-2.8.1.jar ${COCOS_TEST_APP}/proj.android/app/libs/
+cp -v ../../../libs/android/gson-2.8.1.jar ${COCOS_TEST_APP}/proj.android/app/libs/
 
 echo -e "${GREEN}>>> Removing and recreating ${COCOS_TEST_APP}/Classes/Adjust ${NC}"
 cd $COCOS_TEST_APP
@@ -54,7 +54,6 @@ mkdir -p Classes/AdjustTesting/
 
 echo -e "${GREEN}>>> Moving classes to ${COCOS_TEST_APP} ${NC}"
 cd ${ROOT_DIR}
-cp -Rfv Adjust/* ${COCOS_TEST_APP}/Classes/Adjust/
-cp -Rfv AdjustTesting/* ${COCOS_TEST_APP}/Classes/AdjustTesting/
+cp -Rfv src/* ${COCOS_TEST_APP}/Classes/Adjust/
 
 echo -e "${GREEN}>>> Success. Build & run with Android Studio from \`proj.android\` directory. Make sure Android.mk file is modified per README instructions ${NC}"
