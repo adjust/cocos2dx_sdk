@@ -570,7 +570,6 @@ void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
     }
 
     miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jobjTestOptions);
-    miSetTestOptions.env->DeleteLocalRef(jobjTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     
 #endif

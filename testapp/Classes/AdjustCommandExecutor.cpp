@@ -38,6 +38,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->resume();
     } else if (command->methodName == "pause") {
         this->pause();
+    } else if (command->methodName == "setEnabled") {
+        this->setEnabled();
     } else if (command->methodName == "setReferrer") {
         this->setReferrer();
     } else if (command->methodName == "setOfflineMode") {
@@ -77,27 +79,33 @@ void AdjustCommandExecutor::testOptions() {
     }
     if (this->command->containsParameter("timerInterval")) {
         std::string timerIntervalString = command->getFirstParameterValue("timerInterval");
-        testOptions.timerIntervalInMilliseconds = atol(timerIntervalString.c_str());
+        testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
+        *testOptions.timerIntervalInMilliseconds = atol(timerIntervalString.c_str());
     }
     if (this->command->containsParameter("timerStart")) {
         std::string timerStartString = command->getFirstParameterValue("timerStart");
-        testOptions.timerStartInMilliseconds = atol(timerStartString.c_str());
+        testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
+        *testOptions.timerStartInMilliseconds = atol(timerStartString.c_str());
     }
     if (this->command->containsParameter("sessionInterval")) {
         std::string sessionIntervalString = command->getFirstParameterValue("sessionInterval");
-        testOptions.sessionIntervalInMilliseconds = atol(sessionIntervalString.c_str());
+        testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+        *testOptions.sessionIntervalInMilliseconds = atol(sessionIntervalString.c_str());
     }
     if (this->command->containsParameter("subsessionInterval")) {
         std::string subsessionIntervalString = command->getFirstParameterValue("subsessionInterval");
-        testOptions.subsessionIntervalInMilliseconds = atol(subsessionIntervalString.c_str());
+        testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+        *testOptions.subsessionIntervalInMilliseconds = atol(subsessionIntervalString.c_str());
     }
     if (this->command->containsParameter("tryInstallReferrer")) {
         std::string tryInstallReferrerString = command->getFirstParameterValue("tryInstallReferrer");
-        testOptions.tryInstallReferrer = (tryInstallReferrerString == "true");
+        testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
+        *testOptions.tryInstallReferrer = (tryInstallReferrerString == "true");
     }
     if (this->command->containsParameter("noBackoffWait")) {
         std::string noBackoffWaitString = command->getFirstParameterValue("noBackoffWait");
-        testOptions.noBackoffWait = (noBackoffWaitString == "true");
+        testOptions.noBackoffWait = (bool *)malloc(sizeof(bool));
+        *testOptions.noBackoffWait = (noBackoffWaitString == "true");
     }
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
@@ -105,36 +113,50 @@ void AdjustCommandExecutor::testOptions() {
         while(toIterator != teardownOptions.end()) {
             std::string teardownOption = (*toIterator);
             if (teardownOption == "resetSdk") {
-                testOptions.teardown = true;
+                testOptions.teardown = (bool *)malloc(sizeof(bool));
+                *testOptions.teardown = true;
                 testOptions.basePath = this->basePath;
                 testOptions.gdprPath = this->gdprPath;
-                testOptions.useTestConnectionOptions = true;
-                testOptions.tryInstallReferrer = false;
+                testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
+                *testOptions.useTestConnectionOptions = true;
+                testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
+                *testOptions.tryInstallReferrer = false;
             }
             if (teardownOption == "deleteState") {
-                testOptions.setContext = true;
+                testOptions.setContext = (bool *)malloc(sizeof(bool));
+                *testOptions.setContext = true;
             }
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions.timerIntervalInMilliseconds = (long) -1;
-                testOptions.timerStartInMilliseconds = (long) -1;
-                testOptions.sessionIntervalInMilliseconds = (long) -1;
-                testOptions.subsessionIntervalInMilliseconds = (long) -1;
+                testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                *testOptions.timerIntervalInMilliseconds = (long) -1;
+                *testOptions.timerStartInMilliseconds = (long) -1;
+                *testOptions.sessionIntervalInMilliseconds = (long) -1;
+                *testOptions.subsessionIntervalInMilliseconds = (long) -1;
             }
             if (teardownOption == "sdk") {
-                testOptions.teardown = true;
+                testOptions.teardown = (bool *)malloc(sizeof(bool));
+                *testOptions.teardown = true;
                 testOptions.basePath = "";
                 testOptions.gdprPath = "";
-                testOptions.useTestConnectionOptions = false;
+                testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
+                *testOptions.useTestConnectionOptions = false;
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions.timerIntervalInMilliseconds = (long) -1;
-                testOptions.timerStartInMilliseconds = (long) -1;
-                testOptions.sessionIntervalInMilliseconds = (long) -1;
-                testOptions.subsessionIntervalInMilliseconds = (long) -1;
+                testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
+                *testOptions.timerIntervalInMilliseconds = (long) -1;
+                *testOptions.timerStartInMilliseconds = (long) -1;
+                *testOptions.sessionIntervalInMilliseconds = (long) -1;
+                *testOptions.subsessionIntervalInMilliseconds = (long) -1;
             }
             toIterator++;
         }
@@ -155,14 +177,22 @@ void AdjustCommandExecutor::config() {
     if (this->savedConfigs.count(configNumber) > 0) {
         adjustConfig = this->savedConfigs[configNumber];
     } else {
-        std::string environmentParam = command->getFirstParameterValue("environment");
-        std::string appToken = command->getFirstParameterValue("appToken");
+        std::string environmentParam = "";
+        std::string appToken = "";
+        if (this->command->containsParameter("environment")) {
+            environmentParam = command->getFirstParameterValue("environment");
+        }
+        if (this->command->containsParameter("appToken")) {
+            appToken = command->getFirstParameterValue("appToken");
+        }
 
         std::string environment;
         if (environmentParam == "production") {
             environment = AdjustEnvironmentProduction2dx;
-        } else {
+        } else if (environmentParam == "sandbox") {
             environment = AdjustEnvironmentSandbox2dx;
+        } else {
+            environment = "";
         }
 
         adjustConfig = new AdjustConfig2dx(appToken, environment);
@@ -207,13 +237,16 @@ void AdjustCommandExecutor::config() {
         try {
             std::vector<std::string> appSecretArray = command->getParameters("appSecret");
 
-            unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
-            unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
-            unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
-            unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
-            unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
+            if (appSecretArray[0].length() > 0 && appSecretArray[1].length() > 0 && appSecretArray[2].length() > 0 &&
+                    appSecretArray[3].length() > 0 && appSecretArray[4].length() > 0) {
+                unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
+                unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
+                unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
+                unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
+                unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
 
-             adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
+                adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
+            }
         }
         catch (const std::exception &e) {
             CCLOG("\nTestApp: appSecret EXCEPTION: %s", e.what());
@@ -438,6 +471,16 @@ void AdjustCommandExecutor::resume() {
 void AdjustCommandExecutor::pause() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::onPause();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
+#endif
+}
+
+void AdjustCommandExecutor::setEnabled() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string enabledStr = command->getFirstParameterValue("enabled");
+    bool enabled = (enabledStr == "true");
+    Adjust2dx::setEnabled(enabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 
 #endif

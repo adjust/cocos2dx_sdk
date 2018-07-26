@@ -18,19 +18,19 @@
 
 class AdjustTestOptions2dx {
 public:
-    bool setContext;
+    bool *setContext = NULL;
     std::string baseUrl;
     std::string gdprUrl;
     std::string basePath;
     std::string gdprPath;
-    bool useTestConnectionOptions;
-    long timerIntervalInMilliseconds;
-    long timerStartInMilliseconds;
-    long sessionIntervalInMilliseconds;
-    long subsessionIntervalInMilliseconds;
-    bool teardown;
-    bool tryInstallReferrer;
-    bool noBackoffWait;
+    bool *useTestConnectionOptions = NULL;
+    long *timerIntervalInMilliseconds = NULL;
+    long *timerStartInMilliseconds = NULL;
+    long *sessionIntervalInMilliseconds = NULL;
+    long *subsessionIntervalInMilliseconds = NULL;
+    bool *teardown = NULL;
+    bool *tryInstallReferrer = NULL;
+    bool *noBackoffWait = NULL;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getTestOptions();

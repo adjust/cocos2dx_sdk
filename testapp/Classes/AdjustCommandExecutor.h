@@ -23,7 +23,7 @@
 #include "Adjust/AdjustTestOptions2dx.h"
 
 #include "Command.h"
-#include "AdjustTesting/TestLib2dx.h"
+#include "Adjust/AdjustTesting/TestLib2dx.h"
 
 class AdjustCommandExecutor {
 private:
@@ -43,6 +43,7 @@ private:
     void setReferrer();
     void pause();
     void resume();
+    void setEnabled();
     void setOfflineMode();
     void sendFirstPackages();
     void addSessionCallbackParameter();

@@ -31,7 +31,7 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         return NULL;
     }
     jclass clsLong = miInitLong.env->FindClass("java/lang/Long");
-    jmethodID midInitLong = miInitBoolean.env->GetMethodID(clsLong, "<init>", "(J)V");    
+    jmethodID midInitLong = miInitBoolean.env->GetMethodID(clsLong, "<init>", "(J)V");
 
     cocos2d::JniMethodInfo miGetContext;
     if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
@@ -45,7 +45,7 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     jobject jobjTestOptions = miInit.env->NewObject(clsTestOptions, midInit);
 
     // context ////////////////////////////////////////////////////////////////////////////////
-    if (this->setContext == true) {
+    if(this->setContext != NULL && *this->setContext == true) {
         jfieldID fContext = miInit.env->GetFieldID(clsTestOptions, "context", "Landroid/content/Context;");
         miInit.env->SetObjectField(jobjTestOptions, fContext, jContext);
     }
@@ -72,60 +72,76 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     miInit.env->SetObjectField(jobjTestOptions, fGdprPath, jsGdprPath);
 
     // useTestConnectionOptions ////////////////////////////////////////////////////////////////////////////////
-    jboolean jbUseTestConnectionOptions = this->useTestConnectionOptions == true ? JNI_TRUE : JNI_FALSE; 
-    jobject jobjUseTestConnectionOptions = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbUseTestConnectionOptions);
-    jfieldID fUseTestConnectionOptions = miInit.env->GetFieldID(clsTestOptions, "useTestConnectionOptions", "Ljava/lang/Boolean;");
-    miInit.env->SetObjectField(jobjTestOptions, fUseTestConnectionOptions, jobjUseTestConnectionOptions);
-    miInit.env->DeleteLocalRef(jobjUseTestConnectionOptions);
+    if(this->useTestConnectionOptions != NULL) {
+        jboolean jbUseTestConnectionOptions = *this->useTestConnectionOptions == true ? JNI_TRUE : JNI_FALSE;
+        jobject jobjUseTestConnectionOptions = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbUseTestConnectionOptions);
+        jfieldID fUseTestConnectionOptions = miInit.env->GetFieldID(clsTestOptions, "useTestConnectionOptions", "Ljava/lang/Boolean;");
+        miInit.env->SetObjectField(jobjTestOptions, fUseTestConnectionOptions, jobjUseTestConnectionOptions);
+        miInit.env->DeleteLocalRef(jobjUseTestConnectionOptions);
+    }
 
     // timerIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    jlong jTimerIntervalInMilliseconds = (jlong)this->timerIntervalInMilliseconds;
-    jobject jobjTimerIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
-    jfieldID fTimerIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
-    miInit.env->SetObjectField(jobjTestOptions, fTimerIntervalInMilliseconds, jobjTimerIntervalInMilliseconds);
-    miInit.env->DeleteLocalRef(jobjTimerIntervalInMilliseconds);
+    if(this->timerIntervalInMilliseconds != NULL) {
+        jlong jTimerIntervalInMilliseconds = (jlong)(*this->timerIntervalInMilliseconds);
+        jobject jobjTimerIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
+        jfieldID fTimerIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
+        miInit.env->SetObjectField(jobjTestOptions, fTimerIntervalInMilliseconds, jobjTimerIntervalInMilliseconds);
+        miInit.env->DeleteLocalRef(jobjTimerIntervalInMilliseconds);
+    }
 
     // timerStartInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    jlong jTimerStartInMilliseconds = (jlong)this->timerStartInMilliseconds;
-    jobject jobjTimerStartInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
-    jfieldID fTimerStartInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
-    miInit.env->SetObjectField(jobjTestOptions, fTimerStartInMilliseconds, jobjTimerStartInMilliseconds);
-    miInit.env->DeleteLocalRef(jobjTimerStartInMilliseconds);
+    if(this->timerStartInMilliseconds != NULL) {
+        jlong jTimerStartInMilliseconds = (jlong)(*this->timerStartInMilliseconds);
+        jobject jobjTimerStartInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
+        jfieldID fTimerStartInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
+        miInit.env->SetObjectField(jobjTestOptions, fTimerStartInMilliseconds, jobjTimerStartInMilliseconds);
+        miInit.env->DeleteLocalRef(jobjTimerStartInMilliseconds);
+    }
 
     // sessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    jlong jSessionIntervalInMilliseconds = (jlong)this->sessionIntervalInMilliseconds;
-    jobject jobjSessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
-    jfieldID fSessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
-    miInit.env->SetObjectField(jobjTestOptions, fSessionIntervalInMilliseconds, jobjSessionIntervalInMilliseconds);
-    miInit.env->DeleteLocalRef(jobjSessionIntervalInMilliseconds);
+    if(this->sessionIntervalInMilliseconds != NULL) {
+        jlong jSessionIntervalInMilliseconds = (jlong)(*this->sessionIntervalInMilliseconds);
+        jobject jobjSessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
+        jfieldID fSessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
+        miInit.env->SetObjectField(jobjTestOptions, fSessionIntervalInMilliseconds, jobjSessionIntervalInMilliseconds);
+        miInit.env->DeleteLocalRef(jobjSessionIntervalInMilliseconds);
+    }
 
     // subsessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    jlong jSubsessionIntervalInMilliseconds = (jlong)this->subsessionIntervalInMilliseconds;
-    jobject jobjSubsessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
-    jfieldID fSubsessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
-    miInit.env->SetObjectField(jobjTestOptions, fSubsessionIntervalInMilliseconds, jobjSubsessionIntervalInMilliseconds);
-    miInit.env->DeleteLocalRef(jobjSubsessionIntervalInMilliseconds);
+    if(this->subsessionIntervalInMilliseconds != NULL) {
+        jlong jSubsessionIntervalInMilliseconds = (jlong)(*this->subsessionIntervalInMilliseconds);
+        jobject jobjSubsessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
+        jfieldID fSubsessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
+        miInit.env->SetObjectField(jobjTestOptions, fSubsessionIntervalInMilliseconds, jobjSubsessionIntervalInMilliseconds);
+        miInit.env->DeleteLocalRef(jobjSubsessionIntervalInMilliseconds);
+    }
 
     // teardown ////////////////////////////////////////////////////////////////////////////////
-    jboolean jbTeardown = this->teardown == true ? JNI_TRUE : JNI_FALSE;
-    jobject jobjTeardown = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTeardown);
-    jfieldID fTeardown = miInit.env->GetFieldID(clsTestOptions, "teardown", "Ljava/lang/Boolean;");
-    miInit.env->SetObjectField(jobjTestOptions, fTeardown, jobjTeardown);
-    miInit.env->DeleteLocalRef(jobjTeardown);
+    if(this->teardown != NULL) {
+        jboolean jbTeardown = *this->teardown == true ? JNI_TRUE : JNI_FALSE;
+        jobject jobjTeardown = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTeardown);
+        jfieldID fTeardown = miInit.env->GetFieldID(clsTestOptions, "teardown", "Ljava/lang/Boolean;");
+        miInit.env->SetObjectField(jobjTestOptions, fTeardown, jobjTeardown);
+        miInit.env->DeleteLocalRef(jobjTeardown);
+    }
 
     // tryInstallReferrer ////////////////////////////////////////////////////////////////////////////////
-    jboolean jbTryInstallReferrer = this->tryInstallReferrer == true ? JNI_TRUE : JNI_FALSE;
-    jobject jobjTryInstallReferrer = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTryInstallReferrer);
-    jfieldID fTryInstallReferrer = miInit.env->GetFieldID(clsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
-    miInit.env->SetObjectField(jobjTestOptions, fTryInstallReferrer, jobjTryInstallReferrer);
-    miInit.env->DeleteLocalRef(jobjTryInstallReferrer);
+    if(this->tryInstallReferrer != NULL) {
+        jboolean jbTryInstallReferrer = *this->tryInstallReferrer == true ? JNI_TRUE : JNI_FALSE;
+        jobject jobjTryInstallReferrer = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTryInstallReferrer);
+        jfieldID fTryInstallReferrer = miInit.env->GetFieldID(clsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
+        miInit.env->SetObjectField(jobjTestOptions, fTryInstallReferrer, jobjTryInstallReferrer);
+        miInit.env->DeleteLocalRef(jobjTryInstallReferrer);
+    }
 
     // noBackoffWait ////////////////////////////////////////////////////////////////////////////////
-    jboolean jbNoBackoffWait = this->noBackoffWait == true ? JNI_TRUE : JNI_FALSE;
-    jobject jobjNoBackoffWait = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbNoBackoffWait);
-    jfieldID fNoBackoffWait = miInit.env->GetFieldID(clsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
-    miInit.env->SetObjectField(jobjTestOptions, fNoBackoffWait, jobjNoBackoffWait);
-    miInit.env->DeleteLocalRef(jobjNoBackoffWait);
+    if(this->noBackoffWait != NULL) {
+        jboolean jbNoBackoffWait = *this->noBackoffWait == true ? JNI_TRUE : JNI_FALSE;
+        jobject jobjNoBackoffWait = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbNoBackoffWait);
+        jfieldID fNoBackoffWait = miInit.env->GetFieldID(clsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
+        miInit.env->SetObjectField(jobjTestOptions, fNoBackoffWait, jobjNoBackoffWait);
+        miInit.env->DeleteLocalRef(jobjNoBackoffWait);
+    }
 
     return jobjTestOptions;
 }
