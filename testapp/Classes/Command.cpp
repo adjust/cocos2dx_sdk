@@ -21,6 +21,7 @@ Command::Command(std::string className, std::string methodName, std::string para
     // reason for changing [null] to []
     // https://github.com/nlohmann/json/issues/1163
     replaceSubString(parametersJson, "[null]", "[\"\"]");
+    replaceSubString(parametersJson, "[null,", "[\"\",");
     std::map<std::string, std::vector<std::string>> parsedParams = json::parse(parametersJson);
 
     this->parameters = parsedParams;

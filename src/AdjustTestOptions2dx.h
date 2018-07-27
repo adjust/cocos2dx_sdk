@@ -23,6 +23,8 @@ public:
     std::string gdprUrl;
     std::string basePath;
     std::string gdprPath;
+    bool assignBasePath = false;
+    bool assignGdprPath = false;
     bool *useTestConnectionOptions = NULL;
     long *timerIntervalInMilliseconds = NULL;
     long *timerStartInMilliseconds = NULL;

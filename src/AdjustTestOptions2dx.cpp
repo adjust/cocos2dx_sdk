@@ -62,14 +62,18 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     miInit.env->SetObjectField(jobjTestOptions, fGdprUrl, jsGdprUrl);
 
     // base path ////////////////////////////////////////////////////////////////////////////////
-    jstring jsBasePath = miInit.env->NewStringUTF(this->basePath.c_str());
-    jfieldID fBasePath = miInit.env->GetFieldID(clsTestOptions, "basePath", "Ljava/lang/String;");
-    miInit.env->SetObjectField(jobjTestOptions, fBasePath, jsBasePath);
+    if(this->assignBasePath) {
+        jstring jsBasePath = miInit.env->NewStringUTF(this->basePath.c_str());
+        jfieldID fBasePath = miInit.env->GetFieldID(clsTestOptions, "basePath", "Ljava/lang/String;");
+        miInit.env->SetObjectField(jobjTestOptions, fBasePath, jsBasePath);
+    }
 
     // gdpr path ////////////////////////////////////////////////////////////////////////////////
-    jstring jsGdprPath = miInit.env->NewStringUTF(this->gdprPath.c_str());
-    jfieldID fGdprPath = miInit.env->GetFieldID(clsTestOptions, "gdprPath", "Ljava/lang/String;");
-    miInit.env->SetObjectField(jobjTestOptions, fGdprPath, jsGdprPath);
+    if(this->assignGdprPath) {
+        jstring jsGdprPath = miInit.env->NewStringUTF(this->gdprPath.c_str());
+        jfieldID fGdprPath = miInit.env->GetFieldID(clsTestOptions, "gdprPath", "Ljava/lang/String;");
+        miInit.env->SetObjectField(jobjTestOptions, fGdprPath, jsGdprPath);
+    }
 
     // useTestConnectionOptions ////////////////////////////////////////////////////////////////////////////////
     if(this->useTestConnectionOptions != NULL) {

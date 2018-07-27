@@ -117,6 +117,8 @@ void AdjustCommandExecutor::testOptions() {
                 *testOptions.teardown = true;
                 testOptions.basePath = this->basePath;
                 testOptions.gdprPath = this->gdprPath;
+                testOptions.assignBasePath = true;
+                testOptions.assignGdprPath = true;
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = true;
                 testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
@@ -143,6 +145,8 @@ void AdjustCommandExecutor::testOptions() {
                 *testOptions.teardown = true;
                 testOptions.basePath = "";
                 testOptions.gdprPath = "";
+                testOptions.assignBasePath = true;
+                testOptions.assignGdprPath = true;
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = false;
             }

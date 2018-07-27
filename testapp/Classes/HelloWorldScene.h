@@ -9,7 +9,7 @@
 #define __TESTAPP_SCENE_H__
 
 #include "cocos2d.h"
-#include "AdjustTesting/TestLib2dx.h"
+#include "Adjust/AdjustTesting/TestLib2dx.h"
 #include "AdjustCommandExecutor.h"
 
 class TestApp : public cocos2d::Scene {

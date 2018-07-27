@@ -8,7 +8,6 @@
 #include <platform/CCApplication.h>
 #include "HelloWorldScene.h"
 #include "AppDelegate.h"
-#include "AdjustTesting/TestLib2dx.h"
 
 USING_NS_CC;
 
@@ -18,8 +17,8 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string baseUrl = "https://192.168.9.165:8443";
-static std::string gdprUrl = "https://192.168.9.165:8443";
+static std::string baseUrl = "https://192.168.8.118:8443";
+static std::string gdprUrl = "https://192.168.8.118:8443";
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);
 
 void TestApp::initTestLibrary() {
@@ -85,7 +84,7 @@ void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG(">>> Start test session called! <<<");
 
     // call testLib.startTestSession
-    this->testLibrary->startTestSession("cocos2dx4.14.0@android4.14.0");
+    this->testLibrary->startTestSession("cocos2d-x4.14.0@android4.14.0");
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {
