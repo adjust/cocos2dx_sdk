@@ -170,3 +170,7 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
     return attribution2dx;
 }
+
+void ADJAdjust2dx::setTestOptions(ATLAdjustTestOptions2dx testOptions) {
+    [Adjust setTestOptions:(AdjustTestOptions *)testOptions.getTestOptions()];
+}

@@ -12,17 +12,17 @@
 #include <Adjust/AdjustProxy2dx.h>
 #include "platform/android/jni/JniHelper.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+#include "ATLTestLibrary2dx.h"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static jobject testLibrary;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+static ATLTestLibrary2dx testlibrary;
 #endif
 
 void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
-    std::cout << "TestLib2dx Object is being created and initialized..." << std::endl;
+    //std::cout << "TestLib2dx Object is being created and initialized..." << std::endl;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
@@ -54,7 +54,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     miInit.env->DeleteLocalRef(jBaseUrl);
     miInit.env->DeleteLocalRef(jCommListenerCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary = ATLTestLibrary2dx(baseUrl, executeCommandCallback);
 #endif
 }
 
@@ -73,7 +73,7 @@ void TestLib2dx::addTest(std::string testName) {
     miAddTest.env->CallVoidMethod(testLibrary, miAddTest.methodID, jTestName);
     miAddTest.env->DeleteLocalRef(jTestName);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary.addTest(testName);
 #endif
 }
 
@@ -92,7 +92,7 @@ void TestLib2dx::addTestDirectory(std::string testDirectory) {
     miAddTestDir.env->CallVoidMethod(testLibrary, miAddTestDir.methodID, jTestDir);
     miAddTestDir.env->DeleteLocalRef(jTestDir);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary.addTestDirectory(testDirectory);
 #endif
 }
 
@@ -111,7 +111,7 @@ void TestLib2dx::startTestSession(std::string clientSdk) {
     miStartTestSession.env->CallVoidMethod(testLibrary, miStartTestSession.methodID, jClientSdk);
     miStartTestSession.env->DeleteLocalRef(jClientSdk);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary.startTestSession(clientSdk);
 #endif
 }
 
@@ -132,7 +132,7 @@ void TestLib2dx::addInfoToSend(std::string key, std::string value) {
     miAddInfoToSend.env->DeleteLocalRef(jKey);
     miAddInfoToSend.env->DeleteLocalRef(jValue);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary.addInfoToSend(key, value);
 #endif    
 }
 
@@ -151,6 +151,6 @@ void TestLib2dx::sendInfoToServer(std::string basePath) {
     miSendInfoToServer.env->CallVoidMethod(testLibrary, miSendInfoToServer.methodID, jBasePath);
     miSendInfoToServer.env->DeleteLocalRef(jBasePath);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    testlibrary.sendInfoToServer(basePath);
 #endif
 }

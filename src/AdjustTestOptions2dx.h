@@ -11,33 +11,39 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+#include "AdjustTesting/ATLAdjustTestOptions2dx.h"
 #endif
 
 #include <iostream>
 
 class AdjustTestOptions2dx {
 public:
-    bool *setContext = NULL;
     std::string baseUrl;
     std::string gdprUrl;
     std::string basePath;
     std::string gdprPath;
     bool assignBasePath = false;
     bool assignGdprPath = false;
-    bool *useTestConnectionOptions = NULL;
     long *timerIntervalInMilliseconds = NULL;
     long *timerStartInMilliseconds = NULL;
     long *sessionIntervalInMilliseconds = NULL;
     long *subsessionIntervalInMilliseconds = NULL;
     bool *teardown = NULL;
-    bool *tryInstallReferrer = NULL;
     bool *noBackoffWait = NULL;
+
+    // android specific
+    bool *setContext = NULL;
+    bool *tryInstallReferrer = NULL;
+    bool *useTestConnectionOptions = NULL;
+
+    // ios specific
+    bool *iAdFrameworkEnabled = NULL;
+    bool *deleteState = NULL;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getTestOptions();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    ATLAdjustTestOptions2dx getTestOptions();
 #endif
 };
 

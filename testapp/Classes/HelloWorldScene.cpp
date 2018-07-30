@@ -73,6 +73,11 @@ bool TestApp::init() {
 
     // create and initialize Test Library Wrapper
     TestApp::initTestLibrary();
+    
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    CCLOG(">>> Start test session called! <<<");
+    this->testLibrary->startTestSession("cocos2d-x4.14.0@ios4.14.2");
+    #endif
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
@@ -83,8 +88,11 @@ bool TestApp::init() {
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG(">>> Start test session called! <<<");
 
-    // call testLib.startTestSession
-    this->testLibrary->startTestSession("cocos2d-x4.14.0@android4.14.0");
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        this->testLibrary->startTestSession("cocos2d-x4.14.0@ios4.14.2");
+    #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        this->testLibrary->startTestSession("cocos2d-x4.14.0@android4.14.0");
+    #endif
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {

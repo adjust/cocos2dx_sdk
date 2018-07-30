@@ -150,7 +150,62 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     return jobjTestOptions;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-ADJAdjustTestOptions2dx AdjustTestOptions2dx::getTestOptions() {
+ATLAdjustTestOptions2dx AdjustTestOptions2dx::getTestOptions() {
+    ATLAdjustTestOptions2dx testOptions = ATLAdjustTestOptions2dx();
 
+    testOptions.setBaseUrl(this->baseUrl);
+    testOptions.setGdprUrl(this->gdprUrl);
+    
+    // base path //////////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->assignBasePath) {
+        testOptions.setBasePath(this->basePath);
+    }
+
+    // gdpr path //////////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->assignGdprPath) {
+        testOptions.setGdprPath(this->gdprPath);
+    }
+
+    // timerIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
+    if(this->timerIntervalInMilliseconds != NULL) {
+        testOptions.setTimerIntervalInMilliseconds(*this->timerIntervalInMilliseconds);
+    }
+
+    // timerStartInMilliseconds //////////////////////////////////////////////////////////////////////////////////////
+    if(this->timerStartInMilliseconds != NULL) {
+        testOptions.setTimerStartInMilliseconds(*this->timerStartInMilliseconds);
+    }
+    
+    // sessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
+    if(this->sessionIntervalInMilliseconds != NULL) {
+        testOptions.setSessionIntervalInMilliseconds(*this->sessionIntervalInMilliseconds);
+    }
+    
+    // subsessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
+    if(this->subsessionIntervalInMilliseconds != NULL) {
+        testOptions.setSubsessionIntervalInMilliseconds(*this->subsessionIntervalInMilliseconds);
+    }
+
+    // teardown ////////////////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->teardown != NULL) {
+        testOptions.setTeardown(*this->teardown);
+    }
+    
+    // deleteState /////////////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->deleteState != NULL) {
+        testOptions.setDeleteState(*this->deleteState);
+    }
+    
+    // noBackoffWait //////////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->noBackoffWait != NULL) {
+        testOptions.setNoBackoffWait(*this->noBackoffWait);
+    }
+
+    // iAdFrameworkEnabled ////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->iAdFrameworkEnabled != NULL) {
+        testOptions.setIAdFrameworkEnabled(*this->iAdFrameworkEnabled);
+    }
+    
+    return testOptions;
 }
 #endif
