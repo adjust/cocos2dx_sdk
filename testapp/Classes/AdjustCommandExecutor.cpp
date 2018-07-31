@@ -107,6 +107,12 @@ void AdjustCommandExecutor::testOptions() {
         testOptions.noBackoffWait = (bool *)malloc(sizeof(bool));
         *testOptions.noBackoffWait = (noBackoffWaitString == "true");
     }
+    testOptions.iAdFrameworkEnabled = (bool *)malloc(sizeof(bool));
+    *testOptions.iAdFrameworkEnabled = false; // default value -> FALSE - iAd will not be used in test app by default
+    if (this->command->containsParameter("iAdFrameworkEnabled")) {
+        std::string iAdFrameworkEnabledString = command->getFirstParameterValue("iAdFrameworkEnabled");
+        *testOptions.iAdFrameworkEnabled = (iAdFrameworkEnabledString == "true");
+    }
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
         std::vector<std::string>::iterator toIterator = teardownOptions.begin();
@@ -119,14 +125,20 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions.gdprPath = this->gdprPath;
                 testOptions.assignBasePath = true;
                 testOptions.assignGdprPath = true;
+                //android specific
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = true;
                 testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
                 *testOptions.tryInstallReferrer = false;
+                
             }
             if (teardownOption == "deleteState") {
+                //android specific
                 testOptions.setContext = (bool *)malloc(sizeof(bool));
                 *testOptions.setContext = true;
+                //ios specific
+                testOptions.deleteState = (bool *)malloc(sizeof(bool));
+                *testOptions.deleteState = true;
             }
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
@@ -147,6 +159,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions.gdprPath = "";
                 testOptions.assignBasePath = true;
                 testOptions.assignGdprPath = true;
+                //android specific
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = false;
             }
@@ -465,29 +478,17 @@ void AdjustCommandExecutor::trackEvent() {
 }
 
 void AdjustCommandExecutor::resume() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::onResume();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#endif
 }
 
 void AdjustCommandExecutor::pause() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::onPause();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#endif
 }
 
 void AdjustCommandExecutor::setEnabled() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string enabledStr = command->getFirstParameterValue("enabled");
     bool enabled = (enabledStr == "true");
     Adjust2dx::setEnabled(enabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#endif
 }
 
 void AdjustCommandExecutor::setReferrer() {
@@ -495,7 +496,7 @@ void AdjustCommandExecutor::setReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
+    // no referrer in iOS
 #endif
 }
 
@@ -574,7 +575,7 @@ void AdjustCommandExecutor::sendReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    
+    // no referrer in iOS
 #endif
 }
 

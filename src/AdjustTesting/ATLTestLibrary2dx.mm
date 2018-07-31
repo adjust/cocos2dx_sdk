@@ -6,13 +6,13 @@
 //  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
 //
 
+#include <iostream>
 #include "ATLTestLibrary2dx.h"
 #include "AdjustCommandDelegate2dx.h"
-#include <iostream>
 #include <AdjustTestLibrary/ATLTestLibrary.h>
 
 ATLTestLibrary2dx::ATLTestLibrary2dx(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
-	AdjustCommandDelegate2dx *adjustCommandDelegate = [AdjustCommandDelegate2dx getInstanceWithCommandExecutorCallbackId:executeCommandCallback];	
+	AdjustCommandDelegate2dx *adjustCommandDelegate = [AdjustCommandDelegate2dx getInstanceWithCommandExecutorCallbackId:executeCommandCallback];
 	testLibrary = [ATLTestLibrary testLibraryWithBaseUrl:[NSString stringWithUTF8String:baseUrl.c_str()] 
 									  andCommandDelegate:adjustCommandDelegate];
 }

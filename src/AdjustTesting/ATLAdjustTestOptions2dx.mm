@@ -34,15 +34,15 @@ void ATLAdjustTestOptions2dx::setTimerIntervalInMilliseconds(long timerIntervalI
 }
 
 void ATLAdjustTestOptions2dx::setTimerStartInMilliseconds(long timerStartInMilliseconds) {
-    ((AdjustTestOptions *)testOptions).timerIntervalInMilliseconds = [NSNumber numberWithLong:timerStartInMilliseconds];
+    ((AdjustTestOptions *)testOptions).timerStartInMilliseconds = [NSNumber numberWithLong:timerStartInMilliseconds];
 }
 
 void ATLAdjustTestOptions2dx::setSessionIntervalInMilliseconds(long sessionIntervalInMilliseconds) {
-    ((AdjustTestOptions *)testOptions).timerIntervalInMilliseconds = [NSNumber numberWithLong:sessionIntervalInMilliseconds];
+    ((AdjustTestOptions *)testOptions).sessionIntervalInMilliseconds = [NSNumber numberWithLong:sessionIntervalInMilliseconds];
 }
 
 void ATLAdjustTestOptions2dx::setSubsessionIntervalInMilliseconds(long subsessionIntervalInMilliseconds) {
-    ((AdjustTestOptions *)testOptions).timerIntervalInMilliseconds = [NSNumber numberWithLong:subsessionIntervalInMilliseconds];
+    ((AdjustTestOptions *)testOptions).subsessionIntervalInMilliseconds = [NSNumber numberWithLong:subsessionIntervalInMilliseconds];
 }
 
 void ATLAdjustTestOptions2dx::setTeardown(bool teardown) {

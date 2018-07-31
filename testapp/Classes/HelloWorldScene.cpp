@@ -17,8 +17,14 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string baseUrl = "https://192.168.8.118:8443";
-static std::string gdprUrl = "https://192.168.8.118:8443";
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+static std::string baseUrl = "http://192.168.8.134:8080";
+static std::string gdprUrl = "http://192.168.8.134:8080";
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+static std::string baseUrl = "https://192.168.8.72:8443";
+static std::string gdprUrl = "https://192.168.8.72:8443";
+#endif
+
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);
 
 void TestApp::initTestLibrary() {

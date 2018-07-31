@@ -512,6 +512,8 @@ void Adjust2dx::onResume() {
     }
 
     miOnResume.env->CallStaticVoidMethod(miOnResume.classID, miOnResume.methodID);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackSubsessionStart();
 #endif
 }
 
@@ -523,6 +525,8 @@ void Adjust2dx::onPause() {
     }
 
     miOnPause.env->CallStaticVoidMethod(miOnPause.classID, miOnPause.methodID);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackSubsessionEnd();
 #endif
 }
 
