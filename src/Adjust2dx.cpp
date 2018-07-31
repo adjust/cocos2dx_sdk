@@ -31,6 +31,7 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
     cocos2d::JniHelper::getEnv()->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
+    onResume();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
     WRTAdjust::ApplicationLaunching(adjustConfig.getConfig());
 #endif
