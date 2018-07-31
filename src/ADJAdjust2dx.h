@@ -44,6 +44,7 @@ public:
 
     // only for testing
     static void setTestOptions(ATLAdjustTestOptions2dx testOptions);
+    static void teardownADJDelegate();
 };
 
 #endif /* _ADJUST_ADJUST2DX_H_ */

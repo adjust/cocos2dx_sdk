@@ -55,6 +55,9 @@ public:
 
     // TestApp-specific
     static void setTestOptions(AdjustTestOptions2dx testOptions);
+    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    static void teardownADJDelegate();
+    #endif
 };
 
 #endif /* ADJUST_ADJUST2DX_H_ */

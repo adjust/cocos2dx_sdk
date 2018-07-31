@@ -174,3 +174,7 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
 void ADJAdjust2dx::setTestOptions(ATLAdjustTestOptions2dx testOptions) {
     [Adjust setTestOptions:(AdjustTestOptions *)testOptions.getTestOptions()];
 }
+
+void ADJAdjust2dx::teardownADJDelegate() {
+    [ADJDelegate2dx teardown];
+}

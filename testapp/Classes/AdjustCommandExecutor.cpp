@@ -130,7 +130,10 @@ void AdjustCommandExecutor::testOptions() {
                 *testOptions.useTestConnectionOptions = true;
                 testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
                 *testOptions.tryInstallReferrer = false;
-                
+                //ios specific
+                #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+                Adjust2dx::teardownADJDelegate();
+                #endif
             }
             if (teardownOption == "deleteState") {
                 //android specific

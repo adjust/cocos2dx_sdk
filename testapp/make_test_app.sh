@@ -42,4 +42,5 @@ echo
 echo -e "${GREEN}>>> Add the following environmental variable to your .zshrc file or .bashrc: ${NC}"
 echo -e "${YELLOW}export COCOS_TEST_APP=${NEW_APP_PATH}/testapp ${NC}"
 echo -e "${YELLOW}export PATH=\$COCOS_TEST_APP:\$PATH ${NC}"
-echo
+echo -e "${YELLOW}>>> then:"
+echo -e "${YELLOW}.  in scripts folder, for Android run >testapp-android.sh<, whereas for iOS >testapp-ios.sh< to copy necessary Adjust files"

@@ -10,6 +10,9 @@
 #import "ADJAdjust2dx.h"
 #import "ADJDelegate2dx.h"
 
+static dispatch_once_t onceToken;
+static ADJDelegate2dx *defaultInstance = nil;
+
 @implementation ADJDelegate2dx
 
 + (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
@@ -24,9 +27,6 @@
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId {
-    static dispatch_once_t onceToken;
-    static ADJDelegate2dx *defaultInstance = nil;
-
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 
@@ -65,6 +65,11 @@
     });
     
     return defaultInstance;
+}
+
++ (void)teardown {
+    defaultInstance = nil;
+    onceToken = 0;
 }
 
 - (id)init {
@@ -107,7 +112,7 @@
 }
 
 - (void)adjustEventTrackingSucceededWannabe:(ADJEventSuccess *)eventSuccessResponseData {
-    if (nil == eventSuccessResponseData) {
+    if (nil == eventSuccessResponseData || NULL == _eventSuccessCallbackMethod) {
         return;
     }
 
@@ -129,7 +134,7 @@
 }
 
 - (void)adjustEventTrackingFailedWannabe:(ADJEventFailure *)eventFailureResponseData {
-    if (nil == eventFailureResponseData) {
+    if (nil == eventFailureResponseData || NULL == _eventFailureCallbackMethod) {
         return;
     }
 
@@ -153,7 +158,7 @@
 }
 
 - (void)adjustSessionTrackingSucceededWannabe:(ADJSessionSuccess *)sessionSuccessResponseData {
-    if (nil == sessionSuccessResponseData) {
+    if (nil == sessionSuccessResponseData || NULL == _sessionSuccessCallbackMethod) {
         return;
     }
 
@@ -173,7 +178,7 @@
 }
 
 - (void)adjustSessionTrackingFailedWananbe:(ADJSessionFailure *)sessionFailureResponseData {
-    if (nil == sessionFailureResponseData) {
+    if (nil == sessionFailureResponseData || NULL == _sessionFailureCallbackMethod) {
         return;
     }
 

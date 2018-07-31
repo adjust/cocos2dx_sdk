@@ -579,3 +579,9 @@ void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
     ADJAdjust2dx::setTestOptions(testOptions.getTestOptions());
 #endif
 }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void Adjust2dx::teardownADJDelegate() {
+    ADJAdjust2dx::teardownADJDelegate();
+}
+#endif
