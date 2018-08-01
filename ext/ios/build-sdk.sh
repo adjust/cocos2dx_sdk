@@ -26,7 +26,7 @@ echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Deleting old AdjustSdk.framewo
 cd ${ROOT_DIR}
 rm -rfv ${LIB_OUT_DIR}/AdjustSdk.framework
 
-if [ $1 == --with-test-lib ]; then
+if [ $# -eq 1 ] && [ $1 == --with-test-lib ]; then
 	echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Deleting old AdjustTestLibrary.framework file ... ${NC}"
 	rm -rfv ${LIB_OUT_DIR}/AdjustTestLibrary.framework
 fi
@@ -39,7 +39,7 @@ echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Rebuilding AdjustSdk.framework
 cd ${ROOT_DIR}/${BUILD_DIR}
 xcodebuild -target AdjustStatic -configuration Release clean build
 
-if [ $1 == --with-test-lib ]; then
+if [ $# -eq 1 ] && [ $1 == --with-test-lib ]; then
 	echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Rebuilding AdjustTestLibrary.framework file ... ${NC}"
     cd ${ROOT_DIR}/${TEST_LIB_BUILD_DIR}
 	xcodebuild -target AdjustTestLibraryStatic -configuration Release clean build
@@ -53,7 +53,7 @@ echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Build successful. Copying Adju
 cd ${ROOT_DIR}/${BUILD_DIR}
 cp -Rv Frameworks/Static/AdjustSdk.framework ${ROOT_DIR}/${LIB_OUT_DIR}
 
-if [ $1 == --with-test-lib ]; then
+if [ $# -eq 1 ] && [ $1 == --with-test-lib ]; then
 	echo -e "${CYAN}[ADJUST][IOS][BUILD-SDK]:${GREEN} Build successful. Copying AdjustTestLibrary.framework to ${ROOT_DIR}/${LIB_OUT_DIR} ... ${NC}"
 	cp -Rv Frameworks/Static/AdjustTestLibrary.framework ${ROOT_DIR}/${LIB_OUT_DIR}
 fi

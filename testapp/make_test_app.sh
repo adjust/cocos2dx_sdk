@@ -4,12 +4,12 @@
 set -e
 
 if [ $# -ne 2 ]; then
-    echo $0: "error. missing arguments. usage: ./make_test_app.sh [platfor: -ios | -android] [location-to-create-new-project]"
+    echo $0: "error. missing arguments. usage: ./make_test_app.sh [platform: -ios | -android] [location-to-create-new-project]"
     exit 1
 fi
 
 if [ $1 != "-ios" ] && [ $1 != "-android" ]; then
-    echo $0: "error. wrong platform selected. usage: ./make_test_app.sh [platfor: -ios | -android] [location-to-create-new-project]"
+    echo $0: "error. wrong platform selected. usage: ./make_test_app.sh [platform: -ios | -android] [location-to-create-new-project]"
     exit 1
 fi
 
