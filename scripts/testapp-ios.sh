@@ -54,5 +54,5 @@ cp -Rfv src/* ${TEST_APP_PATH}/Classes/Adjust/
 
 # ======================================== ##
 
-echo -e "${GREEN}>>> Success. Make sure AdjustSdk.framework & AdjustTestLibrary.framework (and GameController.framework) are linked in 'Build Phases'. ${NC}"
+echo -e "${GREEN}>>> Success. Make sure AdjustSdk.framework, AdjustTestLibrary.framework and GameController.framework are added in 'Linked Frameworks and Libraries'. ${NC}"
 echo -e "${GREEN}>>> Run it with Xcode from \`proj.ios_mac\` directory. ${NC}"
