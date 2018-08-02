@@ -10,6 +10,8 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "AdjustTesting/ATLAdjustTestOptions2dx.h"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -150,62 +152,62 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     return jobjTestOptions;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-ATLAdjustTestOptions2dx AdjustTestOptions2dx::getTestOptions() {
-    ATLAdjustTestOptions2dx testOptions = ATLAdjustTestOptions2dx();
+void* AdjustTestOptions2dx::getTestOptions() {
+    ATLAdjustTestOptions2dx *testOptions = new ATLAdjustTestOptions2dx();
 
-    testOptions.setBaseUrl(this->baseUrl);
-    testOptions.setGdprUrl(this->gdprUrl);
+    testOptions->setBaseUrl(this->baseUrl);
+    testOptions->setGdprUrl(this->gdprUrl);
     
     // base path //////////////////////////////////////////////////////////////////////////////////////////////////
     if(this->assignBasePath) {
-        testOptions.setBasePath(this->basePath);
+        testOptions->setBasePath(this->basePath);
     }
 
     // gdpr path //////////////////////////////////////////////////////////////////////////////////////////////////
     if(this->assignGdprPath) {
-        testOptions.setGdprPath(this->gdprPath);
+        testOptions->setGdprPath(this->gdprPath);
     }
 
     // timerIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
     if(this->timerIntervalInMilliseconds != NULL) {
-        testOptions.setTimerIntervalInMilliseconds(*this->timerIntervalInMilliseconds);
+        testOptions->setTimerIntervalInMilliseconds(*this->timerIntervalInMilliseconds);
     }
 
     // timerStartInMilliseconds //////////////////////////////////////////////////////////////////////////////////////
     if(this->timerStartInMilliseconds != NULL) {
-        testOptions.setTimerStartInMilliseconds(*this->timerStartInMilliseconds);
+        testOptions->setTimerStartInMilliseconds(*this->timerStartInMilliseconds);
     }
     
     // sessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
     if(this->sessionIntervalInMilliseconds != NULL) {
-        testOptions.setSessionIntervalInMilliseconds(*this->sessionIntervalInMilliseconds);
+        testOptions->setSessionIntervalInMilliseconds(*this->sessionIntervalInMilliseconds);
     }
     
     // subsessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
     if(this->subsessionIntervalInMilliseconds != NULL) {
-        testOptions.setSubsessionIntervalInMilliseconds(*this->subsessionIntervalInMilliseconds);
+        testOptions->setSubsessionIntervalInMilliseconds(*this->subsessionIntervalInMilliseconds);
     }
 
     // teardown ////////////////////////////////////////////////////////////////////////////////////////////////////////
     if(this->teardown != NULL) {
-        testOptions.setTeardown(*this->teardown);
+        testOptions->setTeardown(*this->teardown);
     }
     
     // deleteState /////////////////////////////////////////////////////////////////////////////////////////////////////
     if(this->deleteState != NULL) {
-        testOptions.setDeleteState(*this->deleteState);
+        testOptions->setDeleteState(*this->deleteState);
     }
     
     // noBackoffWait //////////////////////////////////////////////////////////////////////////////////////////////////
     if(this->noBackoffWait != NULL) {
-        testOptions.setNoBackoffWait(*this->noBackoffWait);
-    }
-
-    // iAdFrameworkEnabled ////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->iAdFrameworkEnabled != NULL) {
-        testOptions.setIAdFrameworkEnabled(*this->iAdFrameworkEnabled);
+        testOptions->setNoBackoffWait(*this->noBackoffWait);
     }
     
-    return testOptions;
+    // iAdFrameworkEnabled ////////////////////////////////////////////////////////////////////////////////////////////
+    if(this->iAdFrameworkEnabled != NULL) {
+        testOptions->setIAdFrameworkEnabled(*this->iAdFrameworkEnabled);
+    }
+    
+    return (void*)testOptions;
 }
 #endif

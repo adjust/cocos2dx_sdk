@@ -10,8 +10,6 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "AdjustTesting/ATLAdjustTestOptions2dx.h"
 #endif
 
 #include <iostream>
@@ -43,7 +41,7 @@ public:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getTestOptions();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ATLAdjustTestOptions2dx getTestOptions();
+    void* getTestOptions();
 #endif
 };
 

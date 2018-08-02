@@ -43,7 +43,7 @@ public:
     static AdjustAttribution2dx getAttribution();
 
     // only for testing
-    static void setTestOptions(ATLAdjustTestOptions2dx testOptions);
+    static void setTestOptions(ATLAdjustTestOptions2dx *testOptions);
     static void teardownADJDelegate();
 };
 

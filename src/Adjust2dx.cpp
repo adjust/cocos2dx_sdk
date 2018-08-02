@@ -576,7 +576,7 @@ void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
 
     miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jobjTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::setTestOptions(testOptions.getTestOptions());
+    ADJAdjust2dx::setTestOptions((ATLAdjustTestOptions2dx *)testOptions.getTestOptions());
 #endif
 }
 

@@ -10,12 +10,6 @@
 
 #include <iostream>
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-
-#endif
-
 class TestLib2dx {
 private:
     void initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
