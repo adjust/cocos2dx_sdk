@@ -13,7 +13,7 @@
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
 #include "AdjustAttribution2dx.h"
-#include "AdjustTesting/ATLAdjustTestOptions2dx.h"
+#include "ATLAdjustTestOptions2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
 extern const std::string ADJEnvironmentProduction2dx;

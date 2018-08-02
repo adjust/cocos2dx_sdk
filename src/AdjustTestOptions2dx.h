@@ -2,7 +2,8 @@
 //  AdjustTestOptions2dx.h
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_TESTOPTIONS2DX_H_
@@ -20,21 +21,21 @@ public:
     std::string gdprUrl;
     std::string basePath;
     std::string gdprPath;
-    bool assignBasePath = false;
-    bool assignGdprPath = false;
     long *timerIntervalInMilliseconds = NULL;
     long *timerStartInMilliseconds = NULL;
     long *sessionIntervalInMilliseconds = NULL;
     long *subsessionIntervalInMilliseconds = NULL;
     bool *teardown = NULL;
     bool *noBackoffWait = NULL;
+    bool assignBasePath = false;
+    bool assignGdprPath = false;
 
-    // android specific
+    // Android specific
     bool *setContext = NULL;
     bool *tryInstallReferrer = NULL;
     bool *useTestConnectionOptions = NULL;
 
-    // ios specific
+    // iOS specific
     bool *iAdFrameworkEnabled = NULL;
     bool *deleteState = NULL;
 

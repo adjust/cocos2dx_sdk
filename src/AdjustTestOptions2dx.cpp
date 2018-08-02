@@ -2,7 +2,8 @@
 //  AdjustTestOptions2dx.cpp
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustTestOptions2dx.h"
@@ -11,7 +12,7 @@
 #include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "AdjustTesting/ATLAdjustTestOptions2dx.h"
+#include "ATLAdjustTestOptions2dx.h"
 #endif
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
