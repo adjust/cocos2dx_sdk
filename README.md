@@ -69,15 +69,16 @@ Take the C++ source files from the `src` folder and add them to your Cocos2d-x p
 Inside Android Studio project, you need to add the paths of the Adjust C++ files to the `LOCAL_SRC_FILES` section in your `Android.mk` file:
 
 ```mk
-../../../Classes/Adjust/AdjustConfig2dx.cpp \
-../../../Classes/Adjust/AdjustAttribution2dx.cpp \
-../../../Classes/Adjust/AdjustProxy2dx.cpp \
-../../../Classes/Adjust/AdjustEvent2dx.cpp \
-../../../Classes/Adjust/Adjust2dx.cpp \
-../../../Classes/Adjust/AdjustEventFailure2dx.cpp \
-../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
-../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
-../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustConfig2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustAttribution2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustProxy2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEvent2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/Adjust2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventFailure2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustTestOptions2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
