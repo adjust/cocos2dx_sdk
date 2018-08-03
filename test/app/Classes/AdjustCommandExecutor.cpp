@@ -2,20 +2,19 @@
 //  AdjustCommandExecutor.cpp
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #define COCOS2D_DEBUG 1
 
 #include <regex>
-#include <platform/CCStdC.h>
 #include <base/CCConsole.h>
-
+#include <platform/CCStdC.h>
 #include "AdjustCommandExecutor.h"
 
-const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
-
 static std::string localBasePath;
+const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
 AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl) {
     this->baseUrl = baseUrl;
@@ -108,7 +107,8 @@ void AdjustCommandExecutor::testOptions() {
         *testOptions.noBackoffWait = (noBackoffWaitString == "true");
     }
     testOptions.iAdFrameworkEnabled = (bool *)malloc(sizeof(bool));
-    *testOptions.iAdFrameworkEnabled = false; // default value -> FALSE - iAd will not be used in test app by default
+    // "false" is default value - iAd will not be used in test app by default.
+    *testOptions.iAdFrameworkEnabled = false;
     if (this->command->containsParameter("iAdFrameworkEnabled")) {
         std::string iAdFrameworkEnabledString = command->getFirstParameterValue("iAdFrameworkEnabled");
         *testOptions.iAdFrameworkEnabled = (iAdFrameworkEnabledString == "true");
@@ -125,21 +125,21 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions.gdprPath = this->gdprPath;
                 testOptions.assignBasePath = true;
                 testOptions.assignGdprPath = true;
-                //android specific
+                // Android specific
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = true;
                 testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
                 *testOptions.tryInstallReferrer = false;
-                //ios specific
+                // iOS specific
                 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                Adjust2dx::teardownADJDelegate();
+                Adjust2dx::teardown();
                 #endif
             }
             if (teardownOption == "deleteState") {
-                //android specific
+                // Android specific
                 testOptions.setContext = (bool *)malloc(sizeof(bool));
                 *testOptions.setContext = true;
-                //ios specific
+                // iOS specific
                 testOptions.deleteState = (bool *)malloc(sizeof(bool));
                 *testOptions.deleteState = true;
             }
@@ -162,7 +162,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions.gdprPath = "";
                 testOptions.assignBasePath = true;
                 testOptions.assignGdprPath = true;
-                //android specific
+                // Android specific
                 testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
                 *testOptions.useTestConnectionOptions = false;
             }
@@ -180,8 +180,8 @@ void AdjustCommandExecutor::testOptions() {
             }
             toIterator++;
         }
-
     }
+
     Adjust2dx::setTestOptions(testOptions);
 }
 
@@ -217,15 +217,11 @@ void AdjustCommandExecutor::config() {
 
         adjustConfig = new AdjustConfig2dx(appToken, environment);
         adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
-
         savedConfigs[configNumber] = adjustConfig;
     }
 
     if (this->command->containsParameter("logLevel")) {
         std::string logLevelString = command->getFirstParameterValue("logLevel");
-
-        CCLOG("\nTestApp: logLevel: %s", logLevelString.c_str());
-
         if (logLevelString == "verbose") {
             adjustConfig->setLogLevel(AdjustLogLevel2dxVerbose);
         } else if (logLevelString == "debug") {
@@ -243,11 +239,6 @@ void AdjustCommandExecutor::config() {
         }
     }
 
-    if (this->command->containsParameter("sdkPrefix")) {
-        //std::string sdkPrefix = command->getFirstParameterValue("sdkPrefix");
-        //adjustConfig->setSdkPrefix(sdkPrefix);
-    }
-
     if (this->command->containsParameter("defaultTracker")) {
         std::string defaultTracker = command->getFirstParameterValue("defaultTracker");
         adjustConfig->setDefaultTracker(defaultTracker);
@@ -257,19 +248,21 @@ void AdjustCommandExecutor::config() {
         try {
             std::vector<std::string> appSecretArray = command->getParameters("appSecret");
 
-            if (appSecretArray[0].length() > 0 && appSecretArray[1].length() > 0 && appSecretArray[2].length() > 0 &&
-                    appSecretArray[3].length() > 0 && appSecretArray[4].length() > 0) {
+            if (appSecretArray[0].length() > 0
+                && appSecretArray[1].length() > 0
+                && appSecretArray[2].length() > 0
+                && appSecretArray[3].length() > 0
+                && appSecretArray[4].length() > 0) {
                 unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
                 unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
                 unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
                 unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
                 unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
-
                 adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
             }
         }
         catch (const std::exception &e) {
-            CCLOG("\nTestApp: appSecret EXCEPTION: %s", e.what());
+            CCLOG("\n[AdjustCommandExecutor]: appSecret exceotion: %s", e.what());
         }
     }
 
@@ -302,27 +295,10 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setUserAgent(userAgent);
     }
 
-    if (this->command->containsParameter("deferredDeeplinkCallback")) {
-        adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
-            if (deeplink.empty()) {
-                CCLOG("\nTestApp: Deeplink Response, uri is EMPTY");
-                return false;
-            }
-
-            CCLOG("\nTestApp: Deeplink Response, uri = %s", deeplink.c_str());
-
-            // if starts with "adjusttest"
-            std::smatch match;
-            std::regex_search(deeplink, match, std::regex("^adjusttest"));
-            return match.suffix().length() > 0;
-        });
-    }
-
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
-             CCLOG("\nTestApp: attribution received: %s", attribution.getTrackerToken().c_str());
-
+            CCLOG("\n[AdjustCommandExecutor]: Attribution received: %s", attribution.getTrackerToken().c_str());
             TestLib2dx::addInfoToSend("trackerToken", attribution.getTrackerToken());
             TestLib2dx::addInfoToSend("trackerName", attribution.getTrackerName());
             TestLib2dx::addInfoToSend("network", attribution.getNetwork());
@@ -338,12 +314,11 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
-            CCLOG("\nTestApp: session_success received: %s", adjustSessionSuccess.getMessage().c_str());
-
+            CCLOG("\n[AdjustCommandExecutor]: Session success: %s", adjustSessionSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionSuccess.getAdid());
-            if(!adjustSessionSuccess.getJsonResponse().empty()) {
+            if (!adjustSessionSuccess.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustSessionSuccess.getJsonResponse());
             }
             TestLib2dx::sendInfoToServer(localBasePath);
@@ -353,13 +328,12 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
-            CCLOG("\nTestApp: session_fail received: %s", adjustSessionFailure.getMessage().c_str());
-
+            CCLOG("\n[AdjustCommandExecutor]: Session failure: %s", adjustSessionFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionFailure.getAdid());
             TestLib2dx::addInfoToSend("willRetry", adjustSessionFailure.getWillRetry());
-            if(!adjustSessionFailure.getJsonResponse().empty()) {
+            if (!adjustSessionFailure.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustSessionFailure.getJsonResponse());
             }
             TestLib2dx::sendInfoToServer(localBasePath);
@@ -369,13 +343,12 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
-            CCLOG("\nTestApp: event_success received: %s", adjustEventSuccess.getMessage().c_str());
-
+            CCLOG("\n[AdjustCommandExecutor]: Event success: %s", adjustEventSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventSuccess.getAdid());
             TestLib2dx::addInfoToSend("eventToken", adjustEventSuccess.getEventToken());
-            if(!adjustEventSuccess.getJsonResponse().empty()) {
+            if (!adjustEventSuccess.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventSuccess.getJsonResponse());
             }
             TestLib2dx::sendInfoToServer(localBasePath);
@@ -385,24 +358,35 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
-            CCLOG("\nTestApp: event_fail received: %s", adjustEventFailure.getMessage().c_str());
-
+            CCLOG("\n[AdjustCommandExecutor]: Event failure: %s", adjustEventFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventFailure.getAdid());
             TestLib2dx::addInfoToSend("eventToken", adjustEventFailure.getEventToken());
             TestLib2dx::addInfoToSend("willRetry", adjustEventFailure.getWillRetry());
-            if(!adjustEventFailure.getJsonResponse().empty()) {
+            if (!adjustEventFailure.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventFailure.getJsonResponse());
             }
             TestLib2dx::sendInfoToServer(localBasePath);
+        });
+    }
+
+    if (this->command->containsParameter("deferredDeeplinkCallback")) {
+        localBasePath = this->basePath;
+        std::string openDeeplinkString = command->getFirstParameterValue("deferredDeeplinkCallback");
+        // TODO: Figure out how to pass return value parameter into lambda method.
+        // bool openDeeplink = (openDeeplinkString == "true");
+        adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
+            CCLOG("\n[AdjustCommandExecutor]: Deferred deep link received: %s", deeplink.c_str());
+            TestLib2dx::addInfoToSend("deeplink", deeplink);
+            TestLib2dx::sendInfoToServer(localBasePath);
+            return true;
         });
     }
 }
 
 void AdjustCommandExecutor::start() {
     config();
-
     int configNumber = 0;
     if (this->command->containsParameter("configName")) {
         std::string configName = command->getFirstParameterValue("configName");
@@ -412,7 +396,6 @@ void AdjustCommandExecutor::start() {
 
     AdjustConfig2dx *adjustConfig = this->savedConfigs[configNumber];
     Adjust2dx::start(*adjustConfig);
-
     this->savedConfigs.erase(0);
 }
 
@@ -476,7 +459,6 @@ void AdjustCommandExecutor::trackEvent() {
 
     AdjustEvent2dx *adjustEvent = this->savedEvents[eventNumber];
     Adjust2dx::trackEvent(*adjustEvent);
-
     this->savedEvents.erase(0);
 }
 
@@ -499,7 +481,7 @@ void AdjustCommandExecutor::setReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // no referrer in iOS
+    // No referrer in iOS
 #endif
 }
 
@@ -578,7 +560,7 @@ void AdjustCommandExecutor::sendReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // no referrer in iOS
+    // No referrer in iOS
 #endif
 }
 

@@ -108,8 +108,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 void AppDelegate::initAdjust() {
     auto adjustConfig = AdjustConfig2dx("2fm9gkqubvpc", AdjustEnvironmentSandbox2dx);
     adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-//    adjustConfig.setDelayStart(6.0);
-//    adjustConfig.setSendInBackground(true);
+    // adjustConfig.setDelayStart(6.0);
+    // adjustConfig.setSendInBackground(true);
 
     Adjust2dx::addSessionCallbackParameter("scpk1", "scpv1");
     Adjust2dx::addSessionCallbackParameter("scpk2", "scpv2");
@@ -123,14 +123,7 @@ void AppDelegate::initAdjust() {
     // Adjust2dx::resetSessionCallbackParameters();
     // Adjust2dx::resetSessionPartnerParameters();
 
-    adjustConfig.setAppSecret(1, 552143313, 465657129, 437714723, 1932667013);
-    adjustConfig.setDeviceKnown(true);
-    adjustConfig.setReadMobileEquipmentIdentity(true);
-    Adjust2dx::setReferrer("my-referrer");
-
     Adjust2dx::start(adjustConfig);
-
-    Adjust2dx::sendFirstPackages();
 }
 
 // This function will be called when the app is inactive. Note, when receiving a phone call it is invoked.

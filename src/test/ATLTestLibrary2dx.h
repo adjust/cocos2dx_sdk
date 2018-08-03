@@ -2,8 +2,8 @@
 //  ATLTestLibrary2dx.h
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 30/07/18.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Created by Srdjan Tubin (@2beens) on 30th July 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ATLTESTLIBRARY2DX_H_

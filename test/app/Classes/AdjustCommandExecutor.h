@@ -2,16 +2,18 @@
 //  AdjustCommandExecutor.h
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef  _ADJUST_COMMAND_EXECUTOR_H_
 #define  _ADJUST_COMMAND_EXECUTOR_H_
 
+#include <map>
 #include <string>
 #include <vector>
-#include <map>
-
+#include "Command.h"
+#include "Adjust/test/TestLib2dx.h"
 #include "Adjust/Adjust2dx.h"
 #include "Adjust/AdjustEvent2dx.h"
 #include "Adjust/AdjustConfig2dx.h"
@@ -21,9 +23,6 @@
 #include "Adjust/AdjustSessionSuccess2dx.h"
 #include "Adjust/AdjustSessionFailure2dx.h"
 #include "Adjust/AdjustTestOptions2dx.h"
-
-#include "Command.h"
-#include "Adjust/AdjustTesting/TestLib2dx.h"
 
 class AdjustCommandExecutor {
 private:
@@ -57,8 +56,8 @@ private:
     void sendReferrer();
     void gdprForgetMe();
 public:
-    AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl);
     static const std::string TAG;
+    AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl);
     void executeCommand(Command *command);
 };
 

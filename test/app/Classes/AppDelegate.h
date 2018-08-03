@@ -2,7 +2,8 @@
 //  AppDelegate.h
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef  _APP_DELEGATE_H_
@@ -11,9 +12,7 @@
 #include "cocos2d.h"
 
 /**
-@brief    The cocos2d Application.
-
-Private inheritance here hides part of interface from Director.
+ @brief The cocos2d Application. Private inheritance here hides part of interface from Director.
 */
 class  AppDelegate : private cocos2d::Application
 {

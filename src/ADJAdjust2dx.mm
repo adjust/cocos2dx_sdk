@@ -175,6 +175,6 @@ void ADJAdjust2dx::setTestOptions(ATLAdjustTestOptions2dx *testOptions) {
     [Adjust setTestOptions:(AdjustTestOptions *)testOptions->getTestOptions()];
 }
 
-void ADJAdjust2dx::teardownADJDelegate() {
+void ADJAdjust2dx::teardown() {
     [ADJDelegate2dx teardown];
 }

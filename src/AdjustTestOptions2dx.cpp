@@ -26,6 +26,7 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     if (!cocos2d::JniHelper::getMethodInfo(miInitBoolean, "java/lang/Boolean", "<init>", "(Z)V")) {
         return NULL;
     }
+
     jclass clsBoolean = miInitBoolean.env->FindClass("java/lang/Boolean");
     jmethodID midInitBoolean = miInitBoolean.env->GetMethodID(clsBoolean, "<init>", "(Z)V");
 
@@ -42,44 +43,44 @@ jobject AdjustTestOptions2dx::getTestOptions() {
     }
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
 
-    // TEST OPTIONS JAVA OBJECT ////////////////////////////////////////////////////////////////////////////////
+    // Test options
     jclass clsTestOptions = miInit.env->FindClass("com/adjust/sdk/AdjustTestOptions");
     jmethodID midInit = miInit.env->GetMethodID(clsTestOptions, "<init>", "()V");
     jobject jobjTestOptions = miInit.env->NewObject(clsTestOptions, midInit);
 
-    // context ////////////////////////////////////////////////////////////////////////////////
-    if(this->setContext != NULL && *this->setContext == true) {
+    // Context
+    if (this->setContext != NULL && *this->setContext == true) {
         jfieldID fContext = miInit.env->GetFieldID(clsTestOptions, "context", "Landroid/content/Context;");
         miInit.env->SetObjectField(jobjTestOptions, fContext, jContext);
     }
     miGetContext.env->DeleteLocalRef(jContext);
 
-    // base url ////////////////////////////////////////////////////////////////////////////////
+    // Base URL
     jstring jsBaseUrl = miInit.env->NewStringUTF(this->baseUrl.c_str());
     jfieldID fBaseUrl = miInit.env->GetFieldID(clsTestOptions, "baseUrl", "Ljava/lang/String;");
     miInit.env->SetObjectField(jobjTestOptions, fBaseUrl, jsBaseUrl);
 
-    // gdpr url ////////////////////////////////////////////////////////////////////////////////
+    // GDPR URL
     jstring jsGdprUrl = miInit.env->NewStringUTF(this->gdprUrl.c_str());
     jfieldID fGdprUrl = miInit.env->GetFieldID(clsTestOptions, "gdprUrl", "Ljava/lang/String;");
     miInit.env->SetObjectField(jobjTestOptions, fGdprUrl, jsGdprUrl);
 
-    // base path ////////////////////////////////////////////////////////////////////////////////
-    if(this->assignBasePath) {
+    // Base path
+    if (this->assignBasePath) {
         jstring jsBasePath = miInit.env->NewStringUTF(this->basePath.c_str());
         jfieldID fBasePath = miInit.env->GetFieldID(clsTestOptions, "basePath", "Ljava/lang/String;");
         miInit.env->SetObjectField(jobjTestOptions, fBasePath, jsBasePath);
     }
 
-    // gdpr path ////////////////////////////////////////////////////////////////////////////////
-    if(this->assignGdprPath) {
+    // GDPR path
+    if (this->assignGdprPath) {
         jstring jsGdprPath = miInit.env->NewStringUTF(this->gdprPath.c_str());
         jfieldID fGdprPath = miInit.env->GetFieldID(clsTestOptions, "gdprPath", "Ljava/lang/String;");
         miInit.env->SetObjectField(jobjTestOptions, fGdprPath, jsGdprPath);
     }
 
-    // useTestConnectionOptions ////////////////////////////////////////////////////////////////////////////////
-    if(this->useTestConnectionOptions != NULL) {
+    // Use test connection options
+    if (this->useTestConnectionOptions != NULL) {
         jboolean jbUseTestConnectionOptions = *this->useTestConnectionOptions == true ? JNI_TRUE : JNI_FALSE;
         jobject jobjUseTestConnectionOptions = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbUseTestConnectionOptions);
         jfieldID fUseTestConnectionOptions = miInit.env->GetFieldID(clsTestOptions, "useTestConnectionOptions", "Ljava/lang/Boolean;");
@@ -87,8 +88,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjUseTestConnectionOptions);
     }
 
-    // timerIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->timerIntervalInMilliseconds != NULL) {
+    // Timer interval in milliseconds
+    if (this->timerIntervalInMilliseconds != NULL) {
         jlong jTimerIntervalInMilliseconds = (jlong)(*this->timerIntervalInMilliseconds);
         jobject jobjTimerIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
         jfieldID fTimerIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -96,8 +97,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjTimerIntervalInMilliseconds);
     }
 
-    // timerStartInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->timerStartInMilliseconds != NULL) {
+    // Timer start in milliseconds
+    if (this->timerStartInMilliseconds != NULL) {
         jlong jTimerStartInMilliseconds = (jlong)(*this->timerStartInMilliseconds);
         jobject jobjTimerStartInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
         jfieldID fTimerStartInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
@@ -105,8 +106,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjTimerStartInMilliseconds);
     }
 
-    // sessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->sessionIntervalInMilliseconds != NULL) {
+    // Session interval in milliseconds
+    if (this->sessionIntervalInMilliseconds != NULL) {
         jlong jSessionIntervalInMilliseconds = (jlong)(*this->sessionIntervalInMilliseconds);
         jobject jobjSessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
         jfieldID fSessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -114,8 +115,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjSessionIntervalInMilliseconds);
     }
 
-    // subsessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->subsessionIntervalInMilliseconds != NULL) {
+    // Sub-session interval in milliseconds
+    if (this->subsessionIntervalInMilliseconds != NULL) {
         jlong jSubsessionIntervalInMilliseconds = (jlong)(*this->subsessionIntervalInMilliseconds);
         jobject jobjSubsessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
         jfieldID fSubsessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -123,8 +124,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjSubsessionIntervalInMilliseconds);
     }
 
-    // teardown ////////////////////////////////////////////////////////////////////////////////
-    if(this->teardown != NULL) {
+    // Teardown
+    if (this->teardown != NULL) {
         jboolean jbTeardown = *this->teardown == true ? JNI_TRUE : JNI_FALSE;
         jobject jobjTeardown = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTeardown);
         jfieldID fTeardown = miInit.env->GetFieldID(clsTestOptions, "teardown", "Ljava/lang/Boolean;");
@@ -132,8 +133,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjTeardown);
     }
 
-    // tryInstallReferrer ////////////////////////////////////////////////////////////////////////////////
-    if(this->tryInstallReferrer != NULL) {
+    // Try install referrer
+    if (this->tryInstallReferrer != NULL) {
         jboolean jbTryInstallReferrer = *this->tryInstallReferrer == true ? JNI_TRUE : JNI_FALSE;
         jobject jobjTryInstallReferrer = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTryInstallReferrer);
         jfieldID fTryInstallReferrer = miInit.env->GetFieldID(clsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
@@ -141,8 +142,8 @@ jobject AdjustTestOptions2dx::getTestOptions() {
         miInit.env->DeleteLocalRef(jobjTryInstallReferrer);
     }
 
-    // noBackoffWait ////////////////////////////////////////////////////////////////////////////////
-    if(this->noBackoffWait != NULL) {
+    // No backoff wait
+    if (this->noBackoffWait != NULL) {
         jboolean jbNoBackoffWait = *this->noBackoffWait == true ? JNI_TRUE : JNI_FALSE;
         jobject jobjNoBackoffWait = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbNoBackoffWait);
         jfieldID fNoBackoffWait = miInit.env->GetFieldID(clsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
@@ -155,60 +156,59 @@ jobject AdjustTestOptions2dx::getTestOptions() {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void* AdjustTestOptions2dx::getTestOptions() {
     ATLAdjustTestOptions2dx *testOptions = new ATLAdjustTestOptions2dx();
-
     testOptions->setBaseUrl(this->baseUrl);
     testOptions->setGdprUrl(this->gdprUrl);
-    
-    // base path //////////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->assignBasePath) {
+
+    // Base path
+    if (this->assignBasePath) {
         testOptions->setBasePath(this->basePath);
     }
 
-    // gdpr path //////////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->assignGdprPath) {
+    // GDPR path
+    if (this->assignGdprPath) {
         testOptions->setGdprPath(this->gdprPath);
     }
 
-    // timerIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->timerIntervalInMilliseconds != NULL) {
+    // Timer interval in milliseconds
+    if (this->timerIntervalInMilliseconds != NULL) {
         testOptions->setTimerIntervalInMilliseconds(*this->timerIntervalInMilliseconds);
     }
 
-    // timerStartInMilliseconds //////////////////////////////////////////////////////////////////////////////////////
-    if(this->timerStartInMilliseconds != NULL) {
+    // Timer start in milliseconds
+    if (this->timerStartInMilliseconds != NULL) {
         testOptions->setTimerStartInMilliseconds(*this->timerStartInMilliseconds);
     }
-    
-    // sessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->sessionIntervalInMilliseconds != NULL) {
+
+    // Session interval in milliseconds
+    if (this->sessionIntervalInMilliseconds != NULL) {
         testOptions->setSessionIntervalInMilliseconds(*this->sessionIntervalInMilliseconds);
     }
-    
-    // subsessionIntervalInMilliseconds ////////////////////////////////////////////////////////////////////////////////
-    if(this->subsessionIntervalInMilliseconds != NULL) {
+
+    // Sub-session interval in milliseconds
+    if (this->subsessionIntervalInMilliseconds != NULL) {
         testOptions->setSubsessionIntervalInMilliseconds(*this->subsessionIntervalInMilliseconds);
     }
 
-    // teardown ////////////////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->teardown != NULL) {
+    // Teardown
+    if (this->teardown != NULL) {
         testOptions->setTeardown(*this->teardown);
     }
-    
-    // deleteState /////////////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->deleteState != NULL) {
+
+    // Delete state
+    if (this->deleteState != NULL) {
         testOptions->setDeleteState(*this->deleteState);
     }
-    
-    // noBackoffWait //////////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->noBackoffWait != NULL) {
+
+    // No backoff wait
+    if (this->noBackoffWait != NULL) {
         testOptions->setNoBackoffWait(*this->noBackoffWait);
     }
-    
-    // iAdFrameworkEnabled ////////////////////////////////////////////////////////////////////////////////////////////
-    if(this->iAdFrameworkEnabled != NULL) {
+
+    // iAd framework enabled
+    if (this->iAdFrameworkEnabled != NULL) {
         testOptions->setIAdFrameworkEnabled(*this->iAdFrameworkEnabled);
     }
-    
+
     return (void*)testOptions;
 }
 #endif

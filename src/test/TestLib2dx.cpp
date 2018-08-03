@@ -1,8 +1,9 @@
 //
 //  TestLib2dx.cpp
-//  Adjust SDK Test Library Wrapper
+//  Adjust SDK
 //
-//  Created by Srdjan Tubin on 29/06/18.
+//  Created by Srdjan Tubin (@2beens) on 29th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #include "TestLib2dx.h"
@@ -34,10 +35,10 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     jclass clsTestLibrary = miInit.env->FindClass("com/adjust/testlibrary/TestLibrary");
     jmethodID midInit = miInit.env->GetMethodID(clsTestLibrary, "<init>", "(Ljava/lang/String;Lcom/adjust/testlibrary/ICommandJsonListener;)V");
     
-    // baseUrl
+    // Base URL
     jstring jBaseUrl = miInit.env->NewStringUTF(baseUrl.c_str());
 
-    // command listener
+    // Command listener
     cocos2d::JniMethodInfo miInitCommJsonListener;
     if (!cocos2d::JniHelper::getMethodInfo(miInitCommJsonListener, "com/adjust/testlibrary/Adjust2dxCommandJsonListenerCallback", "<init>", "()V")) {
         return;
@@ -47,7 +48,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     jmethodID midInitCommJsonListener = miInitCommJsonListener.env->GetMethodID(clsAdjust2dxCommandJsonListenerCallback, "<init>", "()V");
     jobject jCommListenerCallbackProxy = miInitCommJsonListener.env->NewObject(clsAdjust2dxCommandJsonListenerCallback, midInitCommJsonListener);
 
-    // tet library init
+    // Initialise test library
     jobject jobjTestLib = miInit.env->NewObject(clsTestLibrary, midInit, jBaseUrl, jCommListenerCallbackProxy);
     testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(jobjTestLib);
 
@@ -63,7 +64,6 @@ void TestLib2dx::addTest(std::string testName) {
     if (testLibrary == NULL) {
         return;
     }
-
     cocos2d::JniMethodInfo miAddTest;
     if (!cocos2d::JniHelper::getMethodInfo(miAddTest, "com/adjust/testlibrary/TestLibrary", "addTest", "(Ljava/lang/String;)V")) {
         return;
@@ -82,7 +82,6 @@ void TestLib2dx::addTestDirectory(std::string testDirectory) {
     if (testLibrary == NULL) {
         return;
     }
-
     cocos2d::JniMethodInfo miAddTestDir;
     if (!cocos2d::JniHelper::getMethodInfo(miAddTestDir, "com/adjust/testlibrary/TestLibrary", "addTestDirectory", "(Ljava/lang/String;)V")) {
         return;
@@ -101,7 +100,6 @@ void TestLib2dx::startTestSession(std::string clientSdk) {
     if (testLibrary == NULL) {
         return;
     }
-
     cocos2d::JniMethodInfo miStartTestSession;
     if (!cocos2d::JniHelper::getMethodInfo(miStartTestSession, "com/adjust/testlibrary/TestLibrary", "startTestSession", "(Ljava/lang/String;)V")) {
         return;
@@ -120,7 +118,6 @@ void TestLib2dx::addInfoToSend(std::string key, std::string value) {
     if (testLibrary == NULL) {
         return;
     }
-
     cocos2d::JniMethodInfo miAddInfoToSend;
     if (!cocos2d::JniHelper::getMethodInfo(miAddInfoToSend, "com/adjust/testlibrary/TestLibrary", "addInfoToSend", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
@@ -141,7 +138,6 @@ void TestLib2dx::sendInfoToServer(std::string basePath) {
     if (testLibrary == NULL) {
         return;
     }
-
     cocos2d::JniMethodInfo miSendInfoToServer;
     if (!cocos2d::JniHelper::getMethodInfo(miSendInfoToServer, "com/adjust/testlibrary/TestLibrary", "sendInfoToServer", "(Ljava/lang/String;)V")) {
         return;

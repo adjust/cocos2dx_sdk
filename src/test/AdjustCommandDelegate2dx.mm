@@ -2,8 +2,8 @@
 //  AdjustCommandDelegate.mm
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 30/07/18.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Created by Srdjan Tubin (@2beens) on 30th July 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #import <objc/runtime.h>
@@ -19,7 +19,7 @@
         defaultInstance = [[AdjustCommandDelegate2dx alloc] init];
         [defaultInstance setCommandExecutorCallback:commandExecutorCallbackId];
     });
-    
+
     return defaultInstance;
 }
 
@@ -37,11 +37,10 @@
     if (nil == _commandExecutorCallback) {
         return;
     }
-    
+
     std::string strClassName = std::string([className UTF8String]);
     std::string strMethodName = std::string([methodName UTF8String]);
     std::string strJsonParameters = std::string([jsonParameters UTF8String]);
-
     _commandExecutorCallback(strClassName, strMethodName, strJsonParameters);
 }
 

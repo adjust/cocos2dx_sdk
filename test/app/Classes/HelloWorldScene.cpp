@@ -2,7 +2,8 @@
 //  HelloWorldScene.cpp
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #include <platform/CCApplication.h>
@@ -29,7 +30,7 @@ static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecuto
 
 void TestApp::initTestLibrary() {
     auto func = [](std::string className, std::string methodName, std::string jsonParameters) {
-        CCLOG(">>>>>> EXECUTING COMMAND: %s.%s <<<<<<", className.c_str(), methodName.c_str());
+        CCLOG("[AdjustTest]: Executing command: %s.%s", className.c_str(), methodName.c_str());
         Command *command = new Command(className, methodName, jsonParameters);
         commandExecutorInstance->executeCommand(command);
     };
@@ -37,10 +38,7 @@ void TestApp::initTestLibrary() {
     this->testLibrary = new TestLib2dx(baseUrl, func);
 }
 
-// on "init" you need to initialize your instance
 bool TestApp::init() {
-    //////////////////////////////
-    // super init first
     if (!Scene::init()) {
         return false;
     }
@@ -55,35 +53,30 @@ bool TestApp::init() {
     label->setSystemFontSize(19);
     label->setTextColor(Color4B::BLUE);
 
-    // position the label on the center of the screen
+    // Position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width / 2,
                             origin.y + visibleSize.height - label->getContentSize().height));
 
-    // add the label as a child to this layer
+    // Add the label as a child to this layer
     this->addChild(label, 1);
 
-    /////////////////////////////
-    // add main menu
+    // Add main menu
     auto mainMenu = Menu::create();
     int index = 2;
     int offset = 35;
     int divide = 20;
 
     // Start test session
-    auto position =
-            Vec2(origin.x + visibleSize.width / 2,
-                 origin.y + visibleSize.height - label->getContentSize().height
-                 + offset
-                 - divide * (++index));
+    auto position = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height + offset - divide * (++index));
     makeButton(mainMenu, "Start Test Session", position, CC_CALLBACK_1(TestApp::onStartTestSession, this));
 
-    // create and initialize Test Library Wrapper
+    // Create and initialize test library wrapper
     TestApp::initTestLibrary();
     
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    CCLOG(">>> Start test session called! <<<");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    CCLOG("[AdjustTest]: Start test session called!");
     this->testLibrary->startTestSession("cocos2d-x4.14.0@ios4.14.2");
-    #endif
+#endif
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
@@ -92,8 +85,7 @@ bool TestApp::init() {
 }
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
-    CCLOG(">>> Start test session called! <<<");
-
+    CCLOG("[AdjustTest]: Start test session called!");
     #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         this->testLibrary->startTestSession("cocos2d-x4.14.0@ios4.14.2");
     #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -108,7 +100,6 @@ void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccM
 
     auto menuItem = MenuItemLabel::create(itemlabel);
     menuItem->setCallback(callback);
-
     menuItem->setPosition(position);
 
     menu->addChild(menuItem, 2);

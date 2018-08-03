@@ -29,12 +29,10 @@ public:
     bool *noBackoffWait = NULL;
     bool assignBasePath = false;
     bool assignGdprPath = false;
-
     // Android specific
     bool *setContext = NULL;
     bool *tryInstallReferrer = NULL;
     bool *useTestConnectionOptions = NULL;
-
     // iOS specific
     bool *iAdFrameworkEnabled = NULL;
     bool *deleteState = NULL;

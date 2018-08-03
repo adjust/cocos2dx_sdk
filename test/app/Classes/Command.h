@@ -2,17 +2,17 @@
 //  Command.h
 //  Adjust SDK
 //
-//  Created by Srdjan Tubin on 04/06/18.
+//  Created by Srdjan Tubin (@2beens) on 4th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef  _TESTAPP_COMMAND_H_
 #define  _TESTAPP_COMMAND_H_
 
-#include <vector>
 #include <map>
 #include <string>
-
-#include "jsonParser/json.hpp"
+#include <vector>
+#include "json/json.hpp"
 
 class Command {
 private:

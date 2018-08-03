@@ -1,8 +1,9 @@
 //
 //  TestLib2dx.h
-//  Adjust SDK Test Library Wrapper
+//  Adjust SDK
 //
-//  Created by Srdjan Tubin on 29/06/18.
+//  Created by Srdjan Tubin (@2beens) on 29th June 2018.
+//  Copyright © 2018 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_TESTLIB2DX_H_

@@ -42,9 +42,9 @@ public:
     static std::string getAdid();
     static AdjustAttribution2dx getAttribution();
 
-    // only for testing
+    // For testing purposes only.
     static void setTestOptions(ATLAdjustTestOptions2dx *testOptions);
-    static void teardownADJDelegate();
+    static void teardown();
 };
 
 #endif /* _ADJUST_ADJUST2DX_H_ */
