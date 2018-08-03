@@ -19,11 +19,11 @@ Scene *TestApp::createScene() {
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-static std::string baseUrl = "http://192.168.8.134:8080";
-static std::string gdprUrl = "http://192.168.8.134:8080";
+static std::string baseUrl = "http://192.168.8.235:8080";
+static std::string gdprUrl = "http://192.168.8.235:8080";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-static std::string baseUrl = "https://192.168.8.72:8443";
-static std::string gdprUrl = "https://192.168.8.72:8443";
+static std::string baseUrl = "https://192.168.8.235:8443";
+static std::string gdprUrl = "https://192.168.8.235:8443";
 #endif
 
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);
@@ -73,9 +73,11 @@ bool TestApp::init() {
     // Create and initialize test library wrapper
     TestApp::initTestLibrary();
     
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     CCLOG("[AdjustTest]: Start test session called!");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     this->testLibrary->startTestSession("cocos2d-x4.14.0@ios4.14.2");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    this->testLibrary->startTestSession("cocos2d-x4.14.0@android4.14.0");
 #endif
 
     // Add main menu to screen
