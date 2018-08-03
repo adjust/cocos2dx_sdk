@@ -38,26 +38,21 @@ public:
     static std::string getAdid();
     static AdjustAttribution2dx getAttribution();
 
-    // Android-specific
+    // Android specific methods.
     static void setReferrer(std::string referrer);
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));
     static std::string getAmazonAdId();
     static void onResume();
     static void onPause();
 
-    // iOS-specific
+    // iOS specific methods.
     static std::string getIdfa();
 
-    // Windows-specific
-    static std::string getWindowsAdId();
-    static void applicationPaused();
-    static void applicationResumed();
-
-    // TestApp-specific
+    // For testing purposes only.
     static void setTestOptions(AdjustTestOptions2dx testOptions);
-    #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    static void teardownADJDelegate();
-    #endif
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    static void teardown();
+#endif
 };
 
 #endif /* ADJUST_ADJUST2DX_H_ */

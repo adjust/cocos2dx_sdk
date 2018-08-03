@@ -185,7 +185,7 @@ elif [ "$APP_TYPE" == "test" ]; then
 	cd ${ROOT_DIR}
 	cp -Rfv src/* ${APP_PATH}/Classes/Adjust/
 	cd ${ROOT_DIR}
-	cp -Rfv src/* ${APP_PATH}/Classes/Adjust/
+	cp -Rfv test/app/Classes/* ${APP_PATH}/Classes/
 	echo -e "${CYAN}[ADJUST][BUILD][$REPO_TYPE_UC][$BUILD_TYPE_UC]:${GREEN} Success. Build & run with Android Studio from \`proj.android\` directory. Make sure Android.mk file is modified in accordance with README instructions. ${NC}"
 	echo -e "${CYAN}[ADJUST][BUILD][$REPO_TYPE_UC][$BUILD_TYPE_UC]:${GREEN} Done! ${NC}"
 fi

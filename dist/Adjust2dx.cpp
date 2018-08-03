@@ -25,15 +25,12 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miOnCreate, "com/adjust/sdk/Adjust", "onCreate", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
         return;
     }
-
     miOnCreate.env->CallStaticVoidMethod(miOnCreate.classID, miOnCreate.methodID, adjustConfig.getConfig());
     onResume();
     cocos2d::JniHelper::getEnv()->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
     onResume();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::ApplicationLaunching(adjustConfig.getConfig());
 #endif
 }
 
@@ -43,12 +40,9 @@ void Adjust2dx::trackEvent(AdjustEvent2dx event) {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com/adjust/sdk/Adjust", "trackEvent", "(Lcom/adjust/sdk/AdjustEvent;)V")) {
         return;
     }
-
     miTrackEvent.env->CallStaticVoidMethod(miTrackEvent.classID, miTrackEvent.methodID, event.getEvent());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackEvent(event.getEvent());
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::TrackEvent(event.getEvent());
 #endif
 }
 
@@ -58,12 +52,9 @@ void Adjust2dx::setEnabled(bool isEnabled) {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
         return;
     }
-
     miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setEnabled(isEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::SetEnabled(isEnabled);
 #endif
 }
 
@@ -73,13 +64,10 @@ bool Adjust2dx::isEnabled() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
         return false;
     }
-
     jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
     return jIsEnabled;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::isEnabled();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    return WRTAdjust::IsEnabled();
 #else
     return false;
 #endif
@@ -91,12 +79,9 @@ void Adjust2dx::setOfflineMode(bool isOffline) {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
         return;
     }
-
     miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setOfflineMode(isOffline);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::SetOfflineMode(isOffline);
 #endif
 }
 
@@ -143,8 +128,6 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
     miSetPushToken.env->CallStaticVoidMethod(miSetPushToken.classID, miSetPushToken.methodID, jPushToken, jContext);
     miSetPushToken.env->DeleteLocalRef(jPushToken);
     miGetContext.env->DeleteLocalRef(jContext);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -156,10 +139,7 @@ void Adjust2dx::sendFirstPackages() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miSendFirstPackages, "com/adjust/sdk/Adjust", "sendFirstPackages", "()V")) {
         return;
     }
-
     miSendFirstPackages.env->CallStaticVoidMethod(miSendFirstPackages.classID, miSendFirstPackages.methodID);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -179,8 +159,6 @@ void Adjust2dx::gdprForgetMe() {
     jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
     miGdprForgetMe.env->CallStaticVoidMethod(miGdprForgetMe.classID, miGdprForgetMe.methodID, jContext);
     miGetContext.env->DeleteLocalRef(jContext);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -189,7 +167,6 @@ void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) 
     ADJAdjust2dx::addSessionCallbackParameter(key, value);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo miAddSessionCallbackParameter;
-
     if (!cocos2d::JniHelper::getStaticMethodInfo(miAddSessionCallbackParameter, "com/adjust/sdk/Adjust", "addSessionCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
@@ -199,8 +176,6 @@ void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) 
     miAddSessionCallbackParameter.env->CallStaticVoidMethod(miAddSessionCallbackParameter.classID, miAddSessionCallbackParameter.methodID, jKey, jValue);
     miAddSessionCallbackParameter.env->DeleteLocalRef(jKey);
     miAddSessionCallbackParameter.env->DeleteLocalRef(jValue);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -218,8 +193,6 @@ void Adjust2dx::addSessionPartnerParameter(std::string key, std::string value) {
     miAddSessionPartnerParameter.env->CallStaticVoidMethod(miAddSessionPartnerParameter.classID, miAddSessionPartnerParameter.methodID, jKey, jValue);
     miAddSessionPartnerParameter.env->DeleteLocalRef(jKey);
     miAddSessionPartnerParameter.env->DeleteLocalRef(jValue);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -235,8 +208,6 @@ void Adjust2dx::removeSessionCallbackParameter(std::string key) {
     jstring jKey = miRemoveSessionCallbackParameter.env->NewStringUTF(key.c_str());
     miRemoveSessionCallbackParameter.env->CallStaticVoidMethod(miRemoveSessionCallbackParameter.classID, miRemoveSessionCallbackParameter.methodID, jKey);
     miRemoveSessionCallbackParameter.env->DeleteLocalRef(jKey);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -252,8 +223,6 @@ void Adjust2dx::removeSessionPartnerParameter(std::string key) {
     jstring jKey = miRemoveSessionPartnerParameter.env->NewStringUTF(key.c_str());
     miRemoveSessionPartnerParameter.env->CallStaticVoidMethod(miRemoveSessionPartnerParameter.classID, miRemoveSessionPartnerParameter.methodID, jKey);
     miRemoveSessionPartnerParameter.env->DeleteLocalRef(jKey);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -265,10 +234,7 @@ void Adjust2dx::resetSessionCallbackParameters() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miResetSessionCallbackParameters, "com/adjust/sdk/Adjust", "resetSessionCallbackParameters", "()V")) {
         return;
     }
-
     miResetSessionCallbackParameters.env->CallStaticVoidMethod(miResetSessionCallbackParameters.classID, miResetSessionCallbackParameters.methodID);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -280,10 +246,7 @@ void Adjust2dx::resetSessionPartnerParameters() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miResetSessionPartnerParameters, "com/adjust/sdk/Adjust", "resetSessionPartnerParameters", "()V")) {
         return;
     }
-
     miResetSessionPartnerParameters.env->CallStaticVoidMethod(miResetSessionPartnerParameters.classID, miResetSessionPartnerParameters.methodID);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -305,8 +268,6 @@ std::string Adjust2dx::getAdid() {
         miGetAdid.env->DeleteLocalRef(jAdid);
     }
     return adid;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -424,8 +385,6 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
     return attribution2dx;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-
 #endif
 }
 
@@ -497,9 +456,7 @@ std::string Adjust2dx::getAmazonAdId() {
     }
     miGetContext.env->DeleteLocalRef(jContext);
     return adid;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return "";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+#else
     return "";
 #endif
 }
@@ -510,7 +467,6 @@ void Adjust2dx::onResume() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miOnResume, "com/adjust/sdk/Adjust", "onResume", "()V")) {
         return;
     }
-
     miOnResume.env->CallStaticVoidMethod(miOnResume.classID, miOnResume.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackSubsessionStart();
@@ -523,7 +479,6 @@ void Adjust2dx::onPause() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(miOnPause, "com/adjust/sdk/Adjust", "onPause", "()V")) {
         return;
     }
-
     miOnPause.env->CallStaticVoidMethod(miOnPause.classID, miOnPause.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackSubsessionEnd();
@@ -533,55 +488,26 @@ void Adjust2dx::onPause() {
 std::string Adjust2dx::getIdfa() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getIdfa();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#else
     return "";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    return "";
-#endif
-}
-
-std::string Adjust2dx::getWindowsAdId() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    Platform::String^ managedAdId = WRTAdjust::GetWindowsAdId();
-    std::wstring wstrAdId(managedAdId->Begin());
-    std::string adId(wstrAdId.begin(), wstrAdId.end());
-    return adId;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return "";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    return "";
-#endif
-}
-
-void Adjust2dx::applicationPaused() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::ApplicationDeactivated();
-#endif
-}
-
-void Adjust2dx::applicationResumed() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjust::ApplicationActivated();
 #endif
 }
 
 void Adjust2dx::setTestOptions(AdjustTestOptions2dx testOptions) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    jobject jobjTestOptions = testOptions.getTestOptions();
-    
+    jobject jTestOptions = testOptions.getTestOptions();
     cocos2d::JniMethodInfo miSetTestOptions;
     if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
         return;
     }
-
-    miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jobjTestOptions);
+    miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setTestOptions((ATLAdjustTestOptions2dx *)testOptions.getTestOptions());
 #endif
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-void Adjust2dx::teardownADJDelegate() {
-    ADJAdjust2dx::teardownADJDelegate();
+void Adjust2dx::teardown() {
+    ADJAdjust2dx::teardown();
 }
 #endif
