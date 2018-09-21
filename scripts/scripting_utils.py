@@ -68,9 +68,12 @@ def copy_files(fileNamePattern, sourceDir, destDir):
         debug('copying: {0} -> {1}'.format(file, destDir))
         shutil.copy(file, destDir)
 
-def copy_dir_contents(sourceDir, destDir):
-    debug('copying dir contents: {0} -> {1}'.format(sourceDir, destDir))
-    copy_tree(sourceDir, destDir)
+def copy_dir_contents(source_dir, dest_dir, copy_symlinks=False):
+    debug('copying dir contents: {0} -> {1}'.format(source_dir, dest_dir))
+    if not copy_symlinks:
+        copy_tree(source_dir, dest_dir)
+    else:
+        shutil.copytree(source_dir, dest_dir, symlinks=True);
 
 def remove_files(fileNamePattern, sourceDir, log=True):
     for file in glob.glob(sourceDir + '/' + fileNamePattern):

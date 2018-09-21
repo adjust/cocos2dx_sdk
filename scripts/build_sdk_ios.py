@@ -15,8 +15,8 @@ def build_example(root_dir, ios_submodule_dir, configuration, app_path):
     # ------------------------------------------------------------------
     # Copying new AdjustSdk.framework to example app
     debug_green('Copying new AdjustSdk.framework to example app ...')
-    remove_file_if_exists('{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path))
-    copy_file('{0}/libs/ios/AdjustSdk.framework'.format(root_dir), '{0}/proj.ios_mac/ios'.format(app_path))
+    remove_dir_if_exists('{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path))
+    copy_dir_contents('{0}/libs/ios/AdjustSdk.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path), copy_symlinks=True)
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust fodler
@@ -40,16 +40,16 @@ def build_test(root_dir, ios_submodule_dir, configuration, app_path):
     # ------------------------------------------------------------------
     # Copying new AdjustSdk.framework & AdjustTestLibrary.framework to example app
     debug_green('Copying new AdjustSdk.framework & AdjustTestLibrary.framework to test app ...')
-    remove_file_if_exists('{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path))
-    remove_file_if_exists('{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path))
-    copy_file('{0}/libs/ios/AdjustSdk.framework'.format(root_dir), '{0}/proj.ios_mac/ios'.format(app_path))
-    copy_file('{0}/libs/ios/AdjustTestLibrary.framework'.format(root_dir), '{0}/proj.ios_mac/ios'.format(app_path))
+    remove_dir_if_exists('{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path))
+    remove_dir_if_exists('{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path))
+    copy_dir_contents('{0}/libs/ios/AdjustSdk.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path), copy_symlinks=True)
+    copy_dir_contents('{0}/libs/ios/AdjustTestLibrary.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path), copy_symlinks=True)
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust folder
     debug_green('Updating Adjust SDK C++ source files in {0}/Classes/Adjust fodler ...'.format(app_path))
     recreate_dir('{0}/Classes/Adjust'.format(app_path))
-    copy_dir_contents('{0}/src'.format(root_dir), '{0}/Classes/Adjust/'.format(app_path))
+    copy_dir_contents('{0}/src'.format(root_dir), '{0}/Classes/Adjust'.format(app_path))
     copy_dir_contents('{0}/test/app/Classes'.format(root_dir), '{0}/Classes'.format(app_path))
 
     # ------------------------------------------------------------------
@@ -92,9 +92,10 @@ def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # ------------------------------------------------------------------
     # Copying AdjustSdk.framework to ${ROOT_DIR}/${LIB_OUT_DIR}
     debug_green('Copying AdjustSdk.framework to {0} ...'.format(lib_out_dir))
-    copy_file('{0}/Frameworks/Static/AdjustSdk.framework'.format(build_dir), '{0}/AdjustSdk.framework'.format(lib_out_dir))
+    copy_dir_contents('{0}/Frameworks/Static/AdjustSdk.framework'.format(build_dir), '{0}/AdjustSdk.framework'.format(lib_out_dir), copy_symlinks=True)
 
     # ------------------------------------------------------------------
     # Copying AdjustTestLibrary.framework to ${ROOT_DIR}/${LIB_OUT_DIR}
-    debug_green('Copying AdjustTestLibrary.framework to {0} ...'.format(lib_out_dir))
-    copy_file('{0}/Frameworks/Static/AdjustTestLibrary.framework'.format(build_dir), '{0}/AdjustTestLibrary.framework'.format(lib_out_dir))
+    if with_test_lib:
+        debug_green('Copying AdjustTestLibrary.framework to {0} ...'.format(lib_out_dir))
+        copy_dir_contents('{0}/Frameworks/Static/AdjustTestLibrary.framework'.format(build_dir), '{0}/AdjustTestLibrary.framework'.format(lib_out_dir), copy_symlinks=True)
