@@ -208,29 +208,11 @@ def gradle_run(options):
         cmd_params.append(opt)
     execute_command(cmd_params)
 
-def get_javac_path():
-    java_home_7_env = get_env_variable('JAVA_HOME_7')
-    return '{0}/bin/javac'.format(java_home_7_env)
-
-def get_jar_path():
-    java_home_7_env = get_env_variable('JAVA_HOME_7')
-    return '{0}/bin/jar'.format(java_home_7_env)
-
-def get_android_jar_path():
-    android_home = get_env_variable('ANDROID_HOME')
-    return '{0}/platforms/android-23/android.jar'.format(android_home)
-
-def unpack_adjust_android_jar():
-    execute_command([get_javac_path(), '-cp', 'adjust-android.jar:{0}'.format(get_android_jar_path()), 'com/adjust/sdk/*.java'])
-
-def unpack_adjust_testing_jar():
-    execute_command([get_javac_path(), '-cp', 'adjust-testing.jar:{0}'.format(get_android_jar_path()), 'com/adjust/testlibrary/*.java'])
-
-def inject_cpp_bridge():
-    execute_command([get_jar_path(), 'uf', 'adjust-android.jar', 'com/adjust/sdk/*.class'])
-
-def inject_cpp_testing_bridge():
-    execute_command([get_jar_path(), 'uf', 'adjust-testing.jar', 'com/adjust/testlibrary/*.class'])
+def inject_cpp_bridge(android_proxy_dir, with_test_lib):
+    if with_test_lib:
+        execute_command(['{0}/inject_cpp_bridge.sh'.format(android_proxy_dir), '--with-test-lib'])
+    else:
+        execute_command(['{0}/inject_cpp_bridge.sh'.format(android_proxy_dir)])
 
 def update_dist(root_dir):
     debug_green('Populate dist folder with files needed for clients ...')

@@ -60,7 +60,6 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     # Copying Adjust SDK and test JAR files to Cocos2d-x test app at APP_PATH
     debug_green('Copying Adjust SDK and test JAR files to Cocos2d-x test app at {0} ...'.format(app_path))
     create_dir_if_not_exist('{0}/proj.android/app/libs'.format(app_path))
-    # TODO: copy of adjust-android.jar might not be needed (it is already in the root_dir/libs/android)
     copy_file('{0}/adjust-android.jar'.format(android_libs_dir), '{0}/proj.android/app/libs/adjust-android.jar'.format(app_path))
     copy_file('{0}/adjust-testing.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-testing.jar'.format(app_path))
     copy_file('{0}/gson-2.8.1.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.1.jar'.format(app_path))
@@ -121,27 +120,9 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         copy_file('{0}/classes.jar'.format(test_libs_in_dir), '{0}/adjust-testing.jar'.format(proxy_dir))
 
     # ------------------------------------------------------------------
-    # Unpacking adjust-android.jar file
-    debug_green('Unpacking adjust-android.jar file ...')
+    # Injecting C++ bridge changes
     change_dir(proxy_dir)
-    unpack_adjust_android_jar()
-
-    # ------------------------------------------------------------------
-    # Unpacking adjust-testing.jar file
-    if with_test_lib:
-        debug_green('Unpacking adjust-testing.jar file ...')
-        unpack_adjust_testing_jar()
-
-    # ------------------------------------------------------------------
-    # Injecting C++ bridge Java classes to adjust-android.jar
-    debug_green('Injecting C++ bridge Java classes to adjust-android.jar ...')
-    inject_cpp_bridge()
-
-    # ------------------------------------------------------------------
-    # Injecting C++ bridge Java classes to adjust-testing.jar
-    if with_test_lib:
-        debug_green('Injecting C++ bridge Java classes to adjust-testing.jar ...')
-        inject_cpp_testing_bridge()
+    inject_cpp_bridge(proxy_dir, with_test_lib)
 
     # ------------------------------------------------------------------
     # Deleting .class files
@@ -159,4 +140,4 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
     # Copying resulting adjust-testing.jar into test libs out dir
     if with_test_lib:
         debug_green('Copying resulting adjust-testing.jar into {0} ...'.format(test_libs_out_dir))
-        copy_file('{0}/adjust-testing.jar'.format(proxy_dir), '{0}/adjust-android.jar'.format(test_libs_out_dir))    
+        copy_file('{0}/adjust-testing.jar'.format(proxy_dir), '{0}/adjust-testing.jar'.format(test_libs_out_dir))    
