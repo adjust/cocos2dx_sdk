@@ -92,9 +92,6 @@ if [ "$PLATFORM" == "android" ]; then
 		fi
 		echo -e "${CYAN}[ADJUST][BUILD][$REPO_TYPE_UC][$BUILD_TYPE_UC]:${GREEN} Done! ${NC}"
 	fi
-
-
-
 elif [ "$PLATFORM" == "ios" ]; then
 	if [ "$APP_TYPE" == "example" ]; then
 		echo -e "${CYAN}[ADJUST][BUILD][$REPO_TYPE_UC][$BUILD_TYPE_UC]:${GREEN} Building AdjustSdk.framework file ... ${NC}"
