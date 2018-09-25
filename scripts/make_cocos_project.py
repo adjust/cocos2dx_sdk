@@ -24,7 +24,7 @@ app_path    = args.app_path
 recreate_dir(app_path)
 
 try:
-    if args.apptype is 'example':
+    if args.apptype == 'example':
         # ------------------------------------------------------------------
         # paths
         example_dir = '{0}/example'.format(root_dir)
