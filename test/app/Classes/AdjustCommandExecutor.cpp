@@ -262,7 +262,7 @@ void AdjustCommandExecutor::config() {
             }
         }
         catch (const std::exception &e) {
-            CCLOG("\n[AdjustCommandExecutor]: appSecret exceotion: %s", e.what());
+            CCLOG("\n[AdjustCommandExecutor]: appSecret exception: %s", e.what());
         }
     }
 
