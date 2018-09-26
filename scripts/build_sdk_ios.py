@@ -43,7 +43,7 @@ def build_test(root_dir, ios_submodule_dir, configuration, app_path):
     remove_dir_if_exists('{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path))
     remove_dir_if_exists('{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path))
     copy_dir_contents('{0}/libs/ios/AdjustSdk.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustSdk.framework'.format(app_path), copy_symlinks=True)
-    copy_dir_contents('{0}/libs/ios/AdjustTestLibrary.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path), copy_symlinks=True)
+    copy_dir_contents('{0}/test/libs/ios/AdjustTestLibrary.framework'.format(root_dir), '{0}/proj.ios_mac/ios/AdjustTestLibrary.framework'.format(app_path), copy_symlinks=True)
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust folder
