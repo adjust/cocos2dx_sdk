@@ -121,13 +121,20 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"timestamp" value:eventSuccessResponseData.timeStamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:eventSuccessResponseData.adid];
     [self addValueOrEmpty:dictionary key:@"eventToken" value:eventSuccessResponseData.eventToken];
-    [self addValueOrEmpty:dictionary key:@"jsonResponse" value:eventSuccessResponseData.jsonResponse];
 
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string eventToken = std::string([[dictionary objectForKey:@"eventToken"] UTF8String]);
-    std::string jsonResponse = std::string([[dictionary objectForKey:@"jsonResponse"] UTF8String]);
+
+    std::string jsonResponse = "";
+    if (eventSuccessResponseData.jsonResponse != nil) {
+        NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:eventSuccessResponseData.jsonResponse options:0 error:nil];
+        NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                length:[dataJsonResponse length]
+                                                              encoding:NSUTF8StringEncoding];
+        jsonResponse = [stringJsonResponse UTF8String];
+    }
 
     AdjustEventSuccess2dx eventSuccess2dx = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, jsonResponse);
     _eventSuccessCallbackMethod(eventSuccess2dx);
@@ -144,14 +151,21 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"adid" value:eventFailureResponseData.adid];
     [self addValueOrEmpty:dictionary key:@"eventToken" value:eventFailureResponseData.eventToken];
     [dictionary setObject:(eventFailureResponseData.willRetry ? @"true" : @"false") forKey:@"willRetry"];
-    [self addValueOrEmpty:dictionary key:@"jsonResponse" value:eventFailureResponseData.jsonResponse];
 
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string eventToken = std::string([[dictionary objectForKey:@"eventToken"] UTF8String]);
     std::string willRetry = std::string([[dictionary objectForKey:@"willRetry"] UTF8String]);
-    std::string jsonResponse = std::string([[dictionary objectForKey:@"jsonResponse"] UTF8String]);
+
+    std::string jsonResponse = "";
+    if (eventFailureResponseData.jsonResponse != nil) {
+        NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:eventFailureResponseData.jsonResponse options:0 error:nil];
+        NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                length:[dataJsonResponse length]
+                                                              encoding:NSUTF8StringEncoding];
+        jsonResponse = [stringJsonResponse UTF8String];
+    }
 
     AdjustEventFailure2dx eventFailure2dx = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, jsonResponse);
     _eventFailureCallbackMethod(eventFailure2dx);
@@ -166,12 +180,19 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"message" value:sessionSuccessResponseData.message];
     [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionSuccessResponseData.timeStamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:sessionSuccessResponseData.adid];
-    [self addValueOrEmpty:dictionary key:@"jsonResponse" value:sessionSuccessResponseData.jsonResponse];
 
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
-    std::string jsonResponse = std::string([[dictionary objectForKey:@"jsonResponse"] UTF8String]);
+
+    std::string jsonResponse = "";
+    if (sessionSuccessResponseData.jsonResponse != nil) {
+        NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:sessionSuccessResponseData.jsonResponse options:0 error:nil];
+        NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                length:[dataJsonResponse length]
+                                                              encoding:NSUTF8StringEncoding];
+        jsonResponse = [stringJsonResponse UTF8String];
+    }
     
     AdjustSessionSuccess2dx sessionSuccess2dx = AdjustSessionSuccess2dx(adid, message, timestamp, jsonResponse);
     _sessionSuccessCallbackMethod(sessionSuccess2dx);
@@ -187,14 +208,21 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionFailureResponseData.timeStamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:sessionFailureResponseData.adid];
     [dictionary setObject:(sessionFailureResponseData.willRetry ? @"true" : @"false") forKey:@"willRetry"];
-    [self addValueOrEmpty:dictionary key:@"jsonResponse" value:sessionFailureResponseData.jsonResponse];
 
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string willRetry = std::string([[dictionary objectForKey:@"willRetry"] UTF8String]);
-    std::string jsonResponse = std::string([[dictionary objectForKey:@"jsonResponse"] UTF8String]);
 
+    std::string jsonResponse = "";
+    if (sessionFailureResponseData.jsonResponse != nil) {
+        NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:sessionFailureResponseData.jsonResponse options:0 error:nil];
+        NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                length:[dataJsonResponse length]
+                                                              encoding:NSUTF8StringEncoding];
+        jsonResponse = [stringJsonResponse UTF8String];
+    }
+    
     AdjustSessionFailure2dx sessionFailure2dx = AdjustSessionFailure2dx(adid, message, timestamp, willRetry, jsonResponse);
     _sessionFailureCallbackMethod(sessionFailure2dx);
 }
