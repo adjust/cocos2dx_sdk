@@ -10,10 +10,10 @@
 #define _ADJUST_ADJUST2DX_H_
 
 #include <iostream>
+#include <map>
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
 #include "AdjustAttribution2dx.h"
-#include "ATLAdjustTestOptions2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
 extern const std::string ADJEnvironmentProduction2dx;
@@ -43,7 +43,7 @@ public:
     static AdjustAttribution2dx getAttribution();
 
     // For testing purposes only.
-    static void setTestOptions(ATLAdjustTestOptions2dx *testOptions);
+    static void setTestOptions(std::map<std::string, std::string> testOptions);
     static void teardown();
 };
 
