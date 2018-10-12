@@ -14,10 +14,6 @@ void ADJEvent2dx::initEvent(std::string eventToken) {
              [NSString stringWithUTF8String:eventToken.c_str()]];
 }
 
-void ADJEvent2dx::setTransactionId(std::string transactionId) {
-    [((ADJEvent *)event) setTransactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
-}
-
 void ADJEvent2dx::setRevenue(double amount, std::string currency) {
     [((ADJEvent *)event) setRevenue:amount
                            currency:[NSString stringWithUTF8String:currency.c_str()]];
@@ -31,6 +27,14 @@ void ADJEvent2dx::addCallbackParameter(std::string key, std::string value) {
 void ADJEvent2dx::addPartnerParameter(std::string key, std::string value) {
     [((ADJEvent *)event) addPartnerParameter:[NSString stringWithUTF8String:key.c_str()]
                                        value:[NSString stringWithUTF8String:value.c_str()]];
+}
+
+void ADJEvent2dx::setTransactionId(std::string transactionId) {
+    [((ADJEvent *)event) setTransactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
+}
+
+void ADJEvent2dx::setCallbackId(std::string callbackId) {
+    [((ADJEvent *)event) setCallbackId:[NSString stringWithUTF8String:callbackId.c_str()]];
 }
 
 void ADJEvent2dx::setReceipt(std::string receipt, std::string transactionId) {

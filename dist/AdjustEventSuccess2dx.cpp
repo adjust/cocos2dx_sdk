@@ -24,6 +24,10 @@ std::string AdjustEventSuccess2dx::getEventToken() {
     return this->eventToken;
 }
 
+std::string AdjustEventSuccess2dx::getCallbackId() {
+    return this->callbackId;
+}
+
 std::string AdjustEventSuccess2dx::getJsonResponse() {
     return this->jsonResponse;
 }

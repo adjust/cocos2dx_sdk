@@ -18,6 +18,7 @@ private:
     std::string timestamp;
     std::string willRetry;
     std::string eventToken;
+    std::string callbackId;
     std::string jsonResponse;
 public:
     AdjustEventFailure2dx() {}
@@ -27,12 +28,14 @@ public:
         std::string timestamp,
         std::string willRetry,
         std::string eventToken,
+        std::string callbackId,
         std::string jsonResponse) {
         this->adid = adid;
         this->message = message;
         this->timestamp = timestamp;
         this->willRetry = willRetry;
         this->eventToken = eventToken;
+        this->callbackId = callbackId;
         this->jsonResponse = jsonResponse;
     }
 
@@ -41,6 +44,7 @@ public:
     std::string getWillRetry();
     std::string getTimestamp();
     std::string getEventToken();
+    std::string getCallbackId();
     std::string getJsonResponse();
 };
 

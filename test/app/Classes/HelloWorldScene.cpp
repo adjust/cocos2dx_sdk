@@ -23,11 +23,11 @@ static std::string serverIp = "192.168.8.109";
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 static std::string baseUrl = "http://" + serverIp + ":8080";
 static std::string gdprUrl = "http://" + serverIp + ":8080";
-static std::string clientSdk = "cocos2d-x4.14.0@ios4.14.2";
+static std::string clientSdk = "cocos2d-x4.14.0@ios4.15.0";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static std::string baseUrl = "https://" + serverIp + ":8443";
 static std::string gdprUrl = "https://" + serverIp + ":8443";
-static std::string clientSdk = "cocos2d-x4.14.0@android4.14.0";
+static std::string clientSdk = "cocos2d-x4.14.0@android4.15.0";
 #endif
 
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);

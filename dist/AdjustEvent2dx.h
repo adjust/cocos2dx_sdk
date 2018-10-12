@@ -48,6 +48,7 @@ public:
     bool isValid();
     void setRevenue(double amount, std::string currency);
     void setTransactionId(std::string transactionId);
+    void setCallbackId(std::string callbackId);
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
 

@@ -28,6 +28,10 @@ std::string AdjustEventFailure2dx::getEventToken() {
     return this->eventToken;
 }
 
+std::string AdjustEventFailure2dx::getCallbackId() {
+    return this->callbackId;
+}
+
 std::string AdjustEventFailure2dx::getJsonResponse() {
     return this->jsonResponse;
 }

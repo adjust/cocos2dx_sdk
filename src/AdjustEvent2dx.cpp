@@ -144,6 +144,28 @@ void AdjustEvent2dx::setTransactionId(std::string transactionId) {
 #endif
 }
 
+void AdjustEvent2dx::setCallbackId(std::string callbackId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isEventSet) {
+        event.setCallbackId(callbackId);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (event == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo miSetCallbackId;
+    if (!cocos2d::JniHelper::getMethodInfo(miSetCallbackId, "com/adjust/sdk/AdjustEvent", "setCallbackId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jCallbackId = miSetCallbackId.env->NewStringUTF(callbackId.c_str());
+    miSetCallbackId.env->CallVoidMethod(event, miSetCallbackId.methodID, jCallbackId);
+    miSetCallbackId.env->DeleteLocalRef(jCallbackId);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
+
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
     if (isEventSet) {

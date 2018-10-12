@@ -314,6 +314,7 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventSuccess.getAdid());
             TestLib2dx::addInfoToSend("eventToken", adjustEventSuccess.getEventToken());
+            TestLib2dx::addInfoToSend("callbackId", adjustEventSuccess.getCallbackId());
             if (!adjustEventSuccess.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventSuccess.getJsonResponse());
             }
@@ -329,6 +330,7 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventFailure.getAdid());
             TestLib2dx::addInfoToSend("eventToken", adjustEventFailure.getEventToken());
+            TestLib2dx::addInfoToSend("callbackId", adjustEventFailure.getCallbackId());
             TestLib2dx::addInfoToSend("willRetry", adjustEventFailure.getWillRetry());
             if (!adjustEventFailure.getJsonResponse().empty()) {
                 TestLib2dx::addInfoToSend("jsonResponse", adjustEventFailure.getJsonResponse());
@@ -411,6 +413,11 @@ void AdjustCommandExecutor::event() {
     if (this->command->containsParameter("orderId")) {
         std::string orderId = command->getFirstParameterValue("orderId");
         adjustEvent->setTransactionId(orderId);
+    }
+
+    if (this->command->containsParameter("callbackId")) {
+        std::string callbackId = command->getFirstParameterValue("callbackId");
+        adjustEvent->setCallbackId(callbackId);
     }
 }
 

@@ -22,10 +22,11 @@ public:
         initEvent(eventToken);
     }
 
-    void setTransactionId(std::string transactionId);
     void setRevenue(double amount, std::string currency);
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
+    void setTransactionId(std::string transactionId);
+    void setCallbackId(std::string callbackId);
     void setReceipt(std::string receipt, std::string transactionId);
     bool isValid();
     void* getEvent();

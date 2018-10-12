@@ -151,6 +151,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     std::string timestamp;
     std::string adid;
     std::string eventToken;
+    std::string callbackId;
     std::string willRetry;
     std::string jsonResponse;
 
@@ -159,12 +160,14 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
     jfieldID fTimestampID = env->GetFieldID(clsAdjustEventFailure, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustEventFailure, "adid", "Ljava/lang/String;");
     jfieldID fEventTokenID = env->GetFieldID(clsAdjustEventFailure, "eventToken", "Ljava/lang/String;");
+    jfieldID fCallbackIdID = env->GetFieldID(clsAdjustEventFailure, "callbackId", "Ljava/lang/String;");
     jfieldID fWillRetryID = env->GetFieldID(clsAdjustEventFailure, "willRetry", "Z");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventFailure, "jsonResponse", "Lorg/json/JSONObject;");
     jstring jMessage = (jstring)env->GetObjectField(eventFailureObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(eventFailureObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(eventFailureObject, fAdidID);
     jstring jEventToken = (jstring)env->GetObjectField(eventFailureObject, fEventTokenID);
+    jstring jCallbackId = (jstring)env->GetObjectField(eventFailureObject, fCallbackIdID);
     jboolean jWillRetryObj = env->GetBooleanField(eventFailureObject, fWillRetryID);
     jstring jWillRetry = JNI_TRUE == jWillRetryObj ? env->NewStringUTF("true") : env->NewStringUTF("false");
     jobject jJsonResponseObj = env->GetObjectField(eventFailureObject, fJsonResponseID);
@@ -206,6 +209,15 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
         eventToken = "";
     }
 
+    if (NULL != jCallbackId) {
+        const char *callbackIdCStr = env->GetStringUTFChars(jCallbackId, NULL);
+        callbackId = std::string(callbackIdCStr);
+        env->ReleaseStringUTFChars(jCallbackId, callbackIdCStr);
+        env->DeleteLocalRef(jCallbackId);
+    } else {
+        callbackId = "";
+    }
+
     if (NULL != jWillRetry) {
         const char *willRetryCStr = env->GetStringUTFChars(jWillRetry, NULL);
         willRetry = std::string(willRetryCStr);
@@ -230,7 +242,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
         }
     }
 
-    AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, jsonResponse);
+    AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, callbackId, jsonResponse);
     eventTrackingFailedCallbackMethod(eventFailure);
 }
 
@@ -247,6 +259,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     std::string timestamp;
     std::string adid;
     std::string eventToken;
+    std::string callbackId;
     std::string jsonResponse;
 
     jclass clsAdjustEventSuccess = env->FindClass("com/adjust/sdk/AdjustEventSuccess");
@@ -254,11 +267,13 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
     jfieldID fTimestampID = env->GetFieldID(clsAdjustEventSuccess, "timestamp", "Ljava/lang/String;");
     jfieldID fAdidID = env->GetFieldID(clsAdjustEventSuccess, "adid", "Ljava/lang/String;");
     jfieldID fEventTokenID = env->GetFieldID(clsAdjustEventSuccess, "eventToken", "Ljava/lang/String;");
+    jfieldID fCallbackIdID = env->GetFieldID(clsAdjustEventSuccess, "callbackId", "Ljava/lang/String;");
     jfieldID fJsonResponseID = env->GetFieldID(clsAdjustEventSuccess, "jsonResponse", "Lorg/json/JSONObject;");
     jstring jMessage = (jstring)env->GetObjectField(eventSuccessObject, fMessageID);
     jstring jTimestamp = (jstring)env->GetObjectField(eventSuccessObject, fTimestampID);
     jstring jAdid = (jstring)env->GetObjectField(eventSuccessObject, fAdidID);
     jstring jEventToken = (jstring)env->GetObjectField(eventSuccessObject, fEventTokenID);
+    jstring jCallbackId = (jstring)env->GetObjectField(eventSuccessObject, fCallbackIdID);
     jobject jJsonResponseObj = (jobject)env->GetObjectField(eventSuccessObject, fJsonResponseID);
     jstring jJsonResponse;
 
@@ -298,6 +313,15 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
         eventToken = "";
     }
 
+    if (NULL != jCallbackId) {
+        const char *callbackIdCStr = env->GetStringUTFChars(jCallbackId, NULL);
+        callbackId = std::string(callbackIdCStr);
+        env->ReleaseStringUTFChars(jCallbackId, callbackIdCStr);
+        env->DeleteLocalRef(jCallbackId);
+    } else {
+        callbackId = "";
+    }
+
     if (NULL != jJsonResponseObj) {
         jclass jcJsonObject = env->FindClass("org/json/JSONObject");
         jmethodID jToStringID = env->GetMethodID(jcJsonObject, "toString", "()Ljava/lang/String;");
@@ -313,7 +337,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
         }
     }
 
-    AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, jsonResponse);
+    AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, callbackId, jsonResponse);
     eventTrackingSucceededCallbackMethod(eventSuccess);
 }
 
