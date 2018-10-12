@@ -346,17 +346,17 @@ void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
 }
 
 void AdjustConfig2dx::setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo miSetReadMobileEquipmentIdentity;
-    if (!cocos2d::JniHelper::getMethodInfo(miSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
-        return;
-    }
-
-    miSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, miSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
-#endif
+// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+//     if (config == NULL) {
+//         return;
+//     }
+//     cocos2d::JniMethodInfo miSetReadMobileEquipmentIdentity;
+//     if (!cocos2d::JniHelper::getMethodInfo(miSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
+//         return;
+//     }
+//
+//     miSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, miSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
+// #endif
 }
 
 void AdjustConfig2dx::setProcessName(std::string processName) {
