@@ -27,6 +27,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [Revenue deduplication](#revenue-deduplication)
       * [Callback parameters](#callback-parameters)
       * [Partner parameters](#partner-parameters)
+      * [Callback identifier](#callback-id)
    * [Session parameters](#session-parameters)
       * [Session callback parameters](#session-callback-parameters)
       * [Session partner parameters](#session-partner-parameters)
@@ -396,6 +397,16 @@ Adjust2dx::trackEvent(adjustEvent);
 
 You can read more about special partners and how to integrate them in our [guide to special partners][special-partners].
 
+### <a id="callback-id"></a>Callback identifier
+
+You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdjustEvent2dx` instance:
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setCallbackId("Your-Custom-Id");
+Adjust2dx::trackEvent(adjustEvent);
+```
+
 ### <a id="session-parameters"></a>Session parameters
 
 Some parameters are saved to be sent in every event and session of the Adjust SDK. Once you have added any of these parameters, you don't need to add them again, since they will be saved locally. If you add the same parameter twice, there will be no effect.
@@ -535,6 +546,7 @@ static void eventSuccessCallbackMethod(AdjustEventSuccess2dx eventSuccess) {
     CCLOG("\nMessage: %s", eventSuccess.getMessage().c_str());
     CCLOG("\nTimestamp: %s", eventSuccess.getTimestamp().c_str());
     CCLOG("\nEvent token: %s", eventSuccess.getEventToken().c_str());
+    CCLOG("\Callback ID: %s", eventSuccess.getCallbackId().c_str());
     CCLOG("\nJSON response: %s", eventSuccess.getJsonResponse().c_str());
     CCLOG("\n");
 }
@@ -569,6 +581,7 @@ static void eventFailureCallbackMethod(AdjustEventFailure2dx eventFailure) {
     CCLOG("\nTimestamp: %s", eventFailure.getTimestamp().c_str());
     CCLOG("\nWill retry: %s", eventFailure.getWillRetry().c_str());
     CCLOG("\nEvent token: %s", eventFailure.getEventToken().c_str());
+    CCLOG("\Callback ID: %s", eventFailure.getCallbackId().c_str());
     CCLOG("\nJSON response: %s", eventFailure.getJsonResponse().c_str());
     CCLOG("\n");
 }
@@ -661,6 +674,7 @@ The callback functions will be called after the SDK tries to send a package to t
 Both event response data objects contain:
 
 - `std::string eventToken` the event token, if the package tracked was an event.
+- `std::string callbackId` the custom defined callback ID set on event object.
 
 And both event- and session-failed objects also contain:
 
