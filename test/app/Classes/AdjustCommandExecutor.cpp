@@ -69,49 +69,35 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
 }
 
 void AdjustCommandExecutor::testOptions() {
-    AdjustTestOptions2dx testOptions = AdjustTestOptions2dx();
-    testOptions.baseUrl = this->baseUrl;
-    testOptions.gdprUrl = this->gdprUrl;
+    std::map<std::string, std::string> testOptions;
+    testOptions["baseUrl"] = this->baseUrl;
+    testOptions["gdprUrl"] = this->gdprUrl;
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
         this->gdprPath = command->getFirstParameterValue("basePath");
     }
     if (this->command->containsParameter("timerInterval")) {
-        std::string timerIntervalString = command->getFirstParameterValue("timerInterval");
-        testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
-        *testOptions.timerIntervalInMilliseconds = atol(timerIntervalString.c_str());
+        testOptions["timerIntervalInMilliseconds"] = command->getFirstParameterValue("timerInterval");
     }
     if (this->command->containsParameter("timerStart")) {
-        std::string timerStartString = command->getFirstParameterValue("timerStart");
-        testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
-        *testOptions.timerStartInMilliseconds = atol(timerStartString.c_str());
+        testOptions["timerStartInMilliseconds"] = command->getFirstParameterValue("timerStart");
     }
     if (this->command->containsParameter("sessionInterval")) {
-        std::string sessionIntervalString = command->getFirstParameterValue("sessionInterval");
-        testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-        *testOptions.sessionIntervalInMilliseconds = atol(sessionIntervalString.c_str());
+        testOptions["sessionIntervalInMilliseconds"] = command->getFirstParameterValue("sessionInterval");
     }
     if (this->command->containsParameter("subsessionInterval")) {
-        std::string subsessionIntervalString = command->getFirstParameterValue("subsessionInterval");
-        testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-        *testOptions.subsessionIntervalInMilliseconds = atol(subsessionIntervalString.c_str());
+        testOptions["subsessionIntervalInMilliseconds"] = command->getFirstParameterValue("subsessionInterval");
     }
     if (this->command->containsParameter("tryInstallReferrer")) {
-        std::string tryInstallReferrerString = command->getFirstParameterValue("tryInstallReferrer");
-        testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
-        *testOptions.tryInstallReferrer = (tryInstallReferrerString == "true");
+        testOptions["tryInstallReferrer"] = command->getFirstParameterValue("tryInstallReferrer");
     }
     if (this->command->containsParameter("noBackoffWait")) {
-        std::string noBackoffWaitString = command->getFirstParameterValue("noBackoffWait");
-        testOptions.noBackoffWait = (bool *)malloc(sizeof(bool));
-        *testOptions.noBackoffWait = (noBackoffWaitString == "true");
+        testOptions["noBackoffWait"] = command->getFirstParameterValue("noBackoffWait");
     }
-    testOptions.iAdFrameworkEnabled = (bool *)malloc(sizeof(bool));
     // "false" is default value - iAd will not be used in test app by default.
-    *testOptions.iAdFrameworkEnabled = false;
+    testOptions["iAdFrameworkEnabled"] = "false";
     if (this->command->containsParameter("iAdFrameworkEnabled")) {
-        std::string iAdFrameworkEnabledString = command->getFirstParameterValue("iAdFrameworkEnabled");
-        *testOptions.iAdFrameworkEnabled = (iAdFrameworkEnabledString == "true");
+        testOptions["iAdFrameworkEnabled"] = command->getFirstParameterValue("iAdFrameworkEnabled");
     }
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
@@ -119,64 +105,44 @@ void AdjustCommandExecutor::testOptions() {
         while(toIterator != teardownOptions.end()) {
             std::string teardownOption = (*toIterator);
             if (teardownOption == "resetSdk") {
-                testOptions.teardown = (bool *)malloc(sizeof(bool));
-                *testOptions.teardown = true;
-                testOptions.basePath = this->basePath;
-                testOptions.gdprPath = this->gdprPath;
-                testOptions.assignBasePath = true;
-                testOptions.assignGdprPath = true;
+                testOptions["teardown"] = "true";
+                testOptions["basePath"] = this->basePath;
+                testOptions["gdprPath"] = this->gdprPath;
                 // Android specific
-                testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
-                *testOptions.useTestConnectionOptions = true;
-                testOptions.tryInstallReferrer = (bool *)malloc(sizeof(bool));
-                *testOptions.tryInstallReferrer = false;
-                // iOS specific
+                testOptions["useTestConnectionOptions"] = "true";
+                testOptions["tryInstallReferrer"] = "false";
                 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
                 #endif
             }
             if (teardownOption == "deleteState") {
                 // Android specific
-                testOptions.setContext = (bool *)malloc(sizeof(bool));
-                *testOptions.setContext = true;
+                testOptions["setContext"] = "true";
                 // iOS specific
-                testOptions.deleteState = (bool *)malloc(sizeof(bool));
-                *testOptions.deleteState = true;
+                testOptions["deleteState"] = "true";
             }
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                *testOptions.timerIntervalInMilliseconds = (long) -1;
-                *testOptions.timerStartInMilliseconds = (long) -1;
-                *testOptions.sessionIntervalInMilliseconds = (long) -1;
-                *testOptions.subsessionIntervalInMilliseconds = (long) -1;
+                testOptions["timerIntervalInMilliseconds"] = "-1";
+                testOptions["timerStartInMilliseconds"] = "-1";
+                testOptions["sessionIntervalInMilliseconds"] = "-1";
+                testOptions["subsessionIntervalInMilliseconds"] = "-1";
             }
             if (teardownOption == "sdk") {
-                testOptions.teardown = (bool *)malloc(sizeof(bool));
-                *testOptions.teardown = true;
-                testOptions.basePath = "";
-                testOptions.gdprPath = "";
-                testOptions.assignBasePath = true;
-                testOptions.assignGdprPath = true;
+                testOptions["teardown"] = "true";
+                testOptions["basePath"] = "";
+                testOptions["gdprPath"] = "";
                 // Android specific
-                testOptions.useTestConnectionOptions = (bool *)malloc(sizeof(bool));
-                *testOptions.useTestConnectionOptions = false;
+                testOptions["useTestConnectionOptions"] = "false";
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions.timerIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.timerStartInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.sessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                testOptions.subsessionIntervalInMilliseconds = (long *)malloc(sizeof(long));
-                *testOptions.timerIntervalInMilliseconds = (long) -1;
-                *testOptions.timerStartInMilliseconds = (long) -1;
-                *testOptions.sessionIntervalInMilliseconds = (long) -1;
-                *testOptions.subsessionIntervalInMilliseconds = (long) -1;
+                testOptions["timerIntervalInMilliseconds"] = "-1";
+                testOptions["timerStartInMilliseconds"] = "-1";
+                testOptions["sessionIntervalInMilliseconds"] = "-1";
+                testOptions["subsessionIntervalInMilliseconds"] = "-1";
             }
             toIterator++;
         }

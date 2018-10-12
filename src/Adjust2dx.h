@@ -10,9 +10,9 @@
 #define ADJUST_ADJUST2DX_H_
 
 #include <iostream>
+#include <map>
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
-#include "AdjustTestOptions2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
@@ -49,7 +49,7 @@ public:
     static std::string getIdfa();
 
     // For testing purposes only.
-    static void setTestOptions(AdjustTestOptions2dx testOptions);
+    static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void teardown();
 #endif

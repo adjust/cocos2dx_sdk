@@ -22,7 +22,6 @@
 #include "Adjust/AdjustEventSuccess2dx.h"
 #include "Adjust/AdjustSessionSuccess2dx.h"
 #include "Adjust/AdjustSessionFailure2dx.h"
-#include "Adjust/AdjustTestOptions2dx.h"
 
 class AdjustCommandExecutor {
 private:
