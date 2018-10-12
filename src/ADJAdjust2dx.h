@@ -9,8 +9,8 @@
 #ifndef _ADJUST_ADJUST2DX_H_
 #define _ADJUST_ADJUST2DX_H_
 
-#include <iostream>
 #include <map>
+#include <iostream>
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
 #include "AdjustAttribution2dx.h"
@@ -36,14 +36,12 @@ public:
     static void removeSessionPartnerParameter(std::string key);
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
-
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
     static AdjustAttribution2dx getAttribution();
-
     // For testing purposes only.
-    static void setTestOptions(std::map<std::string, std::string> testOptions);
+    static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();
 };
 

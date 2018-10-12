@@ -22,7 +22,7 @@ extern "C" {
     static void (*sessionTrackingSucceededCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
     static bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
     static void (*adIdCallbackMethod)(std::string adId);
-    // test app/library
+    // Only for testing purposes.
     static void (*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters);
 
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attributionChanged
@@ -39,7 +39,7 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     (JNIEnv *, jobject, jstring);
-    // test app/library
+    // Only for testing purposes.
     JNIEXPORT void JNICALL Java_com_adjust_testlibrary_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
     (JNIEnv *, jobject, jstring, jstring, jstring);
 
@@ -50,7 +50,7 @@ extern "C" {
     void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
-    // test app/library
+    // Only for testing purposes.
     void setExecuteTestLibCommandCallbackMethod(void(*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters));
 }
 #endif

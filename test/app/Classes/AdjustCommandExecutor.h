@@ -13,7 +13,6 @@
 #include <string>
 #include <vector>
 #include "Command.h"
-#include "Adjust/test/TestLib2dx.h"
 #include "Adjust/Adjust2dx.h"
 #include "Adjust/AdjustEvent2dx.h"
 #include "Adjust/AdjustConfig2dx.h"
@@ -22,6 +21,7 @@
 #include "Adjust/AdjustEventSuccess2dx.h"
 #include "Adjust/AdjustSessionSuccess2dx.h"
 #include "Adjust/AdjustSessionFailure2dx.h"
+#include "Adjust/test/TestLib2dx.h"
 
 class AdjustCommandExecutor {
 private:

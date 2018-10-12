@@ -29,7 +29,6 @@
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
 					             deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId;
-
 + (void)teardown;
 
 @end

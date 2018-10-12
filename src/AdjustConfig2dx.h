@@ -13,8 +13,6 @@
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJConfig2dx.h"
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-using namespace AdjustWinRT;
 #endif
 
 #include <iostream>
@@ -25,13 +23,13 @@ using namespace AdjustWinRT;
 #include "AdjustSessionFailure2dx.h"
 
 enum AdjustLogLevel2dx {
-    AdjustLogLevel2dxVerbose    = 1,
-    AdjustLogLevel2dxDebug      = 2,
-    AdjustLogLevel2dxInfo       = 3,
-    AdjustLogLevel2dxWarn       = 4,
-    AdjustLogLevel2dxError      = 5,
-    AdjustLogLevel2dxAssert     = 6,
-    AdjustLogLevel2dxSuppress   = 7 };
+    AdjustLogLevel2dxVerbose = 1,
+    AdjustLogLevel2dxDebug = 2,
+    AdjustLogLevel2dxInfo = 3,
+    AdjustLogLevel2dxWarn = 4,
+    AdjustLogLevel2dxError = 5,
+    AdjustLogLevel2dxAssert = 6,
+    AdjustLogLevel2dxSuppress = 7 };
 
 class AdjustConfig2dx {
 private:
@@ -40,11 +38,7 @@ private:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     bool isConfigSet;
     ADJConfig2dx config;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    bool isConfigSet;
-    WRTAdjustConfig^ config;
 #endif
-
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel);
 
 public:
@@ -56,9 +50,6 @@ public:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isConfigSet = false;
         initConfig(appToken, environment, false);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-        isConfigSet = false;
-        initConfig(appToken, environment, false);
 #endif
     }
 
@@ -66,9 +57,6 @@ public:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initConfig(appToken, environment, allowSuppressLogLevel);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isConfigSet = false;
-        initConfig(appToken, environment, allowSuppressLogLevel);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
         isConfigSet = false;
         initConfig(appToken, environment, allowSuppressLogLevel);
 #endif
@@ -96,12 +84,6 @@ public:
 };
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJConfig2dx getConfig();
-};
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    typedef void(*AttributionCallback)(AdjustAttribution2dx attribution);
-    WRTAdjustConfig^ getConfig();
-    static AttributionCallback attributionCallbackSaved;
-    static void triggerSavedAttributionCallback(AdjustAttribution2dx attribution);
 };
 #endif
 

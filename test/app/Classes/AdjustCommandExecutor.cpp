@@ -108,7 +108,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["teardown"] = "true";
                 testOptions["basePath"] = this->basePath;
                 testOptions["gdprPath"] = this->gdprPath;
-                // Android specific
+                // Android specific.
                 testOptions["useTestConnectionOptions"] = "true";
                 testOptions["tryInstallReferrer"] = "false";
                 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -116,9 +116,9 @@ void AdjustCommandExecutor::testOptions() {
                 #endif
             }
             if (teardownOption == "deleteState") {
-                // Android specific
+                // Android specific.
                 testOptions["setContext"] = "true";
-                // iOS specific
+                // iOS specific.
                 testOptions["deleteState"] = "true";
             }
             if (teardownOption == "resetTest") {
@@ -133,7 +133,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["teardown"] = "true";
                 testOptions["basePath"] = "";
                 testOptions["gdprPath"] = "";
-                // Android specific
+                // Android specific.
                 testOptions["useTestConnectionOptions"] = "false";
             }
             if (teardownOption == "test") {
@@ -454,7 +454,7 @@ void AdjustCommandExecutor::setReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // No referrer in iOS
+    // No referrer in iOS.
 #endif
 }
 
@@ -533,7 +533,7 @@ void AdjustCommandExecutor::sendReferrer() {
     std::string referrer = command->getFirstParameterValue("referrer");
     Adjust2dx::setReferrer(referrer);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // No referrer in iOS
+    // No referrer in iOS.
 #endif
 }
 

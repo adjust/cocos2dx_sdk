@@ -13,8 +13,6 @@
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJEvent2dx.h"
-#else
-using namespace AdjustWinRT;
 #endif
 
 #include <iostream>
@@ -26,9 +24,6 @@ private:
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     bool isEventSet;
     ADJEvent2dx event;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    bool isEventSet;
-    WRTAdjustEvent^ event;
 #endif
     void initEvent(std::string eventToken);
 
@@ -37,9 +32,6 @@ public:
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initEvent(eventToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isEventSet = false;
-        initEvent(eventToken);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
         isEventSet = false;
         initEvent(eventToken);
 #endif
@@ -51,14 +43,11 @@ public:
     void setCallbackId(std::string callbackId);
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
-
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getEvent();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJEvent2dx getEvent();
     void setReceipt(std::string receipt, std::string transactionId);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_WINRT)
-    WRTAdjustEvent^ getEvent();
 #endif
 };
 

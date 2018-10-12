@@ -21,11 +21,11 @@ const std::string AdjustEnvironmentProduction2dx = "production";
 
 void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miOnCreate;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miOnCreate, "com/adjust/sdk/Adjust", "onCreate", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
+    cocos2d::JniMethodInfo jmiOnCreate;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnCreate, "com/adjust/sdk/Adjust", "onCreate", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
         return;
     }
-    miOnCreate.env->CallStaticVoidMethod(miOnCreate.classID, miOnCreate.methodID, adjustConfig.getConfig());
+    jmiOnCreate.env->CallStaticVoidMethod(jmiOnCreate.classID, jmiOnCreate.methodID, adjustConfig.getConfig());
     onResume();
     cocos2d::JniHelper::getEnv()->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -36,11 +36,11 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
 
 void Adjust2dx::trackEvent(AdjustEvent2dx event) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miTrackEvent;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miTrackEvent, "com/adjust/sdk/Adjust", "trackEvent", "(Lcom/adjust/sdk/AdjustEvent;)V")) {
+    cocos2d::JniMethodInfo jmiTrackEvent;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackEvent, "com/adjust/sdk/Adjust", "trackEvent", "(Lcom/adjust/sdk/AdjustEvent;)V")) {
         return;
     }
-    miTrackEvent.env->CallStaticVoidMethod(miTrackEvent.classID, miTrackEvent.methodID, event.getEvent());
+    jmiTrackEvent.env->CallStaticVoidMethod(jmiTrackEvent.classID, jmiTrackEvent.methodID, event.getEvent());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackEvent(event.getEvent());
 #endif
@@ -48,11 +48,11 @@ void Adjust2dx::trackEvent(AdjustEvent2dx event) {
 
 void Adjust2dx::setEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miSetEnabled;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiSetEnabled;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
         return;
     }
-    miSetEnabled.env->CallStaticVoidMethod(miSetEnabled.classID, miSetEnabled.methodID, isEnabled);
+    jmiSetEnabled.env->CallStaticVoidMethod(jmiSetEnabled.classID, jmiSetEnabled.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setEnabled(isEnabled);
 #endif
@@ -60,11 +60,11 @@ void Adjust2dx::setEnabled(bool isEnabled) {
 
 bool Adjust2dx::isEnabled() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miIsEnabled;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
+    cocos2d::JniMethodInfo jmiIsEnabled;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
         return false;
     }
-    jboolean jIsEnabled = miIsEnabled.env->CallStaticBooleanMethod(miIsEnabled.classID, miIsEnabled.methodID);
+    jboolean jIsEnabled = jmiIsEnabled.env->CallStaticBooleanMethod(jmiIsEnabled.classID, jmiIsEnabled.methodID);
     return jIsEnabled;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::isEnabled();
@@ -75,11 +75,11 @@ bool Adjust2dx::isEnabled() {
 
 void Adjust2dx::setOfflineMode(bool isOffline) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miIsOffline;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiIsOffline;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
         return;
     }
-    miIsOffline.env->CallStaticVoidMethod(miIsOffline.classID, miIsOffline.methodID, isOffline);
+    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID, isOffline);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setOfflineMode(isOffline);
 #endif
@@ -89,24 +89,24 @@ void Adjust2dx::appWillOpenUrl(std::string url) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appWillOpenUrl(url);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miAppWillOpenUrl;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miAppWillOpenUrl, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
+    cocos2d::JniMethodInfo jmiAppWillOpenUrl;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAppWillOpenUrl, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
         return;
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
-    jclass jcUri = miAppWillOpenUrl.env->FindClass("android/net/Uri");
-    jmethodID midParse = miAppWillOpenUrl.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
-    jstring jUrl = miAppWillOpenUrl.env->NewStringUTF(url.c_str());
-    jobject jUri = miAppWillOpenUrl.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-    miAppWillOpenUrl.env->CallStaticVoidMethod(miAppWillOpenUrl.classID, miAppWillOpenUrl.methodID, jUri, jContext);
-    miAppWillOpenUrl.env->DeleteLocalRef(jUrl);
-    miAppWillOpenUrl.env->DeleteLocalRef(jUri);
-    miGetContext.env->DeleteLocalRef(jContext);
+    jclass jcUri = jmiAppWillOpenUrl.env->FindClass("android/net/Uri");
+    jmethodID midParse = jmiAppWillOpenUrl.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
+    jstring jUrl = jmiAppWillOpenUrl.env->NewStringUTF(url.c_str());
+    jobject jUri = jmiAppWillOpenUrl.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiAppWillOpenUrl.env->CallStaticVoidMethod(jmiAppWillOpenUrl.classID, jmiAppWillOpenUrl.methodID, jUri, jContext);
+    jmiAppWillOpenUrl.env->DeleteLocalRef(jUrl);
+    jmiAppWillOpenUrl.env->DeleteLocalRef(jUri);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
@@ -114,20 +114,20 @@ void Adjust2dx::setDeviceToken(std::string deviceToken) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setDeviceToken(deviceToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miSetPushToken;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetPushToken, "com/adjust/sdk/Adjust", "setPushToken", "(Ljava/lang/String;Landroid/content/Context;)V")) {
+    cocos2d::JniMethodInfo jmiSetPushToken;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetPushToken, "com/adjust/sdk/Adjust", "setPushToken", "(Ljava/lang/String;Landroid/content/Context;)V")) {
         return;
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
-    jstring jPushToken = miSetPushToken.env->NewStringUTF(deviceToken.c_str());
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-    miSetPushToken.env->CallStaticVoidMethod(miSetPushToken.classID, miSetPushToken.methodID, jPushToken, jContext);
-    miSetPushToken.env->DeleteLocalRef(jPushToken);
-    miGetContext.env->DeleteLocalRef(jContext);
+    jstring jPushToken = jmiSetPushToken.env->NewStringUTF(deviceToken.c_str());
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiSetPushToken.env->CallStaticVoidMethod(jmiSetPushToken.classID, jmiSetPushToken.methodID, jPushToken, jContext);
+    jmiSetPushToken.env->DeleteLocalRef(jPushToken);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
@@ -135,11 +135,11 @@ void Adjust2dx::sendFirstPackages() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::sendFirstPackages();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miSendFirstPackages;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSendFirstPackages, "com/adjust/sdk/Adjust", "sendFirstPackages", "()V")) {
+    cocos2d::JniMethodInfo jmiSendFirstPackages;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSendFirstPackages, "com/adjust/sdk/Adjust", "sendFirstPackages", "()V")) {
         return;
     }
-    miSendFirstPackages.env->CallStaticVoidMethod(miSendFirstPackages.classID, miSendFirstPackages.methodID);
+    jmiSendFirstPackages.env->CallStaticVoidMethod(jmiSendFirstPackages.classID, jmiSendFirstPackages.methodID);
 #endif
 }
 
@@ -147,18 +147,18 @@ void Adjust2dx::gdprForgetMe() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::gdprForgetMe();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miGdprForgetMe;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGdprForgetMe, "com/adjust/sdk/Adjust", "gdprForgetMe", "(Landroid/content/Context;)V")) {
+    cocos2d::JniMethodInfo jmiGdprForgetMe;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGdprForgetMe, "com/adjust/sdk/Adjust", "gdprForgetMe", "(Landroid/content/Context;)V")) {
         return;
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-    miGdprForgetMe.env->CallStaticVoidMethod(miGdprForgetMe.classID, miGdprForgetMe.methodID, jContext);
-    miGetContext.env->DeleteLocalRef(jContext);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiGdprForgetMe.env->CallStaticVoidMethod(jmiGdprForgetMe.classID, jmiGdprForgetMe.methodID, jContext);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
@@ -166,16 +166,16 @@ void Adjust2dx::addSessionCallbackParameter(std::string key, std::string value) 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addSessionCallbackParameter(key, value);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miAddSessionCallbackParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miAddSessionCallbackParameter, "com/adjust/sdk/Adjust", "addSessionCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiAddSessionCallbackParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddSessionCallbackParameter, "com/adjust/sdk/Adjust", "addSessionCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = miAddSessionCallbackParameter.env->NewStringUTF(key.c_str());
-    jstring jValue = miAddSessionCallbackParameter.env->NewStringUTF(value.c_str());
-    miAddSessionCallbackParameter.env->CallStaticVoidMethod(miAddSessionCallbackParameter.classID, miAddSessionCallbackParameter.methodID, jKey, jValue);
-    miAddSessionCallbackParameter.env->DeleteLocalRef(jKey);
-    miAddSessionCallbackParameter.env->DeleteLocalRef(jValue);
+    jstring jKey = jmiAddSessionCallbackParameter.env->NewStringUTF(key.c_str());
+    jstring jValue = jmiAddSessionCallbackParameter.env->NewStringUTF(value.c_str());
+    jmiAddSessionCallbackParameter.env->CallStaticVoidMethod(jmiAddSessionCallbackParameter.classID, jmiAddSessionCallbackParameter.methodID, jKey, jValue);
+    jmiAddSessionCallbackParameter.env->DeleteLocalRef(jKey);
+    jmiAddSessionCallbackParameter.env->DeleteLocalRef(jValue);
 #endif
 }
 
@@ -183,16 +183,16 @@ void Adjust2dx::addSessionPartnerParameter(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addSessionPartnerParameter(key, value);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miAddSessionPartnerParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miAddSessionPartnerParameter, "com/adjust/sdk/Adjust", "addSessionPartnerParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiAddSessionPartnerParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddSessionPartnerParameter, "com/adjust/sdk/Adjust", "addSessionPartnerParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = miAddSessionPartnerParameter.env->NewStringUTF(key.c_str());
-    jstring jValue = miAddSessionPartnerParameter.env->NewStringUTF(value.c_str());
-    miAddSessionPartnerParameter.env->CallStaticVoidMethod(miAddSessionPartnerParameter.classID, miAddSessionPartnerParameter.methodID, jKey, jValue);
-    miAddSessionPartnerParameter.env->DeleteLocalRef(jKey);
-    miAddSessionPartnerParameter.env->DeleteLocalRef(jValue);
+    jstring jKey = jmiAddSessionPartnerParameter.env->NewStringUTF(key.c_str());
+    jstring jValue = jmiAddSessionPartnerParameter.env->NewStringUTF(value.c_str());
+    jmiAddSessionPartnerParameter.env->CallStaticVoidMethod(jmiAddSessionPartnerParameter.classID, jmiAddSessionPartnerParameter.methodID, jKey, jValue);
+    jmiAddSessionPartnerParameter.env->DeleteLocalRef(jKey);
+    jmiAddSessionPartnerParameter.env->DeleteLocalRef(jValue);
 #endif
 }
 
@@ -200,14 +200,14 @@ void Adjust2dx::removeSessionCallbackParameter(std::string key) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeSessionCallbackParameter(key);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miRemoveSessionCallbackParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miRemoveSessionCallbackParameter, "com/adjust/sdk/Adjust", "removeSessionCallbackParameter", "(Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiRemoveSessionCallbackParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveSessionCallbackParameter, "com/adjust/sdk/Adjust", "removeSessionCallbackParameter", "(Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = miRemoveSessionCallbackParameter.env->NewStringUTF(key.c_str());
-    miRemoveSessionCallbackParameter.env->CallStaticVoidMethod(miRemoveSessionCallbackParameter.classID, miRemoveSessionCallbackParameter.methodID, jKey);
-    miRemoveSessionCallbackParameter.env->DeleteLocalRef(jKey);
+    jstring jKey = jmiRemoveSessionCallbackParameter.env->NewStringUTF(key.c_str());
+    jmiRemoveSessionCallbackParameter.env->CallStaticVoidMethod(jmiRemoveSessionCallbackParameter.classID, jmiRemoveSessionCallbackParameter.methodID, jKey);
+    jmiRemoveSessionCallbackParameter.env->DeleteLocalRef(jKey);
 #endif
 }
 
@@ -215,14 +215,14 @@ void Adjust2dx::removeSessionPartnerParameter(std::string key) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeSessionPartnerParameter(key);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miRemoveSessionPartnerParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miRemoveSessionPartnerParameter, "com/adjust/sdk/Adjust", "removeSessionPartnerParameter", "(Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiRemoveSessionPartnerParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveSessionPartnerParameter, "com/adjust/sdk/Adjust", "removeSessionPartnerParameter", "(Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = miRemoveSessionPartnerParameter.env->NewStringUTF(key.c_str());
-    miRemoveSessionPartnerParameter.env->CallStaticVoidMethod(miRemoveSessionPartnerParameter.classID, miRemoveSessionPartnerParameter.methodID, jKey);
-    miRemoveSessionPartnerParameter.env->DeleteLocalRef(jKey);
+    jstring jKey = jmiRemoveSessionPartnerParameter.env->NewStringUTF(key.c_str());
+    jmiRemoveSessionPartnerParameter.env->CallStaticVoidMethod(jmiRemoveSessionPartnerParameter.classID, jmiRemoveSessionPartnerParameter.methodID, jKey);
+    jmiRemoveSessionPartnerParameter.env->DeleteLocalRef(jKey);
 #endif
 }
 
@@ -230,11 +230,11 @@ void Adjust2dx::resetSessionCallbackParameters() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::resetSessionCallbackParameters();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miResetSessionCallbackParameters;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miResetSessionCallbackParameters, "com/adjust/sdk/Adjust", "resetSessionCallbackParameters", "()V")) {
+    cocos2d::JniMethodInfo jmiResetSessionCallbackParameters;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiResetSessionCallbackParameters, "com/adjust/sdk/Adjust", "resetSessionCallbackParameters", "()V")) {
         return;
     }
-    miResetSessionCallbackParameters.env->CallStaticVoidMethod(miResetSessionCallbackParameters.classID, miResetSessionCallbackParameters.methodID);
+    jmiResetSessionCallbackParameters.env->CallStaticVoidMethod(jmiResetSessionCallbackParameters.classID, jmiResetSessionCallbackParameters.methodID);
 #endif
 }
 
@@ -242,11 +242,11 @@ void Adjust2dx::resetSessionPartnerParameters() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::resetSessionPartnerParameters();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miResetSessionPartnerParameters;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miResetSessionPartnerParameters, "com/adjust/sdk/Adjust", "resetSessionPartnerParameters", "()V")) {
+    cocos2d::JniMethodInfo jmiResetSessionPartnerParameters;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiResetSessionPartnerParameters, "com/adjust/sdk/Adjust", "resetSessionPartnerParameters", "()V")) {
         return;
     }
-    miResetSessionPartnerParameters.env->CallStaticVoidMethod(miResetSessionPartnerParameters.classID, miResetSessionPartnerParameters.methodID);
+    jmiResetSessionPartnerParameters.env->CallStaticVoidMethod(jmiResetSessionPartnerParameters.classID, jmiResetSessionPartnerParameters.methodID);
 #endif
 }
 
@@ -254,18 +254,18 @@ std::string Adjust2dx::getAdid() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getAdid();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miGetAdid;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetAdid, "com/adjust/sdk/Adjust", "getAdid", "()Ljava/lang/String;")) {
+    cocos2d::JniMethodInfo jmiGetAdid;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdid", "()Ljava/lang/String;")) {
         return "";
     }
 
-    jstring jAdid = (jstring)miGetAdid.env->CallStaticObjectMethod(miGetAdid.classID, miGetAdid.methodID);
+    jstring jAdid = (jstring)jmiGetAdid.env->CallStaticObjectMethod(jmiGetAdid.classID, jmiGetAdid.methodID);
     std::string adid = "";
     if (NULL != jAdid) {
-        const char *adidCStr = miGetAdid.env->GetStringUTFChars(jAdid, NULL);
+        const char *adidCStr = jmiGetAdid.env->GetStringUTFChars(jAdid, NULL);
         adid = std::string(adidCStr);
-        miGetAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
-        miGetAdid.env->DeleteLocalRef(jAdid);
+        jmiGetAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
+        jmiGetAdid.env->DeleteLocalRef(jAdid);
     }
     return adid;
 #endif
@@ -284,100 +284,100 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
     std::string clickLabel;
     std::string adid;
 
-    cocos2d::JniMethodInfo miGetAttribution;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetAttribution, "com/adjust/sdk/Adjust", "getAttribution", "()Lcom/adjust/sdk/AdjustAttribution;")) {
+    cocos2d::JniMethodInfo jmiGetAttribution;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttribution, "com/adjust/sdk/Adjust", "getAttribution", "()Lcom/adjust/sdk/AdjustAttribution;")) {
         AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
         return attribution2dx;
     }
 
-    jobject jAttribution = miGetAttribution.env->CallStaticObjectMethod(miGetAttribution.classID, miGetAttribution.methodID);
+    jobject jAttribution = jmiGetAttribution.env->CallStaticObjectMethod(jmiGetAttribution.classID, jmiGetAttribution.methodID);
     if (NULL != jAttribution) {
-        jclass clsAdjustAttribution = miGetAttribution.env->FindClass("com/adjust/sdk/AdjustAttribution");
-        jfieldID fTrackerTokenID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
-        jfieldID fTrackerNameID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
-        jfieldID fNetworkID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
-        jfieldID fCampaignID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "campaign", "Ljava/lang/String;");
-        jfieldID fAdgroupID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
-        jfieldID fCreativeID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
-        jfieldID fClickLabelID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
-        jfieldID fAdidID = miGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
-        jstring jTrackerToken = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerTokenID);
-        jstring jTrackerName = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fTrackerNameID);
-        jstring jNetwork = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fNetworkID);
-        jstring jCampaign = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCampaignID);
-        jstring jAdgroup = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdgroupID);
-        jstring jCreative = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fCreativeID);
-        jstring jClickLabel = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fClickLabelID);
-        jstring jAdid = (jstring)miGetAttribution.env->GetObjectField(jAttribution, fAdidID);
+        jclass clsAdjustAttribution = jmiGetAttribution.env->FindClass("com/adjust/sdk/AdjustAttribution");
+        jfieldID jfidTrackerToken = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
+        jfieldID jfidTrackerName = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
+        jfieldID jfidNetwork = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
+        jfieldID jfidCampaign = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "campaign", "Ljava/lang/String;");
+        jfieldID jfidAdgroup = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
+        jfieldID jfidCreative = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
+        jfieldID jfidClickLabel = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
+        jfieldID jfidAdid = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
+        jstring jTrackerToken = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerToken);
+        jstring jTrackerName = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerName);
+        jstring jNetwork = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidNetwork);
+        jstring jCampaign = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCampaign);
+        jstring jAdgroup = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidAdgroup);
+        jstring jCreative = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCreative);
+        jstring jClickLabel = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidClickLabel);
+        jstring jAdid = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidAdid);
 
         if (NULL != jTrackerToken) {
-            const char *trackerTokenCStr = miGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
+            const char *trackerTokenCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
             trackerToken = std::string(trackerTokenCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
-            miGetAttribution.env->DeleteLocalRef(jTrackerToken);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jTrackerToken);
         } else {
             trackerToken = "";
         }
 
         if (NULL != jTrackerName) {
-            const char *trackerNameCStr = miGetAttribution.env->GetStringUTFChars(jTrackerName, NULL);
+            const char *trackerNameCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerName, NULL);
             trackerName = std::string(trackerNameCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
-            miGetAttribution.env->DeleteLocalRef(jTrackerName);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jTrackerName);
         } else {
             trackerName = "";
         }
 
         if (NULL != jNetwork) {
-            const char *networkCStr = miGetAttribution.env->GetStringUTFChars(jNetwork, NULL);
+            const char *networkCStr = jmiGetAttribution.env->GetStringUTFChars(jNetwork, NULL);
             network = std::string(networkCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jNetwork, networkCStr);
-            miGetAttribution.env->DeleteLocalRef(jNetwork);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jNetwork, networkCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jNetwork);
         } else {
             network = "";
         }
 
         if (NULL != jCampaign) {
-            const char *campaignCStr = miGetAttribution.env->GetStringUTFChars(jCampaign, NULL);
+            const char *campaignCStr = jmiGetAttribution.env->GetStringUTFChars(jCampaign, NULL);
             campaign = std::string(campaignCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jCampaign, campaignCStr);
-            miGetAttribution.env->DeleteLocalRef(jCampaign);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jCampaign, campaignCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jCampaign);
         } else {
             campaign = "";
         }
 
         if (NULL != jAdgroup) {
-            const char *adgroupCStr = miGetAttribution.env->GetStringUTFChars(jAdgroup, NULL);
+            const char *adgroupCStr = jmiGetAttribution.env->GetStringUTFChars(jAdgroup, NULL);
             adgroup = std::string(adgroupCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
-            miGetAttribution.env->DeleteLocalRef(jAdgroup);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jAdgroup);
         } else {
             adgroup = "";
         }
 
         if (NULL != jCreative) {
-            const char *creativeCStr = miGetAttribution.env->GetStringUTFChars(jCreative, NULL);
+            const char *creativeCStr = jmiGetAttribution.env->GetStringUTFChars(jCreative, NULL);
             creative = std::string(creativeCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jCreative, creativeCStr);
-            miGetAttribution.env->DeleteLocalRef(jCreative);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jCreative, creativeCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jCreative);
         } else {
             creative = "";
         }
 
         if (NULL != jClickLabel) {
-            const char *clickLabelCStr = miGetAttribution.env->GetStringUTFChars(jClickLabel, NULL);
+            const char *clickLabelCStr = jmiGetAttribution.env->GetStringUTFChars(jClickLabel, NULL);
             clickLabel = std::string(clickLabelCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
-            miGetAttribution.env->DeleteLocalRef(jClickLabel);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jClickLabel);
         } else {
             clickLabel = "";
         }
 
         if (NULL != jAdid) {
-            const char *adidCStr = miGetAttribution.env->GetStringUTFChars(jAdid, NULL);
+            const char *adidCStr = jmiGetAttribution.env->GetStringUTFChars(jAdid, NULL);
             adid = std::string(adidCStr);
-            miGetAttribution.env->ReleaseStringUTFChars(jAdid, adidCStr);
-            miGetAttribution.env->DeleteLocalRef(jAdid);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jAdid, adidCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jAdid);
         } else {
             adid = "";
         }
@@ -390,20 +390,20 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
 
 void Adjust2dx::setReferrer(std::string referrer) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miSetReferrer;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetReferrer, "com/adjust/sdk/Adjust", "setReferrer", "(Ljava/lang/String;Landroid/content/Context;)V")) {
+    cocos2d::JniMethodInfo jmiSetReferrer;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetReferrer, "com/adjust/sdk/Adjust", "setReferrer", "(Ljava/lang/String;Landroid/content/Context;)V")) {
         return;
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
-    jstring jReferrer = miSetReferrer.env->NewStringUTF(referrer.c_str());
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-    miSetReferrer.env->CallStaticVoidMethod(miSetReferrer.classID, miSetReferrer.methodID, jReferrer, jContext);
-    miSetReferrer.env->DeleteLocalRef(jReferrer);
-    miGetContext.env->DeleteLocalRef(jContext);
+    jstring jReferrer = jmiSetReferrer.env->NewStringUTF(referrer.c_str());
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiSetReferrer.env->CallStaticVoidMethod(jmiSetReferrer.classID, jmiSetReferrer.methodID, jReferrer, jContext);
+    jmiSetReferrer.env->DeleteLocalRef(jReferrer);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
@@ -411,50 +411,50 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setAdIdCallbackMethod(adIdCallback);
 
-    cocos2d::JniMethodInfo miGetAdIdCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnDeviceIdsRead;)V")) {
+    cocos2d::JniMethodInfo jmiGetAdIdCallback;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnDeviceIdsRead;)V")) {
         return;
     }
-    cocos2d::JniMethodInfo miInit;
-    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
         return;
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
     
-    jclass clsAdjust2dxAdIdCallback = miInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
-    jmethodID midInit = miInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
-    jobject jCallbackProxy = miInit.env->NewObject(clsAdjust2dxAdIdCallback, midInit);
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
-    miGetAdIdCallback.env->CallStaticVoidMethod(miGetAdIdCallback.classID, miGetAdIdCallback.methodID, jContext, jCallbackProxy);
-    miGetContext.env->DeleteLocalRef(jContext);
-    miInit.env->DeleteLocalRef(jCallbackProxy);
+    jclass clsAdjust2dxAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdIdCallback, jmidInit);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jContext, jCallbackProxy);
+    jmiGetContext.env->DeleteLocalRef(jContext);
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
 std::string Adjust2dx::getAmazonAdId() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miGetAmazonAdid;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetAmazonAdid, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;)Ljava/lang/String;")) {
+    cocos2d::JniMethodInfo jmiGetAmazonAdid;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAmazonAdid, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;)Ljava/lang/String;")) {
         return "";
     }
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return "";
     }
 
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);    
-    jstring jAdid = (jstring)miGetAmazonAdid.env->CallStaticObjectMethod(miGetAmazonAdid.classID, miGetAmazonAdid.methodID, jContext);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);    
+    jstring jAdid = (jstring)jmiGetAmazonAdid.env->CallStaticObjectMethod(jmiGetAmazonAdid.classID, jmiGetAmazonAdid.methodID, jContext);
     std::string adid = "";
     if (NULL != jAdid) {
-        const char *adidCStr = miGetAmazonAdid.env->GetStringUTFChars(jAdid, NULL);
+        const char *adidCStr = jmiGetAmazonAdid.env->GetStringUTFChars(jAdid, NULL);
         adid = std::string(adidCStr);
-        miGetAmazonAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
-        miGetAmazonAdid.env->DeleteLocalRef(jAdid);
+        jmiGetAmazonAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
+        jmiGetAmazonAdid.env->DeleteLocalRef(jAdid);
     }
-    miGetContext.env->DeleteLocalRef(jContext);
+    jmiGetContext.env->DeleteLocalRef(jContext);
     return adid;
 #else
     return "";
@@ -463,11 +463,11 @@ std::string Adjust2dx::getAmazonAdId() {
 
 void Adjust2dx::onResume() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miOnResume;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miOnResume, "com/adjust/sdk/Adjust", "onResume", "()V")) {
+    cocos2d::JniMethodInfo jmiOnResume;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnResume, "com/adjust/sdk/Adjust", "onResume", "()V")) {
         return;
     }
-    miOnResume.env->CallStaticVoidMethod(miOnResume.classID, miOnResume.methodID);
+    jmiOnResume.env->CallStaticVoidMethod(jmiOnResume.classID, jmiOnResume.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackSubsessionStart();
 #endif
@@ -475,11 +475,11 @@ void Adjust2dx::onResume() {
 
 void Adjust2dx::onPause() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo miOnPause;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miOnPause, "com/adjust/sdk/Adjust", "onPause", "()V")) {
+    cocos2d::JniMethodInfo jmiOnPause;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnPause, "com/adjust/sdk/Adjust", "onPause", "()V")) {
         return;
     }
-    miOnPause.env->CallStaticVoidMethod(miOnPause.classID, miOnPause.methodID);
+    jmiOnPause.env->CallStaticVoidMethod(jmiOnPause.classID, jmiOnPause.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::trackSubsessionEnd();
 #endif
@@ -495,156 +495,155 @@ std::string Adjust2dx::getIdfa() {
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject getTestOptions(std::map<std::string, std::string> testOptions) {
-    cocos2d::JniMethodInfo miInit;
-    if (!cocos2d::JniHelper::getMethodInfo(miInit, "com/adjust/sdk/AdjustTestOptions", "<init>", "()V")) {
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustTestOptions", "<init>", "()V")) {
+        return NULL;
+    }
+    cocos2d::JniMethodInfo jmiInitBoolean;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInitBoolean, "java/lang/Boolean", "<init>", "(Z)V")) {
         return NULL;
     }
 
-    cocos2d::JniMethodInfo miInitBoolean;
-    if (!cocos2d::JniHelper::getMethodInfo(miInitBoolean, "java/lang/Boolean", "<init>", "(Z)V")) {
+    jclass jclsBoolean = jmiInitBoolean.env->FindClass("java/lang/Boolean");
+    jmethodID midInitBoolean = jmiInitBoolean.env->GetMethodID(jclsBoolean, "<init>", "(Z)V");
+
+    cocos2d::JniMethodInfo jmiInitLong;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInitLong, "java/lang/Long", "<init>", "(J)V")) {
         return NULL;
     }
+    jclass clsLong = jmiInitLong.env->FindClass("java/lang/Long");
+    jmethodID midInitLong = jmiInitBoolean.env->GetMethodID(clsLong, "<init>", "(J)V");
 
-    jclass clsBoolean = miInitBoolean.env->FindClass("java/lang/Boolean");
-    jmethodID midInitBoolean = miInitBoolean.env->GetMethodID(clsBoolean, "<init>", "(Z)V");
-
-    cocos2d::JniMethodInfo miInitLong;
-    if (!cocos2d::JniHelper::getMethodInfo(miInitLong, "java/lang/Long", "<init>", "(J)V")) {
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return NULL;
     }
-    jclass clsLong = miInitLong.env->FindClass("java/lang/Long");
-    jmethodID midInitLong = miInitBoolean.env->GetMethodID(clsLong, "<init>", "(J)V");
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
 
-    cocos2d::JniMethodInfo miGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
-        return NULL;
-    }
-    jobject jContext = (jobject)miGetContext.env->CallStaticObjectMethod(miGetContext.classID, miGetContext.methodID);
+    // Test options.
+    jclass jclsTestOptions = jmiInit.env->FindClass("com/adjust/sdk/AdjustTestOptions");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsTestOptions, "<init>", "()V");
+    jobject jTestOptions = jmiInit.env->NewObject(jclsTestOptions, jmidInit);
 
-    // Test options
-    jclass clsTestOptions = miInit.env->FindClass("com/adjust/sdk/AdjustTestOptions");
-    jmethodID midInit = miInit.env->GetMethodID(clsTestOptions, "<init>", "()V");
-    jobject jobjTestOptions = miInit.env->NewObject(clsTestOptions, midInit);
-
-    // Context
+    // Context.
     if (testOptions.find("setContext") != testOptions.end()) {
-        jfieldID fContext = miInit.env->GetFieldID(clsTestOptions, "context", "Landroid/content/Context;");
-        miInit.env->SetObjectField(jobjTestOptions, fContext, jContext);
+        jfieldID jfidContext = jmiInit.env->GetFieldID(jclsTestOptions, "context", "Landroid/content/Context;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidContext, jContext);
     }
-    miGetContext.env->DeleteLocalRef(jContext);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 
-    // Base URL
-    jstring jsBaseUrl = miInit.env->NewStringUTF(testOptions["baseUrl"].c_str());
-    jfieldID fBaseUrl = miInit.env->GetFieldID(clsTestOptions, "baseUrl", "Ljava/lang/String;");
-    miInit.env->SetObjectField(jobjTestOptions, fBaseUrl, jsBaseUrl);
+    // Base URL.
+    jstring jBaseUrl = jmiInit.env->NewStringUTF(testOptions["baseUrl"].c_str());
+    jfieldID jfidBaseUrl = jmiInit.env->GetFieldID(jclsTestOptions, "baseUrl", "Ljava/lang/String;");
+    jmiInit.env->SetObjectField(jTestOptions, jfidBaseUrl, jBaseUrl);
 
-    // GDPR URL
-    jstring jsGdprUrl = miInit.env->NewStringUTF(testOptions["gdprUrl"].c_str());
-    jfieldID fGdprUrl = miInit.env->GetFieldID(clsTestOptions, "gdprUrl", "Ljava/lang/String;");
-    miInit.env->SetObjectField(jobjTestOptions, fGdprUrl, jsGdprUrl);
+    // GDPR URL.
+    jstring jsGdprUrl = jmiInit.env->NewStringUTF(testOptions["gdprUrl"].c_str());
+    jfieldID jfidGdprUrl = jmiInit.env->GetFieldID(jclsTestOptions, "gdprUrl", "Ljava/lang/String;");
+    jmiInit.env->SetObjectField(jTestOptions, jfidGdprUrl, jsGdprUrl);
 
-    // Base path
+    // Base path.
     if (testOptions.find("basePath") != testOptions.end()) {
-        jstring jsBasePath = miInit.env->NewStringUTF(testOptions["basePath"].c_str());
-        jfieldID fBasePath = miInit.env->GetFieldID(clsTestOptions, "basePath", "Ljava/lang/String;");
-        miInit.env->SetObjectField(jobjTestOptions, fBasePath, jsBasePath);
+        jstring jsBasePath = jmiInit.env->NewStringUTF(testOptions["basePath"].c_str());
+        jfieldID jfidBasePath = jmiInit.env->GetFieldID(jclsTestOptions, "basePath", "Ljava/lang/String;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidBasePath, jsBasePath);
     }
 
-    // GDPR path
+    // GDPR path.
     if (testOptions.find("gdprPath") != testOptions.end()) {
-        jstring jsGdprPath = miInit.env->NewStringUTF(testOptions["gdprPath"].c_str());
-        jfieldID fGdprPath = miInit.env->GetFieldID(clsTestOptions, "gdprPath", "Ljava/lang/String;");
-        miInit.env->SetObjectField(jobjTestOptions, fGdprPath, jsGdprPath);
+        jstring jsGdprPath = jmiInit.env->NewStringUTF(testOptions["gdprPath"].c_str());
+        jfieldID jfidGdprPath = jmiInit.env->GetFieldID(jclsTestOptions, "gdprPath", "Ljava/lang/String;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsGdprPath);
     }
 
-    // Use test connection options
+    // Use test connection options.
     if (testOptions.find("useTestConnectionOptions") != testOptions.end()) {
-        jboolean jbUseTestConnectionOptions = testOptions["useTestConnectionOptions"] == "true" ? JNI_TRUE : JNI_FALSE;
-        jobject jobjUseTestConnectionOptions = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbUseTestConnectionOptions);
-        jfieldID fUseTestConnectionOptions = miInit.env->GetFieldID(clsTestOptions, "useTestConnectionOptions", "Ljava/lang/Boolean;");
-        miInit.env->SetObjectField(jobjTestOptions, fUseTestConnectionOptions, jobjUseTestConnectionOptions);
-        miInit.env->DeleteLocalRef(jobjUseTestConnectionOptions);
+        jboolean jUseTestConnectionOptions = testOptions["useTestConnectionOptions"] == "true" ? JNI_TRUE : JNI_FALSE;
+        jobject jUseTestConnectionOptionsObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jUseTestConnectionOptions);
+        jfieldID jfidUseTestConnectionOptions = jmiInit.env->GetFieldID(jclsTestOptions, "useTestConnectionOptions", "Ljava/lang/Boolean;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidUseTestConnectionOptions, jUseTestConnectionOptionsObj);
+        jmiInit.env->DeleteLocalRef(jUseTestConnectionOptionsObj);
     }
 
-    // Timer interval in milliseconds
+    // Timer interval in milliseconds.
     if (testOptions.find("timerIntervalInMilliseconds") != testOptions.end()) {
         long timerIntervalInMilliseconds = std::stol (testOptions["timerIntervalInMilliseconds"]);
         jlong jTimerIntervalInMilliseconds = (jlong)(timerIntervalInMilliseconds);
-        jobject jobjTimerIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
-        jfieldID fTimerIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
-        miInit.env->SetObjectField(jobjTestOptions, fTimerIntervalInMilliseconds, jobjTimerIntervalInMilliseconds);
-        miInit.env->DeleteLocalRef(jobjTimerIntervalInMilliseconds);
+        jobject jTimerIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
+        jfieldID jfidTimerIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidTimerIntervalInMilliseconds, jTimerIntervalInMillisecondsObj);
+        jmiInit.env->DeleteLocalRef(jTimerIntervalInMillisecondsObj);
     }
 
-    // Timer start in milliseconds
+    // Timer start in milliseconds.
     if (testOptions.find("timerStartInMilliseconds") != testOptions.end()) {
         long timerStartInMilliseconds = std::stol (testOptions["timerStartInMilliseconds"]);
         jlong jTimerStartInMilliseconds = (jlong)(timerStartInMilliseconds);
-        jobject jobjTimerStartInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
-        jfieldID fTimerStartInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
-        miInit.env->SetObjectField(jobjTestOptions, fTimerStartInMilliseconds, jobjTimerStartInMilliseconds);
-        miInit.env->DeleteLocalRef(jobjTimerStartInMilliseconds);
+        jobject jTimerStartInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
+        jfieldID jfidTimerStartInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidTimerStartInMilliseconds, jTimerStartInMillisecondsObj);
+        jmiInit.env->DeleteLocalRef(jTimerStartInMillisecondsObj);
     }
 
-    // Session interval in milliseconds
+    // Session interval in milliseconds.
     if (testOptions.find("sessionIntervalInMilliseconds") != testOptions.end()) {
         long sessionIntervalInMilliseconds = std::stol (testOptions["sessionIntervalInMilliseconds"]);
         jlong jSessionIntervalInMilliseconds = (jlong)(sessionIntervalInMilliseconds);
-        jobject jobjSessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
-        jfieldID fSessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
-        miInit.env->SetObjectField(jobjTestOptions, fSessionIntervalInMilliseconds, jobjSessionIntervalInMilliseconds);
-        miInit.env->DeleteLocalRef(jobjSessionIntervalInMilliseconds);
+        jobject jSessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
+        jfieldID jfidSessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidSessionIntervalInMilliseconds, jSessionIntervalInMillisecondsObj);
+        jmiInit.env->DeleteLocalRef(jSessionIntervalInMillisecondsObj);
     }
 
-    // Sub-session interval in milliseconds
+    // Sub-session interval in milliseconds.
     if (testOptions.find("subsessionIntervalInMilliseconds") != testOptions.end()) {
         long subsessionIntervalInMilliseconds = std::stol (testOptions["subsessionIntervalInMilliseconds"]);
         jlong jSubsessionIntervalInMilliseconds = (jlong)(subsessionIntervalInMilliseconds);
-        jobject jobjSubsessionIntervalInMilliseconds = miInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
-        jfieldID fSubsessionIntervalInMilliseconds = miInit.env->GetFieldID(clsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
-        miInit.env->SetObjectField(jobjTestOptions, fSubsessionIntervalInMilliseconds, jobjSubsessionIntervalInMilliseconds);
-        miInit.env->DeleteLocalRef(jobjSubsessionIntervalInMilliseconds);
+        jobject jSubsessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
+        jfieldID jfidSubsessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidSubsessionIntervalInMilliseconds, jSubsessionIntervalInMillisecondsObj);
+        jmiInit.env->DeleteLocalRef(jSubsessionIntervalInMillisecondsObj);
     }
 
-    // Teardown
+    // Teardown.
     if (testOptions.find("teardown") != testOptions.end()) {
-        jboolean jbTeardown = testOptions["teardown"] == "true" ? JNI_TRUE : JNI_FALSE;
-        jobject jobjTeardown = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTeardown);
-        jfieldID fTeardown = miInit.env->GetFieldID(clsTestOptions, "teardown", "Ljava/lang/Boolean;");
-        miInit.env->SetObjectField(jobjTestOptions, fTeardown, jobjTeardown);
-        miInit.env->DeleteLocalRef(jobjTeardown);
+        jboolean jTeardown = testOptions["teardown"] == "true" ? JNI_TRUE : JNI_FALSE;
+        jobject jTeardownObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jTeardown);
+        jfieldID jfidTeardown = jmiInit.env->GetFieldID(jclsTestOptions, "teardown", "Ljava/lang/Boolean;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidTeardown, jTeardownObj);
+        jmiInit.env->DeleteLocalRef(jTeardownObj);
     }
 
-    // Try install referrer
+    // Try install referrer.
     if (testOptions.find("tryInstallReferrer") != testOptions.end()) {
-        jboolean jbTryInstallReferrer = testOptions["tryInstallReferrer"] == "true" ? JNI_TRUE : JNI_FALSE;
-        jobject jobjTryInstallReferrer = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbTryInstallReferrer);
-        jfieldID fTryInstallReferrer = miInit.env->GetFieldID(clsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
-        miInit.env->SetObjectField(jobjTestOptions, fTryInstallReferrer, jobjTryInstallReferrer);
-        miInit.env->DeleteLocalRef(jobjTryInstallReferrer);
+        jboolean jTryInstallReferrer = testOptions["tryInstallReferrer"] == "true" ? JNI_TRUE : JNI_FALSE;
+        jobject jTryInstallReferrerObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jTryInstallReferrer);
+        jfieldID jfidTryInstallReferrer = jmiInit.env->GetFieldID(jclsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidTryInstallReferrer, jTryInstallReferrerObj);
+        jmiInit.env->DeleteLocalRef(jTryInstallReferrerObj);
     }
 
-    // No backoff wait
+    // No backoff wait.
     if (testOptions.find("noBackoffWait") != testOptions.end()) { 
-        jboolean jbNoBackoffWait = testOptions["noBackoffWait"] == "true" ? JNI_TRUE : JNI_FALSE;
-        jobject jobjNoBackoffWait = miInitBoolean.env->NewObject(clsBoolean, midInitBoolean, jbNoBackoffWait);
-        jfieldID fNoBackoffWait = miInit.env->GetFieldID(clsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
-        miInit.env->SetObjectField(jobjTestOptions, fNoBackoffWait, jobjNoBackoffWait);
-        miInit.env->DeleteLocalRef(jobjNoBackoffWait);
+        jboolean jNoBackoffWait = testOptions["noBackoffWait"] == "true" ? JNI_TRUE : JNI_FALSE;
+        jobject jNoBackoffWaitObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jNoBackoffWait);
+        jfieldID jfidNoBackoffWait = jmiInit.env->GetFieldID(jclsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidNoBackoffWait, jNoBackoffWaitObj);
+        jmiInit.env->DeleteLocalRef(jNoBackoffWaitObj);
     }
 
-    return jobjTestOptions;
+    return jTestOptions;
 }
 #endif
 
 void Adjust2dx::setTestOptions(std::map<std::string, std::string> testOptions) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject jTestOptions = getTestOptions(testOptions);
-    cocos2d::JniMethodInfo miSetTestOptions;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(miSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
+    cocos2d::JniMethodInfo jmiSetTestOptions;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
         return;
     }
-    miSetTestOptions.env->CallStaticVoidMethod(miSetTestOptions.classID, miSetTestOptions.methodID, jTestOptions);
+    jmiSetTestOptions.env->CallStaticVoidMethod(jmiSetTestOptions.classID, jmiSetTestOptions.methodID, jTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setTestOptions(testOptions);
 #endif

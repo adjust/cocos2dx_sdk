@@ -179,63 +179,53 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
     if (testOptionsMap.find("basePath") != testOptionsMap.end()) {
         testOptions.basePath = [NSString stringWithUTF8String:testOptionsMap["basePath"].c_str()];
     }
-
     if (testOptionsMap.find("gdprPath") != testOptionsMap.end()) {
         testOptions.gdprPath = [NSString stringWithUTF8String:testOptionsMap["gdprPath"].c_str()];
     }
-
     if (testOptionsMap.find("timerIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *timerIntervalMilliS = [NSString stringWithUTF8String:testOptionsMap["timerIntervalInMilliseconds"].c_str()];
-        testOptions.timerIntervalInMilliseconds = [NSNumber numberWithInt:[timerIntervalMilliS intValue]];
+        NSString *timerIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["timerIntervalInMilliseconds"].c_str()];
+        testOptions.timerIntervalInMilliseconds = [NSNumber numberWithInt:[timerIntervalMilliseconds intValue]];
     }
-
     if (testOptionsMap.find("timerStartInMilliseconds") != testOptionsMap.end()) {
-        NSString *timerStartMilliS = [NSString stringWithUTF8String:testOptionsMap["timerStartInMilliseconds"].c_str()];
-        testOptions.timerStartInMilliseconds = [NSNumber numberWithInt:[timerStartMilliS intValue]];
+        NSString *timerStartMilliseconds = [NSString stringWithUTF8String:testOptionsMap["timerStartInMilliseconds"].c_str()];
+        testOptions.timerStartInMilliseconds = [NSNumber numberWithInt:[timerStartMilliseconds intValue]];
     }
-
     if (testOptionsMap.find("sessionIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *sessionIntervalMilliS = [NSString stringWithUTF8String:testOptionsMap["sessionIntervalInMilliseconds"].c_str()];
-        testOptions.sessionIntervalInMilliseconds = [NSNumber numberWithInt:[sessionIntervalMilliS intValue]];
+        NSString *sessionIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["sessionIntervalInMilliseconds"].c_str()];
+        testOptions.sessionIntervalInMilliseconds = [NSNumber numberWithInt:[sessionIntervalMilliseconds intValue]];
     }
-
     if (testOptionsMap.find("subsessionIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *subsessionIntervalMilliS = [NSString stringWithUTF8String:testOptionsMap["subsessionIntervalInMilliseconds"].c_str()];
-        testOptions.subsessionIntervalInMilliseconds = [NSNumber numberWithInt:[subsessionIntervalMilliS intValue]];
+        NSString *subsessionIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["subsessionIntervalInMilliseconds"].c_str()];
+        testOptions.subsessionIntervalInMilliseconds = [NSNumber numberWithInt:[subsessionIntervalMilliseconds intValue]];
     }
-
     if (testOptionsMap.find("teardown") != testOptionsMap.end()) {
-        NSString *teardownStr = [NSString stringWithUTF8String:testOptionsMap["teardown"].c_str()];
+        NSString *teardown = [NSString stringWithUTF8String:testOptionsMap["teardown"].c_str()];
         testOptions.teardown = NO;
-        if ([teardownStr isEqualToString:@"true"]) {
+        if ([teardown isEqualToString:@"true"]) {
             testOptions.teardown = YES;
         }
     }
-
     if (testOptionsMap.find("deleteState") != testOptionsMap.end()) {
-        NSString *deleteStateStr = [NSString stringWithUTF8String:testOptionsMap["deleteState"].c_str()];
+        NSString *deleteState = [NSString stringWithUTF8String:testOptionsMap["deleteState"].c_str()];
         testOptions.deleteState = NO;
-        if ([deleteStateStr isEqualToString:@"true"]) {
+        if ([deleteState isEqualToString:@"true"]) {
             testOptions.deleteState = YES;
         }
     }
-
     if (testOptionsMap.find("noBackoffWait") != testOptionsMap.end()) {
-        NSString *noBackoffWaitStr = [NSString stringWithUTF8String:testOptionsMap["noBackoffWait"].c_str()];
+        NSString *noBackoffWait = [NSString stringWithUTF8String:testOptionsMap["noBackoffWait"].c_str()];
         testOptions.noBackoffWait = NO;
-        if ([noBackoffWaitStr isEqualToString:@"true"]) {
+        if ([noBackoffWait isEqualToString:@"true"]) {
             testOptions.noBackoffWait = YES;
         }
     }
-
-    // TODO: available from 4.14.2
-    // testOptions.iAdFrameworkEnabled = NO; // default value -> NO - iAd will not be used in test app by default
-    // if (testOptionsMap.find("iAdFrameworkEnabled") != testOptionsMap.end()) {
-    //     NSString *iAdFrameworkEnabledStr = [NSString stringWithUTF8String:testOptionsMap["iAdFrameworkEnabled"].c_str()];
-    //     if ([iAdFrameworkEnabledStr isEqualToString:@"true"]) {
-    //         testOptions.iAdFrameworkEnabled = YES;
-    //     }
-    // }
+    testOptions.iAdFrameworkEnabled = NO;
+    if (testOptionsMap.find("iAdFrameworkEnabled") != testOptionsMap.end()) {
+        NSString *iAdFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["iAdFrameworkEnabled"].c_str()];
+        if ([iAdFrameworkEnabled isEqualToString:@"true"]) {
+            testOptions.iAdFrameworkEnabled = YES;
+        }
+    }
 
     [Adjust setTestOptions:testOptions];
 }

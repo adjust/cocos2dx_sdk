@@ -128,7 +128,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string eventToken = std::string([[dictionary objectForKey:@"eventToken"] UTF8String]);
     std::string callbackId = std::string([[dictionary objectForKey:@"callbackId"] UTF8String]);
-
     std::string jsonResponse = "";
     if (eventSuccessResponseData.jsonResponse != nil) {
         NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:eventSuccessResponseData.jsonResponse options:0 error:nil];
@@ -161,7 +160,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string eventToken = std::string([[dictionary objectForKey:@"eventToken"] UTF8String]);
     std::string callbackId = std::string([[dictionary objectForKey:@"callbackId"] UTF8String]);
     std::string willRetry = std::string([[dictionary objectForKey:@"willRetry"] UTF8String]);
-
     std::string jsonResponse = "";
     if (eventFailureResponseData.jsonResponse != nil) {
         NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:eventFailureResponseData.jsonResponse options:0 error:nil];
@@ -188,7 +186,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
-
     std::string jsonResponse = "";
     if (sessionSuccessResponseData.jsonResponse != nil) {
         NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:sessionSuccessResponseData.jsonResponse options:0 error:nil];
@@ -217,7 +214,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string timestamp = std::string([[dictionary objectForKey:@"timestamp"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string willRetry = std::string([[dictionary objectForKey:@"willRetry"] UTF8String]);
-
     std::string jsonResponse = "";
     if (sessionFailureResponseData.jsonResponse != nil) {
         NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:sessionFailureResponseData.jsonResponse options:0 error:nil];
@@ -246,7 +242,6 @@ static ADJDelegate2dx *defaultInstance = nil;
                                         originalSelector,
                                         method_getImplementation(swizzledMethod),
                                         method_getTypeEncoding(swizzledMethod));
-
     if (didAddMethod) {
         class_replaceMethod(cls,
                             swizzledSelector,

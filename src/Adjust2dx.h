@@ -9,8 +9,8 @@
 #ifndef ADJUST_ADJUST2DX_H_
 #define ADJUST_ADJUST2DX_H_
 
-#include <iostream>
 #include <map>
+#include <iostream>
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
 #include "AdjustAttribution2dx.h"
@@ -37,17 +37,14 @@ public:
     static void resetSessionPartnerParameters();
     static std::string getAdid();
     static AdjustAttribution2dx getAttribution();
-
     // Android specific methods.
     static void setReferrer(std::string referrer);
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));
     static std::string getAmazonAdId();
     static void onResume();
     static void onPause();
-
     // iOS specific methods.
     static std::string getIdfa();
-
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
