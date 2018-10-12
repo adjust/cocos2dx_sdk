@@ -28,7 +28,7 @@ android_submodule_dir   = '{0}/ext/android'.format(root_dir)
 ios_submodule_dir       = '{0}/ext/ios'.format(root_dir)
 
 # ------------------------------------------------------------------
-# call platform specific build method
+# Call platform specific build method.
 try:
     if args.platform == 'ios':
         set_log_tag('IOS-SDK-BUILD')
@@ -39,9 +39,9 @@ try:
         check_submodule_dir('Android', android_submodule_dir + '/sdk')
         android.build(root_dir, android_submodule_dir, args.apptype, args.configuration, args.app_path)
 finally:
-    # remove autocreated python compiled files
+    # Remove autocreated python compiled files.
     remove_files('*.pyc', script_dir, log=False)
 
 # ------------------------------------------------------------------
-# Script completed
+# Script completed.
 debug_green('Script completed!')
