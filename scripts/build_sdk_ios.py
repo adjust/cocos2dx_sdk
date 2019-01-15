@@ -81,14 +81,20 @@ def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # Rebuilding AdjustSdk.framework file.
     debug_green('Rebuilding AdjustSdk.framework file ...')
     change_dir(build_dir)
-    xcode_build('AdjustStatic', configuration)
+    if configuration == 'debug':
+        xcode_build('AdjustStatic', 'Debug')
+    else:
+        xcode_build('AdjustStatic', 'Release')
 
     # ------------------------------------------------------------------
     # Rebuilding AdjustTestLibrary.framework file.
     if with_test_lib:
         debug_green('Rebuilding AdjustTestLibrary.framework file ...')
         change_dir(test_lib_build_dir)
-        xcode_build('AdjustTestLibraryStatic', configuration)
+        if configuration == 'debug':
+            xcode_build('AdjustTestLibraryStatic', 'Debug')
+        else:
+            xcode_build('AdjustTestLibraryStatic', 'Release')
 
     # ------------------------------------------------------------------
     # Copying AdjustSdk.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.

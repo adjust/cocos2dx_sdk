@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 3rd September 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -40,7 +40,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     (JNIEnv *, jobject, jstring);
     // Only for testing purposes.
-    JNIEXPORT void JNICALL Java_com_adjust_testlibrary_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
+    JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
     (JNIEnv *, jobject, jstring, jstring, jstring);
 
     void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));

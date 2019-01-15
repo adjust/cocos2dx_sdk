@@ -9,7 +9,7 @@
 #include "AdjustProxy2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-JNIEXPORT void Java_com_adjust_testlibrary_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
+JNIEXPORT void Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
 (JNIEnv *env, jobject obj, jstring jClassName, jstring jMethodName, jstring jJsonParameters) {
     if (NULL == executeTestLibCommandCallbackMethod) {
         return;

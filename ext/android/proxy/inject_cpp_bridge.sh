@@ -24,8 +24,8 @@ echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 # ======================================== #
 
 if [ $# -eq 1 ] && [ $1 == --with-test-lib ]; then
-    echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Unpacking adjust-testing.jar file ... ${NC}"
-    $JAVAC -cp "adjust-testing.jar:$ANDROID_JAR" com/adjust/testlibrary/*.java
+    echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Unpacking adjust-test.jar file ... ${NC}"
+    $JAVAC -cp "adjust-test.jar:$ANDROID_JAR" com/adjust/test/*.java
     echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 fi
 
@@ -38,7 +38,7 @@ echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 # ======================================== #
 
 if [ $# -eq 1 ] && [ $1 == --with-test-lib ]; then
-    echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Injecting C++ bridge Java classes to adjust-testing.jar ... ${NC}"
-    $JAR uf adjust-testing.jar com/adjust/testlibrary/*.class
+    echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Injecting C++ bridge Java classes to adjust-test.jar ... ${NC}"
+    $JAR uf adjust-test.jar com/adjust/test/*.class
     echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 fi

@@ -40,7 +40,7 @@ extern "C" {
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     (JNIEnv *, jobject, jstring);
     // Only for testing purposes.
-    JNIEXPORT void JNICALL Java_com_adjust_testlibrary_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
+    JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
     (JNIEnv *, jobject, jstring, jstring, jstring);
 
     void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));

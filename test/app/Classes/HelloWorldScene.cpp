@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-2019 Adjust GmbH. All rights reserved.
 //
 
 #include <platform/CCApplication.h>
@@ -23,11 +23,11 @@ static std::string serverIp = "192.168.8.109";
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 static std::string baseUrl = "http://" + serverIp + ":8080";
 static std::string gdprUrl = "http://" + serverIp + ":8080";
-static std::string clientSdk = "cocos2d-x4.15.0@ios4.15.0";
+static std::string clientSdk = "cocos2d-x4.17.0@ios4.17.1";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static std::string baseUrl = "https://" + serverIp + ":8443";
 static std::string gdprUrl = "https://" + serverIp + ":8443";
-static std::string clientSdk = "cocos2d-x4.15.0@android4.15.0";
+static std::string clientSdk = "cocos2d-x4.17.0@android4.17.0";
 #endif
 
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);

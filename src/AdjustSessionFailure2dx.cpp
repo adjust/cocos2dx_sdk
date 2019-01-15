@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 6th October 2016.
-//  Copyright © 2016-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2016-2019 Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustSessionFailure2dx.h"

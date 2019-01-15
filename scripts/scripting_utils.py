@@ -192,15 +192,15 @@ def adb_shell(app_package):
 
 def gradle_make_release_jar(do_clean=False):
     if (do_clean):
-        execute_command(['./gradlew', 'clean', 'makeReleaseJar'])
+        execute_command(['./gradlew', 'clean', 'adjustSdkNonNativeJarRelease'])
     else:
-        execute_command(['./gradlew', 'makeReleaseJar'])
+        execute_command(['./gradlew', 'adjustSdkNonNativeJarRelease'])
 
 def gradle_make_debug_jar(do_clean=False):
     if (do_clean):
-        execute_command(['./gradlew', 'clean', 'makeDebugJar'])
+        execute_command(['./gradlew', 'clean', 'adjustSdkNonNativeJarDebug'])
     else:
-        execute_command(['./gradlew', 'makeDebugJar'])    
+        execute_command(['./gradlew', 'adjustSdkNonNativeJarDebug'])    
 
 def gradle_run(options):
     cmd_params = ['./gradlew']

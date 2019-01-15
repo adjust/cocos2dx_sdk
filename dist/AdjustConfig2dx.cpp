@@ -17,7 +17,7 @@
 USING_NS_CC;
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
-    std::string sdkPrefix = "cocos2d-x4.15.0";
+    std::string sdkPrefix = "cocos2d-x4.17.0";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiInit;
