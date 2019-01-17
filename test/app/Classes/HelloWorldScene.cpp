@@ -23,11 +23,9 @@ static std::string serverIp = "192.168.8.109";
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 static std::string baseUrl = "http://" + serverIp + ":8080";
 static std::string gdprUrl = "http://" + serverIp + ":8080";
-static std::string clientSdk = "cocos2d-x4.17.0@ios4.17.1";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static std::string baseUrl = "https://" + serverIp + ":8443";
 static std::string gdprUrl = "https://" + serverIp + ":8443";
-static std::string clientSdk = "cocos2d-x4.17.0@android4.17.0";
 #endif
 
 static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl);
@@ -78,7 +76,7 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    this->testLibrary->startTestSession(clientSdk);
+    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
@@ -88,7 +86,7 @@ bool TestApp::init() {
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
-    this->testLibrary->startTestSession(clientSdk);
+    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {

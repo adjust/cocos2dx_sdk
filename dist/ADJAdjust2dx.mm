@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #include "ADJAdjust2dx.h"
@@ -127,6 +127,15 @@ std::string ADJAdjust2dx::getAdid() {
 
     std::string adid = std::string([[Adjust adid] UTF8String]);
     return adid;
+}
+
+std::string ADJAdjust2dx::getSdkVersion() {
+    if (nil == [Adjust sdkVersion]) {
+        return "";
+    }
+
+    std::string sdkVersion = std::string([[Adjust sdkVersion] UTF8String]);
+    return sdkVersion;
 }
 
 AdjustAttribution2dx ADJAdjust2dx::getAttribution() {

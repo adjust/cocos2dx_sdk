@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -16,9 +16,9 @@
 #include "AdjustConfig2dx.h"
 USING_NS_CC;
 
-void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
-    std::string sdkPrefix = "cocos2d-x4.17.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.17.0";
 
+void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiInit;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustConfig", "<init>", "(Landroid/content/Context;Ljava/lang/String;Ljava/lang/String;Z)V")) {
@@ -43,11 +43,11 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, 
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jAppToken);
     jmiInit.env->DeleteLocalRef(jEnvironment);
-    jstring jSdkPrefix = jmiSetSdkPrefix.env->NewStringUTF(sdkPrefix.c_str());
+    jstring jSdkPrefix = jmiSetSdkPrefix.env->NewStringUTF(AdjustSdkPrefix2dx.c_str());
     jmiSetSdkPrefix.env->CallVoidMethod(config, jmiSetSdkPrefix.methodID, jSdkPrefix);
     jmiSetSdkPrefix.env->DeleteLocalRef(jSdkPrefix);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    config = ADJConfig2dx(appToken, environment, allowSuppressLogLevel, sdkPrefix);
+    config = ADJConfig2dx(appToken, environment, allowSuppressLogLevel, AdjustSdkPrefix2dx);
     isConfigSet = true;
 #endif
 }

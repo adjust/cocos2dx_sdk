@@ -129,6 +129,15 @@ std::string ADJAdjust2dx::getAdid() {
     return adid;
 }
 
+std::string ADJAdjust2dx::getSdkVersion() {
+    if (nil == [Adjust sdkVersion]) {
+        return "";
+    }
+
+    std::string sdkVersion = std::string([[Adjust sdkVersion] UTF8String]);
+    return sdkVersion;
+}
+
 AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     ADJAttribution *attribution = [Adjust attribution];
     std::string trackerToken;

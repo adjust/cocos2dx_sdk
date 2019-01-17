@@ -39,6 +39,7 @@ public:
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
+    static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);

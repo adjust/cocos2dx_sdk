@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUST2DX_H_
@@ -36,6 +36,7 @@ public:
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
     static std::string getAdid();
+    static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     // Android specific methods.
     static void setReferrer(std::string referrer);

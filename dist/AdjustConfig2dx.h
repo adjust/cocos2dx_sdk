@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTCONFIG2DX_H_
@@ -21,6 +21,8 @@
 #include "AdjustEventSuccess2dx.h"
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
+
+extern const std::string AdjustSdkPrefix2dx;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,

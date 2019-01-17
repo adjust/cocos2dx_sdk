@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #ifndef _ADJUST_ADJUST2DX_H_
@@ -39,6 +39,7 @@ public:
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
+    static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);

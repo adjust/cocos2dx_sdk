@@ -36,6 +36,7 @@ public:
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
     static std::string getAdid();
+    static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     // Android specific methods.
     static void setReferrer(std::string referrer);

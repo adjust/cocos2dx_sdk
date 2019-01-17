@@ -22,6 +22,8 @@
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
 
+extern const std::string AdjustSdkPrefix2dx;
+
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
     AdjustLogLevel2dxDebug = 2,

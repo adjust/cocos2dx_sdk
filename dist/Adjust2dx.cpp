@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2018 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
 #include "Adjust2dx.h"
@@ -268,6 +268,27 @@ std::string Adjust2dx::getAdid() {
         jmiGetAdid.env->DeleteLocalRef(jAdid);
     }
     return adid;
+#endif
+}
+
+std::string Adjust2dx::getSdkVersion() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return AdjustSdkPrefix2dx + "@" + ADJAdjust2dx::getSdkVersion();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiGetSdkVersion;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersion, "com/adjust/sdk/Adjust", "getSdkVersion", "()Ljava/lang/String;")) {
+        return "";
+    }
+
+    jstring jSdkVersion = (jstring)jmiGetSdkVersion.env->CallStaticObjectMethod(jmiGetSdkVersion.classID, jmiGetSdkVersion.methodID);
+    std::string sdkVersion = "";
+    if (NULL != jSdkVersion) {
+        const char *sdkVersionCStr = jmiGetSdkVersion.env->GetStringUTFChars(jSdkVersion, NULL);
+        sdkVersion = std::string(sdkVersionCStr);
+        jmiGetSdkVersion.env->ReleaseStringUTFChars(jSdkVersion, sdkVersionCStr);
+        jmiGetSdkVersion.env->DeleteLocalRef(jSdkVersion);
+    }
+    return AdjustSdkPrefix2dx + "@" + sdkVersion;
 #endif
 }
 
