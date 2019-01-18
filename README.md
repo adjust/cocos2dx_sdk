@@ -27,6 +27,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [Revenue deduplication](#revenue-deduplication)
       * [Callback parameters](#callback-parameters)
       * [Partner parameters](#partner-parameters)
+      * [Callback identifier](#callback-id)
    * [Session parameters](#session-parameters)
       * [Session callback parameters](#session-callback-parameters)
       * [Session partner parameters](#session-partner-parameters)
@@ -69,15 +70,15 @@ Take the C++ source files from the `src` folder and add them to your Cocos2d-x p
 Inside Android Studio project, you need to add the paths of the Adjust C++ files to the `LOCAL_SRC_FILES` section in your `Android.mk` file:
 
 ```mk
-../../../Classes/Adjust/AdjustConfig2dx.cpp \
-../../../Classes/Adjust/AdjustAttribution2dx.cpp \
-../../../Classes/Adjust/AdjustProxy2dx.cpp \
-../../../Classes/Adjust/AdjustEvent2dx.cpp \
-../../../Classes/Adjust/Adjust2dx.cpp \
-../../../Classes/Adjust/AdjustEventFailure2dx.cpp \
-../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
-../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
-../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustConfig2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustAttribution2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustProxy2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEvent2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/Adjust2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventFailure2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
@@ -147,20 +148,6 @@ If you are using Proguard, add these lines to your Proguard file:
 -keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
     java.lang.String getId();
     boolean isLimitAdTrackingEnabled();
-}
--keep class dalvik.system.VMRuntime {
-    java.lang.String getRuntime();
-}
--keep class android.os.Build {
-    java.lang.String[] SUPPORTED_ABIS;
-    java.lang.String CPU_ABI;
-}
--keep class android.content.res.Configuration {
-    android.os.LocaleList getLocales();
-    java.util.Locale locale;
-}
--keep class android.os.LocaleList {
-    java.util.Locale get(int);
 }
 -keep public class com.android.installreferrer.** { *; }
 ```
@@ -363,10 +350,8 @@ For example, suppose you have registered the URL `http://www.adjust.com/callback
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
-
 adjustEvent.addCallbackParameter("key", "value");
 adjustEvent.addCallbackParameter("foo", "bar");
-
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
@@ -394,6 +379,16 @@ Adjust2dx::trackEvent(adjustEvent);
 ```
 
 You can read more about special partners and how to integrate them in our [guide to special partners][special-partners].
+
+### <a id="callback-id"></a>Callback identifier
+
+You can also add custom string identifier to each event you want to track. This identifier will later be reported in event success and/or event failure callbacks to enable you to keep track on which event was successfully tracked or not. You can set this identifier by calling the `setCallbackId` method on your `AdjustEvent2dx` instance:
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setCallbackId("Your-Custom-Id");
+Adjust2dx::trackEvent(adjustEvent);
+```
 
 ### <a id="session-parameters"></a>Session parameters
 
@@ -534,6 +529,7 @@ static void eventSuccessCallbackMethod(AdjustEventSuccess2dx eventSuccess) {
     CCLOG("\nMessage: %s", eventSuccess.getMessage().c_str());
     CCLOG("\nTimestamp: %s", eventSuccess.getTimestamp().c_str());
     CCLOG("\nEvent token: %s", eventSuccess.getEventToken().c_str());
+    CCLOG("\Callback ID: %s", eventSuccess.getCallbackId().c_str());
     CCLOG("\nJSON response: %s", eventSuccess.getJsonResponse().c_str());
     CCLOG("\n");
 }
@@ -568,6 +564,7 @@ static void eventFailureCallbackMethod(AdjustEventFailure2dx eventFailure) {
     CCLOG("\nTimestamp: %s", eventFailure.getTimestamp().c_str());
     CCLOG("\nWill retry: %s", eventFailure.getWillRetry().c_str());
     CCLOG("\nEvent token: %s", eventFailure.getEventToken().c_str());
+    CCLOG("\Callback ID: %s", eventFailure.getCallbackId().c_str());
     CCLOG("\nJSON response: %s", eventFailure.getJsonResponse().c_str());
     CCLOG("\n");
 }
@@ -660,6 +657,7 @@ The callback functions will be called after the SDK tries to send a package to t
 Both event response data objects contain:
 
 - `std::string eventToken` the event token, if the package tracked was an event.
+- `std::string callbackId` the custom defined callback ID set on event object.
 
 And both event- and session-failed objects also contain:
 
@@ -935,7 +933,7 @@ To set up your Android app to handle deep linking at a native level, please foll
 
 The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2018 Adjust GmbH, http://www.adjust.com
+Copyright (c) 2012-2019 Adjust GmbH, http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
