@@ -78,8 +78,7 @@ $(LOCAL_PATH)/../../../Classes/Adjust/Adjust2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventFailure2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
-$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp \
-$(LOCAL_PATH)/../../../Classes/Adjust/AdjustTestOptions2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
@@ -149,20 +148,6 @@ If you are using Proguard, add these lines to your Proguard file:
 -keep class com.google.android.gms.ads.identifier.AdvertisingIdClient$Info {
     java.lang.String getId();
     boolean isLimitAdTrackingEnabled();
-}
--keep class dalvik.system.VMRuntime {
-    java.lang.String getRuntime();
-}
--keep class android.os.Build {
-    java.lang.String[] SUPPORTED_ABIS;
-    java.lang.String CPU_ABI;
-}
--keep class android.content.res.Configuration {
-    android.os.LocaleList getLocales();
-    java.util.Locale locale;
-}
--keep class android.os.LocaleList {
-    java.util.Locale get(int);
 }
 -keep public class com.android.installreferrer.** { *; }
 ```
@@ -365,10 +350,8 @@ For example, suppose you have registered the URL `http://www.adjust.com/callback
 
 ```cpp
 AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
-
 adjustEvent.addCallbackParameter("key", "value");
 adjustEvent.addCallbackParameter("foo", "bar");
-
 Adjust2dx::trackEvent(adjustEvent);
 ```
 
@@ -950,7 +933,7 @@ To set up your Android app to handle deep linking at a native level, please foll
 
 The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2018 Adjust GmbH, http://www.adjust.com
+Copyright (c) 2012-2019 Adjust GmbH, http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
