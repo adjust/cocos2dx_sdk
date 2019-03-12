@@ -7,6 +7,7 @@
 //
 
 #include "Adjust2dx.h"
+#include <stdlib.h>
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -27,7 +28,7 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
     }
     jmiOnCreate.env->CallStaticVoidMethod(jmiOnCreate.classID, jmiOnCreate.methodID, adjustConfig.getConfig());
     onResume();
-    cocos2d::JniHelper::getEnv()->DeleteGlobalRef(adjustConfig.getConfig());
+    jmiOnCreate.env->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::appDidLaunch(adjustConfig.getConfig());
     onResume();
@@ -588,7 +589,7 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
 
     // Timer interval in milliseconds.
     if (testOptions.find("timerIntervalInMilliseconds") != testOptions.end()) {
-        long timerIntervalInMilliseconds = std::stol (testOptions["timerIntervalInMilliseconds"]);
+        long timerIntervalInMilliseconds = atol(testOptions["timerIntervalInMilliseconds"].c_str());
         jlong jTimerIntervalInMilliseconds = (jlong)(timerIntervalInMilliseconds);
         jobject jTimerIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
         jfieldID jfidTimerIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -598,7 +599,7 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
 
     // Timer start in milliseconds.
     if (testOptions.find("timerStartInMilliseconds") != testOptions.end()) {
-        long timerStartInMilliseconds = std::stol (testOptions["timerStartInMilliseconds"]);
+        long timerStartInMilliseconds = atol(testOptions["timerStartInMilliseconds"].c_str());
         jlong jTimerStartInMilliseconds = (jlong)(timerStartInMilliseconds);
         jobject jTimerStartInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
         jfieldID jfidTimerStartInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
@@ -608,7 +609,7 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
 
     // Session interval in milliseconds.
     if (testOptions.find("sessionIntervalInMilliseconds") != testOptions.end()) {
-        long sessionIntervalInMilliseconds = std::stol (testOptions["sessionIntervalInMilliseconds"]);
+        long sessionIntervalInMilliseconds = atol(testOptions["sessionIntervalInMilliseconds"].c_str());
         jlong jSessionIntervalInMilliseconds = (jlong)(sessionIntervalInMilliseconds);
         jobject jSessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
         jfieldID jfidSessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -618,7 +619,7 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
 
     // Sub-session interval in milliseconds.
     if (testOptions.find("subsessionIntervalInMilliseconds") != testOptions.end()) {
-        long subsessionIntervalInMilliseconds = std::stol (testOptions["subsessionIntervalInMilliseconds"]);
+        long subsessionIntervalInMilliseconds = atol(testOptions["subsessionIntervalInMilliseconds"].c_str());
         jlong jSubsessionIntervalInMilliseconds = (jlong)(subsessionIntervalInMilliseconds);
         jobject jSubsessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
         jfieldID jfidSubsessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
