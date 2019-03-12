@@ -1,3 +1,13 @@
+### Version 4.17.1 (xxth March 2019)
+#### Added
+- Added support for `Cocos2d-x v2.2.6`.
+
+#### Native SDKs
+- [iOS@v4.17.1][ios_sdk_v4.17.1]
+- [Android@v4.17.0][android_sdk_v4.17.0]
+
+---
+
 ### Version 4.17.0 (18th January 2019)
 #### Added
 - Added `getSdkVersion` method to `Adjust2dx` interface to obtain current SDK version string.
