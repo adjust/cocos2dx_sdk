@@ -47,7 +47,7 @@ std::vector<std::string> Command::getParameters(std::string parameterKey) {
 std::string Command::getFirstParameterValue(std::string parameterKey) {
     std::vector<std::string> parameterValues = this->parameters[parameterKey];
     if (parameterValues.size() == 0) {
-        return NULL;
+        return "";
     }
     return parameterValues[0];
 }

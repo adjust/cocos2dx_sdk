@@ -16,7 +16,7 @@
 #include "AdjustConfig2dx.h"
 USING_NS_CC;
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.17.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.17.1";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -39,7 +39,7 @@ void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, 
     jstring jAppToken = jmiInit.env->NewStringUTF(appToken.c_str());
     jstring jEnvironment = jmiInit.env->NewStringUTF(environment.c_str());
     jobject tmp = jmiInit.env->NewObject(jclsAdjustConfig, jmidInit, jContext, jAppToken, jEnvironment, allowSuppressLogLevel);
-    this->config = cocos2d::JniHelper::getEnv()->NewGlobalRef(tmp);
+    this->config = jmiInit.env->NewGlobalRef(tmp);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jAppToken);
     jmiInit.env->DeleteLocalRef(jEnvironment);
