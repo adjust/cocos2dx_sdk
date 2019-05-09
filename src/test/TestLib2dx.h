@@ -13,11 +13,11 @@
 
 class TestLib2dx {
 private:
-    void initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
+    void initTestLibrary(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
 
 public:
-    TestLib2dx(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
-        initTestLibrary(baseUrl, executeCommandCallback);
+    TestLib2dx(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
+        initTestLibrary(baseUrl, controlUrl, executeCommandCallback);
     }
 
     void addTest(std::string testName);

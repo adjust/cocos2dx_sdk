@@ -22,7 +22,7 @@ static jobject testLibrary;
 static ATLTestLibrary2dx testLibrary;
 #endif
 
-void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
+void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
@@ -32,9 +32,11 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     }
 
     jclass jclsTestLibrary = jmiInit.env->FindClass("com/adjust/test/TestLibrary");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsTestLibrary, "<init>", "(Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsTestLibrary, "<init>", "(Ljava/lang/String;Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V");
     // Base URL.
     jstring jBaseUrl = jmiInit.env->NewStringUTF(baseUrl.c_str());
+    // Control URL.
+    jstring jControlUrl = jmiInit.env->NewStringUTF(controlUrl.c_str());
     // Command listener.
     cocos2d::JniMethodInfo jmiInitCommJsonListener;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInitCommJsonListener, "com/adjust/test/Adjust2dxCommandJsonListenerCallback", "<init>", "()V")) {
@@ -46,13 +48,14 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, void(*executeCommandCallba
     jobject jCommListenerCallbackProxy = jmiInitCommJsonListener.env->NewObject(jclsAdjust2dxCommandJsonListenerCallback, jmidInitCommJsonListener);
 
     // Initialise test library
-    jobject jTestLib = jmiInit.env->NewObject(jclsTestLibrary, jmidInit, jBaseUrl, jCommListenerCallbackProxy);
+    jobject jTestLib = jmiInit.env->NewObject(jclsTestLibrary, jmidInit, jBaseUrl, jControlUrl, jCommListenerCallbackProxy);
     testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(jTestLib);
 
     jmiInit.env->DeleteLocalRef(jBaseUrl);
+    jmiInit.env->DeleteLocalRef(jControlUrl);
     jmiInit.env->DeleteLocalRef(jCommListenerCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary = ATLTestLibrary2dx(baseUrl, executeCommandCallback);
+    testLibrary = ATLTestLibrary2dx(baseUrl, controlUrl, executeCommandCallback);
 #endif
 }
 

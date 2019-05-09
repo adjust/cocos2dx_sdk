@@ -15,7 +15,7 @@ private:
 
 public:
     ATLTestLibrary2dx() {}
-    ATLTestLibrary2dx(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
+    ATLTestLibrary2dx(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters));
 
     void addTest(std::string testName);
     void addTestDirectory(std::string testDirectory);
