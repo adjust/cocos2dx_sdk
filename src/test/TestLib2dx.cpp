@@ -27,7 +27,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, vo
     setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/test/TestLibrary", "<init>", "(Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/test/TestLibrary", "<init>", "(Ljava/lang/String;Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V")) {
         return;
     }
 
