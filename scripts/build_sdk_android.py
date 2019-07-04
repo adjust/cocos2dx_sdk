@@ -63,6 +63,7 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     copy_file('{0}/adjust-android.jar'.format(android_libs_dir), '{0}/proj.android/app/libs/adjust-android.jar'.format(app_path))
     copy_file('{0}/adjust-test.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test.jar'.format(app_path))
     copy_file('{0}/gson-2.8.1.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.1.jar'.format(app_path))
+    copy_file('{0}/Java-WebSocket-1.3.9.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/Java-WebSocket-1.3.9.jar'.format(app_path))
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust folder.
@@ -108,7 +109,7 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test library project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test library project ...')
-        gradle_run(['clean', 'adjustMakeJarDebug'])
+        gradle_run(['clean', 'adjustTestLibraryJarDebug'])
         if (configuration == 'release'):
             test_libs_in_dir = '{0}/test-library/build/libs'.format(build_dir)
         else:

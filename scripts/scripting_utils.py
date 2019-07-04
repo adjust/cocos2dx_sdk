@@ -192,15 +192,15 @@ def adb_shell(app_package):
 
 def gradle_make_release_jar(do_clean=False):
     if (do_clean):
-        execute_command(['./gradlew', 'clean', 'adjustSdkNonNativeJarRelease'])
+        execute_command(['./gradlew', 'clean', 'adjustCoreJarRelease'])
     else:
-        execute_command(['./gradlew', 'adjustSdkNonNativeJarRelease'])
+        execute_command(['./gradlew', 'adjustCoreJarRelease'])
 
 def gradle_make_debug_jar(do_clean=False):
     if (do_clean):
-        execute_command(['./gradlew', 'clean', 'adjustSdkNonNativeJarDebug'])
+        execute_command(['./gradlew', 'clean', 'adjustCoreJarDebug'])
     else:
-        execute_command(['./gradlew', 'adjustSdkNonNativeJarDebug'])    
+        execute_command(['./gradlew', 'adjustCoreJarDebug'])    
 
 def gradle_run(options):
     cmd_params = ['./gradlew']
@@ -224,23 +224,3 @@ def update_dist(root_dir):
 
 def cocos_new_project(package_name, app_path, name):
     execute_command(['cocos', 'new', '-l', 'cpp', '-p', package_name, '-d', app_path, name])
-
-############################################################
-### nonsense, eyecandy and such
-
-def waiting_animation(duration, step):
-    if(duration <= step):
-        return
-
-    line = '-'
-    line_killer = '\b'
-    while duration >= 0:
-        duration -= step
-        sys.stdout.write(line)
-        sys.stdout.flush()
-        sys.stdout.write(line_killer)
-        line += '-'
-        line_killer += '\b'
-        if len(line) > 65:
-            line = '-'
-        time.sleep(step)

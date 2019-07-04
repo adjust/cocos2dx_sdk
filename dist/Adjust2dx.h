@@ -35,6 +35,7 @@ public:
     static void removeSessionPartnerParameter(std::string key);
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
+    static void trackAdRevenue(std::string source, std::string payload);
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();

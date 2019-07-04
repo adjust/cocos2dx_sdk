@@ -251,6 +251,29 @@ void Adjust2dx::resetSessionPartnerParameters() {
 #endif
 }
 
+void Adjust2dx::trackAdRevenue(std::string source, std::string payload) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackAdRevenue(source, payload);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackAdRevenue;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackAdRevenue, "com/adjust/sdk/Adjust", "trackAdRevenue", "(Ljava/lang/String;Lorg/json/JSONObject;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiJsonObjectInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiJsonObjectInit, "org/json/JSONObject", "<init>", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jSource = jmiTrackAdRevenue.env->NewStringUTF(source.c_str());
+    jstring jPayload = jmiTrackAdRevenue.env->NewStringUTF(payload.c_str());
+    jclass clsJsonObject = jmiJsonObjectInit.env->FindClass("org/json/JSONObject");
+    jmethodID jmidJsonObjectInit = jmiJsonObjectInit.env->GetMethodID(clsJsonObject, "<init>", "(Ljava/lang/String;)V");
+    jobject jJsonObject = jmiJsonObjectInit.env->NewObject(clsJsonObject, jmidJsonObjectInit, jPayload);
+    jmiTrackAdRevenue.env->CallStaticVoidMethod(jmiTrackAdRevenue.classID, jmiTrackAdRevenue.methodID, jSource, jJsonObject);
+    jmiJsonObjectInit.env->DeleteLocalRef(jJsonObject);
+#endif
+}
+
 std::string Adjust2dx::getAdid() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getAdid();

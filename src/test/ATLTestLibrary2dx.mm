@@ -11,9 +11,10 @@
 #include "AdjustCommandDelegate2dx.h"
 #include <AdjustTestLibrary/ATLTestLibrary.h>
 
-ATLTestLibrary2dx::ATLTestLibrary2dx(std::string baseUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
+ATLTestLibrary2dx::ATLTestLibrary2dx(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
 	AdjustCommandDelegate2dx *adjustCommandDelegate = [AdjustCommandDelegate2dx getInstanceWithCommandExecutorCallbackId:executeCommandCallback];
 	testLibrary = [ATLTestLibrary testLibraryWithBaseUrl:[NSString stringWithUTF8String:baseUrl.c_str()] 
+										   andControlUrl:[NSString stringWithUTF8String:controlUrl.c_str()] 
 									  andCommandDelegate:adjustCommandDelegate];
 }
 

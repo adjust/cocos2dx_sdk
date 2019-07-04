@@ -106,6 +106,10 @@ void ADJAdjust2dx::resetSessionPartnerParameters() {
     [Adjust resetSessionPartnerParameters];
 }
 
+void ADJAdjust2dx::trackAdRevenue(std::string source, std::string payload) {
+    NSData *dataPayload = [[NSString stringWithUTF8String:payload.c_str()] dataUsingEncoding:NSUTF8StringEncoding];
+    [Adjust trackAdRevenue:[NSString stringWithUTF8String:source.c_str()] payload:dataPayload];
+}
 
 bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];

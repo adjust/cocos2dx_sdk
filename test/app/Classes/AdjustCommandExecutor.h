@@ -54,6 +54,7 @@ private:
     void openDeeplink();
     void sendReferrer();
     void gdprForgetMe();
+    void trackAdRevenue();
 public:
     static const std::string TAG;
     AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl);

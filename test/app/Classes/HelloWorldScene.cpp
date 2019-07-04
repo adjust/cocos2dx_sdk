@@ -18,11 +18,12 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.8.109";
+static std::string serverIp = "192.168.8.210";
+static std::string controlUrl = "ws://" + serverIp + ":1987";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-static std::string baseUrl = "http://" + serverIp + ":8080";
-static std::string gdprUrl = "http://" + serverIp + ":8080";
+static std::string baseUrl = "http://" + serverIp + ":9000";
+static std::string gdprUrl = "http://" + serverIp + ":9000";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static std::string baseUrl = "https://" + serverIp + ":8443";
 static std::string gdprUrl = "https://" + serverIp + ":8443";
@@ -37,7 +38,7 @@ void TestApp::initTestLibrary() {
         commandExecutorInstance->executeCommand(command);
     };
 
-    this->testLibrary = new TestLib2dx(baseUrl, func);
+    this->testLibrary = new TestLib2dx(baseUrl, controlUrl, func);
 }
 
 bool TestApp::init() {
