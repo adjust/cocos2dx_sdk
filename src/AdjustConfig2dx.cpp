@@ -16,7 +16,7 @@
 #include "AdjustConfig2dx.h"
 USING_NS_CC;
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.17.1";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.18.0";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

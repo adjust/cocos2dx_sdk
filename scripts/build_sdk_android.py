@@ -109,7 +109,7 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test library project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test library project ...')
-        gradle_run(['clean', 'adjustMakeJarDebug'])
+        gradle_run(['clean', 'adjustTestLibraryJarDebug'])
         if (configuration == 'release'):
             test_libs_in_dir = '{0}/test-library/build/libs'.format(build_dir)
         else:

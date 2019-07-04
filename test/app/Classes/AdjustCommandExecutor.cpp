@@ -65,6 +65,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->sendReferrer();
     } else if (command->methodName == "gdprForgetMe") {
         this->gdprForgetMe();
+    } else if (command->methodName == "trackAdRevenue") {
+        this->trackAdRevenue();
     }
 }
 
@@ -539,4 +541,10 @@ void AdjustCommandExecutor::sendReferrer() {
 
 void AdjustCommandExecutor::gdprForgetMe() {
     Adjust2dx::gdprForgetMe();
+}
+
+void AdjustCommandExecutor::trackAdRevenue() {
+    std::string source = command->getFirstParameterValue("adRevenueSource");
+    std::string payload = command->getFirstParameterValue("adRevenueJsonString");
+    Adjust2dx::trackAdRevenue(source, payload);
 }
