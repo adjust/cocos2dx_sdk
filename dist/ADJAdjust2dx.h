@@ -6,13 +6,14 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
-#ifndef _ADJUST_ADJUST2DX_H_
-#define _ADJUST_ADJUST2DX_H_
+#ifndef _ADJUST_ADJADJUST2DX_H_
+#define _ADJUST_ADJADJUST2DX_H_
 
 #include <map>
 #include <iostream>
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
+#include "ADJAppStoreSubscription2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
@@ -22,6 +23,7 @@ class ADJAdjust2dx {
 public:
     static void appDidLaunch(ADJConfig2dx adjustConfig);
     static void trackEvent(ADJEvent2dx adjustEvent);
+    static void trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription);
     static void trackSubsessionStart();
     static void trackSubsessionEnd();
     static void setEnabled(bool isEnabled);
@@ -30,6 +32,7 @@ public:
     static void setOfflineMode(bool isOffline);
     static void sendFirstPackages();
     static void gdprForgetMe();
+    static void disableThirdPartySharing();
     static void addSessionCallbackParameter(std::string key, std::string value);
     static void addSessionPartnerParameter(std::string key, std::string value);
     static void removeSessionCallbackParameter(std::string key);
@@ -47,4 +50,4 @@ public:
     static void teardown();
 };
 
-#endif /* _ADJUST_ADJUST2DX_H_ */
+#endif /* _ADJUST_ADJADJUST2DX_H_ */

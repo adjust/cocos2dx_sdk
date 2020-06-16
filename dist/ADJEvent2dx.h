@@ -6,8 +6,8 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
-#ifndef _ADJUST_ADJUSTEVENT2DX_H_
-#define _ADJUST_ADJUSTEVENT2DX_H_
+#ifndef _ADJUST_ADJEVENT2DX_H_
+#define _ADJUST_ADJEVENT2DX_H_
 
 #include <iostream>
 
@@ -32,4 +32,4 @@ public:
     void* getEvent();
 };
 
-#endif /* _ADJUST_ADJUSTEVENT2DX_H_ */
+#endif /* _ADJUST_ADJEVENT2DX_H_ */

@@ -6,8 +6,8 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
-#ifndef _ADJUST_ADJUSTCONFIG2DX_H_
-#define _ADJUST_ADJUSTCONFIG2DX_H_
+#ifndef _ADJUST_ADJCONFIG2DX_H_
+#define _ADJUST_ADJCONFIG2DX_H_
 
 #include <iostream>
 #include "AdjustAttribution2dx.h"
@@ -49,8 +49,11 @@ public:
     void setLogLevel(ADJLogLevel2dx logLevel);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
+    void setAllowIdfaReading(bool isAllowed);
+    void setAllowiAdInfoReading(bool isAllowed);
     void setUserAgent(std::string userAgent);
     void setDefaultTracker(std::string defaultTracker);
+    void setExternalDeviceId(std::string externalDeviceId);
     void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
     void setIsDeviceKnown(bool isDeviceKnown);
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
@@ -68,4 +71,4 @@ public:
     bool(*getDeferredDeeplinkCallback())(std::string);
 };
 
-#endif /* _ADJUST_ADJUSTCONFIG2DX_H_ */
+#endif /* _ADJUST_ADJCONFIG2DX_H_ */

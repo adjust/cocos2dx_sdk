@@ -48,6 +48,10 @@ void ADJAdjust2dx::trackEvent(ADJEvent2dx adjustEvent) {
     [Adjust trackEvent:(ADJEvent *)adjustEvent.getEvent()];
 }
 
+void ADJAdjust2dx::trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription) {
+    [Adjust trackSubscription:(ADJSubscription *)subscription.getSubscription()];
+}
+
 void ADJAdjust2dx::trackSubsessionStart() {
     [Adjust trackSubsessionStart];
 }
@@ -80,6 +84,10 @@ void ADJAdjust2dx::sendFirstPackages() {
 
 void ADJAdjust2dx::gdprForgetMe() {
     [Adjust gdprForgetMe];
+}
+
+void ADJAdjust2dx::disableThirdPartySharing() {
+    [Adjust disableThirdPartySharing];
 }
 
 void ADJAdjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
@@ -188,12 +196,10 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
     AdjustTestOptions *testOptions = [[AdjustTestOptions alloc] init];
     testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];
     testOptions.gdprUrl = [NSString stringWithUTF8String:testOptionsMap["gdprUrl"].c_str()];
+    testOptions.subscriptionUrl = [NSString stringWithUTF8String:testOptionsMap["subscriptionUrl"].c_str()];
 
-    if (testOptionsMap.find("basePath") != testOptionsMap.end()) {
-        testOptions.basePath = [NSString stringWithUTF8String:testOptionsMap["basePath"].c_str()];
-    }
-    if (testOptionsMap.find("gdprPath") != testOptionsMap.end()) {
-        testOptions.gdprPath = [NSString stringWithUTF8String:testOptionsMap["gdprPath"].c_str()];
+    if (testOptionsMap.find("extraPath") != testOptionsMap.end()) {
+        testOptions.extraPath = [NSString stringWithUTF8String:testOptionsMap["extraPath"].c_str()];
     }
     if (testOptionsMap.find("timerIntervalInMilliseconds") != testOptionsMap.end()) {
         NSString *timerIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["timerIntervalInMilliseconds"].c_str()];

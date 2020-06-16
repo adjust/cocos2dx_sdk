@@ -67,10 +67,13 @@ public:
     void setDeviceKnown(bool isDeviceKnown);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
+    void setAllowIdfaReading(bool isAllowed);
+    void setAllowiAdInfoReading(bool isAllowed);
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setUserAgent(std::string userAgent);
     void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
+    void setExternalDeviceId(std::string externalDeviceId);
     void setDelayStart(double delayStart);    
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
     void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
