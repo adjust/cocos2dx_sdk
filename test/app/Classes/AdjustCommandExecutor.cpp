@@ -591,21 +591,21 @@ void AdjustCommandExecutor::trackSubscription() {
     std::string transactionDate = command->getFirstParameterValue("transactionDate");
     std::string salesRegion = command->getFirstParameterValue("salesRegion");
 
-    AdjustAppStoreSubscription2dx *subscription = new AdjustAppStoreSubscription2dx(
+    AdjustAppStoreSubscription2dx subscription = AdjustAppStoreSubscription2dx(
         price,
         currency,
         transactionId,
         receipt
     );
-    subscription->setTransactionDate(transactionDate);
-    subscription->setSalesRegion(salesRegion);
+    subscription.setTransactionDate(transactionDate);
+    subscription.setSalesRegion(salesRegion);
 
     if (this->command->containsParameter("callbackParams")) {
         std::vector<std::string> callbackParams = command->getParameters("callbackParams");
         for (int i = 0; i < callbackParams.size(); i = i + 2) {
             std::string key = callbackParams[i];
             std::string value = callbackParams[i + 1];
-            subscription->addCallbackParameter(key, value);
+            subscription.addCallbackParameter(key, value);
         }
     }
 
@@ -614,11 +614,11 @@ void AdjustCommandExecutor::trackSubscription() {
         for (int i = 0; i < partnerParams.size(); i = i + 2) {
             std::string key = partnerParams[i];
             std::string value = partnerParams[i + 1];
-            subscription->addPartnerParameter(key, value);
+            subscription.addPartnerParameter(key, value);
         }
     }
 
-    Adjust2dx::trackAppStoreSubscription(*subscription);
+    Adjust2dx::trackAppStoreSubscription(subscription);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string price = command->getFirstParameterValue("revenue");
     std::string currency = command->getFirstParameterValue("currency");
@@ -628,7 +628,7 @@ void AdjustCommandExecutor::trackSubscription() {
     std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
     std::string purchaseTime = command->getFirstParameterValue("transactionDate");
 
-    AdjustPlayStoreSubscription2dx *subscription = new AdjustPlayStoreSubscription2dx(
+    AdjustPlayStoreSubscription2dx subscription = AdjustPlayStoreSubscription2dx(
         price,
         currency,
         sku,
@@ -636,14 +636,14 @@ void AdjustCommandExecutor::trackSubscription() {
         signature,
         purchaseToken
     );
-    subscription->setPurchaseTime(purchaseTime);
+    subscription.setPurchaseTime(purchaseTime);
 
     if (this->command->containsParameter("callbackParams")) {
         std::vector<std::string> callbackParams = command->getParameters("callbackParams");
         for (int i = 0; i < callbackParams.size(); i = i + 2) {
             std::string key = callbackParams[i];
             std::string value = callbackParams[i + 1];
-            subscription->addCallbackParameter(key, value);
+            subscription.addCallbackParameter(key, value);
         }
     }
 
@@ -652,10 +652,10 @@ void AdjustCommandExecutor::trackSubscription() {
         for (int i = 0; i < partnerParams.size(); i = i + 2) {
             std::string key = partnerParams[i];
             std::string value = partnerParams[i + 1];
-            subscription->addPartnerParameter(key, value);
+            subscription.addPartnerParameter(key, value);
         }
     }
 
-    Adjust2dx::trackPlayStoreSubscription(*subscription);
+    Adjust2dx::trackPlayStoreSubscription(subscription);
 #endif
 }
