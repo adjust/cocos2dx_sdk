@@ -1,3 +1,22 @@
+### Version 4.22.0 (17th June 2020)
+#### Added
+- Added subscription tracking feature.
+- Added support for Huawei App Gallery install referrer.
+- Added `disableThirdPartySharing` method to `Adjust2dx` interface to allow disabling of data sharing with third parties outside of Adjust ecosystem.
+- Added support for signature library as a plugin.
+- Added more aggressive sending retry logic for install session package.
+- Added additional parameters to `ad_revenue` package payload.
+- Added external device ID support.
+
+#### Changed
+- Updated communication flow with `iAd.framework`.
+
+#### Native SDKs
+- [iOS@v4.22.1][ios_sdk_v4.22.1]
+- [Android@v4.22.0][android_sdk_v4.22.0]
+
+---
+
 ### Version 4.18.0 (4th July 2019)
 #### Added
 - Added `trackAdRevenue` method to `Adjust2dx` interface to allow tracking of ad revenue. With this release added support for `MoPub` ad revenue tracking.
@@ -291,6 +310,7 @@
 [ios_sdk_v4.17.1]: https://github.com/adjust/ios_sdk/tree/v4.17.1
 [ios_sdk_v4.17.2]: https://github.com/adjust/ios_sdk/tree/v4.17.2
 [ios_sdk_v4.18.0]: https://github.com/adjust/ios_sdk/tree/v4.18.0
+[ios_sdk_v4.22.1]: https://github.com/adjust/ios_sdk/tree/v4.22.1
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -308,5 +328,6 @@
 [android_sdk_v4.14.0]: https://github.com/adjust/android_sdk/tree/v4.14.0
 [android_sdk_v4.17.0]: https://github.com/adjust/android_sdk/tree/v4.17.0
 [android_sdk_v4.18.0]: https://github.com/adjust/android_sdk/tree/v4.18.0
+[android_sdk_v4.22.0]: https://github.com/adjust/android_sdk/tree/v4.22.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
