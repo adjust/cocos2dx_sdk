@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-2020 Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUST2DX_H_
@@ -14,6 +14,8 @@
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
 #include "AdjustAttribution2dx.h"
+#include "AdjustAppStoreSubscription2dx.h"
+#include "AdjustPlayStoreSubscription2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -36,6 +38,7 @@ public:
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
     static void trackAdRevenue(std::string source, std::string payload);
+    static void disableThirdPartySharing();
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
@@ -45,8 +48,10 @@ public:
     static std::string getAmazonAdId();
     static void onResume();
     static void onPause();
+    static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     // iOS specific methods.
     static std::string getIdfa();
+    static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

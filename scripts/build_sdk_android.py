@@ -62,8 +62,9 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     create_dir_if_not_exist('{0}/proj.android/app/libs'.format(app_path))
     copy_file('{0}/adjust-android.jar'.format(android_libs_dir), '{0}/proj.android/app/libs/adjust-android.jar'.format(app_path))
     copy_file('{0}/adjust-test.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test.jar'.format(app_path))
-    copy_file('{0}/gson-2.8.1.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.1.jar'.format(app_path))
-    copy_file('{0}/Java-WebSocket-1.3.9.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/Java-WebSocket-1.3.9.jar'.format(app_path))
+    copy_file('{0}/gson-2.8.6.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.6.jar'.format(app_path))
+    copy_file('{0}/Java-WebSocket-1.4.0.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/Java-WebSocket-1.4.0.jar'.format(app_path))
+    copy_file('{0}/slf4j-api-1.7.30.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/slf4j-api-1.7.30.jar'.format(app_path))
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust folder.

@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-2020 Adjust GmbH. All rights reserved.
 //
 
 #define COCOS2D_DEBUG 1
@@ -16,9 +16,10 @@
 static std::string localBasePath;
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
-AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl) {
+AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl, std::string subscriptionUrl) {
     this->baseUrl = baseUrl;
     this->gdprUrl = gdprUrl;
+    this->subscriptionUrl = subscriptionUrl;
 }
 
 void AdjustCommandExecutor::executeCommand(Command *command) {
@@ -67,6 +68,10 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->gdprForgetMe();
     } else if (command->methodName == "trackAdRevenue") {
         this->trackAdRevenue();
+    } else if (command->methodName == "disableThirdPartySharing") {
+        this->disableThirdPartySharing();
+    } else if (command->methodName == "trackSubscription") {
+        this->trackSubscription();
     }
 }
 
@@ -74,9 +79,12 @@ void AdjustCommandExecutor::testOptions() {
     std::map<std::string, std::string> testOptions;
     testOptions["baseUrl"] = this->baseUrl;
     testOptions["gdprUrl"] = this->gdprUrl;
+    testOptions["subscriptionUrl"] = this->subscriptionUrl;
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
         this->gdprPath = command->getFirstParameterValue("basePath");
+        this->subscriptionPath = command->getFirstParameterValue("basePath");
+        this->extraPath = command->getFirstParameterValue("basePath");
     }
     if (this->command->containsParameter("timerInterval")) {
         testOptions["timerIntervalInMilliseconds"] = command->getFirstParameterValue("timerInterval");
@@ -110,6 +118,8 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["teardown"] = "true";
                 testOptions["basePath"] = this->basePath;
                 testOptions["gdprPath"] = this->gdprPath;
+                testOptions["subscriptionPath"] = this->subscriptionPath;
+                testOptions["extraPath"] = this->extraPath;
                 // Android specific.
                 testOptions["useTestConnectionOptions"] = "true";
                 testOptions["tryInstallReferrer"] = "false";
@@ -135,6 +145,8 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["teardown"] = "true";
                 testOptions["basePath"] = "";
                 testOptions["gdprPath"] = "";
+                testOptions["subscriptionPath"] = "";
+                testOptions["extraPath"] = "";
                 // Android specific.
                 testOptions["useTestConnectionOptions"] = "false";
             }
@@ -207,11 +219,6 @@ void AdjustCommandExecutor::config() {
         }
     }
 
-    if (this->command->containsParameter("defaultTracker")) {
-        std::string defaultTracker = command->getFirstParameterValue("defaultTracker");
-        adjustConfig->setDefaultTracker(defaultTracker);
-    }
-
     if (this->command->containsParameter("appSecret")) {
         try {
             std::vector<std::string> appSecretArray = command->getParameters("appSecret");
@@ -252,10 +259,32 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setEventBufferingEnabled(eventBufferingEnabled);
     }
 
+    if (this->command->containsParameter("allowIdfaReading")) {
+        std::string allowIdfaReadingString = command->getFirstParameterValue("allowIdfaReading");
+        bool allowIdfaReading = (allowIdfaReadingString == "true");
+        adjustConfig->setAllowIdfaReading(allowIdfaReading);
+    }
+
+    if (this->command->containsParameter("allowiAdInfoReading")) {
+        std::string allowiAdInfoReadingString = command->getFirstParameterValue("allowiAdInfoReading");
+        bool allowiAdInfoReading = (allowiAdInfoReadingString == "true");
+        adjustConfig->setAllowiAdInfoReading(allowiAdInfoReading);
+    }
+
     if (this->command->containsParameter("sendInBackground")) {
         std::string sendInBackgroundString = command->getFirstParameterValue("sendInBackground");
         bool sendInBackground = (sendInBackgroundString == "true");
         adjustConfig->setSendInBackground(sendInBackground);
+    }
+
+    if (this->command->containsParameter("defaultTracker")) {
+        std::string defaultTracker = command->getFirstParameterValue("defaultTracker");
+        adjustConfig->setDefaultTracker(defaultTracker);
+    }
+
+    if (this->command->containsParameter("externalDeviceId")) {
+        std::string externalDeviceId = command->getFirstParameterValue("externalDeviceId");
+        adjustConfig->setExternalDeviceId(externalDeviceId);
     }
 
     if (this->command->containsParameter("userAgent")) {
@@ -543,8 +572,90 @@ void AdjustCommandExecutor::gdprForgetMe() {
     Adjust2dx::gdprForgetMe();
 }
 
+void AdjustCommandExecutor::disableThirdPartySharing() {
+    Adjust2dx::disableThirdPartySharing();
+}
+
 void AdjustCommandExecutor::trackAdRevenue() {
     std::string source = command->getFirstParameterValue("adRevenueSource");
     std::string payload = command->getFirstParameterValue("adRevenueJsonString");
     Adjust2dx::trackAdRevenue(source, payload);
+}
+
+void AdjustCommandExecutor::trackSubscription() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    std::string price = command->getFirstParameterValue("revenue");
+    std::string currency = command->getFirstParameterValue("currency");
+    std::string transactionId = command->getFirstParameterValue("transactionId");
+    std::string receipt = command->getFirstParameterValue("receipt");
+    std::string transactionDate = command->getFirstParameterValue("transactionDate");
+    std::string salesRegion = command->getFirstParameterValue("salesRegion");
+
+    AdjustAppStoreSubscription2dx *subscription = new AdjustAppStoreSubscription2dx(
+        price,
+        currency,
+        transactionId,
+        receipt
+    );
+    subscription->setTransactionDate(transactionDate);
+    subscription->setSalesRegion(salesRegion);
+
+    if (this->command->containsParameter("callbackParams")) {
+        std::vector<std::string> callbackParams = command->getParameters("callbackParams");
+        for (int i = 0; i < callbackParams.size(); i = i + 2) {
+            std::string key = callbackParams[i];
+            std::string value = callbackParams[i + 1];
+            subscription->addCallbackParameter(key, value);
+        }
+    }
+
+    if (this->command->containsParameter("partnerParams")) {
+        std::vector<std::string> partnerParams = command->getParameters("partnerParams");
+        for (int i = 0; i < partnerParams.size(); i = i + 2) {
+            std::string key = partnerParams[i];
+            std::string value = partnerParams[i + 1];
+            subscription->addPartnerParameter(key, value);
+        }
+    }
+
+    Adjust2dx::trackAppStoreSubscription(*subscription);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string price = command->getFirstParameterValue("revenue");
+    std::string currency = command->getFirstParameterValue("currency");
+    std::string sku = command->getFirstParameterValue("productId");
+    std::string orderId = command->getFirstParameterValue("transactionId");
+    std::string signature = command->getFirstParameterValue("receipt");
+    std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
+    std::string purchaseTime = command->getFirstParameterValue("transactionDate");
+
+    AdjustPlayStoreSubscription2dx *subscription = new AdjustPlayStoreSubscription2dx(
+        price,
+        currency,
+        sku,
+        orderId,
+        signature,
+        purchaseToken
+    );
+    subscription->setPurchaseTime(purchaseTime);
+
+    if (this->command->containsParameter("callbackParams")) {
+        std::vector<std::string> callbackParams = command->getParameters("callbackParams");
+        for (int i = 0; i < callbackParams.size(); i = i + 2) {
+            std::string key = callbackParams[i];
+            std::string value = callbackParams[i + 1];
+            subscription->addCallbackParameter(key, value);
+        }
+    }
+
+    if (this->command->containsParameter("partnerParams")) {
+        std::vector<std::string> partnerParams = command->getParameters("partnerParams");
+        for (int i = 0; i < partnerParams.size(); i = i + 2) {
+            std::string key = partnerParams[i];
+            std::string value = partnerParams[i + 1];
+            subscription->addPartnerParameter(key, value);
+        }
+    }
+
+    Adjust2dx::trackPlayStoreSubscription(*subscription);
+#endif
 }

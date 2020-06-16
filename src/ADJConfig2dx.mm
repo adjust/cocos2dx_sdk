@@ -33,12 +33,24 @@ void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
     ((ADJConfig *)config).eventBufferingEnabled = isEnabled;
 }
 
+void ADJConfig2dx::setAllowIdfaReading(bool isAllowed) {
+    ((ADJConfig *)config).allowIdfaReading = isAllowed;
+}
+
+void ADJConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
+    ((ADJConfig *)config).allowiAdInfoReading = isAllowed;
+}
+
 void ADJConfig2dx::setUserAgent(std::string userAgent) {
     ((ADJConfig *)config).userAgent = [NSString stringWithUTF8String:userAgent.c_str()];
 }
 
 void ADJConfig2dx::setDefaultTracker(std::string defaultTracker) {
     ((ADJConfig *)config).defaultTracker = [NSString stringWithUTF8String:defaultTracker.c_str()];
+}
+
+void ADJConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
+    ((ADJConfig *)config).externalDeviceId = [NSString stringWithUTF8String:externalDeviceId.c_str()];
 }
 
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {

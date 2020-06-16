@@ -47,6 +47,22 @@ void Adjust2dx::trackEvent(AdjustEvent2dx event) {
 #endif
 }
 
+void Adjust2dx::trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackAppStoreSubscription(subscription.getSubscription());
+#endif
+}
+
+void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackPlayStoreSubscription;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackPlayStoreSubscription, "com/adjust/sdk/Adjust", "trackPlayStoreSubscription", "(Lcom/adjust/sdk/AdjustPlayStoreSubscription;)V")) {
+        return;
+    }
+    jmiTrackPlayStoreSubscription.env->CallStaticVoidMethod(jmiTrackPlayStoreSubscription.classID, jmiTrackPlayStoreSubscription.methodID, subscription.getSubscription());
+#endif
+}
+
 void Adjust2dx::setEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetEnabled;
@@ -271,6 +287,25 @@ void Adjust2dx::trackAdRevenue(std::string source, std::string payload) {
     jobject jJsonObject = jmiJsonObjectInit.env->NewObject(clsJsonObject, jmidJsonObjectInit, jPayload);
     jmiTrackAdRevenue.env->CallStaticVoidMethod(jmiTrackAdRevenue.classID, jmiTrackAdRevenue.methodID, jSource, jJsonObject);
     jmiJsonObjectInit.env->DeleteLocalRef(jJsonObject);
+#endif
+}
+
+void Adjust2dx::disableThirdPartySharing() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::disableThirdPartySharing();
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiDisableThirdPartySharing;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiDisableThirdPartySharing, "com/adjust/sdk/Adjust", "disableThirdPartySharing", "(Landroid/content/Context;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiDisableThirdPartySharing.env->CallStaticVoidMethod(jmiDisableThirdPartySharing.classID, jmiDisableThirdPartySharing.methodID, jContext);
+    jmiGetContext.env->DeleteLocalRef(jContext);
 #endif
 }
 
@@ -587,6 +622,11 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     jfieldID jfidGdprUrl = jmiInit.env->GetFieldID(jclsTestOptions, "gdprUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidGdprUrl, jsGdprUrl);
 
+    // Subscription URL.
+    jstring jsSubscriptionUrl = jmiInit.env->NewStringUTF(testOptions["subscriptionUrl"].c_str());
+    jfieldID jfidSubscriptionUrl = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionUrl", "Ljava/lang/String;");
+    jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionUrl, jsSubscriptionUrl);
+
     // Base path.
     if (testOptions.find("basePath") != testOptions.end()) {
         jstring jsBasePath = jmiInit.env->NewStringUTF(testOptions["basePath"].c_str());
@@ -599,6 +639,13 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
         jstring jsGdprPath = jmiInit.env->NewStringUTF(testOptions["gdprPath"].c_str());
         jfieldID jfidGdprPath = jmiInit.env->GetFieldID(jclsTestOptions, "gdprPath", "Ljava/lang/String;");
         jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsGdprPath);
+    }
+
+    // GDPR path.
+    if (testOptions.find("subscriptionPath") != testOptions.end()) {
+        jstring jsSubscriptionPath = jmiInit.env->NewStringUTF(testOptions["subscriptionPath"].c_str());
+        jfieldID jfidSubscriptionPath = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionPath", "Ljava/lang/String;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionPath, jsSubscriptionPath);
     }
 
     // Use test connection options.

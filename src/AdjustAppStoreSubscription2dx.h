@@ -1,0 +1,47 @@
+//
+//  AdjustAppStoreSubscription2dx.h
+//  Adjust SDK
+//
+//  Created by Uglješa Erceg (@uerceg) on 12th June 2020.
+//  Copyright © 2015-2020 Adjust GmbH. All rights reserved.
+//
+
+#ifndef ADJUST_ADJUSTAPPSTORESUBSCRIPTION2DX_H_
+#define ADJUST_ADJUSTAPPSTORESUBSCRIPTION2DX_H_
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "ADJAppStoreSubscription2dx.h"
+#endif
+
+#include <iostream>
+
+class AdjustAppStoreSubscription2dx {
+private:
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    bool isSubscriptionSet;
+    ADJAppStoreSubscription2dx subscription;
+#endif
+    void initSubscription(std::string price, std::string currency, std::string transactionId, std::string receipt);
+
+public:
+    AdjustAppStoreSubscription2dx(std::string price, std::string currency, std::string transactionId, std::string receipt) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        isSubscriptionSet = false;
+        initSubscription(price, currency, transactionId, receipt);
+#endif
+    }
+
+    void setTransactionDate(std::string transactionDate);
+    void setSalesRegion(std::string salesRegion);
+    void addCallbackParameter(std::string key, std::string value);
+    void addPartnerParameter(std::string key, std::string value);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAppStoreSubscription2dx getSubscription();
+#endif
+};
+
+#endif /* ADJUST_ADJUSTAPPSTORESUBSCRIPTION2DX_H_ */

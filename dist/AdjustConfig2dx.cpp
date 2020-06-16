@@ -16,7 +16,7 @@
 #include "AdjustConfig2dx.h"
 USING_NS_CC;
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.18.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.21.0";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -167,6 +167,24 @@ void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
 #endif
 }
 
+void AdjustConfig2dx::setAllowIdfaReading(bool isAllowed) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setAllowIdfaReading(isAllowed);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setAllowiAdInfoReading(isAllowed);
+    }
+#endif
+}
+
 void AdjustConfig2dx::setUserAgent(std::string userAgent) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetUserAgent;
@@ -200,6 +218,26 @@ void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setDefaultTracker(defaultTracker);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetExternalDeviceId;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetExternalDeviceId, "com/adjust/sdk/AdjustConfig", "setExternalDeviceId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jExternalDeviceId = jmiSetExternalDeviceId.env->NewStringUTF(externalDeviceId.c_str());
+    jmiSetExternalDeviceId.env->CallVoidMethod(config, jmiSetExternalDeviceId.methodID, jExternalDeviceId);
+    jmiSetExternalDeviceId.env->DeleteLocalRef(jExternalDeviceId);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setExternalDeviceId(externalDeviceId);
     }
 #endif
 }
