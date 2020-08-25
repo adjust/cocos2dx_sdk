@@ -23,6 +23,8 @@
 #include "AdjustSessionFailure2dx.h"
 
 extern const std::string AdjustSdkPrefix2dx;
+extern const std::string AdjustUrlStrategyChina;
+extern const std::string AdjustUrlStrategyIndia;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -31,7 +33,8 @@ enum AdjustLogLevel2dx {
     AdjustLogLevel2dxWarn = 4,
     AdjustLogLevel2dxError = 5,
     AdjustLogLevel2dxAssert = 6,
-    AdjustLogLevel2dxSuppress = 7 };
+    AdjustLogLevel2dxSuppress = 7
+};
 
 class AdjustConfig2dx {
 private:
@@ -74,9 +77,11 @@ public:
     void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
     void setExternalDeviceId(std::string externalDeviceId);
+    void setUrlStrategy(std::string urlStrategy);
     void setDelayStart(double delayStart);    
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
     void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
+    void deactivateSKAdNetworkHandling();
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));

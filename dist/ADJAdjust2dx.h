@@ -45,6 +45,7 @@ public:
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
+    static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();

@@ -192,6 +192,12 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     return attribution2dx;
 }
 
+void ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
+    [Adjust requestTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
+        trackingStatusCallback((int)status);
+    }];
+}
+
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
     AdjustTestOptions *testOptions = [[AdjustTestOptions alloc] init];
     testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];

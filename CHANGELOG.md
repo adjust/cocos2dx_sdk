@@ -1,3 +1,20 @@
+### Version 4.23.0 (26th August 2020)
+#### Added
+- Added communication with SKAdNetwork framework by default on iOS 14.
+- Added method `deactivateSKAdNetworkHandling` method to `AdjustConfig2dx` to switch off default communication with SKAdNetwork framework in iOS 14.
+- Added wrapper method `requestTrackingAuthorizationWithCompletionHandler` to `Adjust2dx` to allow asking for user's consent to be tracked in iOS 14 and immediate propagation of user's choice to backend.
+- Added handling of new iAd framework error codes introduced in iOS 14.
+- Added sending of value of user's consent to be tracked with each package.
+- Added `setUrlStrategy` method to `AdjustConfig2dx` class to allow selection of URL strategy for specific market.
+
+⚠️ **Note**: iOS 14 beta versions prior to 5 appear to have an issue when trying to use iAd framework API like described in [here](https://github.com/adjust/ios_sdk/issues/452). For testing of v4.23.0 version of SDK in iOS, please make sure you're using **iOS 14 beta 5 or later**.
+
+#### Native SDKs
+- [iOS@v4.23.0][ios_sdk_v4.23.0]
+- [Android@v4.24.0][android_sdk_v4.24.0]
+
+---
+
 ### Version 4.22.0 (17th June 2020)
 #### Added
 - Added subscription tracking feature.
@@ -311,6 +328,7 @@
 [ios_sdk_v4.17.2]: https://github.com/adjust/ios_sdk/tree/v4.17.2
 [ios_sdk_v4.18.0]: https://github.com/adjust/ios_sdk/tree/v4.18.0
 [ios_sdk_v4.22.1]: https://github.com/adjust/ios_sdk/tree/v4.22.1
+[ios_sdk_v4.23.0]: https://github.com/adjust/ios_sdk/tree/v4.23.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -329,5 +347,6 @@
 [android_sdk_v4.17.0]: https://github.com/adjust/android_sdk/tree/v4.17.0
 [android_sdk_v4.18.0]: https://github.com/adjust/android_sdk/tree/v4.18.0
 [android_sdk_v4.22.0]: https://github.com/adjust/android_sdk/tree/v4.22.0
+[android_sdk_v4.24.0]: https://github.com/adjust/android_sdk/tree/v4.24.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3

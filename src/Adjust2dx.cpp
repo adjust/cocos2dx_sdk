@@ -573,6 +573,12 @@ std::string Adjust2dx::getIdfa() {
 #endif
 }
 
+void Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(trackingStatusCallback);
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     cocos2d::JniMethodInfo jmiInit;

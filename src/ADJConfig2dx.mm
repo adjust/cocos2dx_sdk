@@ -53,6 +53,19 @@ void ADJConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
     ((ADJConfig *)config).externalDeviceId = [NSString stringWithUTF8String:externalDeviceId.c_str()];
 }
 
+void ADJConfig2dx::setUrlStrategy(std::string urlStrategy) {
+    NSString *strUrlStrategy = [NSString stringWithUTF8String:urlStrategy.c_str()];
+    if ([strUrlStrategy isEqualToString:@"china"]) {
+        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyChina;
+    } else if ([strUrlStrategy isEqualToString:@"india"]) {
+        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyIndia;
+    }
+}
+
+void ADJConfig2dx::deactivateSKAdNetworkHandling() {
+    [((ADJConfig *)config) deactivateSKAdNetworkHandling];
+}
+
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     attributionCallback = callbackMethod;
 }
