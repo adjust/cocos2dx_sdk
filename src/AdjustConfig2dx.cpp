@@ -1,4 +1,3 @@
-
 //  AdjustConfig2dx.cpp
 //  Adjust SDK
 //
@@ -17,6 +16,8 @@
 USING_NS_CC;
 
 const std::string AdjustSdkPrefix2dx = "cocos2d-x4.23.0";
+const std::string AdjustUrlStrategyChina = "china";
+const std::string AdjustUrlStrategyIndia = "india";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -242,6 +243,36 @@ void AdjustConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
 #endif
 }
 
+void AdjustConfig2dx::setUrlStrategy(std::string urlStrategy) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetUrlStrategy;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUrlStrategy, "com/adjust/sdk/AdjustConfig", "setUrlStrategy", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    if (urlStrategy.compare(AdjustUrlStrategyChina) == 0) {
+        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
+        jfieldID jfidUrlStrategyChina = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CHINA", "Ljava/lang/String;");
+        jstring jUrlStrategyChina = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyChina);
+        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyChina);
+        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyChina);
+    } else if (urlStrategy.compare(AdjustUrlStrategyIndia) == 0) {
+        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
+        jfieldID jfidUrlStrategyIndia = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_INDIA", "Ljava/lang/String;");
+        jstring jUrlStrategyIndia = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyIndia);
+        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyIndia);
+        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyIndia);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setUrlStrategy(urlStrategy);
+    }
+#endif
+}
+
 void AdjustConfig2dx::setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
@@ -272,6 +303,14 @@ void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setIsDeviceKnown(isDeviceKnown);
+    }
+#endif
+}
+
+void AdjustConfig2dx::deactivateSKAdNetworkHandling() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.deactivateSKAdNetworkHandling();
     }
 #endif
 }
