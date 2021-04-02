@@ -15,7 +15,7 @@
 #include "AdjustConfig2dx.h"
 USING_NS_CC;
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.23.1";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.28.0";
 const std::string AdjustUrlStrategyChina = "china";
 const std::string AdjustUrlStrategyIndia = "india";
 

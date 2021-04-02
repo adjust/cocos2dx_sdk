@@ -1,3 +1,13 @@
+### Version 4.28.0 (3rd April 2021)
+#### Changed
+- Removed native iOS legacy code.
+
+#### Native SDKs
+- [iOS@v4.28.0][ios_sdk_v4.28.0]
+- [Android@v4.27.0][android_sdk_v4.27.0]
+
+---
+
 ### Version 4.23.1 (29th September 2020)
 #### Fixed
 - Fixed duplicate `ADJUrlStrategy` symbol error.
@@ -16,8 +26,6 @@
 - Added handling of new iAd framework error codes introduced in iOS 14.
 - Added sending of value of user's consent to be tracked with each package.
 - Added `setUrlStrategy` method to `AdjustConfig2dx` class to allow selection of URL strategy for specific market.
-
-⚠️ **Note**: iOS 14 beta versions prior to 5 appear to have an issue when trying to use iAd framework API like described in [here](https://github.com/adjust/ios_sdk/issues/452). For testing of v4.23.0 version of SDK in iOS, please make sure you're using **iOS 14 beta 5 or later**.
 
 #### Native SDKs
 - [iOS@v4.23.0][ios_sdk_v4.23.0]
