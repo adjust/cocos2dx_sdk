@@ -309,6 +309,30 @@ void Adjust2dx::disableThirdPartySharing() {
 #endif
 }
 
+void Adjust2dx::trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackThirdPartySharing;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackThirdPartySharing, "com/adjust/sdk/Adjust", "trackThirdPartySharing", "(Lcom/adjust/sdk/AdjustThirdPartySharing;)V")) {
+        return;
+    }
+    jmiTrackThirdPartySharing.env->CallStaticVoidMethod(jmiTrackThirdPartySharing.classID, jmiTrackThirdPartySharing.methodID, thirdPartySharing.getThirdPartySharing());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackThirdPartySharing(thirdPartySharing.getThirdPartySharing());
+#endif
+}
+
+void Adjust2dx::trackMeasurementConsent(bool measurementConsent) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackMeasurementConsent;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackMeasurementConsent, "com/adjust/sdk/Adjust", "trackMeasurementConsent", "(Z)V")) {
+        return;
+    }
+    jmiTrackMeasurementConsent.env->CallStaticVoidMethod(jmiTrackMeasurementConsent.classID, jmiTrackMeasurementConsent.methodID, measurementConsent);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackMeasurementConsent(measurementConsent);
+#endif
+}
+
 std::string Adjust2dx::getAdid() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getAdid();

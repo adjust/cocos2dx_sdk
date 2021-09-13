@@ -39,3 +39,15 @@ std::string AdjustAttribution2dx::getClickLabel() {
 std::string AdjustAttribution2dx::getAdid() {
 	return this->adid;
 }
+
+std::string AdjustAttribution2dx::getCostType() {
+    return this->costType;
+}
+
+double AdjustAttribution2dx::getCostAmount() {
+    return this->costAmount;
+}
+
+std::string AdjustAttribution2dx::getCostCurrency() {
+    return this->costCurrency;
+}

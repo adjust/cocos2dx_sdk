@@ -25,6 +25,9 @@
 extern const std::string AdjustSdkPrefix2dx;
 extern const std::string AdjustUrlStrategyChina;
 extern const std::string AdjustUrlStrategyIndia;
+extern const std::string AdjustDataResidencyEU;
+extern const std::string AdjustDataResidencyTR;
+extern const std::string AdjustDataResidencyUS;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -70,9 +73,7 @@ public:
     void setDeviceKnown(bool isDeviceKnown);
     void setSendInBackground(bool isEnabled);
     void setEventBufferingEnabled(bool isEnabled);
-    void setAllowIdfaReading(bool isAllowed);
-    void setAllowiAdInfoReading(bool isAllowed);
-    void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
+    void setNeedsCost(bool needsCost);
     void setUserAgent(std::string userAgent);
     void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
@@ -81,13 +82,22 @@ public:
     void setDelayStart(double delayStart);    
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
     void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
-    void deactivateSKAdNetworkHandling();
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
+    // iOS only
+    void deactivateSkAdNetworkHandling();
+    void setAllowIdfaReading(bool isAllowed);
+    void setAllowiAdInfoReading(bool isAllowed);
+    void setAllowAdServicesInfoReading(bool isAllowed);
+    void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
+    // Android only
+    void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
+    void setPreinstallTrackingEnabled(bool isEnabled);
+    void setPreinstallFilePath(std::string filePath);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

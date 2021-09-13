@@ -14,6 +14,7 @@
 #include "ADJEvent2dx.h"
 #include "ADJConfig2dx.h"
 #include "ADJAppStoreSubscription2dx.h"
+#include "ADJThirdPartySharing2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
@@ -46,6 +47,9 @@ public:
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
+    static int getAppTrackingAuthorizationStatus();
+    static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
+    static void trackMeasurementConsent(bool measurementConsent);
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();
