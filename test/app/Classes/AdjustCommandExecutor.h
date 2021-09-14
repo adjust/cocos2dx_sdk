@@ -25,6 +25,7 @@
 #include "Adjust/AdjustSessionFailure2dx.h"
 #include "Adjust/AdjustThirdPartySharing2dx.h"
 #include "Adjust/test/TestLib2dx.h"
+#include "Adjust/test/TestConnectionOptions2dx.h"
 
 class AdjustCommandExecutor {
 private:

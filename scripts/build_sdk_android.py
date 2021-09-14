@@ -61,7 +61,7 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     debug_green('Copying Adjust SDK and test JAR files to Cocos2d-x test app at {0} ...'.format(app_path))
     create_dir_if_not_exist('{0}/proj.android/app/libs'.format(app_path))
     copy_file('{0}/adjust-android.jar'.format(android_libs_dir), '{0}/proj.android/app/libs/adjust-android.jar'.format(app_path))
-    copy_file('{0}/adjust-test.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test.jar'.format(app_path))
+    copy_file('{0}/adjust-test-library.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test-library.jar'.format(app_path))
     copy_file('{0}/gson-2.8.6.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.6.jar'.format(app_path))
     copy_file('{0}/Java-WebSocket-1.4.0.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/Java-WebSocket-1.4.0.jar'.format(app_path))
     copy_file('{0}/slf4j-api-1.7.30.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/slf4j-api-1.7.30.jar'.format(app_path))
@@ -119,7 +119,7 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         # ------------------------------------------------------------------
         # Copying Testing JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
         debug_green('Copying Testing JAR from {0} to {1} ...'.format(test_libs_in_dir, proxy_dir))
-        copy_file('{0}/test-library-debug.jar'.format(test_libs_in_dir), '{0}/adjust-test.jar'.format(proxy_dir))
+        copy_file('{0}/test-library-debug.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
 
     # ------------------------------------------------------------------
     # Injecting C++ bridge changes.
@@ -139,7 +139,7 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
     copy_file('{0}/adjust-android.jar'.format(proxy_dir), '{0}/adjust-android.jar'.format(libs_out_dir))
 
     # ------------------------------------------------------------------
-    # Copying resulting adjust-test.jar into test libs out dir.
+    # Copying resulting adjust-test-library.jar into test libs out dir.
     if with_test_lib:
-        debug_green('Copying resulting adjust-test.jar into {0} ...'.format(test_libs_out_dir))
-        copy_file('{0}/adjust-test.jar'.format(proxy_dir), '{0}/adjust-test.jar'.format(test_libs_out_dir))    
+        debug_green('Copying resulting adjust-test-library.jar into {0} ...'.format(test_libs_out_dir))
+        copy_file('{0}/adjust-test-library.jar'.format(proxy_dir), '{0}/adjust-test-library.jar'.format(test_libs_out_dir))    

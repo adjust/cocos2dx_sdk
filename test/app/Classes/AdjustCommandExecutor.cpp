@@ -118,6 +118,10 @@ void AdjustCommandExecutor::testOptions() {
     if (this->command->containsParameter("adServicesFrameworkEnabled")) {
         testOptions["adServicesFrameworkEnabled"] = command->getFirstParameterValue("adServicesFrameworkEnabled");
     }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    bool useTestConnectionOptions = false;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
         std::vector<std::string>::iterator toIterator = teardownOptions.begin();
@@ -130,11 +134,15 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["subscriptionPath"] = this->subscriptionPath;
                 testOptions["extraPath"] = this->extraPath;
                 // Android specific.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 testOptions["useTestConnectionOptions"] = "true";
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+                useTestConnectionOptions = true;
+#endif
                 testOptions["tryInstallReferrer"] = "false";
-                #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
-                #endif
+#endif
             }
             if (teardownOption == "deleteState") {
                 // Android specific.
@@ -157,7 +165,10 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["subscriptionPath"] = "";
                 testOptions["extraPath"] = "";
                 // Android specific.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 testOptions["useTestConnectionOptions"] = "false";
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#endif
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
@@ -172,6 +183,12 @@ void AdjustCommandExecutor::testOptions() {
     }
 
     Adjust2dx::setTestOptions(testOptions);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (useTestConnectionOptions == true) {
+        TestConnectionOptions2dx::setTestConnectionOptions();
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
 }
 
 void AdjustCommandExecutor::config() {
