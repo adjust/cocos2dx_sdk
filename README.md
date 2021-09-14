@@ -25,7 +25,10 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
 * [Additional features](#additional-features)
    * [AppTrackingTransparency framework](#att-framework)
       * [App-tracking authorisation wrapper](#ata-wrapper)
+      * [Get current authorisation status](#ata-getter)
    * [SKAdNetwork framework](#skadn-framework)
+      * [Update SKAdNetwork conversion value](#skadn-update-conversion-value)
+      * [Conversion value updated callback](#skadn-cv-updated-callback)
    * [Event tracking](#event-tracking)
       * [Revenue tracking](#revenue-tracking)
       * [Revenue deduplication](#revenue-deduplication)
@@ -60,6 +63,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [Deferred deep linking](#deeplinking-deferred)
       * [Deep link handling for iOS apps](#deeplinking-ios)
       * [Deep link handling for Android apps](#deeplinking-android)
+   * [Data residency](#data-residency)
 * [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
@@ -87,7 +91,8 @@ $(LOCAL_PATH)/../../../Classes/Adjust/AdjustEventSuccess2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustAppStoreSubscription2dx.cpp \
-$(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStoreSubscription2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStoreSubscription2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
@@ -147,7 +152,7 @@ After this, open the `AndroidManifest.xml` file of your Android project and add 
 If you are using Proguard, add these lines to your Proguard file:
 
 ```
--keep public class com.adjust.sdk.** { *; }
+-keep class com.adjust.sdk.** { *; }
 -keep class com.google.android.gms.common.ConnectionResult {
     int SUCCESS;
 }
@@ -172,7 +177,7 @@ In order to correctly attribute an install of your Android app to its source, Ad
 In order to support this in your app, please make sure to add following dependency to your `build.gradle` file:
 
 ```
-implementation 'com.android.installreferrer:installreferrer:1.0'
+implementation 'com.android.installreferrer:installreferrer:2.2'
 ```
 
 Also, make sure that you have paid attention to the [Proguard settings](#android-proguard) chapter and that you have added all the rules mentioned in it, especially the one needed for this feature:
@@ -211,16 +216,13 @@ As of v4.22.0, the Adjust SDK supports install tracking on Huawei devices with H
 
 ### <a id="ios-frameworks"></a>[iOS] Frameworks
 
-You need to add following frameworks to your app's Xcode project:
+Select your project in the Project Navigator. In the left hand side of the main view, select your target. In the tab `Build Phases`, expand the group `Link Binary with Libraries`. On the bottom of that section click on the `+` button. Select below mentined frameworks and make sure to change the `Status` of frameworks to `Optional`. Adjust SDK uses these frameworks with following purpose:
 
-* `iAd.framework` - in case you are running iAd campaigns
-* `AdSupport.framework` - for reading iOS Advertising Id (IDFA)
-* `CoreTelephony.framework` - for reading MCC and MNC information
-* `StoreKit.framework` - for communication with SKAdNetwork framework
+* `iAd.framework` - to support Apple Search Ads campaigns
+* `AdServices.framework` - to support Apple Search Ads campaigns
+* `AdSupport.framework` - to read iOS Advertising Id (IDFA) value
+* `StoreKit.framework` - to communicate with `SKAdNetwork` framework
 * `AppTrackingTransparency.framework` - to ask for user's consent to be tracked and obtain status of that consent
-* `AdjustSdk.framework` - our native iOS SDK framework
-
-If you are not running any iAd campaigns, you can feel free to remove the `iAd.framework` dependency. If you don't use SKAdNetwork framework, feel free to remove `StoreKit.framework` dependency (unless you need it for something else).
 
 ### <a id="ios-linker-flags"></a>[iOS] Additional linker flags
 
@@ -377,6 +379,18 @@ static void authorizationStatusCallback(int status) {
 Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(authorizationStatusCallback);
 ```
 
+### <a id="ata-getter"></a>Get current authorisation status
+
+**Note**: This feature exists only in iOS platform.
+
+To get the current app tracking authorization status you can call `getAppTrackingAuthorizationStatus` method of `Adjust2dx` class that will return one of the following possibilities:
+
+* `0`: The user hasn't been asked yet
+* `1`: The user device is restricted
+* `2`: The user denied access to IDFA
+* `3`: The user authorized access to IDFA
+* `-1`: The status is not available
+
 ### <a id="skadn-framework"></a>SKAdNetwork framework
 
 **Note**: This feature exists only in iOS platform.
@@ -387,6 +401,47 @@ In case you don't want the Adjust SDK to automatically communicate with SKAdNetw
 
 ```cpp
 adjustConfig.deactivateSKAdNetworkHandling();
+```
+
+### <a id="skadn-update-conversion-value"></a>Update SKAdNetwork conversion value
+
+**Note**: This feature exists only in iOS platform.
+
+You can use Adjust SDK wrapper method `updateConversionValue` to update SKAdNetwork conversion value for your user:
+
+```js
+Adjust2dx::updateConversionValue(6);
+```
+
+### <a id="skadn-cv-updated-callback"></a>Conversion value updated callback
+
+**Note**: This feature exists only in iOS platform.
+
+You can register callback to get notified each time when Adjust SDK updates conversion value for the user.
+
+```cpp
+#include "Adjust/Adjust2dx.h"
+
+// ...
+
+static void conversionValueUpdatedCallbackMethod(int conversionValue) {
+    CCLOG("\nConversion value updated!");
+    CCLOG("\nConversion value: %d", conversionValue);
+}
+
+// ...
+
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setConversionValueUpdatedCallback(conversionValueUpdatedCallbackMethod);
+    Adjust2dx::start(adjustConfig);
+
+    // ...
+}
 ```
 
 ### <a id="event-tracking"></a>Event tracking
@@ -669,6 +724,9 @@ The callback function will be called when the SDK receives the final attribution
 - `std::string creative` the creative grouping level of the current attribution.
 - `std::string clickLabel` the click label of the current attribution.
 - `std::string adid` the Adjust device identifier.
+- `std::string costType` the cost type.
+- `double costAmount` the cost amount.
+- `std::string costCurrency` the cost currency.
 
 ```cpp
 #include "Adjust/Adjust2dx.h"
@@ -686,6 +744,9 @@ static void attributionCallbackMethod(AdjustAttribution2dx attribution) {
     CCLOG("\nCreative: %s", attribution.getCreative().c_str());
     CCLOG("\nClick label: %s", attribution.getClickLabel().c_str());
     CCLOG("\nAdid: %s", attribution.getAdid().c_str());
+    CCLOG("\nCost type: %s", attribution.getCostType().c_str());
+    CCLOG("\nCost amount: %f", attribution.getCostAmount());
+    CCLOG("\nCost currency: %s", attribution.getCostCurrency().c_str());
     CCLOG("\n");
 }
 
@@ -705,6 +766,8 @@ bool AppDelegate::applicationDidFinishLaunching() {
 ```
 
 Please make sure to consider the [applicable attribution data policies][attribution-data].
+
+**Note**: The cost data - `costType`, `costAmount` & `costCurrency` are only available when configured in `AdjustConfig2dx` by calling `setNeedsCost` method. If not configured or configured, but not being part of the attribution, string fields will have value `null` and double field will be 0. This feature is available in SDK v4.29.0 and above.
 
 ### <a id="session-event-callbacks"></a>Session and event callbacks
 
@@ -1137,6 +1200,16 @@ To set up your iOS app to handle deep linking at a native level, please follow o
 
 To set up your Android app to handle deep linking at a native level, please follow our [guide][android-deeplinking] in the official Android SDK README.
 
+### <a id="data-residency"></a>Data residency
+
+In order to enable data residency feature, make sure to call `setUrlStrategy` method of the `AdjustConfig2dx` instance with one of the following constants:
+
+```js
+adjustConfig.setUrlStrategy(AdjustDataResidencyEU); // for EU data residency region
+adjustConfig.setUrlStrategy(AdjustDataResidencyTR); // for Turkey data residency region
+adjustConfig.setUrlStrategy(AdjustDataResidencyUS); // for US data residency region
+```
+
 
 [adjust]:       http://adjust.com
 [dashboard]:    http://adjust.com
@@ -1165,7 +1238,7 @@ To set up your Android app to handle deep linking at a native level, please foll
 
 The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2019 Adjust GmbH, http://www.adjust.com
+Copyright (c) 2012-2021 Adjust GmbH, http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
