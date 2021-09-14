@@ -21,12 +21,14 @@ static ADJDelegate2dx *defaultInstance = nil;
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
+          swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
-                       deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId {
+                       deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
+                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId {
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 
@@ -55,6 +57,10 @@ static ADJDelegate2dx *defaultInstance = nil;
             [defaultInstance swizzleCallbackMethod:@selector(adjustDeeplinkResponse:)
                                   swizzledSelector:@selector(adjustDeeplinkResponseWannabe:)];
         }
+        if (swizzleConversionValueUpdatedCallback) {
+            [defaultInstance swizzleCallbackMethod:@selector(adjustConversionValueUpdated:)
+                                  swizzledSelector:@selector(adjustConversionValueUpdatedWannabe:)];
+        }
         
         [defaultInstance setAttributionCallbackMethod:attributionCallbackId];
         [defaultInstance setEventSuccessCallbackMethod:eventSuccessCallbackId];
@@ -62,6 +68,7 @@ static ADJDelegate2dx *defaultInstance = nil;
         [defaultInstance setSessionSuccessCallbackMethod:sessionSuccessCallbackId];
         [defaultInstance setSessionFailureCallbackMethod:sessionFailureCallbackId];
         [defaultInstance setDeferredDeeplinkCallbackMethod:deferredDeeplinkCallbackId];
+        [defaultInstance setConversionValueUpdatedCallbackMethod:conversionValueUpdatedCallbackId];
     });
     
     return defaultInstance;
@@ -97,6 +104,9 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"adgroup" value:attribution.adgroup];
     [self addValueOrEmpty:dictionary key:@"clickLabel" value:attribution.clickLabel];
     [self addValueOrEmpty:dictionary key:@"adid" value:attribution.adid];
+    [self addValueOrEmpty:dictionary key:@"costType" value:attribution.costType];
+    [self addValueOrEmpty:dictionary key:@"costAmount" value:attribution.costAmount];
+    [self addValueOrEmpty:dictionary key:@"costCurrency" value:attribution.costCurrency];
     
     std::string trackerToken = std::string([[dictionary objectForKey:@"trackerToken"] UTF8String]);
     std::string trackerName = std::string([[dictionary objectForKey:@"trackerName"] UTF8String]);
@@ -106,8 +116,22 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string adgroup = std::string([[dictionary objectForKey:@"adgroup"] UTF8String]);
     std::string clickLabel = std::string([[dictionary objectForKey:@"clickLabel"] UTF8String]);
     std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
+    std::string costType = std::string([[dictionary objectForKey:@"costType"] UTF8String]);
+    double costAmount = [dictionary objectForKey:@"costAmount"] != nil ? [[dictionary objectForKey:@"costAmount"] doubleValue] : 0;
+    std::string costCurrency = std::string([[dictionary objectForKey:@"costCurrency"] UTF8String]);
 
-    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+        trackerToken,
+        trackerName,
+        network,
+        campaign,
+        adgroup,
+        creative,
+        clickLabel,
+        adid,
+        costType,
+        costAmount,
+        costCurrency);
     _attributionCallbackMethod(attribution2dx);
 }
 
@@ -233,6 +257,13 @@ static ADJDelegate2dx *defaultInstance = nil;
     return _deferredDeeplinkCallbackMethod(strDeeplink);
 }
 
+- (void)adjustConversionValueUpdatedWannabe:(NSNumber *)conversionValue {
+    if (conversionValue == nil) {
+        return;
+    }
+    _conversionValueUpdatedCallbackMethod([conversionValue intValue]);
+}
+
 - (void)swizzleCallbackMethod:(SEL)originalSelector
              swizzledSelector:(SEL)swizzledSelector {
     Class cls = [self class];
@@ -256,7 +287,13 @@ static ADJDelegate2dx *defaultInstance = nil;
                     key:(NSString *)key
                   value:(NSObject *)value {
     if (nil != value) {
-        [dictionary setObject:[NSString stringWithFormat:@"%@", value] forKey:key];
+        if ([value isKindOfClass:[NSString class]]) {
+            [dictionary setObject:[NSString stringWithFormat:@"%@", value] forKey:key];
+        } else if ([value isKindOfClass:[NSNumber class]]) {
+            [dictionary setObject:[NSString stringWithFormat:@"%@", [((NSNumber *)value) stringValue]] forKey:key];
+        } else {
+            [dictionary setObject:@"" forKey:key];
+        }
     } else {
         [dictionary setObject:@"" forKey:key];
     }

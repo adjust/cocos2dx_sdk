@@ -43,6 +43,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string creative;
     std::string clickLabel;
     std::string adid;
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
 
     jclass jclsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
     jfieldID jfidTrackerToken = env->GetFieldID(jclsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
@@ -53,6 +56,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID jfidCreative = env->GetFieldID(jclsAdjustAttribution, "creative", "Ljava/lang/String;");
     jfieldID jfidClickLabel = env->GetFieldID(jclsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
     jfieldID jfidAdid = env->GetFieldID(jclsAdjustAttribution, "adid", "Ljava/lang/String;");
+    jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
+    jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
+    jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
     jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, jfidTrackerToken);
     jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, jfidTrackerName);
     jstring jNetwork = (jstring)env->GetObjectField(attributionObject, jfidNetwork);
@@ -61,6 +67,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jstring jCreative = (jstring)env->GetObjectField(attributionObject, jfidCreative);
     jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, jfidClickLabel);
     jstring jAdid = (jstring)env->GetObjectField(attributionObject, jfidAdid);
+    jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
+    jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
+    jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
 
     if (NULL != jTrackerToken) {
         const char *trackerTokenCStr = env->GetStringUTFChars(jTrackerToken, NULL);
@@ -134,7 +143,44 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         adid = "";
     }
 
-    AdjustAttribution2dx attribution = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+    if (NULL != jCostType) {
+        const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
+        costType = std::string(costTypeCStr);
+        env->ReleaseStringUTFChars(jCostType, costTypeCStr);
+        env->DeleteLocalRef(jCostType);
+    } else {
+        costType = "";
+    }
+
+    if (NULL != jCostAmount) {
+        jclass jcDouble = env->FindClass("java/lang/Double");
+        jmethodID jmidDoubleValue = env->GetMethodID(jcDouble, "doubleValue", "()D" );
+        costAmount = env->CallDoubleMethod(jCostAmount, jmidDoubleValue);
+    } else {
+        costAmount = 0;
+    }
+
+    if (NULL != jCostCurrency) {
+        const char *costCurrencyCStr = env->GetStringUTFChars(jCostCurrency, NULL);
+        costCurrency = std::string(costCurrencyCStr);
+        env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
+        env->DeleteLocalRef(jCostCurrency);
+    } else {
+        costCurrency = "";
+    }
+
+    AdjustAttribution2dx attribution = AdjustAttribution2dx(
+        trackerToken,
+        trackerName,
+        network,
+        campaign,
+        adgroup,
+        creative,
+        clickLabel,
+        adid,
+        costType,
+        costAmount,
+        costCurrency);
     attributionCallbackMethod(attribution);
 }
 

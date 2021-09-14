@@ -72,6 +72,10 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->disableThirdPartySharing();
     } else if (command->methodName == "trackSubscription") {
         this->trackSubscription();
+    } else if (command->methodName == "thirdPartySharing") {
+        this->trackThirdPartySharing();
+    } else if (command->methodName == "measurementConsent") {
+        this->trackMeasurementConsent();
     }
 }
 
@@ -109,6 +113,15 @@ void AdjustCommandExecutor::testOptions() {
     if (this->command->containsParameter("iAdFrameworkEnabled")) {
         testOptions["iAdFrameworkEnabled"] = command->getFirstParameterValue("iAdFrameworkEnabled");
     }
+    // "false" is default value - AdServices will not be used in test app by default.
+    testOptions["adServicesFrameworkEnabled"] = "false";
+    if (this->command->containsParameter("adServicesFrameworkEnabled")) {
+        testOptions["adServicesFrameworkEnabled"] = command->getFirstParameterValue("adServicesFrameworkEnabled");
+    }
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    bool useTestConnectionOptions = false;
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
         std::vector<std::string>::iterator toIterator = teardownOptions.begin();
@@ -121,11 +134,15 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["subscriptionPath"] = this->subscriptionPath;
                 testOptions["extraPath"] = this->extraPath;
                 // Android specific.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 testOptions["useTestConnectionOptions"] = "true";
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+                useTestConnectionOptions = true;
+#endif
                 testOptions["tryInstallReferrer"] = "false";
-                #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
-                #endif
+#endif
             }
             if (teardownOption == "deleteState") {
                 // Android specific.
@@ -148,7 +165,10 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["subscriptionPath"] = "";
                 testOptions["extraPath"] = "";
                 // Android specific.
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 testOptions["useTestConnectionOptions"] = "false";
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#endif
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
@@ -163,6 +183,12 @@ void AdjustCommandExecutor::testOptions() {
     }
 
     Adjust2dx::setTestOptions(testOptions);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (useTestConnectionOptions == true) {
+        TestConnectionOptions2dx::setTestConnectionOptions();
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
 }
 
 void AdjustCommandExecutor::config() {
@@ -270,6 +296,20 @@ void AdjustCommandExecutor::config() {
         bool allowiAdInfoReading = (allowiAdInfoReadingString == "true");
         adjustConfig->setAllowiAdInfoReading(allowiAdInfoReading);
     }
+    
+    if (this->command->containsParameter("allowAdServicesInfoReading")) {
+        std::string allowAdServicesInfoReadingString = command->getFirstParameterValue("allowAdServicesInfoReading");
+        bool allowAdServicesInfoReading = (allowAdServicesInfoReadingString == "true");
+        adjustConfig->setAllowAdServicesInfoReading(allowAdServicesInfoReading);
+    }
+
+    if (this->command->containsParameter("allowSkAdNetworkHandling")) {
+        std::string allowSkAdNetworkHandlingString = command->getFirstParameterValue("allowSkAdNetworkHandling");
+        bool allowSkAdNetworkHandling = (allowSkAdNetworkHandlingString == "true");
+        if (allowSkAdNetworkHandling == false) {
+            adjustConfig->deactivateSkAdNetworkHandling();
+        }
+    }
 
     if (this->command->containsParameter("sendInBackground")) {
         std::string sendInBackgroundString = command->getFirstParameterValue("sendInBackground");
@@ -304,6 +344,12 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("creative", attribution.getCreative());
             TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
             TestLib2dx::addInfoToSend("adid", attribution.getAdid());
+            TestLib2dx::addInfoToSend("costType", attribution.getCostType());
+            std::ostringstream sstream;
+            sstream << attribution.getCostAmount();
+            std::string strCostAmount = sstream.str();
+            TestLib2dx::addInfoToSend("costAmount", strCostAmount);
+            TestLib2dx::addInfoToSend("costCurrency", attribution.getCostCurrency());
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -658,4 +704,31 @@ void AdjustCommandExecutor::trackSubscription() {
 
     Adjust2dx::trackPlayStoreSubscription(subscription);
 #endif
+}
+
+void AdjustCommandExecutor::trackThirdPartySharing() {
+    std::string enabled = command->getFirstParameterValue("isEnabled");
+    AdjustThirdPartySharing2dx thirdPartySharing;
+    if (enabled.empty()) {
+        thirdPartySharing = AdjustThirdPartySharing2dx();
+    } else {
+        thirdPartySharing = AdjustThirdPartySharing2dx(enabled == "true" ? true : false);
+    }
+
+    if (this->command->containsParameter("granularOptions")) {
+        std::vector<std::string> granularOptions = command->getParameters("granularOptions");
+        for (int i = 0; i < granularOptions.size(); i = i + 3) {
+            std::string partnerName = granularOptions[i];
+            std::string key = granularOptions[i + 1];
+            std::string value = granularOptions[i + 2];
+            thirdPartySharing.addGranularOption(partnerName, key, value);
+        }
+    }
+
+    Adjust2dx::trackThirdPartySharing(thirdPartySharing);
+}
+
+void AdjustCommandExecutor::trackMeasurementConsent() {
+    std::string enabled = command->getFirstParameterValue("isEnabled");
+    Adjust2dx::trackMeasurementConsent(enabled == "true" ? true : false);
 }

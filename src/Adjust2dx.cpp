@@ -309,6 +309,30 @@ void Adjust2dx::disableThirdPartySharing() {
 #endif
 }
 
+void Adjust2dx::trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackThirdPartySharing;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackThirdPartySharing, "com/adjust/sdk/Adjust", "trackThirdPartySharing", "(Lcom/adjust/sdk/AdjustThirdPartySharing;)V")) {
+        return;
+    }
+    jmiTrackThirdPartySharing.env->CallStaticVoidMethod(jmiTrackThirdPartySharing.classID, jmiTrackThirdPartySharing.methodID, thirdPartySharing.getThirdPartySharing());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackThirdPartySharing(thirdPartySharing.getThirdPartySharing());
+#endif
+}
+
+void Adjust2dx::trackMeasurementConsent(bool measurementConsent) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackMeasurementConsent;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackMeasurementConsent, "com/adjust/sdk/Adjust", "trackMeasurementConsent", "(Z)V")) {
+        return;
+    }
+    jmiTrackMeasurementConsent.env->CallStaticVoidMethod(jmiTrackMeasurementConsent.classID, jmiTrackMeasurementConsent.methodID, measurementConsent);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackMeasurementConsent(measurementConsent);
+#endif
+}
+
 std::string Adjust2dx::getAdid() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getAdid();
@@ -363,10 +387,24 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
     std::string creative;
     std::string clickLabel;
     std::string adid;
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
 
     cocos2d::JniMethodInfo jmiGetAttribution;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttribution, "com/adjust/sdk/Adjust", "getAttribution", "()Lcom/adjust/sdk/AdjustAttribution;")) {
-        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+            trackerToken,
+            trackerName,
+            network,
+            campaign,
+            adgroup,
+            creative,
+            clickLabel,
+            adid,
+            costType,
+            costAmount,
+            costCurrency);
         return attribution2dx;
     }
 
@@ -381,6 +419,9 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         jfieldID jfidCreative = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
         jfieldID jfidClickLabel = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
         jfieldID jfidAdid = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
+        jfieldID jfidCostType = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costType", "Ljava/lang/String;");
+        jfieldID jfidCostAmount = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
+        jfieldID jfidCostCurrency = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
         jstring jTrackerToken = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerToken);
         jstring jTrackerName = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerName);
         jstring jNetwork = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidNetwork);
@@ -389,6 +430,9 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         jstring jCreative = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCreative);
         jstring jClickLabel = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidClickLabel);
         jstring jAdid = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidAdid);
+        jstring jCostType = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostType);
+        jobject jCostAmount = jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostAmount);
+        jstring jCostCurrency = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostCurrency);
 
         if (NULL != jTrackerToken) {
             const char *trackerTokenCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
@@ -461,9 +505,46 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         } else {
             adid = "";
         }
+
+        if (NULL != jCostType) {
+            const char *costTypeCStr = jmiGetAttribution.env->GetStringUTFChars(jCostType, NULL);
+            costType = std::string(costTypeCStr);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jCostType, costTypeCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jCostType);
+        } else {
+            costType = "";
+        }
+
+        if (NULL != jCostAmount) {
+            jclass jcDouble = jmiGetAttribution.env->FindClass("java/lang/Double");
+            jmethodID jmidDoubleValue = jmiGetAttribution.env->GetMethodID(jcDouble, "doubleValue", "()D" );
+            costAmount = jmiGetAttribution.env->CallDoubleMethod(jCostAmount, jmidDoubleValue);
+        } else {
+            costAmount = 0;
+        }
+
+        if (NULL != jCostCurrency) {
+            const char *costCurrencyCStr = jmiGetAttribution.env->GetStringUTFChars(jCostCurrency, NULL);
+            costCurrency = std::string(costCurrencyCStr);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jCostCurrency);
+        } else {
+            costCurrency = "";
+        }
     }
 
-    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+        trackerToken,
+        trackerName,
+        network,
+        campaign,
+        adgroup,
+        creative,
+        clickLabel,
+        adid,
+        costType,
+        costAmount,
+        costCurrency);
     return attribution2dx;
 #endif
 }
@@ -576,6 +657,12 @@ std::string Adjust2dx::getIdfa() {
 void Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(trackingStatusCallback);
+#endif
+}
+
+void Adjust2dx::updateConversionValue(int conversionValue) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updateConversionValue(conversionValue);
 #endif
 }
 

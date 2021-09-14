@@ -20,25 +20,29 @@ void ADJAdjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
     BOOL isSessionSuccessCallbackImplemented = NULL != adjustConfig.getSessionSuccessCallback() ? YES : NO;
     BOOL isSessionFailureCallbackImplemented = NULL != adjustConfig.getSessionFailureCallback() ? YES : NO;
     BOOL isDeferredDeeplinkCallbackImplemented = NULL != adjustConfig.getDeferredDeeplinkCallback() ? YES : NO;
+    BOOL isConversionValueUpdatedListenerImplemented = NULL != adjustConfig.getConversionValueUpdatedCallback() ? YES : NO;
     
     if (isAttributionCallbackImplemented
         || isEventSuccessCallbackImplemented
         || isEventFailureCallbackImplemented
         || isSessionSuccessCallbackImplemented
         || isSessionFailureCallbackImplemented
-        || isDeferredDeeplinkCallbackImplemented) {
+        || isDeferredDeeplinkCallbackImplemented
+        || isConversionValueUpdatedListenerImplemented) {
         ((ADJConfig *)adjustConfig.getConfig()).delegate = [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
                                                                                          swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
                                                                                          swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
                                                                                        swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
                                                                                        swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
                                                                                      swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
+                                                                               swizzleOfConversionValueUpdatedCallback:isConversionValueUpdatedListenerImplemented
                                                                                               andAttributionCallbackId:adjustConfig.getAttributionCallback()
                                                                                                 eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
                                                                                                 eventFailureCallbackId:adjustConfig.getEventFailureCallback()
                                                                                               sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
                                                                                               sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
-                                                                                            deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()];
+                                                                                            deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
+                                                                                      conversionValueUpdatedCallbackId:adjustConfig.getConversionValueUpdatedCallback()];
     }
 
     [Adjust appDidLaunch:(ADJConfig *)adjustConfig.getConfig()];
@@ -160,6 +164,9 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     std::string creative;
     std::string clickLabel;
     std::string adid;
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
 
     if (nil != attribution) {
         if (attribution.trackerToken != NULL) {
@@ -186,9 +193,29 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
         if (attribution.adid != NULL) {
             adid = std::string([attribution.adid UTF8String]);
         }
+        if (attribution.costType != NULL) {
+            costType = std::string([attribution.costType UTF8String]);
+        }
+        if (attribution.costType != NULL) {
+            costAmount = [attribution.costAmount doubleValue];
+        }
+        if (attribution.costCurrency != NULL) {
+            costCurrency = std::string([attribution.costCurrency UTF8String]);
+        }
     }
 
-    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken, trackerName, network, campaign, adgroup, creative, clickLabel, adid);
+    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+        trackerToken,
+        trackerName,
+        network,
+        campaign,
+        adgroup,
+        creative,
+        clickLabel,
+        adid,
+        costType,
+        costAmount,
+        costCurrency);
     return attribution2dx;
 }
 
@@ -196,6 +223,22 @@ void ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trac
     [Adjust requestTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
         trackingStatusCallback((int)status);
     }];
+}
+
+int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
+    return [Adjust appTrackingAuthorizationStatus];
+}
+
+void ADJAdjust2dx::updateConversionValue(int conversionValue) {
+    [Adjust updateConversionValue:conversionValue];
+}
+
+void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing) {
+    [Adjust trackThirdPartySharing:(ADJThirdPartySharing *)thirdPartySharing.getThirdPartySharing()];
+}
+
+void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
+    [Adjust trackMeasurementConsent:measurementConsent];
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
@@ -249,6 +292,13 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
         NSString *iAdFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["iAdFrameworkEnabled"].c_str()];
         if ([iAdFrameworkEnabled isEqualToString:@"true"]) {
             testOptions.iAdFrameworkEnabled = YES;
+        }
+    }
+    testOptions.adServicesFrameworkEnabled = NO;
+    if (testOptionsMap.find("adServicesFrameworkEnabled") != testOptionsMap.end()) {
+        NSString *adServicesFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["adServicesFrameworkEnabled"].c_str()];
+        if ([adServicesFrameworkEnabled isEqualToString:@"true"]) {
+            testOptions.adServicesFrameworkEnabled = YES;
         }
     }
 

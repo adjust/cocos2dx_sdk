@@ -21,6 +21,9 @@ private:
     std::string creative;
     std::string clickLabel;
     std::string adid;
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
 public:
     AdjustAttribution2dx() {}
     AdjustAttribution2dx(
@@ -31,7 +34,10 @@ public:
         std::string adgroup,
         std::string creative,
         std::string clickLabel,
-        std::string adid) {
+        std::string adid,
+        std::string costType,
+        double costAmount,
+        std::string costCurrency) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;
@@ -40,6 +46,9 @@ public:
         this->creative = creative;
         this->clickLabel = clickLabel;
         this->adid = adid;
+        this->costType = costType;
+        this->costAmount = costAmount;
+        this->costCurrency = costCurrency;
     }
 
     std::string getTrackerToken();
@@ -50,6 +59,9 @@ public:
     std::string getCreative();
     std::string getClickLabel();
     std::string getAdid();
+    std::string getCostType();
+    double getCostAmount();
+    std::string getCostCurrency();
 };
 
 #endif /* ADJUST_ADJUSTATTRIBUTION2DX_H_ */

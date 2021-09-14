@@ -16,6 +16,7 @@
 @property (nonatomic) void (*sessionSuccessCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
 @property (nonatomic) void (*sessionFailureCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
 @property (nonatomic) bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
+@property (nonatomic) void (*conversionValueUpdatedCallbackMethod)(int conversionValue);
 
 + (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
                     swizzleOfEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
@@ -23,12 +24,14 @@
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-						             andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
+          swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
+						 andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
-					             deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId;
+					   deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
+                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId;
 + (void)teardown;
 
 @end

@@ -16,6 +16,7 @@
 #include "AdjustAttribution2dx.h"
 #include "AdjustAppStoreSubscription2dx.h"
 #include "AdjustPlayStoreSubscription2dx.h"
+#include "AdjustThirdPartySharing2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -39,6 +40,8 @@ public:
     static void resetSessionPartnerParameters();
     static void trackAdRevenue(std::string source, std::string payload);
     static void disableThirdPartySharing();
+    static void trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing);
+    static void trackMeasurementConsent(bool measurementConsent);
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
@@ -53,6 +56,8 @@ public:
     static std::string getIdfa();
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
     static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
+    static int getAppTrackingAuthorizationStatus();
+    static void updateConversionValue(int conversionValue);
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

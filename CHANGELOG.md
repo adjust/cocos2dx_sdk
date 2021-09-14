@@ -1,3 +1,24 @@
+### Version 4.29.0 (14th September 2021)
+#### Added
+- Added possibility to get cost data information in attribution callback.
+- Added `setNeedsCost` method to `AdjustConfig2dx` to indicate if cost data is needed in attribution callback (by default cost data will not be part of attribution callback if not enabled with this setter method).
+- Added `setPreinstallTrackingEnabled` method to `AdjustConfig2dx` to allow enabling of preinstall tracking (this feature is OFF by default).
+- Added support for Apple Search Ads attribution with usage of `AdServices.framework`.
+- Added `setAllowAdServicesInfoReading` method to `AdjustConfig2dx` to allow option for users to prevent SDK from performing any tasks related to Apple Search Ads attribution with usage of `AdServices.framework`.
+- Added `setAllowiAdInfoReading` method to `AdjustConfig2dx` to allow option for users to prevent SDK from performing any tasks related to Apple Search Ads attribution with usage of `iAd.framework`.
+- Added wrapper method `updateConversionValue` method to `Adjust2dx` to allow updating SKAdNetwork conversion value via SDK API.
+- Added `getAppTrackingAuthorizationStatus` getter to `Adjust2dx` instance to be able to get current iOS app tracking status.
+- Added improved measurement consent management and third party sharing mechanism.
+- Added data residency feature. You can choose this setting by calling `setUrlStrategy` method of `AdjustConfig2dx` instance with `AdjustDataResidencyEU` (for EU data residency region), `AdjustDataResidencyTR` (for TR data residency region) or `AdjustDataResidencyUS` value (for US data residency region).
+- Added `setConversionValueUpdatedCallback` method to `AdjustConfig2dx` which can be used to set a callback which will get information when Adjust SDK updates conversion value for the user.
+- Added preinstall tracking with usage of system installer receiver on Android platform (`setPreinstallFilePath` method of the `AdjustConfig2dx`).
+
+#### Native SDKs
+- [iOS@v4.29.6][ios_sdk_v4.29.6]
+- [Android@v4.28.4][android_sdk_v4.28.4]
+
+---
+
 ### Version 4.28.0 (3rd April 2021)
 #### Changed
 - Removed native iOS legacy code.
@@ -348,6 +369,8 @@
 [ios_sdk_v4.22.1]: https://github.com/adjust/ios_sdk/tree/v4.22.1
 [ios_sdk_v4.23.0]: https://github.com/adjust/ios_sdk/tree/v4.23.0
 [ios_sdk_v4.23.2]: https://github.com/adjust/ios_sdk/tree/v4.23.2
+[ios_sdk_v4.28.0]: https://github.com/adjust/ios_sdk/tree/v4.28.0
+[ios_sdk_v4.29.6]: https://github.com/adjust/ios_sdk/tree/v4.29.6
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -368,5 +391,7 @@
 [android_sdk_v4.22.0]: https://github.com/adjust/android_sdk/tree/v4.22.0
 [android_sdk_v4.24.0]: https://github.com/adjust/android_sdk/tree/v4.24.0
 [android_sdk_v4.24.1]: https://github.com/adjust/android_sdk/tree/v4.24.1
+[android_sdk_v4.27.0]: https://github.com/adjust/android_sdk/tree/v4.27.0
+[android_sdk_v4.28.4]: https://github.com/adjust/android_sdk/tree/v4.28.4
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3

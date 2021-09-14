@@ -41,6 +41,14 @@ void ADJConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
     ((ADJConfig *)config).allowiAdInfoReading = isAllowed;
 }
 
+void ADJConfig2dx::setAllowAdServicesInfoReading(bool isAllowed) {
+    ((ADJConfig *)config).allowAdServicesInfoReading = isAllowed;
+}
+
+void ADJConfig2dx::setNeedsCost(bool needsCost) {
+    ((ADJConfig *)config).needsCost = needsCost;
+}
+
 void ADJConfig2dx::setUserAgent(std::string userAgent) {
     ((ADJConfig *)config).userAgent = [NSString stringWithUTF8String:userAgent.c_str()];
 }
@@ -59,10 +67,16 @@ void ADJConfig2dx::setUrlStrategy(std::string urlStrategy) {
         ((ADJConfig *)config).urlStrategy = ADJUrlStrategyChina;
     } else if ([strUrlStrategy isEqualToString:@"india"]) {
         ((ADJConfig *)config).urlStrategy = ADJUrlStrategyIndia;
+    } else if ([strUrlStrategy isEqualToString:@"data-residency-eu"]) {
+        ((ADJConfig *)config).urlStrategy = ADJDataResidencyEU;
+    } else if ([strUrlStrategy isEqualToString:@"data-residency-tr"]) {
+        ((ADJConfig *)config).urlStrategy = ADJDataResidencyTR;
+    } else if ([strUrlStrategy isEqualToString:@"data-residency-us"]) {
+        ((ADJConfig *)config).urlStrategy = ADJDataResidencyUS;
     }
 }
 
-void ADJConfig2dx::deactivateSKAdNetworkHandling() {
+void ADJConfig2dx::deactivateSkAdNetworkHandling() {
     [((ADJConfig *)config) deactivateSKAdNetworkHandling];
 }
 
@@ -88,6 +102,10 @@ void ADJConfig2dx::setSessionFailureCallback(void(*callbackMethod)(AdjustSession
 
 void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink)) {
     deferredDeeplinkCallback = callbackMethod;
+}
+
+void ADJConfig2dx::setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue)) {
+    conversionValueUpdatedCallback = callbackMethod;
 }
 
 void* ADJConfig2dx::getConfig() {
@@ -124,4 +142,8 @@ void(*ADJConfig2dx::getSessionFailureCallback())(AdjustSessionFailure2dx) {
 
 bool(*ADJConfig2dx::getDeferredDeeplinkCallback())(std::string) {
     return deferredDeeplinkCallback;
+}
+
+void(*ADJConfig2dx::getConversionValueUpdatedCallback())(int) {
+    return conversionValueUpdatedCallback;
 }
