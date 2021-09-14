@@ -145,7 +145,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
 
     if (NULL != jCostType) {
         const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
-        adid = std::string(costTypeCStr);
+        costType = std::string(costTypeCStr);
         env->ReleaseStringUTFChars(jCostType, costTypeCStr);
         env->DeleteLocalRef(jCostType);
     } else {
@@ -162,7 +162,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
 
     if (NULL != jCostCurrency) {
         const char *costCurrencyCStr = env->GetStringUTFChars(jCostCurrency, NULL);
-        adid = std::string(costCurrencyCStr);
+        costCurrency = std::string(costCurrencyCStr);
         env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
         env->DeleteLocalRef(jCostCurrency);
     } else {

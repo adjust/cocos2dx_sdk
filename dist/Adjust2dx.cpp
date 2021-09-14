@@ -508,7 +508,7 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
 
         if (NULL != jCostType) {
             const char *costTypeCStr = jmiGetAttribution.env->GetStringUTFChars(jCostType, NULL);
-            adid = std::string(costTypeCStr);
+            costType = std::string(costTypeCStr);
             jmiGetAttribution.env->ReleaseStringUTFChars(jCostType, costTypeCStr);
             jmiGetAttribution.env->DeleteLocalRef(jCostType);
         } else {
@@ -525,7 +525,7 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
 
         if (NULL != jCostCurrency) {
             const char *costCurrencyCStr = jmiGetAttribution.env->GetStringUTFChars(jCostCurrency, NULL);
-            adid = std::string(costCurrencyCStr);
+            costCurrency = std::string(costCurrencyCStr);
             jmiGetAttribution.env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
             jmiGetAttribution.env->DeleteLocalRef(jCostCurrency);
         } else {

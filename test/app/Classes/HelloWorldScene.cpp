@@ -79,7 +79,7 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    // this->testLibrary->addTest("Test_ThirdPartySharing_before_install");
+    // this->testLibrary->addTest("Test_AttributionCallback_no_ask_in");
     // this->testLibrary->addTest("Test_ThirdPartySharing_after_install");
     this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 
