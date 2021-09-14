@@ -660,6 +660,12 @@ void Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackin
 #endif
 }
 
+void Adjust2dx::updateConversionValue(int conversionValue) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updateConversionValue(conversionValue);
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     cocos2d::JniMethodInfo jmiInit;

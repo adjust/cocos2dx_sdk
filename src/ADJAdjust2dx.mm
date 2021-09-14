@@ -229,6 +229,10 @@ int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
     return [Adjust appTrackingAuthorizationStatus];
 }
 
+void ADJAdjust2dx::updateConversionValue(int conversionValue) {
+    [Adjust updateConversionValue:conversionValue];
+}
+
 void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing) {
     [Adjust trackThirdPartySharing:(ADJThirdPartySharing *)thirdPartySharing.getThirdPartySharing()];
 }

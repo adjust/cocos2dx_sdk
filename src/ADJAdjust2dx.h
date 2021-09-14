@@ -50,6 +50,7 @@ public:
     static int getAppTrackingAuthorizationStatus();
     static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
+    static void updateConversionValue(int conversionValue);
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();
