@@ -120,6 +120,16 @@ If you are **not targeting the Google Play Store**, please also add the followin
 <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
 ```
 
+#### <a id="gps-adid-permission"></a>Add permission to gather Google advertising ID
+
+If you are targeting Android 12 and above (API level 31), you need to add the `com.google.android.gms.AD_ID` permission to read the device's advertising ID. Add the following line to your `AndroidManifest.xml` to enable the permission.
+
+```xml
+<uses-permission android:name="com.google.android.gms.permission.AD_ID"/>
+```
+
+For more information, see [Google's `AdvertisingIdClient.Info` documentation](https://developers.google.com/android/reference/com/google/android/gms/ads/identifier/AdvertisingIdClient.Info#public-string-getid).
+
 ### <a id="android-gps"></a>[Android] Google Play Services
 
 Since August 1, 2014, apps in the Google Play Store must use the [Google advertising ID][google-ad-id] to uniquely identify each device. To allow the Adjust SDK to use the Google advertising ID, you must integrate [Google Play Services][google-play-services].
@@ -1037,6 +1047,10 @@ std::string idfa = Adjust2dx::getIdfa();
 ```
 
 ### <a id="di-gps-adid"></a>Google Play Services advertising identifier
+
+The Google Play Services Advertising Identifier (Google advertising ID) is a unique identifier for a device. Users can opt out of sharing their Google advertising ID by toggling the "Opt out of Ads Personalization" setting on their device. When a user has enabled this setting, the Adjust SDK returns a string of zeros when trying to read the Google advertising ID.
+
+> **Important**: If you are targeting Android 12 and above (API level 31), you need to add the [`com.google.android.gms.AD_ID` permission](#gps-adid-permission) to your app. If you do not add this permission, you will not be able to read the Google advertising ID even if the user has not opted out of sharing their ID.
 
 The Adjust SDK allows you to read the Google Advertising Identifier of the Android device on which your app is running. To do this, set the callback method which receives the `std::string` parameter. Next, invoke the `getGoogleAdId` method of the `Adjust2dx` instance and pass the defined callback method as a parameter. You will then get the Google Advertising Identifier value in your callback method:
 
