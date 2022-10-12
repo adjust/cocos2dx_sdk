@@ -2,7 +2,7 @@
 //  Adjust.h
 //  Adjust SDK
 //
-//  V4.29.6
+//  V4.32.1
 //  Created by Christian Wellenbrock (@wellle) on 23rd July 2013.
 //  Copyright (c) 2012-2021 Adjust GmbH. All rights reserved.
 //
@@ -49,6 +49,9 @@ extern NSString * __nonnull const ADJAdRevenueSourceMopub;
 extern NSString * __nonnull const ADJAdRevenueSourceAdMob;
 extern NSString * __nonnull const ADJAdRevenueSourceIronSource;
 extern NSString * __nonnull const ADJAdRevenueSourceAdMost;
+extern NSString * __nonnull const ADJAdRevenueSourceUnity;
+extern NSString * __nonnull const ADJAdRevenueSourceHeliumChartboost;
+extern NSString * __nonnull const ADJAdRevenueSourcePublisher;
 
 /**
  * Constants for country app's URL strategies.
@@ -305,7 +308,7 @@ extern NSString * __nonnull const ADJDataResidencyUS;
 /**
  * @brief Getter for app tracking authorization status.
  *
- * return Value of app tracking authorization status.
+ * @return Value of app tracking authorization status.
  */
 + (int)appTrackingAuthorizationStatus;
 
@@ -315,6 +318,18 @@ extern NSString * __nonnull const ADJDataResidencyUS;
  * @param conversionValue Conversion value you would like SDK to set for given user.
  */
 + (void)updateConversionValue:(NSInteger)conversionValue;
+
+/**
+ * @brief Instruct to Adjust SDK to check current state of att_status.
+ */
++ (void)checkForNewAttStatus;
+
+/**
+ * @brief Get the last deep link which has opened the app.
+ *
+ * @return Last deep link which has opened the app.
+ */
++ (nullable NSURL *)lastDeeplink;
 
 /**
  * @brief Method used for internal testing only. Don't use it in production.
@@ -389,5 +404,9 @@ extern NSString * __nonnull const ADJDataResidencyUS;
 - (void)trackMeasurementConsent:(BOOL)enabled;
 
 - (void)trackAdRevenue:(nonnull ADJAdRevenue *)adRevenue;
+
+- (void)checkForNewAttStatus;
+
+- (nullable NSURL *)lastDeeplink;
 
 @end
