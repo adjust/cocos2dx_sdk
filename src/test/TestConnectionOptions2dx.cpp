@@ -7,7 +7,6 @@
 //
 
 #include "cocos2d.h"
-#include <iostream>
 #include "TestConnectionOptions2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

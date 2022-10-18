@@ -62,9 +62,11 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     create_dir_if_not_exist('{0}/proj.android/app/libs'.format(app_path))
     copy_file('{0}/adjust-android.jar'.format(android_libs_dir), '{0}/proj.android/app/libs/adjust-android.jar'.format(app_path))
     copy_file('{0}/adjust-test-library.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test-library.jar'.format(app_path))
+    copy_file('{0}/adjust-test-options.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/adjust-test-options.jar'.format(app_path))
     copy_file('{0}/gson-2.8.6.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/gson-2.8.6.jar'.format(app_path))
     copy_file('{0}/Java-WebSocket-1.4.0.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/Java-WebSocket-1.4.0.jar'.format(app_path))
     copy_file('{0}/slf4j-api-1.7.30.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/slf4j-api-1.7.30.jar'.format(app_path))
+    copy_file('{0}/slf4j-simple-1.7.30.jar'.format(android_test_libs_dir), '{0}/proj.android/app/libs/slf4j-simple-1.7.30.jar'.format(app_path))
 
     # ------------------------------------------------------------------
     # Updating Adjust SDK C++ source files in ${APP_PATH}/Classes/Adjust folder.
@@ -82,12 +84,14 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
 def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=False):
     # ------------------------------------------------------------------
     # Paths.
-    proxy_dir         = '{0}/proxy'.format(android_submodule_dir)
-    libs_out_dir      = '{0}/libs/android'.format(root_dir)
-    test_libs_out_dir = '{0}/test/libs/android/'.format(root_dir)
-    test_libs_in_dir  = ''
-    build_dir         = '{0}/sdk/Adjust'.format(android_submodule_dir)
-    jar_in_dir        = ''
+    proxy_dir            = '{0}/proxy'.format(android_submodule_dir)
+    libs_out_dir         = '{0}/libs/android'.format(root_dir)
+    test_libs_out_dir    = '{0}/test/libs/android/'.format(root_dir)
+    test_libs_in_dir     = ''
+    test_options_out_dir = '{0}/test/libs/android/'.format(root_dir)
+    test_options_in_dir  = ''
+    build_dir            = '{0}/sdk/Adjust'.format(android_submodule_dir)
+    jar_in_dir           = ''
 
     change_dir(build_dir)
 
@@ -109,17 +113,31 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
     if with_test_lib:
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test library project.
-        debug_green('Running clean and makeJar Gradle tasks for Adjust test library project ...')
-        gradle_run(['clean', 'adjustTestLibraryJarDebug'])
+        debug_green('Running clean and makeJar Gradle tasks for Adjust test-library project ...')
+        gradle_run(['clean', 'test-library:adjustTestLibraryJarDebug'])
         if (configuration == 'release'):
             test_libs_in_dir = '{0}/test-library/build/libs'.format(build_dir)
         else:
             test_libs_in_dir = '{0}/test-library/build/libs'.format(build_dir)
 
         # ------------------------------------------------------------------
-        # Copying Testing JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
-        debug_green('Copying Testing JAR from {0} to {1} ...'.format(test_libs_in_dir, proxy_dir))
+        # Copying test-library JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
+        debug_green('Copying test-library JAR from {0} to {1} ...'.format(test_libs_in_dir, proxy_dir))
         copy_file('{0}/test-library-debug.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
+
+        # ------------------------------------------------------------------
+        # Running clean and makeJar Gradle tasks for Adjust test options project.
+        debug_green('Running clean and makeJar Gradle tasks for Adjust test-options project ...')
+        gradle_run(['clean', ':test-options:assembleDebug'])
+        if (configuration == 'release'):
+            test_options_in_dir = '{0}/test-options/build/intermediates/aar_main_jar/release'.format(build_dir)
+        else:
+            test_options_in_dir = '{0}/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
+
+        # ------------------------------------------------------------------
+        # Copying test-options JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
+        debug_green('Copying test-options JAR from {0} to {1} ...'.format(test_options_in_dir, test_options_out_dir))
+        copy_file('{0}/classes.jar'.format(test_options_in_dir), '{0}/adjust-test-options.jar'.format(test_options_out_dir))
 
     # ------------------------------------------------------------------
     # Injecting C++ bridge changes.
