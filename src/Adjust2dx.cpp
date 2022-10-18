@@ -6,6 +6,8 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
+#define COCOS2D_DEBUG 1
+
 #include "Adjust2dx.h"
 #include <stdlib.h>
 
@@ -546,6 +548,18 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         costAmount,
         costCurrency);
     return attribution2dx;
+#endif
+}
+
+void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackAdRevenueNew(adRevenue.getAdRevenue());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackAdRevenue;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackAdRevenue, "com/adjust/sdk/Adjust", "trackAdRevenue", "(Lcom/adjust/sdk/AdjustAdRevenue;)V")) {
+        return;
+    }
+    jmiTrackAdRevenue.env->CallStaticVoidMethod(jmiTrackAdRevenue.classID, jmiTrackAdRevenue.methodID, adRevenue.getAdRevenue());
 #endif
 }
 

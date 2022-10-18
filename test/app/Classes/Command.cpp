@@ -20,20 +20,25 @@ Command::Command(std::string className, std::string methodName, std::string para
     this->methodName = methodName;
 
     // Reason for changing [null] to []: https://github.com/nlohmann/json/issues/1163
-    replaceSubString(parametersJson, "[null]", "[\"\"]");
-    replaceSubString(parametersJson, "[null,", "[\"\",");
+    replace(parametersJson, "[null]", "[\"\"]");
+    replace(parametersJson, "[null,", "[\"\",");
+    replace(parametersJson, "null", "\"\"");
+    replace(parametersJson, "null,", "\"\",");
     std::map<std::string, std::vector<std::string>> parsedParams = json::parse(parametersJson);
 
     this->parameters = parsedParams;
 }
 
-bool Command::replaceSubString(std::string& str, const std::string& from, const std::string& to) {
-    size_t start_pos = str.find(from);
-    if (start_pos == std::string::npos) {
-        return false;
+// https://stackoverflow.com/a/15372760/1498352
+void Command::replace(std::string &s, const std::string &search, const std::string &replace) {
+    for (size_t pos = 0; ; pos += replace.length()) {
+        // locate the substring to replace
+        pos = s.find(search, pos);
+        if (pos == std::string::npos) break;
+        // replace by erasing and inserting
+        s.erase(pos, search.length());
+        s.insert(pos, replace);
     }
-    str.replace(start_pos, from.length(), to);
-    return true;
 }
 
 std::vector<std::string> Command::getParameters(std::string parameterKey) {

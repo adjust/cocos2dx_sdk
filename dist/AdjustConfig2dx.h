@@ -9,18 +9,19 @@
 #ifndef ADJUST_ADJUSTCONFIG2DX_H_
 #define ADJUST_ADJUSTCONFIG2DX_H_
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "ADJConfig2dx.h"
-#endif
-
+#include "cocos2d.h"
 #include <iostream>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
 #include "AdjustEventSuccess2dx.h"
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "ADJConfig2dx.h"
+#endif
 
 extern const std::string AdjustSdkPrefix2dx;
 extern const std::string AdjustUrlStrategyChina;

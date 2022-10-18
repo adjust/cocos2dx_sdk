@@ -49,7 +49,7 @@ def build_test(root_dir, android_submodule_dir, configuration, app_path):
     # ------------------------------------------------------------------
     # Removing test app from test device/emulator.
     debug_green('Removing test app from test device/emulator ...')
-    adb_uninstall('com.adjust.testapp')
+    adb_uninstall('com.adjust.examples')
 
     # ------------------------------------------------------------------
     # Building Adjust SDK JAR file.

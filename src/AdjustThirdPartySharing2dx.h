@@ -9,13 +9,14 @@
 #ifndef ADJUST_ADJUSTTHIRDPARTYSHARING_H_
 #define ADJUST_ADJUSTTHIRDPARTYSHARING_H_
 
+#include "cocos2d.h"
+#include <iostream>
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJThirdPartySharing2dx.h"
 #endif
-
-#include <iostream>
 
 class AdjustThirdPartySharing2dx {
 private:

@@ -17,6 +17,7 @@
 #include "AdjustAppStoreSubscription2dx.h"
 #include "AdjustPlayStoreSubscription2dx.h"
 #include "AdjustThirdPartySharing2dx.h"
+#include "AdjustAdRevenue2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -45,6 +46,7 @@ public:
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
+    static void trackAdRevenueNew(AdjustAdRevenue2dx adRevenue);
     // Android specific methods.
     static void setReferrer(std::string referrer);
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));

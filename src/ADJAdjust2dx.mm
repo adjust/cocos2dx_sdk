@@ -123,6 +123,10 @@ void ADJAdjust2dx::trackAdRevenue(std::string source, std::string payload) {
     [Adjust trackAdRevenue:[NSString stringWithUTF8String:source.c_str()] payload:dataPayload];
 }
 
+void ADJAdjust2dx::trackAdRevenueNew(ADJAdRevenue2dx adRevenue) {
+    [Adjust trackAdRevenue:(ADJAdRevenue *)adRevenue.getAdRevenue()];
+}
+
 bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];
 }

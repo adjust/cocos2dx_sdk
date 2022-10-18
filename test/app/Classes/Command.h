@@ -16,7 +16,7 @@
 
 class Command {
 private:
-	bool replaceSubString(std::string& str, const std::string& from, const std::string& to);
+	void replace(std::string &s, const std::string &search, const std::string &replace);
 public:
 	std::string className;
 	std::string methodName;

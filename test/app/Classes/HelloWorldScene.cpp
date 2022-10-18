@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.65";
+static std::string serverIp = "192.168.86.44";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

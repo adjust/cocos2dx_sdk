@@ -5,15 +5,12 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
+#include "AdjustConfig2dx.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustProxy2dx.h"
 #endif
-
-#define COCOS2D_DEBUG 1
-#include "AdjustConfig2dx.h"
-USING_NS_CC;
 
 const std::string AdjustSdkPrefix2dx = "cocos2d-x4.32.0";
 const std::string AdjustUrlStrategyChina = "china";

@@ -9,11 +9,12 @@
 #ifndef ADJUST_ADJUSTPLAYSTORESUBSCRIPTION2DX_H_
 #define ADJUST_ADJUSTPLAYSTORESUBSCRIPTION2DX_H_
 
+#include "cocos2d.h"
+#include <iostream>
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #endif
-
-#include <iostream>
 
 class AdjustPlayStoreSubscription2dx {
 private:
