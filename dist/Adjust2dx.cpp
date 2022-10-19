@@ -702,6 +702,12 @@ void Adjust2dx::updateConversionValue(int conversionValue) {
 #endif
 }
 
+void Adjust2dx::checkForNewAttStatus() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::checkForNewAttStatus();
+#endif
+}
+
 std::string Adjust2dx::getLastDeeplink() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getLastDeeplink();

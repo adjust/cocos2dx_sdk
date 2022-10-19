@@ -247,6 +247,10 @@ void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
 }
 
+void ADJAdjust2dx::checkForNewAttStatus() {
+    [Adjust checkForNewAttStatus];
+}
+
 std::string ADJAdjust2dx::getLastDeeplink() {
     NSURL *lastDeeplink = [Adjust lastDeeplink];
     if (nil == lastDeeplink) {
