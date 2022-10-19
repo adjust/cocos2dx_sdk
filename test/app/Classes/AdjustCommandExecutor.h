@@ -68,6 +68,7 @@ private:
     void trackThirdPartySharing();
     void trackMeasurementConsent();
     void trackAdRevenueNew();
+    void getLastDeeplink();
 public:
     static const std::string TAG;
     AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl, std::string subscriptionUrl);

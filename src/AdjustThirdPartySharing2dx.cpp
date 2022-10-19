@@ -94,7 +94,7 @@ void AdjustThirdPartySharing2dx::addPartnerSharingSetting(std::string partnerNam
     jmiAddPartnerSharingSetting.env->DeleteLocalRef(jKey);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isThirdPartySharingSet) {
-        // TODO: implement for iOS
+        thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
     }
 #endif
 }

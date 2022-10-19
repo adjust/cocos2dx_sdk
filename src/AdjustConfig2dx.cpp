@@ -619,7 +619,7 @@ void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
     jmiSetCoppaCompliantEnabled.env->CallVoidMethod(config, jmiSetCoppaCompliantEnabled.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        // TODO: implement for iOS
+        config.setCoppaCompliantEnabled(isEnabled);
     }
 #endif
 }
@@ -635,6 +635,15 @@ void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
     }
     jmiSetPlayStoreKidsAppEnabled.env->CallVoidMethod(config, jmiSetPlayStoreKidsAppEnabled.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
+void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setLinkMeEnabled(isEnabled);
+    }
 #endif
 }
 

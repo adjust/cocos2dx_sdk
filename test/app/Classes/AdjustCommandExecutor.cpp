@@ -79,6 +79,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->trackMeasurementConsent();
     } else if (command->methodName == "trackAdRevenueV2") {
         this->trackAdRevenueNew();
+    } else if (command->methodName == "getLastDeeplink") {
+        this->getLastDeeplink();
     }
 }
 
@@ -809,4 +811,14 @@ void AdjustCommandExecutor::trackAdRevenueNew() {
     }
 
     Adjust2dx::trackAdRevenueNew(*adjustAdRevenue);
+}
+
+void AdjustCommandExecutor::getLastDeeplink() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    localBasePath = this->basePath;
+    std::string lastDeeplink = Adjust2dx::getLastDeeplink();
+    TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
+    TestLib2dx::sendInfoToServer(localBasePath);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#endif
 }

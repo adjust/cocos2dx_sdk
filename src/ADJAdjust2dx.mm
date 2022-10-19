@@ -247,6 +247,20 @@ void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
 }
 
+std::string ADJAdjust2dx::getLastDeeplink() {
+    NSURL *lastDeeplink = [Adjust lastDeeplink];
+    if (nil == lastDeeplink) {
+        return "";
+    }
+    NSString *strLastDeeplink = [lastDeeplink absoluteString];
+    if (nil == strLastDeeplink) {
+        return "";
+    }
+
+    std::string stdStrLastDeeplink = std::string([strLastDeeplink UTF8String]);
+    return stdStrLastDeeplink;
+}
+
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
     AdjustTestOptions *testOptions = [[AdjustTestOptions alloc] init];
     testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];

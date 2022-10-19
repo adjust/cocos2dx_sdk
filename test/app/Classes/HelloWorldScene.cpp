@@ -79,43 +79,6 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    // this->testLibrary->addTestDirectory("ad-revenue");
-    // this->testLibrary->addTestDirectory("ad-services");
-    // this->testLibrary->addTestDirectory("app-secret");
-    // this->testLibrary->addTestDirectory("attribution-callback");
-    // this->testLibrary->addTestDirectory("attribution-initiated-by");
-    // this->testLibrary->addTestDirectory("coppa");
-    // this->testLibrary->addTestDirectory("deeplink");
-    // this->testLibrary->addTestDirectory("deeplink-deferred");
-    // this->testLibrary->addTestDirectory("default-tracker");
-    // this->testLibrary->addTestDirectory("delay-start");
-    // this->testLibrary->addTestDirectory("disable-enable");
-    // this->testLibrary->addTestDirectory("disable-third-party-sharing");
-    // this->testLibrary->addTestDirectory("error-responses");
-    // this->testLibrary->addTestDirectory("event-buffering");
-    // this->testLibrary->addTestDirectory("event-callbacks");
-    // this->testLibrary->addTestDirectory("event-tracking");
-    // this->testLibrary->addTestDirectory("external-device-id");
-    // this->testLibrary->addTestDirectory("gdpr");
-    // this->testLibrary->addTestDirectory("google-kids");
-    // this->testLibrary->addTestDirectory("iad");
-    // this->testLibrary->addTestDirectory("idfa");
-    // this->testLibrary->addTestDirectory("init-malformed");
-    // this->testLibrary->addTestDirectory("measurement-consent");
-    // this->testLibrary->addTestDirectory("offline-mode");
-    // this->testLibrary->addTestDirectory("parameters");
-    // this->testLibrary->addTestDirectory("pasteboard");
-    // this->testLibrary->addTestDirectory("push-token");
-    // this->testLibrary->addTestDirectory("queue-size");
-    // this->testLibrary->addTestDirectory("referrer-reftag");
-    // this->testLibrary->addTestDirectory("sdk-prefix");
-    // this->testLibrary->addTestDirectory("send-in-background");
-    // this->testLibrary->addTestDirectory("session-callbacks");
-    // this->testLibrary->addTestDirectory("session-count");
-    // this->testLibrary->addTestDirectory("session-parameters");
-    // this->testLibrary->addTestDirectory("subscription");
-    // this->testLibrary->addTestDirectory("third-party-sharing");
-    // this->testLibrary->addTestDirectory("user-agent");
     this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 
     // Add main menu to screen

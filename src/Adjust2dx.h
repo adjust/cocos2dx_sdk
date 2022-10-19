@@ -60,6 +60,7 @@ public:
     static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
     static void updateConversionValue(int conversionValue);
+    static std::string getLastDeeplink();
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

@@ -80,6 +80,14 @@ void ADJConfig2dx::deactivateSkAdNetworkHandling() {
     [((ADJConfig *)config) deactivateSKAdNetworkHandling];
 }
 
+void ADJConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
+    ((ADJConfig *)config).coppaCompliantEnabled = isEnabled;
+}
+
+void ADJConfig2dx::setLinkMeEnabled(bool isEnabled) {
+    ((ADJConfig *)config).linkMeEnabled = isEnabled;
+}
+
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     attributionCallback = callbackMethod;
 }

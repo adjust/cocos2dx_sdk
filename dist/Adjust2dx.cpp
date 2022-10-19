@@ -688,9 +688,25 @@ void Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackin
 #endif
 }
 
+int Adjust2dx::getAppTrackingAuthorizationStatus() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getAppTrackingAuthorizationStatus();
+#else
+    return -1;
+#endif
+}
+
 void Adjust2dx::updateConversionValue(int conversionValue) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::updateConversionValue(conversionValue);
+#endif
+}
+
+std::string Adjust2dx::getLastDeeplink() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getLastDeeplink();
+#else
+    return "";
 #endif
 }
 

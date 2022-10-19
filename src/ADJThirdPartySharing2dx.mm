@@ -23,6 +23,12 @@ void ADJThirdPartySharing2dx::addGranularOption(std::string partnerName, std::st
                                                              value:[NSString stringWithUTF8String:value.c_str()]];
 }
 
+void ADJThirdPartySharing2dx::addPartnerSharingSetting(std::string partnerName, std::string key, bool value) {
+    [((ADJThirdPartySharing *)thirdPartySharing) addPartnerSharingSetting:[NSString stringWithUTF8String:partnerName.c_str()]
+                                                                      key:[NSString stringWithUTF8String:key.c_str()]
+                                                                    value:value];
+}
+
 void* ADJThirdPartySharing2dx::getThirdPartySharing() {
     return thirdPartySharing;
 }

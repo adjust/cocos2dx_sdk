@@ -96,6 +96,7 @@ public:
     void setAllowiAdInfoReading(bool isAllowed);
     void setAllowAdServicesInfoReading(bool isAllowed);
     void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
+    void setLinkMeEnabled(bool isEnabled);
     // Android only
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setPreinstallTrackingEnabled(bool isEnabled);

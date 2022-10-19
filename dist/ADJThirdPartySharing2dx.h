@@ -26,6 +26,7 @@ public:
     }
 
     void addGranularOption(std::string partnerName, std::string key, std::string value);
+    void addPartnerSharingSetting(std::string partnerName, std::string key, bool value);
     void* getThirdPartySharing();
 };
 
