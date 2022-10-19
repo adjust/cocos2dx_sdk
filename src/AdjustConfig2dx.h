@@ -29,6 +29,14 @@ extern const std::string AdjustUrlStrategyIndia;
 extern const std::string AdjustDataResidencyEU;
 extern const std::string AdjustDataResidencyTR;
 extern const std::string AdjustDataResidencyUS;
+extern const std::string AdjustAdRevenueSourceAppLovinMAX;
+extern const std::string AdjustAdRevenueSourceMopub;
+extern const std::string AdjustAdRevenueSourceAdMob;
+extern const std::string AdjustAdRevenueSourceIronSource;
+extern const std::string AdjustAdRevenueSourceAdMostSource;
+extern const std::string AdjustAdRevenueSourceUnity;
+extern const std::string AdjustAdRevenueSourceHeliumChartboost;
+extern const std::string AdjustAdRevenueSourcePublisher;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,

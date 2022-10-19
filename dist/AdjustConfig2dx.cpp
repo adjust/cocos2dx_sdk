@@ -18,6 +18,14 @@ const std::string AdjustUrlStrategyIndia = "india";
 const std::string AdjustDataResidencyEU = "data-residency-eu";
 const std::string AdjustDataResidencyTR = "data-residency-tr";
 const std::string AdjustDataResidencyUS = "data-residency-us";
+const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
+const std::string AdjustAdRevenueSourceMopub = "mopub";
+const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
+const std::string AdjustAdRevenueSourceIronSource = "ironsource_sdk";
+const std::string AdjustAdRevenueSourceAdMostSource = "admost_sdk";
+const std::string AdjustAdRevenueSourceUnity = "unity_sdk";
+const std::string AdjustAdRevenueSourceHeliumChartboost = "helium_chartboost_sdk";
+const std::string AdjustAdRevenueSourcePublisher = "publisher_sdk";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
