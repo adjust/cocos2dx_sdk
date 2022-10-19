@@ -89,6 +89,7 @@ public:
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
+    void setCoppaCompliantEnabled(bool isEnabled);
     // iOS only
     void deactivateSkAdNetworkHandling();
     void setAllowIdfaReading(bool isAllowed);
@@ -99,6 +100,7 @@ public:
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setPreinstallTrackingEnabled(bool isEnabled);
     void setPreinstallFilePath(std::string filePath);
+    void setPlayStoreKidsAppEnabled(bool isEnabled);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

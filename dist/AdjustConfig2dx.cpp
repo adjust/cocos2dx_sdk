@@ -607,6 +607,37 @@ void AdjustConfig2dx::setConversionValueUpdatedCallback(void(*conversionValueUpd
 #endif
 }
 
+void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetCoppaCompliantEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCoppaCompliantEnabled, "com/adjust/sdk/AdjustConfig", "setCoppaCompliantEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetCoppaCompliantEnabled.env->CallVoidMethod(config, jmiSetCoppaCompliantEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        // TODO: implement for iOS
+    }
+#endif
+}
+
+void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetPlayStoreKidsAppEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPlayStoreKidsAppEnabled, "com/adjust/sdk/AdjustConfig", "setPlayStoreKidsAppEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetPlayStoreKidsAppEnabled.env->CallVoidMethod(config, jmiSetPlayStoreKidsAppEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject AdjustConfig2dx::getConfig() {
     return config;

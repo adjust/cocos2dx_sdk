@@ -24,6 +24,7 @@ private:
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string fbInstallReferrer;
 public:
     AdjustAttribution2dx() {}
     AdjustAttribution2dx(
@@ -37,7 +38,8 @@ public:
         std::string adid,
         std::string costType,
         double costAmount,
-        std::string costCurrency) {
+        std::string costCurrency,
+        std::string fbInstallReferrer) {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;
@@ -49,6 +51,7 @@ public:
         this->costType = costType;
         this->costAmount = costAmount;
         this->costCurrency = costCurrency;
+        this->fbInstallReferrer = fbInstallReferrer;
     }
 
     std::string getTrackerToken();
@@ -62,6 +65,7 @@ public:
     std::string getCostType();
     double getCostAmount();
     std::string getCostCurrency();
+    std::string getFbInstallReferrer();
 };
 
 #endif /* ADJUST_ADJUSTATTRIBUTION2DX_H_ */

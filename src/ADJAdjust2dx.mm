@@ -171,6 +171,7 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string fbInstallReferrer = NULL;
 
     if (nil != attribution) {
         if (attribution.trackerToken != NULL) {
@@ -219,7 +220,8 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
         adid,
         costType,
         costAmount,
-        costCurrency);
+        costCurrency,
+        fbInstallReferrer);
     return attribution2dx;
 }
 

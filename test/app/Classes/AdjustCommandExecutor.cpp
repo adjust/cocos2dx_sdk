@@ -335,6 +335,18 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setUserAgent(userAgent);
     }
 
+    if (this->command->containsParameter("coppaCompliant")) {
+        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
+        bool coppaCompliant = (coppaCompliantString == "true");
+        adjustConfig->setCoppaCompliantEnabled(coppaCompliant);
+    }
+
+    if (this->command->containsParameter("playStoreKids")) {
+        std::string playStoreKidsString = command->getFirstParameterValue("playStoreKids");
+        bool playStoreKids = (playStoreKidsString == "true");
+        adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
@@ -353,6 +365,7 @@ void AdjustCommandExecutor::config() {
             std::string strCostAmount = sstream.str();
             TestLib2dx::addInfoToSend("costAmount", strCostAmount);
             TestLib2dx::addInfoToSend("costCurrency", attribution.getCostCurrency());
+            TestLib2dx::addInfoToSend("fbInstallReferrer", attribution.getFbInstallReferrer());
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -725,6 +738,16 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
             std::string key = granularOptions[i + 1];
             std::string value = granularOptions[i + 2];
             thirdPartySharing.addGranularOption(partnerName, key, value);
+        }
+    }
+
+    if (this->command->containsParameter("partnerSharingSettings")) {
+        std::vector<std::string> partnerSharingSettings = command->getParameters("partnerSharingSettings");
+        for (int i = 0; i < partnerSharingSettings.size(); i = i + 3) {
+            std::string partnerName = partnerSharingSettings[i];
+            std::string key = partnerSharingSettings[i + 1];
+            bool value = (partnerSharingSettings[i + 2] == "true");
+            thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
         }
     }
 
