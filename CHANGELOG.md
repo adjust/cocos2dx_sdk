@@ -3,7 +3,7 @@
 - Added ability to mark your app as COPPA compliant. You can enable this setting by calling `setCoppaCompliantEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`.
 - Added ability to mark your Android app as app for the kids in accordance to Google Play Families policies. You can enable this setting by calling `setPlayStoreKidsAppEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true` (Android only).
 - Added `checkForNewAttStatus` method to `Adjust2dx` API to allow iOS apps to instruct to SDK to check if `att_status` might have changed in the meantime (iOS only).
-- Added updated `trackAdRevenueNew` method to `Adjust2dx` API to allow unified way of tracking ad revenue with currently supported partners (AppLovin MAX, AdMob, IronSource, AdMost, Unity, Helium Chartboost).
+- Added updated `trackAdRevenueNew` method to `Adjust2dx` API to allow unified way of tracking ad revenue with currently supported partners (AppLovin MAX, AdMob, IronSource, AdMost, Unity, Helium Chartboost). Make sure to include newly added `AdjustAdRevenue2dx.h` and `AdjustAdRevenue2dx.cpp` files to your `Android.mk` or `CMakeLists.txt` files.
 - Added partner sharing settings to the third party sharing feature.
 - Added `getLastDeeplink` getter to `Adjust2dx` API to be able to get last tracked deep link by the SDK (iOS only).
 - Added support for `LinkMe` feature (iOS only).
