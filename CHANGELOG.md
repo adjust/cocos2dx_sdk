@@ -1,4 +1,4 @@
-### Version 4.29.0 (20th October 2022)
+### Version 4.32.0 (20th October 2022)
 #### Added
 - Added ability to mark your app as COPPA compliant. You can enable this setting by calling `setCoppaCompliantEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`.
 - Added ability to mark your Android app as app for the kids in accordance to Google Play Families policies. You can enable this setting by calling `setPlayStoreKidsAppEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true` (Android only).
