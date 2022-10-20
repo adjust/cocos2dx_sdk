@@ -98,7 +98,8 @@ $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustAppStoreSubscription2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStoreSubscription2dx.cpp \
-$(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustAdRevenue2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
