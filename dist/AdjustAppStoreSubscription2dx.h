@@ -9,12 +9,13 @@
 #ifndef ADJUST_ADJUSTAPPSTORESUBSCRIPTION2DX_H_
 #define ADJUST_ADJUSTAPPSTORESUBSCRIPTION2DX_H_
 
+#include "cocos2d.h"
+#include <iostream>
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJAppStoreSubscription2dx.h"
 #endif
-
-#include <iostream>
 
 class AdjustAppStoreSubscription2dx {
 private:

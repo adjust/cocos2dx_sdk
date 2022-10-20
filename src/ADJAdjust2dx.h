@@ -15,6 +15,7 @@
 #include "ADJConfig2dx.h"
 #include "ADJAppStoreSubscription2dx.h"
 #include "ADJThirdPartySharing2dx.h"
+#include "ADJAdRevenue2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
@@ -41,6 +42,7 @@ public:
     static void resetSessionCallbackParameters();
     static void resetSessionPartnerParameters();
     static void trackAdRevenue(std::string source, std::string payload);
+    static void trackAdRevenueNew(ADJAdRevenue2dx adRevenue);
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
@@ -51,6 +53,8 @@ public:
     static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
     static void updateConversionValue(int conversionValue);
+    static void checkForNewAttStatus();
+    static std::string getLastDeeplink();
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();

@@ -6,6 +6,8 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
+#include "cocos2d.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #include "Adjust/AdjustAttribution2dx.h"

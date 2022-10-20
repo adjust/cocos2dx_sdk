@@ -11,6 +11,7 @@
 #include <regex>
 #include <base/CCConsole.h>
 #include <platform/CCStdC.h>
+#include <sstream>
 #include "AdjustCommandExecutor.h"
 
 static std::string localBasePath;
@@ -76,6 +77,10 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->trackThirdPartySharing();
     } else if (command->methodName == "measurementConsent") {
         this->trackMeasurementConsent();
+    } else if (command->methodName == "trackAdRevenueV2") {
+        this->trackAdRevenueNew();
+    } else if (command->methodName == "getLastDeeplink") {
+        this->getLastDeeplink();
     }
 }
 
@@ -332,6 +337,18 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setUserAgent(userAgent);
     }
 
+    if (this->command->containsParameter("coppaCompliant")) {
+        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
+        bool coppaCompliant = (coppaCompliantString == "true");
+        adjustConfig->setCoppaCompliantEnabled(coppaCompliant);
+    }
+
+    if (this->command->containsParameter("playStoreKids")) {
+        std::string playStoreKidsString = command->getFirstParameterValue("playStoreKids");
+        bool playStoreKids = (playStoreKidsString == "true");
+        adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
@@ -350,6 +367,7 @@ void AdjustCommandExecutor::config() {
             std::string strCostAmount = sstream.str();
             TestLib2dx::addInfoToSend("costAmount", strCostAmount);
             TestLib2dx::addInfoToSend("costCurrency", attribution.getCostCurrency());
+            TestLib2dx::addInfoToSend("fbInstallReferrer", attribution.getFbInstallReferrer());
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -725,10 +743,82 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
         }
     }
 
+    if (this->command->containsParameter("partnerSharingSettings")) {
+        std::vector<std::string> partnerSharingSettings = command->getParameters("partnerSharingSettings");
+        for (int i = 0; i < partnerSharingSettings.size(); i = i + 3) {
+            std::string partnerName = partnerSharingSettings[i];
+            std::string key = partnerSharingSettings[i + 1];
+            bool value = (partnerSharingSettings[i + 2] == "true");
+            thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
+        }
+    }
+
     Adjust2dx::trackThirdPartySharing(thirdPartySharing);
 }
 
 void AdjustCommandExecutor::trackMeasurementConsent() {
     std::string enabled = command->getFirstParameterValue("isEnabled");
     Adjust2dx::trackMeasurementConsent(enabled == "true" ? true : false);
+}
+
+void AdjustCommandExecutor::trackAdRevenueNew() {
+    std::string source = command->getFirstParameterValue("adRevenueSource");
+    AdjustAdRevenue2dx *adjustAdRevenue = new AdjustAdRevenue2dx(source);
+
+    if (this->command->containsParameter("revenue")) {
+        std::vector<std::string> revenueParams = command->getParameters("revenue");
+        std::string currency = revenueParams[0];
+        double revenue = std::stod(revenueParams[1]);
+        adjustAdRevenue->setRevenue(revenue, currency);
+    }
+
+    if (this->command->containsParameter("callbackParams")) {
+        std::vector<std::string> callbackParams = command->getParameters("callbackParams");
+        for (int i = 0; i < callbackParams.size(); i = i + 2) {
+            std::string key = callbackParams[i];
+            std::string value = callbackParams[i + 1];
+            adjustAdRevenue->addCallbackParameter(key, value);
+        }
+    }
+
+    if (this->command->containsParameter("partnerParams")) {
+        std::vector<std::string> partnerParams = command->getParameters("partnerParams");
+        for (int i = 0; i < partnerParams.size(); i = i + 2) {
+            std::string key = partnerParams[i];
+            std::string value = partnerParams[i + 1];
+            adjustAdRevenue->addPartnerParameter(key, value);
+        }
+    }
+
+    if (this->command->containsParameter("adImpressionsCount")) {
+        int adImpressionsCount = std::stoi(command->getFirstParameterValue("adImpressionsCount"));
+        adjustAdRevenue->setAdImpressionsCount(adImpressionsCount);
+    }
+
+    if (this->command->containsParameter("adRevenueNetwork")) {
+        std::string adRevenueNetwork = command->getFirstParameterValue("adRevenueNetwork");
+        adjustAdRevenue->setAdRevenueNetwork(adRevenueNetwork);
+    }
+
+    if (this->command->containsParameter("adRevenueUnit")) {
+        std::string adRevenueUnit = command->getFirstParameterValue("adRevenueUnit");
+        adjustAdRevenue->setAdRevenueUnit(adRevenueUnit);
+    }
+
+    if (this->command->containsParameter("adRevenuePlacement")) {
+        std::string adRevenuePlacement = command->getFirstParameterValue("adRevenuePlacement");
+        adjustAdRevenue->setAdRevenuePlacement(adRevenuePlacement);
+    }
+
+    Adjust2dx::trackAdRevenueNew(*adjustAdRevenue);
+}
+
+void AdjustCommandExecutor::getLastDeeplink() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    localBasePath = this->basePath;
+    std::string lastDeeplink = Adjust2dx::getLastDeeplink();
+    TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
+    TestLib2dx::sendInfoToServer(localBasePath);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#endif
 }

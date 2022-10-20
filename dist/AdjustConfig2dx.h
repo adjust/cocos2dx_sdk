@@ -9,12 +9,7 @@
 #ifndef ADJUST_ADJUSTCONFIG2DX_H_
 #define ADJUST_ADJUSTCONFIG2DX_H_
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#include "ADJConfig2dx.h"
-#endif
-
+#include "cocos2d.h"
 #include <iostream>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
@@ -22,12 +17,26 @@
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
 
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#include <jni.h>
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#include "ADJConfig2dx.h"
+#endif
+
 extern const std::string AdjustSdkPrefix2dx;
 extern const std::string AdjustUrlStrategyChina;
 extern const std::string AdjustUrlStrategyIndia;
 extern const std::string AdjustDataResidencyEU;
 extern const std::string AdjustDataResidencyTR;
 extern const std::string AdjustDataResidencyUS;
+extern const std::string AdjustAdRevenueSourceAppLovinMAX;
+extern const std::string AdjustAdRevenueSourceMopub;
+extern const std::string AdjustAdRevenueSourceAdMob;
+extern const std::string AdjustAdRevenueSourceIronSource;
+extern const std::string AdjustAdRevenueSourceAdMostSource;
+extern const std::string AdjustAdRevenueSourceUnity;
+extern const std::string AdjustAdRevenueSourceHeliumChartboost;
+extern const std::string AdjustAdRevenueSourcePublisher;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -88,16 +97,19 @@ public:
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
+    void setCoppaCompliantEnabled(bool isEnabled);
     // iOS only
     void deactivateSkAdNetworkHandling();
     void setAllowIdfaReading(bool isAllowed);
     void setAllowiAdInfoReading(bool isAllowed);
     void setAllowAdServicesInfoReading(bool isAllowed);
     void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
+    void setLinkMeEnabled(bool isEnabled);
     // Android only
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setPreinstallTrackingEnabled(bool isEnabled);
     void setPreinstallFilePath(std::string filePath);
+    void setPlayStoreKidsAppEnabled(bool isEnabled);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

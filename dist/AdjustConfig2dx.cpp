@@ -5,22 +5,27 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
+#include "AdjustConfig2dx.h"
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#include <jni.h>
 #include "platform/android/jni/JniHelper.h"
 #include "AdjustProxy2dx.h"
 #endif
 
-#define COCOS2D_DEBUG 1
-#include "AdjustConfig2dx.h"
-USING_NS_CC;
-
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.29.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.32.0";
 const std::string AdjustUrlStrategyChina = "china";
 const std::string AdjustUrlStrategyIndia = "india";
 const std::string AdjustDataResidencyEU = "data-residency-eu";
 const std::string AdjustDataResidencyTR = "data-residency-tr";
 const std::string AdjustDataResidencyUS = "data-residency-us";
+const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
+const std::string AdjustAdRevenueSourceMopub = "mopub";
+const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
+const std::string AdjustAdRevenueSourceIronSource = "ironsource_sdk";
+const std::string AdjustAdRevenueSourceAdMostSource = "admost_sdk";
+const std::string AdjustAdRevenueSourceUnity = "unity_sdk";
+const std::string AdjustAdRevenueSourceHeliumChartboost = "helium_chartboost_sdk";
+const std::string AdjustAdRevenueSourcePublisher = "publisher_sdk";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -606,6 +611,46 @@ void AdjustConfig2dx::setConversionValueUpdatedCallback(void(*conversionValueUpd
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setConversionValueUpdatedCallback(conversionValueUpdatedCallback);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetCoppaCompliantEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCoppaCompliantEnabled, "com/adjust/sdk/AdjustConfig", "setCoppaCompliantEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetCoppaCompliantEnabled.env->CallVoidMethod(config, jmiSetCoppaCompliantEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setCoppaCompliantEnabled(isEnabled);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetPlayStoreKidsAppEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPlayStoreKidsAppEnabled, "com/adjust/sdk/AdjustConfig", "setPlayStoreKidsAppEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetPlayStoreKidsAppEnabled.env->CallVoidMethod(config, jmiSetPlayStoreKidsAppEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
+void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setLinkMeEnabled(isEnabled);
     }
 #endif
 }

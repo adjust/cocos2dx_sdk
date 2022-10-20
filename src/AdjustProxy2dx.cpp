@@ -46,6 +46,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string fbInstallReferrer;
 
     jclass jclsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
     jfieldID jfidTrackerToken = env->GetFieldID(jclsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
@@ -59,6 +60,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
     jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
     jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
+    jfieldID jfidFbInstallReferrer = env->GetFieldID(jclsAdjustAttribution, "fbInstallReferrer", "Ljava/lang/String;");
     jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, jfidTrackerToken);
     jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, jfidTrackerName);
     jstring jNetwork = (jstring)env->GetObjectField(attributionObject, jfidNetwork);
@@ -70,6 +72,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
     jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
     jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
+    jstring jFbInstallReferrer = (jstring)env->GetObjectField(attributionObject, jfidFbInstallReferrer);
 
     if (NULL != jTrackerToken) {
         const char *trackerTokenCStr = env->GetStringUTFChars(jTrackerToken, NULL);
@@ -169,6 +172,15 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         costCurrency = "";
     }
 
+    if (NULL != jFbInstallReferrer) {
+        const char *fbInstallReferrerCStr = env->GetStringUTFChars(jFbInstallReferrer, NULL);
+        fbInstallReferrer = std::string(fbInstallReferrerCStr);
+        env->ReleaseStringUTFChars(jFbInstallReferrer, fbInstallReferrerCStr);
+        env->DeleteLocalRef(jFbInstallReferrer);
+    } else {
+        fbInstallReferrer = "";
+    }
+
     AdjustAttribution2dx attribution = AdjustAttribution2dx(
         trackerToken,
         trackerName,
@@ -180,7 +192,8 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         adid,
         costType,
         costAmount,
-        costCurrency);
+        costCurrency,
+        fbInstallReferrer);
     attributionCallbackMethod(attribution);
 }
 

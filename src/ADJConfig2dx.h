@@ -62,6 +62,8 @@ public:
     void setIsDeviceKnown(bool isDeviceKnown);
     void setUrlStrategy(std::string urlStrategy);
     void deactivateSkAdNetworkHandling();
+    void setCoppaCompliantEnabled(bool isEnabled);
+    void setLinkMeEnabled(bool isEnabled);
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*callbackMethod)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*callbackMethod)(AdjustEventFailure2dx eventFailure));

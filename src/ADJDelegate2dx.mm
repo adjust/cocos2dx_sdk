@@ -119,6 +119,7 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string costType = std::string([[dictionary objectForKey:@"costType"] UTF8String]);
     double costAmount = [dictionary objectForKey:@"costAmount"] != nil ? [[dictionary objectForKey:@"costAmount"] doubleValue] : 0;
     std::string costCurrency = std::string([[dictionary objectForKey:@"costCurrency"] UTF8String]);
+    std::string fbInstallReferrer;
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
         trackerToken,
@@ -131,7 +132,8 @@ static ADJDelegate2dx *defaultInstance = nil;
         adid,
         costType,
         costAmount,
-        costCurrency);
+        costCurrency,
+        fbInstallReferrer);
     _attributionCallbackMethod(attribution2dx);
 }
 

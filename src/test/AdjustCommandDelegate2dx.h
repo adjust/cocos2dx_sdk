@@ -7,6 +7,7 @@
 //
 
 #import <AdjustTestLibrary/ATLTestLibrary.h>
+#import <iostream>
 
 @interface AdjustCommandDelegate2dx : NSObject<AdjustCommandDelegate>
 

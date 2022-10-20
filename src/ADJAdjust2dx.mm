@@ -123,6 +123,10 @@ void ADJAdjust2dx::trackAdRevenue(std::string source, std::string payload) {
     [Adjust trackAdRevenue:[NSString stringWithUTF8String:source.c_str()] payload:dataPayload];
 }
 
+void ADJAdjust2dx::trackAdRevenueNew(ADJAdRevenue2dx adRevenue) {
+    [Adjust trackAdRevenue:(ADJAdRevenue *)adRevenue.getAdRevenue()];
+}
+
 bool ADJAdjust2dx::isEnabled() {
     return [Adjust isEnabled];
 }
@@ -167,6 +171,7 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string fbInstallReferrer = NULL;
 
     if (nil != attribution) {
         if (attribution.trackerToken != NULL) {
@@ -215,7 +220,8 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
         adid,
         costType,
         costAmount,
-        costCurrency);
+        costCurrency,
+        fbInstallReferrer);
     return attribution2dx;
 }
 
@@ -239,6 +245,24 @@ void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartyShar
 
 void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
+}
+
+void ADJAdjust2dx::checkForNewAttStatus() {
+    [Adjust checkForNewAttStatus];
+}
+
+std::string ADJAdjust2dx::getLastDeeplink() {
+    NSURL *lastDeeplink = [Adjust lastDeeplink];
+    if (nil == lastDeeplink) {
+        return "";
+    }
+    NSString *strLastDeeplink = [lastDeeplink absoluteString];
+    if (nil == strLastDeeplink) {
+        return "";
+    }
+
+    std::string stdStrLastDeeplink = std::string([strLastDeeplink UTF8String]);
+    return stdStrLastDeeplink;
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {

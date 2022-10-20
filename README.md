@@ -26,6 +26,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
    * [AppTrackingTransparency framework](#att-framework)
       * [App-tracking authorisation wrapper](#ata-wrapper)
       * [Get current authorisation status](#ata-getter)
+      * [Check for ATT status change](#att-status-change)
    * [SKAdNetwork framework](#skadn-framework)
       * [Update SKAdNetwork conversion value](#skadn-update-conversion-value)
       * [Conversion value updated callback](#skadn-cv-updated-callback)
@@ -46,7 +47,10 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
    * [Offline mode](#offline-mode)
    * [Event buffering](#event-buffering)
    * [GDPR right to be forgotten](#gdpr-forget-me)
-   * [Disable third-party sharing](#disable-third-party-sharing)
+   * [Third-party sharing](#third-party-sharing)
+      * [Disable third-party sharing](#disable-third-party-sharing)
+      * [Enable third-party sharing](#enable-third-party-sharing)
+   * [Measurement consent](#measurement-consent)
    * [SDK signature](#sdk-signature)
    * [Background tracking](#background-tracking)
    * [Device IDs](#device-ids)
@@ -64,6 +68,8 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [Deep link handling for iOS apps](#deeplinking-ios)
       * [Deep link handling for Android apps](#deeplinking-android)
    * [Data residency](#data-residency)
+   * [COPPA compliance](#coppa-compliance)
+   * [Play Store Kids Apps](#play-store-kids-apps)
 * [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
@@ -92,7 +98,8 @@ $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionFailure2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustSessionSuccess2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustAppStoreSubscription2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStoreSubscription2dx.cpp \
-$(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustAdRevenue2dx.cpp
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
@@ -400,6 +407,14 @@ To get the current app tracking authorization status you can call `getAppTrackin
 * `2`: The user denied access to IDFA
 * `3`: The user authorized access to IDFA
 * `-1`: The status is not available
+
+### <a id="att-status-change"></a>Check for ATT status change
+
+In cases where you are not using [Adjust app-tracking authorization wrapper](#ata-wrapper), Adjust SDK will not be able to know immediately upon answering the dialog what is the new value of app-tracking status. In situations like this, if you would want Adjust SDK to read the new app-tracking status value and communicate it to our backend, make sure to make a call to this method:
+
+```cpp
+Adjust2dx::checkForNewAttStatus();
+```
 
 ### <a id="skadn-framework"></a>SKAdNetwork framework
 
@@ -986,31 +1001,57 @@ Adjust2dx::gdprForgetMe();
 
 Upon receiving this information, Adjust will erase the user's data and the Adjust SDK will stop tracking the user. No requests from this device will be sent to Adjust in the future.
 
-### <a id="disable-third-party-sharing"></a>Disable third-party sharing for specific users
+## <a id="third-party-sharing"></a>Third-party sharing for specific users
 
-You can now notify Adjust when a user has exercised their right to stop sharing their data with partners for marketing purposes, but has allowed it to be shared for statistics purposes. 
+You can notify Adjust when a user disables, enables, and re-enables data sharing with third-party partners.
+
+### <a id="disable-third-party-sharing"></a>Disable third-party sharing for specific users
 
 Call the following method to instruct the Adjust SDK to communicate the user's choice to disable data sharing to the Adjust backend:
 
 ```cpp
-Adjust2dx::disableThirdPartySharing();
+AdjustThirdPartySharing2dx adjustThirdPartySharing = new AdjustThirdPartySharing2dx(false);
+Adjust2dx::trackThirdPartySharing(adjustThirdPartySharing);
 ```
 
 Upon receiving this information, Adjust will block the sharing of that specific user's data to partners and the Adjust SDK will continue to work as usual.
 
-### <a id="sdk-signature"></a>SDK signature
+### <a id="enable-third-party-sharing">Enable or re-enable third-party sharing for specific users</a>
 
-An account manager must activate the Adjust SDK signature. Contact Adjust support (support@adjust.com) if you are interested in using this feature.
-
-If the SDK signature has already been enabled on your account and you have access to App Secrets in your Adjust Dashboard, please use the method below to integrate the SDK signature into your app.
-
-An App Secret is set by passing all secret parameters (`secretId`, `info1`, `info2`, `info3`, `info4`) to `setAppSecret` method of `AdjustConfig` instance:
+Call the following method to instruct the Adjust SDK to communicate the user's choice to share data or change data sharing, to the Adjust backend:
 
 ```cpp
-AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
-adjustConfig.setAppSecret(secretId, info1, info2, info3, info4);
-Adjust2dx::start(adjustConfig);
+AdjustThirdPartySharing2dx adjustThirdPartySharing = new AdjustThirdPartySharing2dx(true);
+Adjust2dx::trackThirdPartySharing(adjustThirdPartySharing);
 ```
+
+Upon receiving this information, Adjust changes sharing the specific user's data to partners. The Adjust SDK will continue to work as expected.
+
+Call the following method to instruct the Adjust SDK to send the granular options to the Adjust backend:
+
+```cpp
+AdjustThirdPartySharing2dx adjustThirdPartySharing = new AdjustThirdPartySharing2dx();
+adjustThirdPartySharing.addGranularOption("PartnerA", "foo", "bar");
+Adjust2dx::trackThirdPartySharing(adjustThirdPartySharing);
+```
+
+### <a id="measurement-consent"></a>Consent measurement for specific users
+
+You can notify Adjust when a user exercises their right to change data sharing with partners for marketing purposes, but they allow data sharing for statistical purposes. 
+
+Call the following method to instruct the Adjust SDK to communicate the user's choice to change data sharing, to the Adjust backend:
+
+```cpp
+Adjust2dx::trackMeasurementConsent(true);
+```
+
+Upon receiving this information, Adjust changes sharing the specific user's data to partners. The Adjust SDK will continue to work as expected.
+
+### <a id="sdk-signature"></a>SDK signature
+
+When you set up the SDK Signature, each SDK communication package is "signed". This lets Adjust’s servers easily detect and reject any install activity that is not legitimate.
+
+There are just a few steps involved in setting up the SDK Signature. Please contact your Technical Account Manager or support@adjust.com to get started.
 
 ### <a id="background-tracking"></a>Background tracking
 
@@ -1224,6 +1265,23 @@ adjustConfig.setUrlStrategy(AdjustDataResidencyTR); // for Turkey data residency
 adjustConfig.setUrlStrategy(AdjustDataResidencyUS); // for US data residency region
 ```
 
+### <a id="coppa-compliance"></a>COPPA compliance
+
+By default Adjust SDK doesn't mark app as COPPA compliant. In order to mark your app as COPPA compliant, make sure to call `setCoppaCompliantEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`:
+
+```cpp
+adjustConfig.setCoppaCompliantEnabled(true);
+```
+
+**Note:** By enabling this feature, third-party sharing will be automatically disabled for the users. If later during the app lifetime you decide not to mark app as COPPA compliant anymore, third-party sharing **will not be automatically re-enabled**. Instead, next to not marking your app as COPPA compliant anymore, you will need to explicitly re-enable third-party sharing in case you want to do that.
+
+### <a id="play-store-kids-apps"></a>Play Store Kids Apps
+
+By default Adjust SDK doesn't mark Android app as Play Store Kids App. In order to mark your app as the app which is targetting kids in Play Store, make sure to call `setPlayStoreKidsAppEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`:
+
+```cpp
+adjustConfig.setPlayStoreKidsAppEnabled(true);
+```
 
 [adjust]:       http://adjust.com
 [dashboard]:    http://adjust.com
@@ -1252,7 +1310,7 @@ adjustConfig.setUrlStrategy(AdjustDataResidencyUS); // for US data residency reg
 
 The Adjust SDK is licensed under the MIT License.
 
-Copyright (c) 2012-2021 Adjust GmbH, http://www.adjust.com
+Copyright (c) 2015-Present Adjust GmbH, http://www.adjust.com
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in

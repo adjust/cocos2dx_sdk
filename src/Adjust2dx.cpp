@@ -6,6 +6,8 @@
 //  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
 //
 
+#define COCOS2D_DEBUG 1
+
 #include "Adjust2dx.h"
 #include <stdlib.h>
 
@@ -390,6 +392,7 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string fbInstallReferrer;
 
     cocos2d::JniMethodInfo jmiGetAttribution;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttribution, "com/adjust/sdk/Adjust", "getAttribution", "()Lcom/adjust/sdk/AdjustAttribution;")) {
@@ -404,7 +407,8 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
             adid,
             costType,
             costAmount,
-            costCurrency);
+            costCurrency,
+            fbInstallReferrer);
         return attribution2dx;
     }
 
@@ -422,6 +426,7 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         jfieldID jfidCostType = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costType", "Ljava/lang/String;");
         jfieldID jfidCostAmount = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
         jfieldID jfidCostCurrency = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
+        jfieldID jfidFbInstallReferrer = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "fbInstallReferrer", "Ljava/lang/String;");
         jstring jTrackerToken = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerToken);
         jstring jTrackerName = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerName);
         jstring jNetwork = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidNetwork);
@@ -433,6 +438,7 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         jstring jCostType = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostType);
         jobject jCostAmount = jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostAmount);
         jstring jCostCurrency = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostCurrency);
+        jstring jFbInstallReferrer = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidFbInstallReferrer);
 
         if (NULL != jTrackerToken) {
             const char *trackerTokenCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
@@ -531,6 +537,15 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         } else {
             costCurrency = "";
         }
+
+        if (NULL != jFbInstallReferrer) {
+            const char *fbInstallReferrerCStr = jmiGetAttribution.env->GetStringUTFChars(jFbInstallReferrer, NULL);
+            fbInstallReferrer = std::string(fbInstallReferrerCStr);
+            jmiGetAttribution.env->ReleaseStringUTFChars(jFbInstallReferrer, fbInstallReferrerCStr);
+            jmiGetAttribution.env->DeleteLocalRef(jFbInstallReferrer);
+        } else {
+            fbInstallReferrer = "";
+        }
     }
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
@@ -544,8 +559,21 @@ AdjustAttribution2dx Adjust2dx::getAttribution() {
         adid,
         costType,
         costAmount,
-        costCurrency);
+        costCurrency,
+        fbInstallReferrer);
     return attribution2dx;
+#endif
+}
+
+void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::trackAdRevenueNew(adRevenue.getAdRevenue());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    cocos2d::JniMethodInfo jmiTrackAdRevenue;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackAdRevenue, "com/adjust/sdk/Adjust", "trackAdRevenue", "(Lcom/adjust/sdk/AdjustAdRevenue;)V")) {
+        return;
+    }
+    jmiTrackAdRevenue.env->CallStaticVoidMethod(jmiTrackAdRevenue.classID, jmiTrackAdRevenue.methodID, adRevenue.getAdRevenue());
 #endif
 }
 
@@ -660,9 +688,31 @@ void Adjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackin
 #endif
 }
 
+int Adjust2dx::getAppTrackingAuthorizationStatus() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getAppTrackingAuthorizationStatus();
+#else
+    return -1;
+#endif
+}
+
 void Adjust2dx::updateConversionValue(int conversionValue) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::updateConversionValue(conversionValue);
+#endif
+}
+
+void Adjust2dx::checkForNewAttStatus() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::checkForNewAttStatus();
+#endif
+}
+
+std::string Adjust2dx::getLastDeeplink() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getLastDeeplink();
+#else
+    return "";
 #endif
 }
 

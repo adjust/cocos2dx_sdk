@@ -6,6 +6,7 @@
 //  Copyright © 2021 Adjust GmbH. All rights reserved.
 //
 
+#include "cocos2d.h"
 #include "TestConnectionOptions2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

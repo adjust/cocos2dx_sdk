@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.65";
+static std::string serverIp = "192.168.86.44";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -79,8 +79,6 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    // this->testLibrary->addTest("Test_AttributionCallback_no_ask_in");
-    // this->testLibrary->addTest("Test_ThirdPartySharing_after_install");
     this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 
     // Add main menu to screen

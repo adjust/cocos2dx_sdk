@@ -9,13 +9,14 @@
 #ifndef ADJUST_ADJUSTEVENT2DX_H_
 #define ADJUST_ADJUSTEVENT2DX_H_
 
+#include "cocos2d.h"
+#include <iostream>
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #include "ADJEvent2dx.h"
 #endif
-
-#include <iostream>
 
 class AdjustEvent2dx {
 private:

@@ -105,4 +105,4 @@ def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # Copying AdjustTestLibrary.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.
     if with_test_lib:
         debug_green('Copying AdjustTestLibrary.framework to {0} ...'.format(test_lib_out_dir))
-        copy_dir_contents('{0}/Frameworks/Static/AdjustTestLibrary.framework'.format(build_dir), '{0}/AdjustTestLibrary.framework'.format(test_lib_out_dir), copy_symlinks=True)
+        copy_dir_contents('{0}/sdk_distribution/test-static-framework/AdjustTestLibrary.framework'.format(build_dir), '{0}/AdjustTestLibrary.framework'.format(test_lib_out_dir), copy_symlinks=True)

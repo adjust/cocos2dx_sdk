@@ -24,6 +24,7 @@
 #include "Adjust/AdjustSessionSuccess2dx.h"
 #include "Adjust/AdjustSessionFailure2dx.h"
 #include "Adjust/AdjustThirdPartySharing2dx.h"
+#include "Adjust/AdjustAdRevenue2dx.h"
 #include "Adjust/test/TestLib2dx.h"
 #include "Adjust/test/TestConnectionOptions2dx.h"
 
@@ -66,6 +67,8 @@ private:
     void trackSubscription();
     void trackThirdPartySharing();
     void trackMeasurementConsent();
+    void trackAdRevenueNew();
+    void getLastDeeplink();
 public:
     static const std::string TAG;
     AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl, std::string subscriptionUrl);

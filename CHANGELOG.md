@@ -1,3 +1,23 @@
+### Version 4.32.0 (20th October 2022)
+#### Added
+- Added ability to mark your app as COPPA compliant. You can enable this setting by calling `setCoppaCompliantEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`.
+- Added ability to mark your Android app as app for the kids in accordance to Google Play Families policies. You can enable this setting by calling `setPlayStoreKidsAppEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true` (Android only).
+- Added `checkForNewAttStatus` method to `Adjust2dx` API to allow iOS apps to instruct to SDK to check if `att_status` might have changed in the meantime (iOS only).
+- Added updated `trackAdRevenueNew` method to `Adjust2dx` API to allow unified way of tracking ad revenue with currently supported partners (AppLovin MAX, AdMob, IronSource, AdMost, Unity, Helium Chartboost). Make sure to include newly added `AdjustAdRevenue2dx.h` and `AdjustAdRevenue2dx.cpp` files to your `Android.mk` or `CMakeLists.txt` files.
+- Added partner sharing settings to the third party sharing feature.
+- Added `getLastDeeplink` getter to `Adjust2dx` API to be able to get last tracked deep link by the SDK (iOS only).
+- Added support for `LinkMe` feature (iOS only).
+- Added support to get Facebook install referrer information in attribution callback (Android only).
+
+#### Changed
+- Switched to adding permission `com.google.android.gms.permission.AD_ID` in the Android app's manifest by default.
+
+#### Native SDKs
+- [iOS@v4.32.1][ios_sdk_v4.32.1]
+- [Android@v4.33.0][android_sdk_v4.33.0]
+
+---
+
 ### Version 4.29.0 (14th September 2021)
 #### Added
 - Added possibility to get cost data information in attribution callback.
@@ -371,6 +391,7 @@
 [ios_sdk_v4.23.2]: https://github.com/adjust/ios_sdk/tree/v4.23.2
 [ios_sdk_v4.28.0]: https://github.com/adjust/ios_sdk/tree/v4.28.0
 [ios_sdk_v4.29.6]: https://github.com/adjust/ios_sdk/tree/v4.29.6
+[ios_sdk_v4.32.1]: https://github.com/adjust/ios_sdk/tree/v4.32.1
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -393,5 +414,6 @@
 [android_sdk_v4.24.1]: https://github.com/adjust/android_sdk/tree/v4.24.1
 [android_sdk_v4.27.0]: https://github.com/adjust/android_sdk/tree/v4.27.0
 [android_sdk_v4.28.4]: https://github.com/adjust/android_sdk/tree/v4.28.4
+[android_sdk_v4.33.0]: https://github.com/adjust/android_sdk/tree/v4.33.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3

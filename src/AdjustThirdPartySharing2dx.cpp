@@ -77,6 +77,28 @@ void AdjustThirdPartySharing2dx::addGranularOption(std::string partnerName, std:
 #endif
 }
 
+void AdjustThirdPartySharing2dx::addPartnerSharingSetting(std::string partnerName, std::string key, bool value) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (thirdPartySharing == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiAddPartnerSharingSetting;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiAddPartnerSharingSetting, "com/adjust/sdk/AdjustThirdPartySharing", "addPartnerSharingSetting", "(Ljava/lang/String;Ljava/lang/String;Z)V")) {
+        return;
+    }
+
+    jstring jPartnerName = jmiAddPartnerSharingSetting.env->NewStringUTF(partnerName.c_str());
+    jstring jKey = jmiAddPartnerSharingSetting.env->NewStringUTF(key.c_str());
+    jmiAddPartnerSharingSetting.env->CallVoidMethod(thirdPartySharing, jmiAddPartnerSharingSetting.methodID, jPartnerName, jKey, value);
+    jmiAddPartnerSharingSetting.env->DeleteLocalRef(jPartnerName);
+    jmiAddPartnerSharingSetting.env->DeleteLocalRef(jKey);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isThirdPartySharingSet) {
+        thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
+    }
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 jobject AdjustThirdPartySharing2dx::getThirdPartySharing() {
     return thirdPartySharing;

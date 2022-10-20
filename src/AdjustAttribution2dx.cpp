@@ -51,3 +51,7 @@ double AdjustAttribution2dx::getCostAmount() {
 std::string AdjustAttribution2dx::getCostCurrency() {
     return this->costCurrency;
 }
+
+std::string AdjustAttribution2dx::getFbInstallReferrer() {
+    return this->fbInstallReferrer;
+}
