@@ -12,7 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.32.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.37.0";
 const std::string AdjustUrlStrategyChina = "china";
 const std::string AdjustUrlStrategyIndia = "india";
 const std::string AdjustDataResidencyEU = "data-residency-eu";
