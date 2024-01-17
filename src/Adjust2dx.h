@@ -18,6 +18,8 @@
 #include "AdjustPlayStoreSubscription2dx.h"
 #include "AdjustThirdPartySharing2dx.h"
 #include "AdjustAdRevenue2dx.h"
+#include "AdjustPlayStorePurchase2dx.h"
+#include "AdjustAppStorePurchase2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -54,6 +56,7 @@ public:
     static void onResume();
     static void onPause();
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
+    static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     // iOS specific methods.
     static std::string getIdfa();
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
@@ -65,6 +68,7 @@ public:
     static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error));
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
+    static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

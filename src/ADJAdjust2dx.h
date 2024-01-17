@@ -16,6 +16,7 @@
 #include "ADJAppStoreSubscription2dx.h"
 #include "ADJThirdPartySharing2dx.h"
 #include "ADJAdRevenue2dx.h"
+#include "ADJAppStorePurchase2dx.h"
 #include "AdjustAttribution2dx.h"
 
 extern const std::string ADJEnvironmentSandbox2dx;
@@ -58,6 +59,7 @@ public:
     static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error));
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
+    static void verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();

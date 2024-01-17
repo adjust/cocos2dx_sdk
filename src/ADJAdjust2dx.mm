@@ -56,6 +56,16 @@ void ADJAdjust2dx::trackAppStoreSubscription(ADJAppStoreSubscription2dx subscrip
     [Adjust trackSubscription:(ADJSubscription *)subscription.getSubscription()];
 }
 
+void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+    [Adjust verifyPurchase:(ADJPurchase *)purchase.getPurchase() completionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+        if (verificationCallback != NULL) {
+            verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
+                                 verificationResult.code,
+                                 std::string([verificationResult.message UTF8String]));
+        }
+    }];
+}
+
 void ADJAdjust2dx::trackSubsessionStart() {
     [Adjust trackSubsessionStart];
 }
