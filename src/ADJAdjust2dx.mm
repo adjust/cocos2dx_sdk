@@ -311,6 +311,7 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
     testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];
     testOptions.gdprUrl = [NSString stringWithUTF8String:testOptionsMap["gdprUrl"].c_str()];
     testOptions.subscriptionUrl = [NSString stringWithUTF8String:testOptionsMap["subscriptionUrl"].c_str()];
+    testOptions.purchaseVerificationUrl = [NSString stringWithUTF8String:testOptionsMap["purchaseVerificationUrl"].c_str()];
 
     if (testOptionsMap.find("extraPath") != testOptionsMap.end()) {
         testOptions.extraPath = [NSString stringWithUTF8String:testOptionsMap["extraPath"].c_str()];
