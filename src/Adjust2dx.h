@@ -60,6 +60,9 @@ public:
     static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
     static void updateConversionValue(int conversionValue);
+    static void updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error));
+    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error));
+    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error));
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
     // For testing purposes only.

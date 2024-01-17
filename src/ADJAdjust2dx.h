@@ -53,6 +53,9 @@ public:
     static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
     static void updateConversionValue(int conversionValue);
+    static void updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error));
+    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error));
+    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error));
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
     // For testing purposes only.

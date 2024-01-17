@@ -26,6 +26,8 @@
 extern const std::string AdjustSdkPrefix2dx;
 extern const std::string AdjustUrlStrategyChina;
 extern const std::string AdjustUrlStrategyIndia;
+extern const std::string AdjustUrlStrategyCn;
+extern const std::string AdjustUrlStrategyCnOnly;
 extern const std::string AdjustDataResidencyEU;
 extern const std::string AdjustDataResidencyTR;
 extern const std::string AdjustDataResidencyUS;
@@ -104,7 +106,9 @@ public:
     void setAllowiAdInfoReading(bool isAllowed);
     void setAllowAdServicesInfoReading(bool isAllowed);
     void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
+    void setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow));
     void setLinkMeEnabled(bool isEnabled);
+    void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setPreinstallTrackingEnabled(bool isEnabled);

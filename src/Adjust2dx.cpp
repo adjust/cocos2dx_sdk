@@ -702,6 +702,24 @@ void Adjust2dx::updateConversionValue(int conversionValue) {
 #endif
 }
 
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, lockWindow, errorCallback);
+#endif
+}
+
 void Adjust2dx::checkForNewAttStatus() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::checkForNewAttStatus();

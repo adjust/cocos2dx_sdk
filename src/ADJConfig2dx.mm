@@ -38,7 +38,8 @@ void ADJConfig2dx::setAllowIdfaReading(bool isAllowed) {
 }
 
 void ADJConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
-    ((ADJConfig *)config).allowiAdInfoReading = isAllowed;
+    // deprecated
+    // ((ADJConfig *)config).allowiAdInfoReading = isAllowed;
 }
 
 void ADJConfig2dx::setAllowAdServicesInfoReading(bool isAllowed) {
@@ -67,6 +68,10 @@ void ADJConfig2dx::setUrlStrategy(std::string urlStrategy) {
         ((ADJConfig *)config).urlStrategy = ADJUrlStrategyChina;
     } else if ([strUrlStrategy isEqualToString:@"india"]) {
         ((ADJConfig *)config).urlStrategy = ADJUrlStrategyIndia;
+    } else if ([strUrlStrategy isEqualToString:@"cn"]) {
+        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyCn;
+    } else if ([strUrlStrategy isEqualToString:@"cn-only"]) {
+        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyCnOnly;
     } else if ([strUrlStrategy isEqualToString:@"data-residency-eu"]) {
         ((ADJConfig *)config).urlStrategy = ADJDataResidencyEU;
     } else if ([strUrlStrategy isEqualToString:@"data-residency-tr"]) {
@@ -86,6 +91,10 @@ void ADJConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
 
 void ADJConfig2dx::setLinkMeEnabled(bool isEnabled) {
     ((ADJConfig *)config).linkMeEnabled = isEnabled;
+}
+
+void ADJConfig2dx::setAttConsentWaitingInterval(int numberOfSeconds) {
+    ((ADJConfig *)config).attConsentWaitingInterval = numberOfSeconds;
 }
 
 void ADJConfig2dx::setAttributionCallback(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
@@ -114,6 +123,10 @@ void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string
 
 void ADJConfig2dx::setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue)) {
     conversionValueUpdatedCallback = callbackMethod;
+}
+
+void ADJConfig2dx::setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow)) {
+    postbackConversionValueUpdatedCallback = callbackMethod;
 }
 
 void* ADJConfig2dx::getConfig() {

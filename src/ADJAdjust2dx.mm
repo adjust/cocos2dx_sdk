@@ -227,7 +227,9 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
 
 void ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
     [Adjust requestTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
-        trackingStatusCallback((int)status);
+        if (trackingStatusCallback != NULL) {
+            trackingStatusCallback((int)status);
+        }
     }];
 }
 
@@ -237,6 +239,35 @@ int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
 
 void ADJAdjust2dx::updateConversionValue(int conversionValue) {
     [Adjust updateConversionValue:conversionValue];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue
+                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                        completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue
+                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                               lockWindow:lockWindow
+                        completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
 }
 
 void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing) {
@@ -309,13 +340,6 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
         testOptions.noBackoffWait = NO;
         if ([noBackoffWait isEqualToString:@"true"]) {
             testOptions.noBackoffWait = YES;
-        }
-    }
-    testOptions.iAdFrameworkEnabled = NO;
-    if (testOptionsMap.find("iAdFrameworkEnabled") != testOptionsMap.end()) {
-        NSString *iAdFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["iAdFrameworkEnabled"].c_str()];
-        if ([iAdFrameworkEnabled isEqualToString:@"true"]) {
-            testOptions.iAdFrameworkEnabled = YES;
         }
     }
     testOptions.adServicesFrameworkEnabled = NO;
