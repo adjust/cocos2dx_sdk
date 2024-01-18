@@ -590,6 +590,7 @@ void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
 }
 
 void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+    setResolvedLinkCallbackMethod(resolvedLinkCallback);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::processDeeplink(url, resolvedLinkCallback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
