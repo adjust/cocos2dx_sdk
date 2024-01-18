@@ -55,6 +55,12 @@ void Adjust2dx::trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscrip
 #endif
 }
 
+void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), verificationCallback);
+#endif
+}
+
 void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiTrackPlayStoreSubscription;
@@ -62,6 +68,12 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
         return;
     }
     jmiTrackPlayStoreSubscription.env->CallStaticVoidMethod(jmiTrackPlayStoreSubscription.classID, jmiTrackPlayStoreSubscription.methodID, subscription.getSubscription());
+#endif
+}
+
+void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    // TBD
 #endif
 }
 
@@ -577,6 +589,32 @@ void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
 #endif
 }
 
+void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::processDeeplink(url, resolvedLinkCallback);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    // TBD
+    cocos2d::JniMethodInfo jmiProcessDeeplink;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jclass jcUri = jmiAppWillOpenUrl.env->FindClass("android/net/Uri");
+    jmethodID midParse = jmiAppWillOpenUrl.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
+    jstring jUrl = jmiAppWillOpenUrl.env->NewStringUTF(url.c_str());
+    jobject jUri = jmiAppWillOpenUrl.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiAppWillOpenUrl.env->CallStaticVoidMethod(jmiAppWillOpenUrl.classID, jmiAppWillOpenUrl.methodID, jUri, jContext);
+    jmiAppWillOpenUrl.env->DeleteLocalRef(jUrl);
+    jmiAppWillOpenUrl.env->DeleteLocalRef(jUri);
+    jmiGetContext.env->DeleteLocalRef(jContext);
+#endif
+}
+
 void Adjust2dx::setReferrer(std::string referrer) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetReferrer;
@@ -702,6 +740,24 @@ void Adjust2dx::updateConversionValue(int conversionValue) {
 #endif
 }
 
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, lockWindow, errorCallback);
+#endif
+}
+
 void Adjust2dx::checkForNewAttStatus() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::checkForNewAttStatus();
@@ -711,6 +767,14 @@ void Adjust2dx::checkForNewAttStatus() {
 std::string Adjust2dx::getLastDeeplink() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getLastDeeplink();
+#else
+    return "";
+#endif
+}
+
+std::string Adjust2dx::getIdfv() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getIdfv();
 #else
     return "";
 #endif

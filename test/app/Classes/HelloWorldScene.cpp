@@ -18,20 +18,25 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.44";
+static std::string serverIp = "192.168.86.30";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 static std::string baseUrl = "http://" + serverIp + ":8080";
 static std::string gdprUrl = "http://" + serverIp + ":8080";
 static std::string subscriptionUrl = "http://" + serverIp + ":8080";
+static std::string purchaseVerificationUrl = "http://" + serverIp + ":8080";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static std::string baseUrl = "https://" + serverIp + ":8443";
 static std::string gdprUrl = "https://" + serverIp + ":8443";
 static std::string subscriptionUrl = "https://" + serverIp + ":8443";
+static std::string purchaseVerificationUrl = "https://" + serverIp + ":8443";
 #endif
 
-static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl, gdprUrl, subscriptionUrl);
+static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl,
+                                                                                  gdprUrl,
+                                                                                  subscriptionUrl,
+                                                                                  purchaseVerificationUrl);
 
 void TestApp::initTestLibrary() {
     auto func = [](std::string className, std::string methodName, std::string jsonParameters) {

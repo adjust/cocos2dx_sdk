@@ -56,6 +56,16 @@ void ADJAdjust2dx::trackAppStoreSubscription(ADJAppStoreSubscription2dx subscrip
     [Adjust trackSubscription:(ADJSubscription *)subscription.getSubscription()];
 }
 
+void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+    [Adjust verifyPurchase:(ADJPurchase *)purchase.getPurchase() completionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+        if (verificationCallback != NULL) {
+            verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
+                                 verificationResult.code,
+                                 std::string([verificationResult.message UTF8String]));
+        }
+    }];
+}
+
 void ADJAdjust2dx::trackSubsessionStart() {
     [Adjust trackSubsessionStart];
 }
@@ -132,12 +142,13 @@ bool ADJAdjust2dx::isEnabled() {
 }
 
 std::string ADJAdjust2dx::getIdfa() {
-    if (nil == [Adjust idfa]) {
+    NSString *idfa = [Adjust idfa];
+    if (nil == idfa) {
         return "";
     }
 
-    std::string idfa = std::string([[Adjust idfa] UTF8String]);
-    return idfa;
+    std::string strIdfa = std::string([idfa UTF8String]);
+    return strIdfa;
 }
 
 std::string ADJAdjust2dx::getAdid() {
@@ -227,7 +238,9 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
 
 void ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
     [Adjust requestTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
-        trackingStatusCallback((int)status);
+        if (trackingStatusCallback != NULL) {
+            trackingStatusCallback((int)status);
+        }
     }];
 }
 
@@ -237,6 +250,35 @@ int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
 
 void ADJAdjust2dx::updateConversionValue(int conversionValue) {
     [Adjust updateConversionValue:conversionValue];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue
+                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                        completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
+}
+
+void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
+    [Adjust updatePostbackConversionValue:conversionValue
+                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                               lockWindow:lockWindow
+                        completionHandler:^(NSError * _Nullable error) {
+        if (errorCallback != NULL) {
+            errorCallback(std::string([error.localizedDescription UTF8String]));
+        }
+    }];
 }
 
 void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing) {
@@ -265,11 +307,35 @@ std::string ADJAdjust2dx::getLastDeeplink() {
     return stdStrLastDeeplink;
 }
 
+std::string ADJAdjust2dx::getIdfv() {
+    NSString *idfv = [Adjust idfv];
+    if (nil == idfv) {
+        return "";
+    }
+
+    std::string strIdfv = std::string([idfv UTF8String]);
+    return strIdfv;
+}
+
+void ADJAdjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
+    [Adjust processDeeplink:pUrl completionHandler:^(NSString * _Nonnull resolvedLink) {
+        if (resolvedLinkCallback != NULL) {
+            if (resolvedLink != nil) {
+                resolvedLinkCallback(std::string([resolvedLink UTF8String]));
+            } else {
+                resolvedLinkCallback("");
+            }
+        }
+    }];
+}
+
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
     AdjustTestOptions *testOptions = [[AdjustTestOptions alloc] init];
     testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];
     testOptions.gdprUrl = [NSString stringWithUTF8String:testOptionsMap["gdprUrl"].c_str()];
     testOptions.subscriptionUrl = [NSString stringWithUTF8String:testOptionsMap["subscriptionUrl"].c_str()];
+    testOptions.purchaseVerificationUrl = [NSString stringWithUTF8String:testOptionsMap["purchaseVerificationUrl"].c_str()];
 
     if (testOptionsMap.find("extraPath") != testOptionsMap.end()) {
         testOptions.extraPath = [NSString stringWithUTF8String:testOptionsMap["extraPath"].c_str()];
@@ -309,13 +375,6 @@ void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptions
         testOptions.noBackoffWait = NO;
         if ([noBackoffWait isEqualToString:@"true"]) {
             testOptions.noBackoffWait = YES;
-        }
-    }
-    testOptions.iAdFrameworkEnabled = NO;
-    if (testOptionsMap.find("iAdFrameworkEnabled") != testOptionsMap.end()) {
-        NSString *iAdFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["iAdFrameworkEnabled"].c_str()];
-        if ([iAdFrameworkEnabled isEqualToString:@"true"]) {
-            testOptions.iAdFrameworkEnabled = YES;
         }
     }
     testOptions.adServicesFrameworkEnabled = NO;

@@ -44,6 +44,13 @@ public:
     void setCallbackId(std::string callbackId);
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
+    void setProductId(std::string productId);
+
+    // iOS only
+    void setReceipt(std::string receipt);
+
+    // Android only
+    void setPurchaseToken(std::string purchaseToken);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getEvent();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

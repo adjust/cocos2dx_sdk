@@ -36,6 +36,7 @@ private:
     void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure) = NULL;
     bool (*deferredDeeplinkCallback)(std::string deeplink) = NULL;
     void (*conversionValueUpdatedCallback)(int conversionValue) = NULL;
+    void (*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow) = NULL;
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix);
 
 public:
@@ -64,6 +65,7 @@ public:
     void deactivateSkAdNetworkHandling();
     void setCoppaCompliantEnabled(bool isEnabled);
     void setLinkMeEnabled(bool isEnabled);
+    void setAttConsentWaitingInterval(int numberOfSeconds);
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*callbackMethod)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*callbackMethod)(AdjustEventFailure2dx eventFailure));
@@ -71,6 +73,8 @@ public:
     void setSessionFailureCallback(void(*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
     void setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue));
+    void setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow));
+    void setReadDeviceInfoOnceEnabled(bool isEnabled);
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);
