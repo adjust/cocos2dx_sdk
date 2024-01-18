@@ -688,6 +688,20 @@ void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
 #endif
 }
 
+void AdjustConfig2dx::setFinalAttributionEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetFinalAttributionEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetFinalAttributionEnabled, "com/adjust/sdk/AdjustConfig", "setFinalAttributionEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetFinalAttributionEnabled.env->CallVoidMethod(config, jmiSetFinalAttributionEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
 void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

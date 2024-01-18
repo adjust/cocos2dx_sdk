@@ -117,6 +117,7 @@ public:
     void setPreinstallTrackingEnabled(bool isEnabled);
     void setPreinstallFilePath(std::string filePath);
     void setPlayStoreKidsAppEnabled(bool isEnabled);
+    void setFinalAttributionEnabled(bool isEnabled);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

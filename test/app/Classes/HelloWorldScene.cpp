@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.30";
+static std::string serverIp = "192.168.86.21";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -84,6 +84,7 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
+    // this->testLibrary->addTestDirectory("purchase-verification");
     this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
 
     // Add main menu to screen

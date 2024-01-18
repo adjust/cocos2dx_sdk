@@ -25,6 +25,7 @@ extern "C" {
     static bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
     static void (*adIdCallbackMethod)(std::string adId);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
+    static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
     // Only for testing purposes.
     static void (*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters);
 
@@ -44,6 +45,8 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+    (JNIEnv *, jobject, jstring, int, jstring);
     // Only for testing purposes.
     JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
     (JNIEnv *, jobject, jstring, jstring, jstring);
@@ -56,6 +59,7 @@ extern "C" {
     void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
+    void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
     // Only for testing purposes.
     void setExecuteTestLibCommandCallbackMethod(void(*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters));
 }

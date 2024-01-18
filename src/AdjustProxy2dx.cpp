@@ -601,6 +601,21 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolve
     env->ReleaseStringUTFChars(jResolvedLink, resolvedLinkCStr);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+(JNIEnv *env, jobject obj, jstring jVerificationStatus, int jCode, jstring jMessage) {
+    if (NULL == purchaseVerificationResultCallbackMethod) {
+        return;
+    }
+
+    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+    std::string verificationStatus = std::string(verificationStatusCStr);
+    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+    std::string message = std::string(messageCStr);
+    purchaseVerificationResultCallbackMethod(verificationStatus, jCode, message);
+    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    env->ReleaseStringUTFChars(jMessage, messageCStr);
+}
+
 void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
     if (NULL == executeTestLibCommandCallbackMethod) {
         executeTestLibCommandCallbackMethod = callbackMethod;
@@ -652,6 +667,12 @@ void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
 void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink)) {
     if (NULL == resolvedLinkCallbackMethod) {
         resolvedLinkCallbackMethod = callbackMethod;
+    }
+}
+
+void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
+    if (NULL == purchaseVerificationResultCallbackMethod) {
+        purchaseVerificationResultCallbackMethod = callbackMethod;
     }
 }
 

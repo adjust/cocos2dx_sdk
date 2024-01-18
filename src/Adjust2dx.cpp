@@ -72,8 +72,17 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
 }
 
 void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+    setPurchaseVerificationResultCallbackMethod(verificationCallback);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
+        return;
+    }
+    jclass clsAdjust2dxPurchaseVerificationResultCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxPurchaseVerificationResultCallback");
+    jmethodID jmidInit = jmiVerifyPlayStorePurchase.env->GetMethodID(clsAdjust2dxPurchaseVerificationResultCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxPurchaseVerificationResultCallback, jmidInit);
+    jmiVerifyPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyPlayStorePurchase.classID, jmiVerifyPlayStorePurchase.methodID, purchase.getPurchase(), jCallbackProxy);
+    jmiVerifyPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
@@ -594,7 +603,6 @@ void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(st
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::processDeeplink(url, resolvedLinkCallback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
     cocos2d::JniMethodInfo jmiProcessDeeplink;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;Lcom/adjust/sdk/OnDeeplinkResolvedListener;)V")) {
         return;
@@ -839,6 +847,11 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     jfieldID jfidSubscriptionUrl = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionUrl, jsSubscriptionUrl);
 
+    // Purchase verification URL.
+    jstring jsPurchaseVerificationUrl = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationUrl"].c_str());
+    jfieldID jfidPurchaseVerificationUrl = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationUrl", "Ljava/lang/String;");
+    jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationUrl, jsPurchaseVerificationUrl);
+
     // Base path.
     if (testOptions.find("basePath") != testOptions.end()) {
         jstring jsBasePath = jmiInit.env->NewStringUTF(testOptions["basePath"].c_str());
@@ -853,11 +866,18 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
         jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsGdprPath);
     }
 
-    // GDPR path.
+    // Subscription path.
     if (testOptions.find("subscriptionPath") != testOptions.end()) {
         jstring jsSubscriptionPath = jmiInit.env->NewStringUTF(testOptions["subscriptionPath"].c_str());
         jfieldID jfidSubscriptionPath = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionPath", "Ljava/lang/String;");
         jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionPath, jsSubscriptionPath);
+    }
+
+    // Purchase verification path.
+    if (testOptions.find("purchaseVerificationPath") != testOptions.end()) {
+        jstring jsPurchaseVerificationPath = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationPath"].c_str());
+        jfieldID jfidPurchaseVerificationPath = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationPath", "Ljava/lang/String;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationPath, jsPurchaseVerificationPath);
     }
 
     // Use test connection options.

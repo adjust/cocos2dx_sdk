@@ -23,12 +23,12 @@ void AdjustPlayStoreSubscription2dx::initSubscription(
 ) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustPlayStoreSubscription", "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustPlayStoreSubscription", "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
     jclass jclsAdjustPlayStoreSubscription = jmiInit.env->FindClass("com/adjust/sdk/AdjustPlayStoreSubscription");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustPlayStoreSubscription, "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustPlayStoreSubscription, "<init>", "(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V");
     jlong jPrice = std::stol(price);
     jstring jCurrency = jmiInit.env->NewStringUTF(currency.c_str());
     jstring jSku = jmiInit.env->NewStringUTF(sku.c_str());

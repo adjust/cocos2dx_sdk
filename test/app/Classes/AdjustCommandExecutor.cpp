@@ -361,6 +361,12 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
     }
 
+    if (this->command->containsParameter("finalAttributionEnabled")) {
+        std::string finalAttributionEnabledString = command->getFirstParameterValue("finalAttributionEnabled");
+        bool finalAttributionEnabled = (finalAttributionEnabledString == "true");
+        adjustConfig->setFinalAttributionEnabled(finalAttributionEnabled);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
