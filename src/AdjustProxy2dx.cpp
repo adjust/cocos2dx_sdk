@@ -596,9 +596,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolve
     }
 
     const char *resolvedLinkCStr = env->GetStringUTFChars(jResolvedLink, NULL);
-    std::string resolvedLink = std::string(adIdCStr);
+    std::string resolvedLink = std::string(resolvedLinkCStr);
     resolvedLinkCallbackMethod(resolvedLink);
-    env->ReleaseStringUTFChars(jResolvedLink, adIdCStr);    
+    env->ReleaseStringUTFChars(jResolvedLink, resolvedLinkCStr);
 }
 
 void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
@@ -609,7 +609,7 @@ void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string cl
 
 void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     if (NULL == attributionCallbackMethod) {
-    	attributionCallbackMethod = callbackMethod;
+        attributionCallbackMethod = callbackMethod;
     }
 }
 
@@ -644,9 +644,9 @@ void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deepli
 }
 
 void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
-	if (NULL == adIdCallbackMethod) {
-		adIdCallbackMethod = callbackMethod;
-	}
+    if (NULL == adIdCallbackMethod) {
+        adIdCallbackMethod = callbackMethod;
+    }
 }
 
 void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink)) {
