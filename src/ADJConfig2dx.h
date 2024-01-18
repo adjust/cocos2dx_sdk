@@ -74,6 +74,7 @@ public:
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
     void setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue));
     void setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow));
+    void setReadDeviceInfoOnceEnabled(bool isEnabled);
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

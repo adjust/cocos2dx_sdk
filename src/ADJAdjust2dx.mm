@@ -142,12 +142,13 @@ bool ADJAdjust2dx::isEnabled() {
 }
 
 std::string ADJAdjust2dx::getIdfa() {
-    if (nil == [Adjust idfa]) {
+    NSString *idfa = [Adjust idfa];
+    if (nil == idfa) {
         return "";
     }
 
-    std::string idfa = std::string([[Adjust idfa] UTF8String]);
-    return idfa;
+    std::string strIdfa = std::string([idfa UTF8String]);
+    return strIdfa;
 }
 
 std::string ADJAdjust2dx::getAdid() {
@@ -304,6 +305,29 @@ std::string ADJAdjust2dx::getLastDeeplink() {
 
     std::string stdStrLastDeeplink = std::string([strLastDeeplink UTF8String]);
     return stdStrLastDeeplink;
+}
+
+std::string ADJAdjust2dx::getIdfv() {
+    NSString *idfv = [Adjust idfv];
+    if (nil == idfv) {
+        return "";
+    }
+
+    std::string strIdfv = std::string([idfv UTF8String]);
+    return strIdfv;
+}
+
+void ADJAdjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
+    [Adjust processDeeplink:pUrl completionHandler:^(NSString * _Nonnull resolvedLink) {
+        if (resolvedLinkCallback != NULL) {
+            if (resolvedLink != nil) {
+                resolvedLinkCallback(std::string([resolvedLink UTF8String]));
+            } else {
+                resolvedLinkCallback("");
+            }
+        }
+    }];
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {

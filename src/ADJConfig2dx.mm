@@ -141,6 +141,10 @@ void ADJConfig2dx::setIsDeviceKnown(bool isDeviceKnown) {
     [((ADJConfig *)config) setIsDeviceKnown:isDeviceKnown];
 }
 
+void ADJConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
+    ((ADJConfig *)config).readDeviceInfoOnceEnabled = isEnabled;
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

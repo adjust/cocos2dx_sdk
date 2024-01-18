@@ -60,6 +60,8 @@ public:
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
     static void verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
+    static std::string getIdfv();
+    static void processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();

@@ -39,6 +39,8 @@ extern const std::string AdjustAdRevenueSourceAdMostSource;
 extern const std::string AdjustAdRevenueSourceUnity;
 extern const std::string AdjustAdRevenueSourceHeliumChartboost;
 extern const std::string AdjustAdRevenueSourcePublisher;
+extern const std::string AdjustAdRevenueSourceTopOn;
+extern const std::string AdjustAdRevenueSourceAdx;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -100,6 +102,7 @@ public:
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
     void setCoppaCompliantEnabled(bool isEnabled);
+    void setReadDeviceInfoOnceEnabled(bool isEnabled);
     // iOS only
     void deactivateSkAdNetworkHandling();
     void setAllowIdfaReading(bool isAllowed);

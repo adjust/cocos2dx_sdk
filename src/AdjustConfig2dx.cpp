@@ -28,6 +28,8 @@ const std::string AdjustAdRevenueSourceAdMostSource = "admost_sdk";
 const std::string AdjustAdRevenueSourceUnity = "unity_sdk";
 const std::string AdjustAdRevenueSourceHeliumChartboost = "helium_chartboost_sdk";
 const std::string AdjustAdRevenueSourcePublisher = "publisher_sdk";
+const std::string AdjustAdRevenueSourceTopOn = "topon_sdk";
+const std::string AdjustAdRevenueSourceAdx = "adx_sdk";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -651,6 +653,23 @@ void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setCoppaCompliantEnabled(isEnabled);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetReadDeviceInfoOnceEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "setReadDeviceInfoOnceEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiSetReadDeviceInfoOnceEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setReadDeviceInfoOnceEnabled(isEnabled);
     }
 #endif
 }

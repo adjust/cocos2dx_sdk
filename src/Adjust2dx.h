@@ -49,6 +49,7 @@ public:
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
     static void trackAdRevenueNew(AdjustAdRevenue2dx adRevenue);
+    static void processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
     // Android specific methods.
     static void setReferrer(std::string referrer);
     static void getGoogleAdId(void (*adIdCallback)(std::string adId));
@@ -69,6 +70,7 @@ public:
     static void checkForNewAttStatus();
     static std::string getLastDeeplink();
     static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
+    static std::string getIdfv();
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
