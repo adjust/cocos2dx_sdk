@@ -595,7 +595,7 @@ void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(st
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     // TBD
     cocos2d::JniMethodInfo jmiProcessDeeplink;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;Lcom/adjust/sdk/OnDeeplinkResolvedListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiGetContext;
@@ -603,15 +603,19 @@ void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(st
         return;
     }
 
-    jclass jcUri = jmiAppWillOpenUrl.env->FindClass("android/net/Uri");
-    jmethodID midParse = jmiAppWillOpenUrl.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
-    jstring jUrl = jmiAppWillOpenUrl.env->NewStringUTF(url.c_str());
-    jobject jUri = jmiAppWillOpenUrl.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
+    jclass jcUri = jmiProcessDeeplink.env->FindClass("android/net/Uri");
+    jmethodID midParse = jmiProcessDeeplink.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
+    jstring jUrl = jmiProcessDeeplink.env->NewStringUTF(url.c_str());
+    jobject jUri = jmiProcessDeeplink.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
-    jmiAppWillOpenUrl.env->CallStaticVoidMethod(jmiAppWillOpenUrl.classID, jmiAppWillOpenUrl.methodID, jUri, jContext);
-    jmiAppWillOpenUrl.env->DeleteLocalRef(jUrl);
-    jmiAppWillOpenUrl.env->DeleteLocalRef(jUri);
+    jclass clsAdjust2dxResolvedLinkCallback = jmiProcessDeeplink.env->FindClass("com/adjust/sdk/Adjust2dxResolvedLinkCallback");
+    jmethodID jmidInit = jmiProcessDeeplink.env->GetMethodID(clsAdjust2dxResolvedLinkCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiProcessDeeplink.env->NewObject(clsAdjust2dxResolvedLinkCallback, jmidInit);
+    jmiProcessDeeplink.env->CallStaticVoidMethod(jmiProcessDeeplink.classID, jmiProcessDeeplink.methodID, jUri, jContext, jCallbackProxy);
+    jmiProcessDeeplink.env->DeleteLocalRef(jUrl);
+    jmiProcessDeeplink.env->DeleteLocalRef(jUri);
     jmiGetContext.env->DeleteLocalRef(jContext);
+    jmiProcessDeeplink.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 

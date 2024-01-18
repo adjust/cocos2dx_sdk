@@ -556,21 +556,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     sessionTrackingSucceededCallbackMethod(sessionSuccess);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
-(JNIEnv *env, jobject obj, jstring jAdId) {
-    if (NULL == adIdCallbackMethod) {
-        return;
-    }
-	if (NULL == jAdId) {
-        return;
-    }
-
-	const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
-	std::string adId = std::string(adIdCStr);
-	adIdCallbackMethod(adId);
-	env->ReleaseStringUTFChars(jAdId, adIdCStr);	
-}
-
 JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_deferredDeeplinkReceived
 (JNIEnv *env, jobject obj, jstring jDeeplink) {
     if (NULL == deferredDeeplinkCallbackMethod) {
@@ -584,6 +569,36 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     std::string deeplink = std::string(deeplinkCStr);
     env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
     return deferredDeeplinkCallbackMethod(deeplink);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
+(JNIEnv *env, jobject obj, jstring jAdId) {
+    if (NULL == adIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jAdId) {
+        return;
+    }
+
+    const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
+    std::string adId = std::string(adIdCStr);
+    adIdCallbackMethod(adId);
+    env->ReleaseStringUTFChars(jAdId, adIdCStr);    
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
+(JNIEnv *env, jobject obj, jstring jResolvedLink) {
+    if (NULL == resolvedLinkCallbackMethod) {
+        return;
+    }
+    if (NULL == jResolvedLink) {
+        return;
+    }
+
+    const char *resolvedLinkCStr = env->GetStringUTFChars(jResolvedLink, NULL);
+    std::string resolvedLink = std::string(adIdCStr);
+    resolvedLinkCallbackMethod(resolvedLink);
+    env->ReleaseStringUTFChars(jResolvedLink, adIdCStr);    
 }
 
 void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
@@ -633,4 +648,11 @@ void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
 		adIdCallbackMethod = callbackMethod;
 	}
 }
+
+void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink)) {
+    if (NULL == resolvedLinkCallbackMethod) {
+        resolvedLinkCallbackMethod = callbackMethod;
+    }
+}
+
 #endif
