@@ -100,6 +100,8 @@ $(LOCAL_PATH)/../../../Classes/Adjust/AdjustAppStoreSubscription2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStoreSubscription2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustThirdPartySharing2dx.cpp \
 $(LOCAL_PATH)/../../../Classes/Adjust/AdjustAdRevenue2dx.cpp
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustAppStorePurchase2dx.cpp \
+$(LOCAL_PATH)/../../../Classes/Adjust/AdjustPlayStorePurchase2dx.cpp \
 ```
 
 ### <a id="sdk-project-settings"></a>Adjust project settings
@@ -144,25 +146,10 @@ Since August 1, 2014, apps in the Google Play Store must use the [Google adverti
 Open the `build.gradle` file of your app and find the `dependencies` block. Add the following line:
 
 ```
-implementation 'com.google.android.gms:play-services-analytics:16.0.1'
+implementation 'com.google.android.gms:play-services-ads-identifier:18.0.1'
 ```
 
 To check whether the analytics part of the Google Play Services library has been successfully added to your app, you should start your app by configuring the SDK to run in **sandbox** mode and set the log level to **verbose**. After that, track a session or some events in your app and observe the list of parameters in the verbose logs which are being read once the session or event has been tracked. If you see a parameter called `gps_adid` in there, you have successfully added the analytics part of the Google Play Services library to your app and our SDK is reading the necessary information from it.
-
-**If you are using Eclipse as your IDE:**
-
-In order to add Google Play Services to your project, you should add `google-play-services_lib` from Android SDK folder into your app project in Eclipse. `google-play-services_lib` is part of the Android SDK, which you may already have installed.
-
-There are two main ways to download the Android SDK. If you are using any tool which has the `Android SDK Manager`, you should download `Android SDK Tools`. Once installed, you can find the libraries in the `SDK_FOLDER/extras/google/google_play_services/libproject/` folder.
-
-If you are not using any tool which has Android SDK Manager, you should download the standalone version of Android SDK from [official page][android-sdk-download]. By downloading this, you will have only a basic version of the Android SDK which doesn't include the Android SDK Tools. There are more detailed instructions on how to download these in the readme file provided by Google, called `SDK Readme.txt`, which is placed in Android SDK folder.
-
-After this, open the `AndroidManifest.xml` file of your Android project and add the following `meta-data` tag inside the `<application>` element:
-
-```xml
-<meta-data android:name="com.google.android.gms.version"
-           android:value="@integer/google-play-services_version" />
-```
 
 ### <a id="android-proguard"></a>[Android] Proguard settings
 
@@ -235,7 +222,6 @@ As of v4.22.0, the Adjust SDK supports install tracking on Huawei devices with H
 
 Select your project in the Project Navigator. In the left hand side of the main view, select your target. In the tab `Build Phases`, expand the group `Link Binary with Libraries`. On the bottom of that section click on the `+` button. Select below mentined frameworks and make sure to change the `Status` of frameworks to `Optional`. Adjust SDK uses these frameworks with following purpose:
 
-* `iAd.framework` - to support Apple Search Ads campaigns
 * `AdServices.framework` - to support Apple Search Ads campaigns
 * `AdSupport.framework` - to read iOS Advertising Id (IDFA) value
 * `StoreKit.framework` - to communicate with `SKAdNetwork` framework
