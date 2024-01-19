@@ -702,6 +702,23 @@ void AdjustConfig2dx::setFinalAttributionEnabled(bool isEnabled) {
 #endif
 }
 
+void AdjustConfig2dx::setFbAppId(std::string fbAppId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetFbAppId;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetFbAppId, "com/adjust/sdk/AdjustConfig", "setFbAppId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jFbAppId = jmiSetFbAppId.env->NewStringUTF(fbAppId.c_str());
+    jmiSetFbAppId.env->CallVoidMethod(config, jmiSetFbAppId.methodID, jFbAppId);
+    jmiSetFbAppId.env->DeleteLocalRef(jFbAppId);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
 void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

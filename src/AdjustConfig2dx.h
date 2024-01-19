@@ -118,6 +118,7 @@ public:
     void setPreinstallFilePath(std::string filePath);
     void setPlayStoreKidsAppEnabled(bool isEnabled);
     void setFinalAttributionEnabled(bool isEnabled);
+    void setFbAppId(std::string fbAppId);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();
