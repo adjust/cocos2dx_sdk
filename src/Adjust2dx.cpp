@@ -72,8 +72,8 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
 }
 
 void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
-    setPurchaseVerificationResultCallbackMethod(verificationCallback);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    setPurchaseVerificationResultCallbackMethod(verificationCallback);
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
         return;
@@ -599,10 +599,10 @@ void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
 }
 
 void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
-    setResolvedLinkCallbackMethod(resolvedLinkCallback);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::processDeeplink(url, resolvedLinkCallback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    setResolvedLinkCallbackMethod(resolvedLinkCallback);
     cocos2d::JniMethodInfo jmiProcessDeeplink;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;Lcom/adjust/sdk/OnDeeplinkResolvedListener;)V")) {
         return;
