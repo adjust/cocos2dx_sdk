@@ -83,6 +83,7 @@ public:
     void(*getSessionFailureCallback())(AdjustSessionFailure2dx);
     bool(*getDeferredDeeplinkCallback())(std::string);
     void(*getConversionValueUpdatedCallback())(int);
+    void(*getPostbackConversionValueUpdatedCallback())(int, std::string, bool);
 };
 
 #endif /* _ADJUST_ADJCONFIG2DX_H_ */

@@ -21,28 +21,33 @@ void ADJAdjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
     BOOL isSessionFailureCallbackImplemented = NULL != adjustConfig.getSessionFailureCallback() ? YES : NO;
     BOOL isDeferredDeeplinkCallbackImplemented = NULL != adjustConfig.getDeferredDeeplinkCallback() ? YES : NO;
     BOOL isConversionValueUpdatedListenerImplemented = NULL != adjustConfig.getConversionValueUpdatedCallback() ? YES : NO;
-    
+    BOOL isPostbackConversionValueUpdatedCallbackImplemented = NULL != adjustConfig.getPostbackConversionValueUpdatedCallback() ? YES : NO;
+
     if (isAttributionCallbackImplemented
         || isEventSuccessCallbackImplemented
         || isEventFailureCallbackImplemented
         || isSessionSuccessCallbackImplemented
         || isSessionFailureCallbackImplemented
         || isDeferredDeeplinkCallbackImplemented
-        || isConversionValueUpdatedListenerImplemented) {
-        ((ADJConfig *)adjustConfig.getConfig()).delegate = [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
-                                                                                         swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
-                                                                                         swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
-                                                                                       swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
-                                                                                       swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
-                                                                                     swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
-                                                                               swizzleOfConversionValueUpdatedCallback:isConversionValueUpdatedListenerImplemented
-                                                                                              andAttributionCallbackId:adjustConfig.getAttributionCallback()
-                                                                                                eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
-                                                                                                eventFailureCallbackId:adjustConfig.getEventFailureCallback()
-                                                                                              sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
-                                                                                              sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
-                                                                                            deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
-                                                                                      conversionValueUpdatedCallbackId:adjustConfig.getConversionValueUpdatedCallback()];
+        || isConversionValueUpdatedListenerImplemented
+        || isPostbackConversionValueUpdatedCallbackImplemented) {
+        ((ADJConfig *)adjustConfig.getConfig()).delegate = 
+        [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
+                                      swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
+                                      swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
+                                    swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
+                                    swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
+                                  swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
+                            swizzleOfConversionValueUpdatedCallback:isConversionValueUpdatedListenerImplemented
+                    swizzleOfPostbackConversionValueUpdatedCallback:isPostbackConversionValueUpdatedCallbackImplemented
+                                           andAttributionCallbackId:adjustConfig.getAttributionCallback()
+                                             eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
+                                             eventFailureCallbackId:adjustConfig.getEventFailureCallback()
+                                           sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
+                                           sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
+                                         deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
+                                   conversionValueUpdatedCallbackId:adjustConfig.getConversionValueUpdatedCallback()
+                           postbackConversionValueUpdatedCallbackId:adjustConfig.getPostbackConversionValueUpdatedCallback()];
     }
 
     [Adjust appDidLaunch:(ADJConfig *)adjustConfig.getConfig()];

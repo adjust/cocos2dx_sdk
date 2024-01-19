@@ -172,3 +172,7 @@ bool(*ADJConfig2dx::getDeferredDeeplinkCallback())(std::string) {
 void(*ADJConfig2dx::getConversionValueUpdatedCallback())(int) {
     return conversionValueUpdatedCallback;
 }
+
+void(*ADJConfig2dx::getPostbackConversionValueUpdatedCallback())(int, std::string, bool) {
+    return postbackConversionValueUpdatedCallback;
+}
