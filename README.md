@@ -18,6 +18,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
          * [Huawei Referrer API](#android-huawei-referrer-api)
       * [[iOS] Frameworks](#ios-frameworks)
       * [[iOS] Additional linker flags](#ios-linker-flags)
+      * [[iOS] Additional source files](#ios-additional-source-files)
    * [Integrate the SDK into your app](#sdk-integrate)
    * [Adjust logging](#sdk-logging)
    * [Android session tracking](#sdk-android-session-tracking)
@@ -27,11 +28,13 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
       * [App-tracking authorisation wrapper](#ata-wrapper)
       * [Get current authorisation status](#ata-getter)
       * [Check for ATT status change](#att-status-change)
+      * [Custom ATT prompt timing](#att-delay)
    * [SKAdNetwork framework](#skadn-framework)
       * [Update SKAdNetwork conversion value](#skadn-update-conversion-value)
       * [Conversion value updated callback](#skadn-cv-updated-callback)
    * [Event tracking](#event-tracking)
       * [Revenue tracking](#revenue-tracking)
+      * [Purchase verification](#purchase-verification)
       * [Revenue deduplication](#revenue-deduplication)
       * [Callback parameters](#callback-parameters)
       * [Partner parameters](#partner-parameters)
@@ -55,6 +58,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
    * [Background tracking](#background-tracking)
    * [Device IDs](#device-ids)
       * [iOS advertising identifier](#di-idfa)
+      * [iOS identifier for vendors](#di-idfv)
       * [Google Play Services advertising identifier](#di-gps-adid)
       * [Amazon advertising identifier](#di-fire-adid)
       * [Adjust device identifier](#di-adid)
@@ -70,6 +74,7 @@ This is the Cocos2d-x SDK of Adjust™. You can read more about Adjust™ at [Ad
    * [Data residency](#data-residency)
    * [COPPA compliance](#coppa-compliance)
    * [Play Store Kids Apps](#play-store-kids-apps)
+   * [Meta install referrer](#meta-install-referrer)
 * [License](#license)
 
 ## <a id="basic-integration"></a>Basic integration
@@ -82,7 +87,7 @@ Download the latest version from our [releases page][releases]. Extract the arch
 
 ### <a id="sdk-add"></a>Add the SDK to your project
 
-Take the C++ source files from the `src` folder and add them to your Cocos2d-x project.
+Take the C++ source files from the `dist` folder and add them to your Cocos2d-x project.
 
 Inside Android Studio project, you need to add the paths of the Adjust C++ files to the `LOCAL_SRC_FILES` section in your `Android.mk` file:
 
@@ -222,6 +227,7 @@ As of v4.22.0, the Adjust SDK supports install tracking on Huawei devices with H
 
 Select your project in the Project Navigator. In the left hand side of the main view, select your target. In the tab `Build Phases`, expand the group `Link Binary with Libraries`. On the bottom of that section click on the `+` button. Select below mentined frameworks and make sure to change the `Status` of frameworks to `Optional`. Adjust SDK uses these frameworks with following purpose:
 
+* `AdjustSdk.framework` - having native Adjust SDK framework is a must (you can download it from the release page of each Cocos2d-x SDK release)
 * `AdServices.framework` - to support Apple Search Ads campaigns
 * `AdSupport.framework` - to read iOS Advertising Id (IDFA) value
 * `StoreKit.framework` - to communicate with `SKAdNetwork` framework
@@ -230,6 +236,10 @@ Select your project in the Project Navigator. In the left hand side of the main 
 ### <a id="ios-linker-flags"></a>[iOS] Additional linker flags
 
 In order to support categories from the `AdjustSdk.framework`, you should add a linker flag. Go to the `Build Settings` part of Project Settings and look for the `Other Linker Flags` option. Add an `-ObjC` flag to it.
+
+### <a id="ios-additional-source-files"></a>[iOS] Additional source files
+
+In order to complete the iOS setup, please make sure (next to adding C++ sourrce files) to add all the Objective-C++ (`.h` and `.mm`) files to your Xcode project and make sure that the `.mm` files are listed inside of the `Build Phases` -> `Compile Sources` section.
 
 ### <a id="sdk-integrate"></a>Integrate the SDK into your app
 
@@ -280,6 +290,7 @@ std::string environment = AdjustEnvironmentSandbox2dx;
 
 AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment, true);
 adjustConfig.setLogLevel(AdjustLogLevel2dxSuppress);
+Adjust2dx::start(adjustConfig);
 ```
 
 ### <a id="sdk-android-session-tracking"></a>Android session tracking
@@ -402,6 +413,16 @@ In cases where you are not using [Adjust app-tracking authorization wrapper](#at
 Adjust2dx::checkForNewAttStatus();
 ```
 
+### <a id="att-delay"></a>Custom ATT prompt timing
+
+If your app includes an onboarding process or a tutorial, you may want to delay sending your user's ATT consent status until after the user has completed this process. To do this, you can set the attConsentWaitingInterval property to delay the sending of data for up to `120 seconds` to give the user time to complete the initial onboarding. After the timeout ends or the user sets their consent status, the SDK sends all information it has recorded during the delay to Adjust's servers along with the user's consent status.
+
+```cpp
+adjustConfig.setAttConsentWaitingInterval = 30;
+```
+
+**Note**: If the user closes the app before the timeout ends, or before they select their consent status, the timeout restarts when they reopen the app.
+
 ### <a id="skadn-framework"></a>SKAdNetwork framework
 
 **Note**: This feature exists only in iOS platform.
@@ -418,10 +439,28 @@ adjustConfig.deactivateSKAdNetworkHandling();
 
 **Note**: This feature exists only in iOS platform.
 
-You can use Adjust SDK wrapper method `updateConversionValue` to update SKAdNetwork conversion value for your user:
+The Adjust SDK is providing you with an out-of-the-box wrappers of the [native SKAdNetwork methods](https://developer.apple.com/documentation/storekit/skadnetwork?language=objc) for updating the conversion values. Feel free to use the one that suits your needs (depending on SKAN version you're using) and have in mind that as of iOS / iPadOS 15.4, the `updateConversionValue` method has been deprecated by Apple:
 
-```js
+```cpp
+// pass just the conversion value (deprecated method)
 Adjust2dx::updateConversionValue(6);
+
+// pass the conversion value and a callback to receive a message about potential error
+Adjust2dx::updatePostbackConversionValue(6, [](std::string error) {
+    std::cout << "Error while updating conversion value: " << error;
+});
+
+// SKAN 4.0
+// pass the conversion value, coarse value and a callback to receive a message about potential error
+Adjust2dx::updatePostbackConversionValue(6, "low", [](std::string error) {
+    std::cout << "Error while updating conversion value: " << error;
+});
+
+// SKAN 4.0
+// pass the conversion value, coarse value, lock window and a callback to receive a message about potential error
+Adjust2dx::updatePostbackConversionValue(6, "low", false, [](std::string error) {
+    std::cout << "Error while updating conversion value: " << error;
+});
 ```
 
 ### <a id="skadn-cv-updated-callback"></a>Conversion value updated callback
@@ -435,10 +474,24 @@ You can register callback to get notified each time when Adjust SDK updates conv
 
 // ...
 
-static void conversionValueUpdatedCallbackMethod(int conversionValue) {
-    CCLOG("\nConversion value updated!");
-    CCLOG("\nConversion value: %d", conversionValue);
+bool AppDelegate::applicationDidFinishLaunching() {
+    std::string appToken = "{YourAppToken}";
+    std::string environment = AdjustEnvironmentSandbox2dx;
+
+    AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
+    adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
+    adjustConfig.setConversionValueUpdatedCallback(conversionValueUpdatedCallbackMethod);
+    adjustConfig.setConversionValueUpdatedCallback([](int conversionValue) {
+        std::cout << "\nConversion value: " << conversionValue;
+    });
+    Adjust2dx::start(adjustConfig);
 }
+```
+
+As of SKAN 4.0, next to conversion value, there are a couple of additional endpoint one can set when updating conversion value for the user: coarse and lock window values. If you are running SKAN 4.0 (or later) campaigns and would like to get information about these values as well, then make sure to implement a callback for that purpose:
+
+```cpp
+#include "Adjust/Adjust2dx.h"
 
 // ...
 
@@ -448,10 +501,14 @@ bool AppDelegate::applicationDidFinishLaunching() {
 
     AdjustConfig2dx adjustConfig = AdjustConfig2dx(appToken, environment);
     adjustConfig.setLogLevel(AdjustLogLevel2dxVerbose);
-    adjustConfig.setConversionValueUpdatedCallback(conversionValueUpdatedCallbackMethod);
+    adjustConfig.setPostbackConversionValueUpdatedCallback([](int conversionValue, 
+                                                          std::string coarseValue, 
+                                                          bool lockWindow) {
+        std::cout << "\nConversion value: " << conversionValue;
+        std::cout << "\nCoarse value: " << coarseValue;
+        std::cout << "\nLock window: " << lockWindow;
+    });
     Adjust2dx::start(adjustConfig);
-
-    // ...
 }
 ```
 
@@ -479,6 +536,44 @@ Adjust2dx::trackEvent(adjustEvent);
 When you set a currency token, Adjust will automatically convert the incoming revenues into a reporting revenue of your choice. Read more about currency conversion [here][currency-conversion].
 
 You can read more about revenue and event tracking in the [event tracking guide][event-tracking].
+
+### <a id="purchase-verification"></a>Purchase verification
+
+If you've enabled [purchase verification](https://help.adjust.com/en/article/purchase-verification), you must can additional information with your purchase events to verify them. When Adjust's servers receive this information in an event object, they forward it to Apple / Google to verify the purchase.
+
+In order to verify the purchase on iOS platform:
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setRevenue(0.01, "EUR");
+adjustEvent.setProductId("productId");
+adjustEvent.setTransactionId("transactionId");
+adjustEvent.setReceipt("receipt");
+Adjust2dx::trackEvent(adjustEvent);
+```
+
+Parameters needed for the iOS verification:
+
+- `transactionId` (std::string): The [`transactionIdentifier` value](https://developer.apple.com/documentation/storekit/skpaymenttransaction/1411288-transactionidentifier) of the successfully completed purchase
+- `productId` (std::string): The product identifier of the item that was successfully purchased
+- `receipt` (std::string): The [signed receipt](https://developer.apple.com/documentation/foundation/bundle/1407276-appstorereceipturl) containing the information about the successfully completed purchase (not base64 encoded)
+
+In order to verify the purchase on Android platform:
+
+```cpp
+AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
+adjustEvent.setRevenue(0.01, "EUR");
+adjustEvent.setProductId("productId");
+adjustEvent.setPurchaseToken("purchaseToken");
+Adjust2dx::trackEvent(adjustEvent);
+```
+
+Parameters needed for the Android verification:
+
+- `productId` (std::string): The product identifier ([`SKU`](https://developer.android.com/reference/com/android/billingclient/api/SkuDetails#getSku())) of the item that was successfully purchased
+- `purchaseToken` (std::string): The [`purchase token`](https://developer.android.com/reference/com/android/billingclient/api/Purchase#getPurchaseToken()) of the successfully completed purchase
+
+**Note:** All the links for the parameters that are needed for the purchase verification are linking to native iOS / Android API which is not the API you will be using inside of your Cocos2d-x app. You will most probably be using some plugin in Cocos2d-x that is wrapping native iOS and Android in-app purchase flows and is encapsulating all these things for you in some way. Depending on the plugin you are using for in-app purchases, you will need to understand how to extract these parameters from the response that you are getting from your library. In case you need assistance with this, feel free to get in touch with us to help you with that.
 
 ### <a id="revenue-deduplication"></a>Revenue deduplication
 
@@ -542,6 +637,8 @@ AdjustEvent2dx adjustEvent = AdjustEvent2dx("abc123");
 adjustEvent.setCallbackId("Your-Custom-Id");
 Adjust2dx::trackEvent(adjustEvent);
 ```
+
+
 
 ### <a id="subscription-tracking"></a>Subscription tracking
 
@@ -1073,6 +1170,14 @@ You can access the IDFA value on an iOS device by invoking the `getIdfa()` metho
 std::string idfa = Adjust2dx::getIdfa();
 ```
 
+### <a id="di-idfa"></a>iOS Identifier For Vendors
+
+You can access the IDFV value on an iOS device by invoking the `getIdfv()` method of the `Adjust2dx` instance.
+
+```cpp
+std::string idfv = Adjust2dx::getIdfv();
+```
+
 ### <a id="di-gps-adid"></a>Google Play Services advertising identifier
 
 The Google Play Services Advertising Identifier (Google advertising ID) is a unique identifier for a device. Users can opt out of sharing their Google advertising ID by toggling the "Opt out of Ads Personalization" setting on their device. When a user has enabled this setting, the Adjust SDK returns a string of zeros when trying to read the Google advertising ID.
@@ -1268,6 +1373,29 @@ By default Adjust SDK doesn't mark Android app as Play Store Kids App. In order 
 ```cpp
 adjustConfig.setPlayStoreKidsAppEnabled(true);
 ```
+
+### <a id="meta-install-refferer"></a>Meta install referrer
+
+The Adjust SDK supports the [Meta Install Referrer](https://developers.facebook.com/docs/app-ads/install-referrer/) in v4.37.0 and above. To enable this feature:
+
+- Find your Meta app ID in your [App Dashboard](https://developers.facebook.com/apps). See Meta's [App Dashboard documentation](https://developers.facebook.com/docs/development/create-an-app/app-dashboard) for more information.
+- Pass your `App ID` as a string argument to the `AdjustConfig`'s `setFbAppId` method.
+
+```cpp
+adjustConfig.setFbAppId("your-fb-app-id");
+```
+
+- Make sure to add additional `queries` entries to the root of your `AndroidManifest.xml` file:
+
+```xml
+<queries>
+    <package android:name="com.facebook.katana" />
+</queries>
+<queries>
+    <package android:name="com.instagram.android" />
+</queries>
+```
+
 
 [adjust]:       http://adjust.com
 [dashboard]:    http://adjust.com
