@@ -135,14 +135,6 @@ void AdjustEvent2dx::setCallbackId(std::string callbackId) {
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
-    if (isEventSet) {
-        event.setReceipt(receipt, transactionId);
-    }
-}
-#endif
-
 bool AdjustEvent2dx::isValid() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (event == NULL) {
@@ -166,11 +158,57 @@ bool AdjustEvent2dx::isValid() {
 #endif
 }
 
+void AdjustEvent2dx::setProductId(std::string productId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isEventSet) {
+        event.setProductId(productId);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (event == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetProductId;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetProductId, "com/adjust/sdk/AdjustEvent", "setProductId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jProductId = jmiSetProductId.env->NewStringUTF(productId.c_str());
+    jmiSetProductId.env->CallVoidMethod(event, jmiSetProductId.methodID, jProductId);
+    jmiSetProductId.env->DeleteLocalRef(jProductId);
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+void AdjustEvent2dx::setPurchaseToken(std::string purchaseToken) {
+    if (event == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetPurchaseToken;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPurchaseToken, "com/adjust/sdk/AdjustEvent", "setPurchaseToken", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jPurchaseToken = jmiSetPurchaseToken.env->NewStringUTF(purchaseToken.c_str());
+    jmiSetPurchaseToken.env->CallVoidMethod(event, jmiSetPurchaseToken.methodID, jPurchaseToken);
+    jmiSetPurchaseToken.env->DeleteLocalRef(jPurchaseToken);
+}
+
 jobject AdjustEvent2dx::getEvent() {
     return event;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
+    if (isEventSet) {
+        event.setReceipt(receipt, transactionId);
+    }
+}
+
+void AdjustEvent2dx::setReceipt(std::string receipt) {
+    if (isEventSet) {
+        event.setReceipt(receipt);
+    }
+}
+
 ADJEvent2dx AdjustEvent2dx::getEvent() {
     return event;
 }

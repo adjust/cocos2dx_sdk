@@ -17,6 +17,7 @@
 @property (nonatomic) void (*sessionFailureCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
 @property (nonatomic) bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
 @property (nonatomic) void (*conversionValueUpdatedCallbackMethod)(int conversionValue);
+@property (nonatomic) void (*postbackConversionValueUpdatedCallbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow);
 
 + (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
                     swizzleOfEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
@@ -25,13 +26,15 @@
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
           swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
-						 andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
+  swizzleOfPostbackConversionValueUpdatedCallback:(BOOL)swizzlePostbackConversionValueUpdatedCallback
+                         andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
-					   deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId;
+                       deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
+                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId
+         postbackConversionValueUpdatedCallbackId:(void (*)(int conversionValue, std::string coarseValue, bool lockWindow))postbackConversionValueUpdatedCallbackId;
 + (void)teardown;
 
 @end

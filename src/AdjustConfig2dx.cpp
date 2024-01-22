@@ -12,9 +12,11 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.32.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x4.37.0";
 const std::string AdjustUrlStrategyChina = "china";
 const std::string AdjustUrlStrategyIndia = "india";
+const std::string AdjustUrlStrategyCn = "cn";
+const std::string AdjustUrlStrategyCnOnly = "cn-only";
 const std::string AdjustDataResidencyEU = "data-residency-eu";
 const std::string AdjustDataResidencyTR = "data-residency-tr";
 const std::string AdjustDataResidencyUS = "data-residency-us";
@@ -26,6 +28,8 @@ const std::string AdjustAdRevenueSourceAdMostSource = "admost_sdk";
 const std::string AdjustAdRevenueSourceUnity = "unity_sdk";
 const std::string AdjustAdRevenueSourceHeliumChartboost = "helium_chartboost_sdk";
 const std::string AdjustAdRevenueSourcePublisher = "publisher_sdk";
+const std::string AdjustAdRevenueSourceTopOn = "topon_sdk";
+const std::string AdjustAdRevenueSourceAdx = "adx_sdk";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -303,6 +307,18 @@ void AdjustConfig2dx::setUrlStrategy(std::string urlStrategy) {
         jstring jUrlStrategyIndia = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyIndia);
         jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyIndia);
         jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyIndia);
+    } else if (urlStrategy.compare(AdjustUrlStrategyCn) == 0) {
+        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
+        jfieldID jfidUrlStrategyCn = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN", "Ljava/lang/String;");
+        jstring jUrlStrategyCn = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCn);
+        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCn);
+        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCn);
+    } else if (urlStrategy.compare(AdjustUrlStrategyCnOnly) == 0) {
+        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
+        jfieldID jfidUrlStrategyCnOnly = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN_ONLY", "Ljava/lang/String;");
+        jstring jUrlStrategyCnOnly = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCnOnly);
+        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCnOnly);
+        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCnOnly);
     } else if (urlStrategy.compare(AdjustDataResidencyEU) == 0) {
         jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
         jfieldID jfidDataResidencyEU = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_EU", "Ljava/lang/String;");
@@ -615,6 +631,15 @@ void AdjustConfig2dx::setConversionValueUpdatedCallback(void(*conversionValueUpd
 #endif
 }
 
+void AdjustConfig2dx::setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setPostbackConversionValueUpdatedCallback(postbackConversionValueUpdatedCallback);
+    }
+#endif
+}
+
 void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
@@ -628,6 +653,23 @@ void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setCoppaCompliantEnabled(isEnabled);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetReadDeviceInfoOnceEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "setReadDeviceInfoOnceEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiSetReadDeviceInfoOnceEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setReadDeviceInfoOnceEnabled(isEnabled);
     }
 #endif
 }
@@ -646,11 +688,51 @@ void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
 #endif
 }
 
+void AdjustConfig2dx::setFinalAttributionEnabled(bool isEnabled) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetFinalAttributionEnabled;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetFinalAttributionEnabled, "com/adjust/sdk/AdjustConfig", "setFinalAttributionEnabled", "(Z)V")) {
+        return;
+    }
+    jmiSetFinalAttributionEnabled.env->CallVoidMethod(config, jmiSetFinalAttributionEnabled.methodID, isEnabled);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
+void AdjustConfig2dx::setFbAppId(std::string fbAppId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetFbAppId;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetFbAppId, "com/adjust/sdk/AdjustConfig", "setFbAppId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jFbAppId = jmiSetFbAppId.env->NewStringUTF(fbAppId.c_str());
+    jmiSetFbAppId.env->CallVoidMethod(config, jmiSetFbAppId.methodID, jFbAppId);
+    jmiSetFbAppId.env->DeleteLocalRef(jFbAppId);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#endif
+}
+
 void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setLinkMeEnabled(isEnabled);
+    }
+#endif
+}
+
+void AdjustConfig2dx::setAttConsentWaitingInterval(int numberOfSeconds) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setAttConsentWaitingInterval(numberOfSeconds);
     }
 #endif
 }

@@ -26,6 +26,8 @@
 extern const std::string AdjustSdkPrefix2dx;
 extern const std::string AdjustUrlStrategyChina;
 extern const std::string AdjustUrlStrategyIndia;
+extern const std::string AdjustUrlStrategyCn;
+extern const std::string AdjustUrlStrategyCnOnly;
 extern const std::string AdjustDataResidencyEU;
 extern const std::string AdjustDataResidencyTR;
 extern const std::string AdjustDataResidencyUS;
@@ -37,6 +39,8 @@ extern const std::string AdjustAdRevenueSourceAdMostSource;
 extern const std::string AdjustAdRevenueSourceUnity;
 extern const std::string AdjustAdRevenueSourceHeliumChartboost;
 extern const std::string AdjustAdRevenueSourcePublisher;
+extern const std::string AdjustAdRevenueSourceTopOn;
+extern const std::string AdjustAdRevenueSourceAdx;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -98,18 +102,23 @@ public:
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
     void setCoppaCompliantEnabled(bool isEnabled);
+    void setReadDeviceInfoOnceEnabled(bool isEnabled);
     // iOS only
     void deactivateSkAdNetworkHandling();
     void setAllowIdfaReading(bool isAllowed);
     void setAllowiAdInfoReading(bool isAllowed);
     void setAllowAdServicesInfoReading(bool isAllowed);
     void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
+    void setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow));
     void setLinkMeEnabled(bool isEnabled);
+    void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
     void setPreinstallTrackingEnabled(bool isEnabled);
     void setPreinstallFilePath(std::string filePath);
     void setPlayStoreKidsAppEnabled(bool isEnabled);
+    void setFinalAttributionEnabled(bool isEnabled);
+    void setFbAppId(std::string fbAppId);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

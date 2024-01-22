@@ -25,6 +25,8 @@
 #include "Adjust/AdjustSessionFailure2dx.h"
 #include "Adjust/AdjustThirdPartySharing2dx.h"
 #include "Adjust/AdjustAdRevenue2dx.h"
+#include "Adjust/AdjustAppStorePurchase2dx.h"
+#include "Adjust/AdjustPlayStorePurchase2dx.h"
 #include "Adjust/test/TestLib2dx.h"
 #include "Adjust/test/TestConnectionOptions2dx.h"
 
@@ -33,9 +35,11 @@ private:
     std::string baseUrl;
     std::string gdprUrl;
     std::string subscriptionUrl;
+    std::string purchaseVerificationUrl;
     std::string basePath;
     std::string gdprPath;
     std::string subscriptionPath;
+    std::string purchaseVerificationPath;
     std::string extraPath;
     std::map<std::int8_t, AdjustEvent2dx*> savedEvents;
     std::map<std::int8_t, AdjustConfig2dx*> savedConfigs;
@@ -69,9 +73,14 @@ private:
     void trackMeasurementConsent();
     void trackAdRevenueNew();
     void getLastDeeplink();
+    void verifyPurchase();
+    void processDeeplink();
 public:
     static const std::string TAG;
-    AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl, std::string subscriptionUrl);
+    AdjustCommandExecutor(std::string baseUrl,
+                          std::string gdprUrl,
+                          std::string subscriptionUrl,
+                          std::string purchaseVerificationUrl);
     void executeCommand(Command *command);
 };
 

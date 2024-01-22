@@ -556,21 +556,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
     sessionTrackingSucceededCallbackMethod(sessionSuccess);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
-(JNIEnv *env, jobject obj, jstring jAdId) {
-    if (NULL == adIdCallbackMethod) {
-        return;
-    }
-	if (NULL == jAdId) {
-        return;
-    }
-
-	const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
-	std::string adId = std::string(adIdCStr);
-	adIdCallbackMethod(adId);
-	env->ReleaseStringUTFChars(jAdId, adIdCStr);	
-}
-
 JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_deferredDeeplinkReceived
 (JNIEnv *env, jobject obj, jstring jDeeplink) {
     if (NULL == deferredDeeplinkCallbackMethod) {
@@ -586,6 +571,51 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     return deferredDeeplinkCallbackMethod(deeplink);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
+(JNIEnv *env, jobject obj, jstring jAdId) {
+    if (NULL == adIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jAdId) {
+        return;
+    }
+
+    const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
+    std::string adId = std::string(adIdCStr);
+    adIdCallbackMethod(adId);
+    env->ReleaseStringUTFChars(jAdId, adIdCStr);    
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
+(JNIEnv *env, jobject obj, jstring jResolvedLink) {
+    if (NULL == resolvedLinkCallbackMethod) {
+        return;
+    }
+    if (NULL == jResolvedLink) {
+        return;
+    }
+
+    const char *resolvedLinkCStr = env->GetStringUTFChars(jResolvedLink, NULL);
+    std::string resolvedLink = std::string(resolvedLinkCStr);
+    resolvedLinkCallbackMethod(resolvedLink);
+    env->ReleaseStringUTFChars(jResolvedLink, resolvedLinkCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+(JNIEnv *env, jobject obj, jstring jVerificationStatus, int jCode, jstring jMessage) {
+    if (NULL == purchaseVerificationResultCallbackMethod) {
+        return;
+    }
+
+    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+    std::string verificationStatus = std::string(verificationStatusCStr);
+    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+    std::string message = std::string(messageCStr);
+    purchaseVerificationResultCallbackMethod(verificationStatus, jCode, message);
+    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    env->ReleaseStringUTFChars(jMessage, messageCStr);
+}
+
 void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
     if (NULL == executeTestLibCommandCallbackMethod) {
         executeTestLibCommandCallbackMethod = callbackMethod;
@@ -594,7 +624,7 @@ void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string cl
 
 void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     if (NULL == attributionCallbackMethod) {
-    	attributionCallbackMethod = callbackMethod;
+        attributionCallbackMethod = callbackMethod;
     }
 }
 
@@ -629,8 +659,21 @@ void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deepli
 }
 
 void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
-	if (NULL == adIdCallbackMethod) {
-		adIdCallbackMethod = callbackMethod;
-	}
+    if (NULL == adIdCallbackMethod) {
+        adIdCallbackMethod = callbackMethod;
+    }
 }
+
+void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink)) {
+    if (NULL == resolvedLinkCallbackMethod) {
+        resolvedLinkCallbackMethod = callbackMethod;
+    }
+}
+
+void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
+    if (NULL == purchaseVerificationResultCallbackMethod) {
+        purchaseVerificationResultCallbackMethod = callbackMethod;
+    }
+}
+
 #endif

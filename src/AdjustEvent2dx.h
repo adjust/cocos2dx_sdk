@@ -44,11 +44,14 @@ public:
     void setCallbackId(std::string callbackId);
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
+    void setProductId(std::string productId);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getEvent();
+    void setPurchaseToken(std::string purchaseToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJEvent2dx getEvent();
     void setReceipt(std::string receipt, std::string transactionId);
+    void setReceipt(std::string receipt);
 #endif
 };
 

@@ -22,13 +22,15 @@ static ADJDelegate2dx *defaultInstance = nil;
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
           swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
+  swizzleOfPostbackConversionValueUpdatedCallback:(BOOL)swizzlePostbackConversionValueUpdatedCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId {
+                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId
+         postbackConversionValueUpdatedCallbackId:(void (*)(int conversionValue, std::string coarseValue, bool lockWindow))postbackConversionValueUpdatedCallbackId {
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 
@@ -61,7 +63,11 @@ static ADJDelegate2dx *defaultInstance = nil;
             [defaultInstance swizzleCallbackMethod:@selector(adjustConversionValueUpdated:)
                                   swizzledSelector:@selector(adjustConversionValueUpdatedWannabe:)];
         }
-        
+        if (swizzlePostbackConversionValueUpdatedCallback) {
+            [defaultInstance swizzleCallbackMethod:@selector(adjustConversionValueUpdated:coarseValue:lockWindow:)
+                                  swizzledSelector:@selector(adjustConversionValueUpdatedWannabe:coarseValue:lockWindow:)];
+        }
+
         [defaultInstance setAttributionCallbackMethod:attributionCallbackId];
         [defaultInstance setEventSuccessCallbackMethod:eventSuccessCallbackId];
         [defaultInstance setEventFailureCallbackMethod:eventFailureCallbackId];
@@ -69,6 +75,7 @@ static ADJDelegate2dx *defaultInstance = nil;
         [defaultInstance setSessionFailureCallbackMethod:sessionFailureCallbackId];
         [defaultInstance setDeferredDeeplinkCallbackMethod:deferredDeeplinkCallbackId];
         [defaultInstance setConversionValueUpdatedCallbackMethod:conversionValueUpdatedCallbackId];
+        [defaultInstance setPostbackConversionValueUpdatedCallbackMethod:postbackConversionValueUpdatedCallbackId];
     });
     
     return defaultInstance;
@@ -264,6 +271,17 @@ static ADJDelegate2dx *defaultInstance = nil;
         return;
     }
     _conversionValueUpdatedCallbackMethod([conversionValue intValue]);
+}
+
+- (void)adjustConversionValueUpdatedWannabe:(NSNumber *)fineValue
+                                coarseValue:(NSString *)coarseValue
+                                 lockWindow:(NSNumber *)lockWindow {
+    if (fineValue == nil || coarseValue == nil || lockWindow == nil) {
+        return;
+    }
+    _postbackConversionValueUpdatedCallbackMethod([fineValue intValue],
+                                                  std::string([coarseValue UTF8String]),
+                                                  [lockWindow boolValue]);
 }
 
 - (void)swizzleCallbackMethod:(SEL)originalSelector

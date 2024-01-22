@@ -43,6 +43,14 @@ void ADJEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
                        transactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
 }
 
+void ADJEvent2dx::setProductId(std::string productId) {
+    [((ADJEvent *)event) setProductId:[NSString stringWithUTF8String:productId.c_str()]];
+}
+
+void ADJEvent2dx::setReceipt(std::string receipt) {
+    [((ADJEvent *)event) setReceipt:[[NSString stringWithUTF8String:receipt.c_str()] dataUsingEncoding:NSUTF8StringEncoding]];
+}
+
 bool ADJEvent2dx::isValid() {
     return [((ADJEvent *)event) isValid];
 }

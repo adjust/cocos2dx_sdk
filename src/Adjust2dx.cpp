@@ -55,6 +55,12 @@ void Adjust2dx::trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscrip
 #endif
 }
 
+void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), verificationCallback);
+#endif
+}
+
 void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiTrackPlayStoreSubscription;
@@ -62,6 +68,21 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
         return;
     }
     jmiTrackPlayStoreSubscription.env->CallStaticVoidMethod(jmiTrackPlayStoreSubscription.classID, jmiTrackPlayStoreSubscription.methodID, subscription.getSubscription());
+#endif
+}
+
+void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    setPurchaseVerificationResultCallbackMethod(verificationCallback);
+    cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
+        return;
+    }
+    jclass clsAdjust2dxPurchaseVerificationResultCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxPurchaseVerificationResultCallback");
+    jmethodID jmidInit = jmiVerifyPlayStorePurchase.env->GetMethodID(clsAdjust2dxPurchaseVerificationResultCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxPurchaseVerificationResultCallback, jmidInit);
+    jmiVerifyPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyPlayStorePurchase.classID, jmiVerifyPlayStorePurchase.methodID, purchase.getPurchase(), jCallbackProxy);
+    jmiVerifyPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
@@ -577,6 +598,36 @@ void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
 #endif
 }
 
+void Adjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::processDeeplink(url, resolvedLinkCallback);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    setResolvedLinkCallbackMethod(resolvedLinkCallback);
+    cocos2d::JniMethodInfo jmiProcessDeeplink;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "processDeeplink", "(Landroid/net/Uri;Landroid/content/Context;Lcom/adjust/sdk/OnDeeplinkResolvedListener;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jclass jcUri = jmiProcessDeeplink.env->FindClass("android/net/Uri");
+    jmethodID midParse = jmiProcessDeeplink.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
+    jstring jUrl = jmiProcessDeeplink.env->NewStringUTF(url.c_str());
+    jobject jUri = jmiProcessDeeplink.env->CallStaticObjectMethod(jcUri, midParse, jUrl);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jclass clsAdjust2dxResolvedLinkCallback = jmiProcessDeeplink.env->FindClass("com/adjust/sdk/Adjust2dxResolvedLinkCallback");
+    jmethodID jmidInit = jmiProcessDeeplink.env->GetMethodID(clsAdjust2dxResolvedLinkCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiProcessDeeplink.env->NewObject(clsAdjust2dxResolvedLinkCallback, jmidInit);
+    jmiProcessDeeplink.env->CallStaticVoidMethod(jmiProcessDeeplink.classID, jmiProcessDeeplink.methodID, jUri, jContext, jCallbackProxy);
+    jmiProcessDeeplink.env->DeleteLocalRef(jUrl);
+    jmiProcessDeeplink.env->DeleteLocalRef(jUri);
+    jmiGetContext.env->DeleteLocalRef(jContext);
+    jmiProcessDeeplink.env->DeleteLocalRef(jCallbackProxy);
+#endif
+}
+
 void Adjust2dx::setReferrer(std::string referrer) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetReferrer;
@@ -702,6 +753,24 @@ void Adjust2dx::updateConversionValue(int conversionValue) {
 #endif
 }
 
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, errorCallback);
+#endif
+}
+
+void Adjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    ADJAdjust2dx::updatePostbackConversionValue(conversionValue, coarseValue, lockWindow, errorCallback);
+#endif
+}
+
 void Adjust2dx::checkForNewAttStatus() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::checkForNewAttStatus();
@@ -711,6 +780,14 @@ void Adjust2dx::checkForNewAttStatus() {
 std::string Adjust2dx::getLastDeeplink() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::getLastDeeplink();
+#else
+    return "";
+#endif
+}
+
+std::string Adjust2dx::getIdfv() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    return ADJAdjust2dx::getIdfv();
 #else
     return "";
 #endif
@@ -770,6 +847,11 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     jfieldID jfidSubscriptionUrl = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionUrl, jsSubscriptionUrl);
 
+    // Purchase verification URL.
+    jstring jsPurchaseVerificationUrl = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationUrl"].c_str());
+    jfieldID jfidPurchaseVerificationUrl = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationUrl", "Ljava/lang/String;");
+    jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationUrl, jsPurchaseVerificationUrl);
+
     // Base path.
     if (testOptions.find("basePath") != testOptions.end()) {
         jstring jsBasePath = jmiInit.env->NewStringUTF(testOptions["basePath"].c_str());
@@ -784,11 +866,18 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
         jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsGdprPath);
     }
 
-    // GDPR path.
+    // Subscription path.
     if (testOptions.find("subscriptionPath") != testOptions.end()) {
         jstring jsSubscriptionPath = jmiInit.env->NewStringUTF(testOptions["subscriptionPath"].c_str());
         jfieldID jfidSubscriptionPath = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionPath", "Ljava/lang/String;");
         jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionPath, jsSubscriptionPath);
+    }
+
+    // Purchase verification path.
+    if (testOptions.find("purchaseVerificationPath") != testOptions.end()) {
+        jstring jsPurchaseVerificationPath = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationPath"].c_str());
+        jfieldID jfidPurchaseVerificationPath = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationPath", "Ljava/lang/String;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationPath, jsPurchaseVerificationPath);
     }
 
     // Use test connection options.

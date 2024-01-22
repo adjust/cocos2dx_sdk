@@ -1,3 +1,25 @@
+### Version 4.37.0 (22nd January 2024)
+#### Added
+- Added support for SKAD 4.0.
+- Added ability to verify purchase events.
+- Added ability to read App Set ID on Android platform in case you opt in by adding the `com.google.android.gms:play-services-appset` dependency to your Android app.
+- Added ability to delay SDK start on iOS platform in order to wait for an answer to the ATT dialog. You can set the number of seconds to wait (capped internally to 120) by calling the `setAttConsentWaitingInterval` method of the `AdjustConfig2dx` instance.
+- Added support for SigV3 library. Update authorization header building logic to use `adj_signing_id`.
+- Added ability to indicate if only final Android attribution is needed in attribution callback (by default attribution callback return intermediate attribution as well before final attribution if not enabled with this setter method) calling the `setFinalAttributionEnabled` method of the `AdjustConfig2dx` instance.
+- Added ability to get IDFV value of the iOS device. You can achieve this by invoking `getIdfv()` method of the `Adjust2dx` instance.
+- Added support for Meta install referrer.
+- Added support for Google Play Games on PC.
+- Added support for `TopOn` and `AD(X)` ad revenue tracking.
+- Added `setReadDeviceInfoOnceEnabled` method to `AdjustConfig2dx` to indicate if device info should be read only once.
+- Added ability to process shortened deep links and provide the unshortened link back as a response. You can achieve this by invoking `processDeeplink` method of the `Adjust2dx` instance.
+- Added support for setting a new China URL strategy (with fallback to other endpoints) and China only URL strategy (without fallbacks). You can choose this setting by calling `setUrlStrategy` method of `AdjustConfig2dx` instance with `AdjustUrlStrategyCn` / `AdjustUrlStrategyCnOnly` parameter.
+
+#### Native SDKs
+- [iOS@v4.37.0][ios_sdk_v4.37.0]
+- [Android@v4.38.0][android_sdk_v4.38.0]
+
+---
+
 ### Version 4.32.0 (20th October 2022)
 #### Added
 - Added ability to mark your app as COPPA compliant. You can enable this setting by calling `setCoppaCompliantEnabled` method of `AdjustConfig2dx` instance with boolean parameter `true`.
@@ -392,6 +414,7 @@
 [ios_sdk_v4.28.0]: https://github.com/adjust/ios_sdk/tree/v4.28.0
 [ios_sdk_v4.29.6]: https://github.com/adjust/ios_sdk/tree/v4.29.6
 [ios_sdk_v4.32.1]: https://github.com/adjust/ios_sdk/tree/v4.32.1
+[ios_sdk_v4.37.0]: https://github.com/adjust/ios_sdk/tree/v4.37.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -415,5 +438,6 @@
 [android_sdk_v4.27.0]: https://github.com/adjust/android_sdk/tree/v4.27.0
 [android_sdk_v4.28.4]: https://github.com/adjust/android_sdk/tree/v4.28.4
 [android_sdk_v4.33.0]: https://github.com/adjust/android_sdk/tree/v4.33.0
+[android_sdk_v4.38.0]: https://github.com/adjust/android_sdk/tree/v4.38.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3

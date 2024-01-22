@@ -17,10 +17,14 @@
 static std::string localBasePath;
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
-AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl, std::string gdprUrl, std::string subscriptionUrl) {
+AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl,
+                                             std::string gdprUrl,
+                                             std::string subscriptionUrl,
+                                             std::string purchaseVerificationUrl) {
     this->baseUrl = baseUrl;
     this->gdprUrl = gdprUrl;
     this->subscriptionUrl = subscriptionUrl;
+    this->purchaseVerificationUrl = purchaseVerificationUrl;
 }
 
 void AdjustCommandExecutor::executeCommand(Command *command) {
@@ -81,6 +85,10 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->trackAdRevenueNew();
     } else if (command->methodName == "getLastDeeplink") {
         this->getLastDeeplink();
+    } else if (command->methodName == "verifyPurchase") {
+        this->verifyPurchase();
+    } else if (command->methodName == "processDeeplink") {
+        this->processDeeplink();
     }
 }
 
@@ -89,10 +97,12 @@ void AdjustCommandExecutor::testOptions() {
     testOptions["baseUrl"] = this->baseUrl;
     testOptions["gdprUrl"] = this->gdprUrl;
     testOptions["subscriptionUrl"] = this->subscriptionUrl;
+    testOptions["purchaseVerificationUrl"] = this->purchaseVerificationUrl;
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
         this->gdprPath = command->getFirstParameterValue("basePath");
         this->subscriptionPath = command->getFirstParameterValue("basePath");
+        this->purchaseVerificationPath = command->getFirstParameterValue("basePath");
         this->extraPath = command->getFirstParameterValue("basePath");
     }
     if (this->command->containsParameter("timerInterval")) {
@@ -137,6 +147,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["basePath"] = this->basePath;
                 testOptions["gdprPath"] = this->gdprPath;
                 testOptions["subscriptionPath"] = this->subscriptionPath;
+                testOptions["purchaseVerificationPath"] = this->purchaseVerificationPath;
                 testOptions["extraPath"] = this->extraPath;
                 // Android specific.
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -168,6 +179,7 @@ void AdjustCommandExecutor::testOptions() {
                 testOptions["basePath"] = "";
                 testOptions["gdprPath"] = "";
                 testOptions["subscriptionPath"] = "";
+                testOptions["purchaseVerificationPath"] = "";
                 testOptions["extraPath"] = "";
                 // Android specific.
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
@@ -349,6 +361,12 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
     }
 
+    if (this->command->containsParameter("finalAttributionEnabled")) {
+        std::string finalAttributionEnabledString = command->getFirstParameterValue("finalAttributionEnabled");
+        bool finalAttributionEnabled = (finalAttributionEnabledString == "true");
+        adjustConfig->setFinalAttributionEnabled(finalAttributionEnabled);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
@@ -514,6 +532,28 @@ void AdjustCommandExecutor::event() {
         std::string callbackId = command->getFirstParameterValue("callbackId");
         adjustEvent->setCallbackId(callbackId);
     }
+
+    if (this->command->containsParameter("transactionId")) {
+        std::string transactionId = command->getFirstParameterValue("transactionId");
+        adjustEvent->setTransactionId(transactionId);
+    }
+
+    if (this->command->containsParameter("productId")) {
+        std::string productId = command->getFirstParameterValue("productId");
+        adjustEvent->setProductId(productId);
+    }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (this->command->containsParameter("purchaseToken")) {
+        std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
+        adjustEvent->setPurchaseToken(purchaseToken);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (this->command->containsParameter("receipt")) {
+        std::string receipt = command->getFirstParameterValue("receipt");
+        adjustEvent->setReceipt(receipt);
+    }
+#endif
 }
 
 void AdjustCommandExecutor::trackEvent() {
@@ -814,11 +854,48 @@ void AdjustCommandExecutor::trackAdRevenueNew() {
 }
 
 void AdjustCommandExecutor::getLastDeeplink() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     localBasePath = this->basePath;
     std::string lastDeeplink = Adjust2dx::getLastDeeplink();
     TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
     TestLib2dx::sendInfoToServer(localBasePath);
+}
+
+void AdjustCommandExecutor::verifyPurchase() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    std::string productId = command->getFirstParameterValue("productId");
+    std::string transactionId = command->getFirstParameterValue("transactionId");
+    std::string receipt = command->getFirstParameterValue("receipt");
+
+    AdjustAppStorePurchase2dx purchase = AdjustAppStorePurchase2dx(productId, transactionId, receipt);
+
+    localBasePath = this->basePath;
+    Adjust2dx::verifyAppStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
+        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
+        TestLib2dx::addInfoToSend("code", std::to_string(code));
+        TestLib2dx::addInfoToSend("message", message);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string productId = command->getFirstParameterValue("productId");
+    std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
+
+    AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
+
+    localBasePath = this->basePath;
+    Adjust2dx::verifyPlayStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
+        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
+        TestLib2dx::addInfoToSend("code", std::to_string(code));
+        TestLib2dx::addInfoToSend("message", message);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
 #endif
+}
+
+void AdjustCommandExecutor::processDeeplink() {
+    std::string deeplink = command->getFirstParameterValue("deeplink");
+    localBasePath = this->basePath;
+    Adjust2dx::processDeeplink(deeplink, [](std::string resolvedLink) {
+        TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
 }
