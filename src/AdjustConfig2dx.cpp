@@ -123,25 +123,7 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
 #endif
 }
 
-void AdjustConfig2dx::setDelayStart(double delayStart) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetDelayStart;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetDelayStart, "com/adjust/sdk/AdjustConfig", "setDelayStart", "(D)V")) {
-        return;
-    }
-
-    jmiSetDelayStart.env->CallVoidMethod(config, jmiSetDelayStart.methodID, delayStart);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setDelayStart(delayStart);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
+void AdjustConfig2dx::enableSendingInBackground() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
@@ -154,33 +136,12 @@ void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
     jmiSetSendInBackground.env->CallVoidMethod(config, jmiSetSendInBackground.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSendInBackground(isEnabled);
+        config.enableSendingInBackground();
     }
 #endif
 }
 
-void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetEventBufferingEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig", "setEventBufferingEnabled", "(Ljava/lang/Boolean;)V")) {
-        return;
-    }
-
-    jclass jclsBoolean = jmiSetEventBufferingEnabled.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetEventBufferingEnabled.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jIsEnabled = jmiSetEventBufferingEnabled.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, isEnabled);
-    jmiSetEventBufferingEnabled.env->CallVoidMethod(config, jmiSetEventBufferingEnabled.methodID, jIsEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setEventBufferingEnabled(isEnabled);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setNeedsCost(bool needsCost) {
+void AdjustConfig2dx::enableCostDataInAttribution() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
@@ -196,51 +157,25 @@ void AdjustConfig2dx::setNeedsCost(bool needsCost) {
     jmiSetNeedsCost.env->CallVoidMethod(config, jmiSetNeedsCost.methodID, jNeedsCost);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setNeedsCost(needsCost);
+        config.enableCostDataInAttribution();
     }
 #endif
 }
 
-void AdjustConfig2dx::setAllowIdfaReading(bool isAllowed) {
+void AdjustConfig2dx::disableIdfaReading() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setAllowIdfaReading(isAllowed);
+        config.disableIdfaReading();
     }
 #endif
 }
 
-void AdjustConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
+void AdjustConfig2dx::disableAdServices() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setAllowiAdInfoReading(isAllowed);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setAllowAdServicesInfoReading(bool isAllowed) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setAllowAdServicesInfoReading(isAllowed);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setUserAgent(std::string userAgent) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiSetUserAgent;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUserAgent, "com/adjust/sdk/AdjustConfig", "setUserAgent", "(Ljava/lang/String;)V")) {
-        return;
-    }
-
-    jstring jUserAgent = jmiSetUserAgent.env->NewStringUTF(userAgent.c_str());
-    jmiSetUserAgent.env->CallVoidMethod(config, jmiSetUserAgent.methodID, jUserAgent);
-    jmiSetUserAgent.env->DeleteLocalRef(jUserAgent);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setUserAgent(userAgent);
+        config.disableAdServices();
     }
 #endif
 }
@@ -285,7 +220,10 @@ void AdjustConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
 #endif
 }
 
-void AdjustConfig2dx::setUrlStrategy(std::string urlStrategy) {
+void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                                     bool useSubdomains,
+                                     bool isDataResidency)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
@@ -340,7 +278,7 @@ void AdjustConfig2dx::setUrlStrategy(std::string urlStrategy) {
     }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setUrlStrategy(urlStrategy);
+        config.setUrlStrategy(urlStrategyDomains, useSubdomains, isDataResidency);
     }
 #endif
 }
@@ -383,44 +321,10 @@ void AdjustConfig2dx::setPreinstallFilePath(std::string externalDeviceId) {
 #endif
 }
 
-void AdjustConfig2dx::setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetAppSecret;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetAppSecret, "com/adjust/sdk/AdjustConfig", "setAppSecret", "(JJJJJ)V")) {
-        return;
-    }
-    jmiSetAppSecret.env->CallVoidMethod(config, jmiSetAppSecret.methodID, secretId, info1, info2, info3, info4);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setAppSecret(secretId, info1, info2, info3, info4);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetDeviceKnown;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetDeviceKnown, "com/adjust/sdk/AdjustConfig", "setDeviceKnown", "(Z)V")) {
-        return;
-    }
-    jmiSetDeviceKnown.env->CallVoidMethod(config, jmiSetDeviceKnown.methodID, isDeviceKnown);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setIsDeviceKnown(isDeviceKnown);
-    }
-#endif
-}
-
-void AdjustConfig2dx::deactivateSkAdNetworkHandling() {
+void AdjustConfig2dx::disableSkanAttribution() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.deactivateSkAdNetworkHandling();
+        config.disableSkanAttribution();
     }
 #endif
 }
@@ -640,24 +544,7 @@ void AdjustConfig2dx::setPostbackConversionValueUpdatedCallback(void(*postbackCo
 #endif
 }
 
-void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetCoppaCompliantEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCoppaCompliantEnabled, "com/adjust/sdk/AdjustConfig", "setCoppaCompliantEnabled", "(Z)V")) {
-        return;
-    }
-    jmiSetCoppaCompliantEnabled.env->CallVoidMethod(config, jmiSetCoppaCompliantEnabled.methodID, isEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setCoppaCompliantEnabled(isEnabled);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
+void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
@@ -669,7 +556,7 @@ void AdjustConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
     jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiSetReadDeviceInfoOnceEnabled.methodID, isEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setReadDeviceInfoOnceEnabled(isEnabled);
+        config.enableDeviceIdsReadingOnce();
     }
 #endif
 }
@@ -719,11 +606,11 @@ void AdjustConfig2dx::setFbAppId(std::string fbAppId) {
 #endif
 }
 
-void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
+void AdjustConfig2dx::enableLinkMe() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setLinkMeEnabled(isEnabled);
+        config.enableLinkMe();
     }
 #endif
 }

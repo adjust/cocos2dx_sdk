@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include <iostream>
+#include <vector>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
 #include "AdjustEventSuccess2dx.h"
@@ -83,34 +84,29 @@ public:
 #endif
     }
 
-    void setDeviceKnown(bool isDeviceKnown);
-    void setSendInBackground(bool isEnabled);
-    void setEventBufferingEnabled(bool isEnabled);
-    void setNeedsCost(bool needsCost);
-    void setUserAgent(std::string userAgent);
+    void enableSendingInBackground();
+    void enableCostDataInAttribution();
     void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
     void setExternalDeviceId(std::string externalDeviceId);
-    void setUrlStrategy(std::string urlStrategy);
-    void setDelayStart(double delayStart);    
+    void setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                        bool useSubdomains,
+                        bool isDataResidency);
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
-    void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
-    void setCoppaCompliantEnabled(bool isEnabled);
-    void setReadDeviceInfoOnceEnabled(bool isEnabled);
+    void enableDeviceIdsReadingOnce();
     // iOS only
-    void deactivateSkAdNetworkHandling();
-    void setAllowIdfaReading(bool isAllowed);
-    void setAllowiAdInfoReading(bool isAllowed);
-    void setAllowAdServicesInfoReading(bool isAllowed);
+    void disableSkanAttribution();
+    void disableIdfaReading();
+    void disableAdServices();
     void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
     void setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow));
-    void setLinkMeEnabled(bool isEnabled);
+    void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only
     void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);

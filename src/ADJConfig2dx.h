@@ -10,6 +10,7 @@
 #define _ADJUST_ADJCONFIG2DX_H_
 
 #include <iostream>
+#include <vector>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
 #include "AdjustEventSuccess2dx.h"
@@ -48,23 +49,18 @@ public:
         initConfig(appToken, environment, allowSuppressLogLevel, sdkPrefix);
     }
 
-    void setDelayStart(double delayStart);
     void setLogLevel(ADJLogLevel2dx logLevel);
-    void setSendInBackground(bool isEnabled);
-    void setEventBufferingEnabled(bool isEnabled);
-    void setAllowIdfaReading(bool isAllowed);
-    void setAllowiAdInfoReading(bool isAllowed);
-    void setAllowAdServicesInfoReading(bool isAllowed);
-    void setNeedsCost(bool needsCost);
-    void setUserAgent(std::string userAgent);
+    void enableSendingInBackground();
+    void disableIdfaReading();
+    void disableAdServices();
+    void enableCostDataInAttribution();
     void setDefaultTracker(std::string defaultTracker);
     void setExternalDeviceId(std::string externalDeviceId);
-    void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
-    void setIsDeviceKnown(bool isDeviceKnown);
-    void setUrlStrategy(std::string urlStrategy);
-    void deactivateSkAdNetworkHandling();
-    void setCoppaCompliantEnabled(bool isEnabled);
-    void setLinkMeEnabled(bool isEnabled);
+    void setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                        bool useSubdomains,
+                        bool isDataResidency);
+    void disableSkanAttribution();
+    void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*callbackMethod)(AdjustEventSuccess2dx eventSuccess));
@@ -74,7 +70,7 @@ public:
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
     void setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue));
     void setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow));
-    void setReadDeviceInfoOnceEnabled(bool isEnabled);
+    void enableDeviceIdsReadingOnce();
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

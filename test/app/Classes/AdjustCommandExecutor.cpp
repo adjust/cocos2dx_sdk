@@ -262,76 +262,54 @@ void AdjustCommandExecutor::config() {
         }
     }
 
-    if (this->command->containsParameter("appSecret")) {
-        try {
-            std::vector<std::string> appSecretArray = command->getParameters("appSecret");
+    /*
+     if ([parameters objectForKey:@"needsCost"]) {
+         NSString *needsCostS = [parameters objectForKey:@"needsCost"][0];
+         if ([needsCostS boolValue] == YES) {
+             [adjustConfig enableCostDataInAttribution];
+         }
+     }
 
-            if (appSecretArray[0].length() > 0
-                && appSecretArray[1].length() > 0
-                && appSecretArray[2].length() > 0
-                && appSecretArray[3].length() > 0
-                && appSecretArray[4].length() > 0) {
-                unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
-                unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
-                unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
-                unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
-                unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
-                adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
-            }
+     */
+
+    if (this->command->containsParameter("needsCost")) {
+        std::string needsCostString = command->getFirstParameterValue("needsCost");
+        bool needsCost = (needsCostString == "true");
+        if (needsCost) {
+            adjustConfig->enableCostDataInAttribution();
         }
-        catch (const std::exception &e) {
-            CCLOG("\n[AdjustCommandExecutor]: appSecret exception: %s", e.what());
-        }
-    }
-
-    if (this->command->containsParameter("delayStart")) {
-        std::string delayStartString = command->getFirstParameterValue("delayStart");
-        double delayStart = std::stod(delayStartString);
-        adjustConfig->setDelayStart(delayStart);
-    }
-
-    if (this->command->containsParameter("deviceKnown")) {
-        std::string deviceKnownString = command->getFirstParameterValue("deviceKnown");
-        bool deviceKnown = (deviceKnownString == "true");
-        adjustConfig->setDeviceKnown(deviceKnown);
-    }
-
-    if (this->command->containsParameter("eventBufferingEnabled")) {
-        std::string eventBufferingEnabledString = command->getFirstParameterValue("eventBufferingEnabled");
-        bool eventBufferingEnabled = (eventBufferingEnabledString == "true");
-        adjustConfig->setEventBufferingEnabled(eventBufferingEnabled);
     }
 
     if (this->command->containsParameter("allowIdfaReading")) {
         std::string allowIdfaReadingString = command->getFirstParameterValue("allowIdfaReading");
         bool allowIdfaReading = (allowIdfaReadingString == "true");
-        adjustConfig->setAllowIdfaReading(allowIdfaReading);
+        if (! allowIdfaReading) {
+            adjustConfig->disableIdfaReading();
+        }
     }
 
-    if (this->command->containsParameter("allowiAdInfoReading")) {
-        std::string allowiAdInfoReadingString = command->getFirstParameterValue("allowiAdInfoReading");
-        bool allowiAdInfoReading = (allowiAdInfoReadingString == "true");
-        adjustConfig->setAllowiAdInfoReading(allowiAdInfoReading);
-    }
-    
     if (this->command->containsParameter("allowAdServicesInfoReading")) {
         std::string allowAdServicesInfoReadingString = command->getFirstParameterValue("allowAdServicesInfoReading");
         bool allowAdServicesInfoReading = (allowAdServicesInfoReadingString == "true");
-        adjustConfig->setAllowAdServicesInfoReading(allowAdServicesInfoReading);
+        if (! allowAdServicesInfoReading) {
+            adjustConfig->disableAdServices();
+        }
     }
 
     if (this->command->containsParameter("allowSkAdNetworkHandling")) {
         std::string allowSkAdNetworkHandlingString = command->getFirstParameterValue("allowSkAdNetworkHandling");
         bool allowSkAdNetworkHandling = (allowSkAdNetworkHandlingString == "true");
         if (allowSkAdNetworkHandling == false) {
-            adjustConfig->deactivateSkAdNetworkHandling();
+            adjustConfig->disableSkanAttribution();
         }
     }
 
     if (this->command->containsParameter("sendInBackground")) {
         std::string sendInBackgroundString = command->getFirstParameterValue("sendInBackground");
         bool sendInBackground = (sendInBackgroundString == "true");
-        adjustConfig->setSendInBackground(sendInBackground);
+        if (sendInBackground) {
+            adjustConfig->enableSendingInBackground();
+        }
     }
 
     if (this->command->containsParameter("defaultTracker")) {
@@ -342,17 +320,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("externalDeviceId")) {
         std::string externalDeviceId = command->getFirstParameterValue("externalDeviceId");
         adjustConfig->setExternalDeviceId(externalDeviceId);
-    }
-
-    if (this->command->containsParameter("userAgent")) {
-        std::string userAgent = command->getFirstParameterValue("userAgent");
-        adjustConfig->setUserAgent(userAgent);
-    }
-
-    if (this->command->containsParameter("coppaCompliant")) {
-        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
-        bool coppaCompliant = (coppaCompliantString == "true");
-        adjustConfig->setCoppaCompliantEnabled(coppaCompliant);
     }
 
     if (this->command->containsParameter("playStoreKids")) {
