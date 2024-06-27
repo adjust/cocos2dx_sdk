@@ -24,14 +24,14 @@ args = parser.parse_args()
 dir_scripts     = os.path.dirname(os.path.realpath(__file__))
 dir_root        = os.path.dirname(os.path.normpath(dir_scripts))
 dir_ext_android = '{0}/ext/android'.format(dir_root)
-dir_ext_ios     = '{0}/ext/ios'.format(dir_root)
+dir_ext_ios     = '{0}/ext/ios_dev/ios_sdk_dev'.format(dir_root)
 
 # ------------------------------------------------------------------
 # Call platform specific build method.
 try:
     if args.platform == 'ios':
         set_log_tag('IOS-SDK-BUILD')
-        check_submodule_dir('iOS', dir_ext_ios + '/sdk')
+        check_submodule_dir('iOS', dir_ext_ios)
         ios.build(dir_root, dir_ext_ios, args.apptype, args.configuration, args.apppath)
     else:
         set_log_tag('ANROID-SDK-BUILD')

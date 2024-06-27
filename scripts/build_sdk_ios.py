@@ -61,7 +61,7 @@ def build_test(root_dir, ios_submodule_dir, configuration, app_path):
 def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # ------------------------------------------------------------------
     # Paths.
-    build_dir          = '{0}/sdk'.format(ios_submodule_dir)
+    build_dir          = '{0}'.format(ios_submodule_dir)
     test_lib_build_dir = '{0}/AdjustTests/AdjustTestLibrary'.format(build_dir)
     lib_out_dir        = '{0}/libs/ios'.format(root_dir)
     test_lib_out_dir   = '{0}/test/libs/ios'.format(root_dir)

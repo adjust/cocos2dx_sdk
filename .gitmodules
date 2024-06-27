@@ -6,3 +6,6 @@
 	path = ext/android/sdk
 	url = git@github.com:adjust/android_sdk.git
 	branch = master
+[submodule "ext/ios_dev/ios_sdk_dev"]
+	path = ext/ios_dev/ios_sdk_dev
+	url = git@github.com:adjust/ios_sdk_dev.git
