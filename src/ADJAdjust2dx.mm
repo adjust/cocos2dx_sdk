@@ -13,15 +13,14 @@
 const std::string ADJEnvironmentSandbox2dx = std::string([ADJEnvironmentSandbox UTF8String]);
 const std::string ADJEnvironmentProduction2dx = std::string([ADJEnvironmentProduction UTF8String]);
 
-void ADJAdjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
+void ADJAdjust2dx::initSdk(ADJConfig2dx adjustConfig) {
     BOOL isAttributionCallbackImplemented = NULL != adjustConfig.getAttributionCallback() ? YES : NO;
     BOOL isEventSuccessCallbackImplemented = NULL != adjustConfig.getEventSuccessCallback() ? YES : NO;
     BOOL isEventFailureCallbackImplemented = NULL != adjustConfig.getEventFailureCallback() ? YES : NO;
     BOOL isSessionSuccessCallbackImplemented = NULL != adjustConfig.getSessionSuccessCallback() ? YES : NO;
     BOOL isSessionFailureCallbackImplemented = NULL != adjustConfig.getSessionFailureCallback() ? YES : NO;
     BOOL isDeferredDeeplinkCallbackImplemented = NULL != adjustConfig.getDeferredDeeplinkCallback() ? YES : NO;
-    BOOL isConversionValueUpdatedListenerImplemented = NULL != adjustConfig.getConversionValueUpdatedCallback() ? YES : NO;
-    BOOL isPostbackConversionValueUpdatedCallbackImplemented = NULL != adjustConfig.getPostbackConversionValueUpdatedCallback() ? YES : NO;
+    BOOL isSkanUpdatedWithConversionDataCallbackImplemented = NULL != adjustConfig.getSkanUpdatedWithConversionDataCallback() ? YES : NO;
 
     if (isAttributionCallbackImplemented
         || isEventSuccessCallbackImplemented
@@ -29,28 +28,26 @@ void ADJAdjust2dx::appDidLaunch(ADJConfig2dx adjustConfig) {
         || isSessionSuccessCallbackImplemented
         || isSessionFailureCallbackImplemented
         || isDeferredDeeplinkCallbackImplemented
-        || isConversionValueUpdatedListenerImplemented
-        || isPostbackConversionValueUpdatedCallbackImplemented) {
-        ((ADJConfig *)adjustConfig.getConfig()).delegate = 
+        || isSkanUpdatedWithConversionDataCallbackImplemented)
+    {
+        ((ADJConfig *)adjustConfig.getConfig()).delegate =
         [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
                                       swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
                                       swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
                                     swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
                                     swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
                                   swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
-                            swizzleOfConversionValueUpdatedCallback:isConversionValueUpdatedListenerImplemented
-                    swizzleOfPostbackConversionValueUpdatedCallback:isPostbackConversionValueUpdatedCallbackImplemented
+                       swizzleSkanUpdatedWithConversionDataCallback:isSkanUpdatedWithConversionDataCallbackImplemented
                                            andAttributionCallbackId:adjustConfig.getAttributionCallback()
                                              eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
                                              eventFailureCallbackId:adjustConfig.getEventFailureCallback()
                                            sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
                                            sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
                                          deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
-                                   conversionValueUpdatedCallbackId:adjustConfig.getConversionValueUpdatedCallback()
-                           postbackConversionValueUpdatedCallbackId:adjustConfig.getPostbackConversionValueUpdatedCallback()];
+                            skanUpdatedWithConversionDataCallbackId:adjustConfig.getSkanUpdatedWithConversionDataCallback()];
     }
 
-    [Adjust appDidLaunch:(ADJConfig *)adjustConfig.getConfig()];
+    [Adjust initSdk:(ADJConfig *)adjustConfig.getConfig()];
 }
 
 void ADJAdjust2dx::trackEvent(ADJEvent2dx adjustEvent) {
@@ -58,12 +55,24 @@ void ADJAdjust2dx::trackEvent(ADJEvent2dx adjustEvent) {
 }
 
 void ADJAdjust2dx::trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription) {
-    [Adjust trackSubscription:(ADJSubscription *)subscription.getSubscription()];
+    [Adjust trackAppStoreSubscription:(ADJAppStoreSubscription *)subscription.getSubscription()];
 }
 
 void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
-    [Adjust verifyPurchase:(ADJPurchase *)purchase.getPurchase() completionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+    [Adjust verifyAppStorePurchase:(ADJAppStorePurchase *)purchase.getPurchase()
+             withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
         if (verificationCallback != NULL) {
+            verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
+                                 verificationResult.code,
+                                 std::string([verificationResult.message UTF8String]));
+        }
+    }];
+}
+
+void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+    [Adjust verifyAndTrackAppStorePurchase:(ADJEvent *)adjustEvent.getEvent()
+                     withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+        if (verificationResult != NULL) {
             verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
                                  verificationResult.code,
                                  std::string([verificationResult.message UTF8String]));
@@ -79,63 +88,60 @@ void ADJAdjust2dx::trackSubsessionEnd() {
     [Adjust trackSubsessionEnd];
 }
 
-void ADJAdjust2dx::setEnabled(bool isEnabled) {
-    [Adjust setEnabled:isEnabled];
+void ADJAdjust2dx::enable() {
+    [Adjust enable];
 }
 
-void ADJAdjust2dx::appWillOpenUrl(std::string url) {
+void ADJAdjust2dx::disable() {
+    [Adjust disable];
+}
+
+void ADJAdjust2dx::processDeeplink(std::string url) {
     NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
-    [Adjust appWillOpenUrl:pUrl];
+    [Adjust processDeeplink:pUrl];
 }
 
-void ADJAdjust2dx::setDeviceToken(std::string deviceToken) {
-    NSString *pPushToken = [NSString stringWithUTF8String:deviceToken.c_str()];
-    [Adjust setPushToken:pPushToken];
+void ADJAdjust2dx::setPushTokenAsString(std::string pushToken) {
+    NSString *pPushToken = [NSString stringWithUTF8String:pushToken.c_str()];
+    [Adjust setPushTokenAsString:pPushToken];
 }
 
-void ADJAdjust2dx::setOfflineMode(bool isOffline) {
-    [Adjust setOfflineMode:isOffline];
+void ADJAdjust2dx::switchToOfflineMode() {
+    [Adjust switchToOfflineMode];
 }
 
-void ADJAdjust2dx::sendFirstPackages() {
-    [Adjust sendFirstPackages];
+void ADJAdjust2dx::switchBackToOnlineMode() {
+    [Adjust switchBackToOnlineMode];
 }
 
 void ADJAdjust2dx::gdprForgetMe() {
     [Adjust gdprForgetMe];
 }
 
-void ADJAdjust2dx::disableThirdPartySharing() {
-    [Adjust disableThirdPartySharing];
+void ADJAdjust2dx::addGlobalCallbackParameter(std::string key, std::string value) {
+    [Adjust addGlobalCallbackParameter:[NSString stringWithUTF8String:key.c_str()]
+                                forKey:[NSString stringWithUTF8String:value.c_str()]];
 }
 
-void ADJAdjust2dx::addSessionCallbackParameter(std::string key, std::string value) {
-    [Adjust addSessionCallbackParameter:[NSString stringWithUTF8String:key.c_str()] value:[NSString stringWithUTF8String:value.c_str()]];
+void ADJAdjust2dx::addGlobalPartnerParameter(std::string key, std::string value) {
+    [Adjust addGlobalPartnerParameter:[NSString stringWithUTF8String:key.c_str()]
+                               forKey:[NSString stringWithUTF8String:value.c_str()]];
 }
 
-void ADJAdjust2dx::addSessionPartnerParameter(std::string key, std::string value) {
-    [Adjust addSessionPartnerParameter:[NSString stringWithUTF8String:key.c_str()] value:[NSString stringWithUTF8String:value.c_str()]];
+void ADJAdjust2dx::removeGlobalCallbackParameter(std::string key) {
+    [Adjust removeGlobalCallbackParameterForKey:[NSString stringWithUTF8String:key.c_str()]];
 }
 
-void ADJAdjust2dx::removeSessionCallbackParameter(std::string key) {
-    [Adjust removeSessionCallbackParameter:[NSString stringWithUTF8String:key.c_str()]];
+void ADJAdjust2dx::removeGlobalPartnerParameter(std::string key) {
+    [Adjust removeGlobalPartnerParameterForKey:[NSString stringWithUTF8String:key.c_str()]];
 }
 
-void ADJAdjust2dx::removeSessionPartnerParameter(std::string key) {
-    [Adjust removeSessionPartnerParameter:[NSString stringWithUTF8String:key.c_str()]];
+void ADJAdjust2dx::removeGlobalCallbackParameters() {
+    [Adjust removeGlobalCallbackParameters];
 }
 
-void ADJAdjust2dx::resetSessionCallbackParameters() {
-    [Adjust resetSessionCallbackParameters];
-}
-
-void ADJAdjust2dx::resetSessionPartnerParameters() {
-    [Adjust resetSessionPartnerParameters];
-}
-
-void ADJAdjust2dx::trackAdRevenue(std::string source, std::string payload) {
-    NSData *dataPayload = [[NSString stringWithUTF8String:payload.c_str()] dataUsingEncoding:NSUTF8StringEncoding];
-    [Adjust trackAdRevenue:[NSString stringWithUTF8String:source.c_str()] payload:dataPayload];
+void ADJAdjust2dx::removeGlobalPartnerParameters() {
+    [Adjust removeGlobalPartnerParameters];
 }
 
 void ADJAdjust2dx::trackAdRevenueNew(ADJAdRevenue2dx adRevenue) {
@@ -241,8 +247,8 @@ AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
     return attribution2dx;
 }
 
-void ADJAdjust2dx::requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
-    [Adjust requestTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
+void ADJAdjust2dx::requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
+    [Adjust requestAppTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
         if (trackingStatusCallback != NULL) {
             trackingStatusCallback((int)status);
         }
@@ -253,33 +259,15 @@ int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
     return [Adjust appTrackingAuthorizationStatus];
 }
 
-void ADJAdjust2dx::updateConversionValue(int conversionValue) {
-    [Adjust updateConversionValue:conversionValue];
-}
-
-void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error)) {
-    [Adjust updatePostbackConversionValue:conversionValue completionHandler:^(NSError * _Nullable error) {
-        if (errorCallback != NULL) {
-            errorCallback(std::string([error.localizedDescription UTF8String]));
-        }
-    }];
-}
-
-void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error)) {
-    [Adjust updatePostbackConversionValue:conversionValue
-                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
-                        completionHandler:^(NSError * _Nullable error) {
-        if (errorCallback != NULL) {
-            errorCallback(std::string([error.localizedDescription UTF8String]));
-        }
-    }];
-}
-
-void ADJAdjust2dx::updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error)) {
-    [Adjust updatePostbackConversionValue:conversionValue
-                              coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
-                               lockWindow:lockWindow
-                        completionHandler:^(NSError * _Nullable error) {
+void ADJAdjust2dx::updateSkanConversionValue(int conversionValue,
+                                             std::string coarseValue,
+                                             bool* optionalLockWindow,
+                                             void (*errorCallback)(std::string error))
+{
+    [Adjust updateSkanConversionValue:conversionValue
+                          coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                           lockWindow:optionalLockWindow ? @(*optionalLockWindow) : nil
+                withCompletionHandler:^(NSError * _Nullable error) {
         if (errorCallback != NULL) {
             errorCallback(std::string([error.localizedDescription UTF8String]));
         }
@@ -292,10 +280,6 @@ void ADJAdjust2dx::trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartyShar
 
 void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
-}
-
-void ADJAdjust2dx::checkForNewAttStatus() {
-    [Adjust checkForNewAttStatus];
 }
 
 std::string ADJAdjust2dx::getLastDeeplink() {
@@ -322,9 +306,10 @@ std::string ADJAdjust2dx::getIdfv() {
     return strIdfv;
 }
 
-void ADJAdjust2dx::processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+void ADJAdjust2dx::processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
     NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
-    [Adjust processDeeplink:pUrl completionHandler:^(NSString * _Nonnull resolvedLink) {
+    [Adjust processAndResolveDeeplink:pUrl
+                withCompletionHandler:^(NSString * _Nullable resolvedLink) {
         if (resolvedLinkCallback != NULL) {
             if (resolvedLink != nil) {
                 resolvedLinkCallback(std::string([resolvedLink UTF8String]));

@@ -49,20 +49,18 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->setReferrer();
     } else if (command->methodName == "setOfflineMode") {
         this->setOfflineMode();
-    } else if (command->methodName == "sendFirstPackages") {
-        this->sendFirstPackages();
-    } else if (command->methodName == "addSessionCallbackParameter") {
-        this->addSessionCallbackParameter();
-    } else if (command->methodName == "addSessionPartnerParameter") {
-        this->addSessionPartnerParameter();
-    } else if (command->methodName == "removeSessionCallbackParameter") {
-        this->removeSessionCallbackParameter();
-    } else if (command->methodName == "removeSessionPartnerParameter") {
-        this->removeSessionPartnerParameter();
-    } else if (command->methodName == "resetSessionCallbackParameters") {
-        this->resetSessionCallbackParameters();
-    } else if (command->methodName == "resetSessionPartnerParameters") {
-        this->resetSessionPartnerParameters();
+    } else if (command->methodName == "addGlobalCallbackParameter") {
+        this->addGlobalCallbackParameter();
+    } else if (command->methodName == "addGlobalPartnerParameter") {
+        this->addGlobalPartnerParameter();
+    } else if (command->methodName == "removeGlobalCallbackParameter") {
+        this->removeGlobalCallbackParameter();
+    } else if (command->methodName == "removeGlobalPartnerParameter") {
+        this->removeGlobalPartnerParameter();
+    } else if (command->methodName == "removeGlobalCallbackParameters") {
+        this->removeGlobalCallbackParameters();
+    } else if (command->methodName == "removeGlobalPartnerParameters") {
+        this->removeGlobalPartnerParameters();
     } else if (command->methodName == "setPushToken") {
         this->setPushToken();
     } else if (command->methodName == "openDeeplink") {
@@ -71,10 +69,6 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->sendReferrer();
     } else if (command->methodName == "gdprForgetMe") {
         this->gdprForgetMe();
-    } else if (command->methodName == "trackAdRevenue") {
-        this->trackAdRevenue();
-    } else if (command->methodName == "disableThirdPartySharing") {
-        this->disableThirdPartySharing();
     } else if (command->methodName == "trackSubscription") {
         this->trackSubscription();
     } else if (command->methodName == "thirdPartySharing") {
@@ -548,7 +542,11 @@ void AdjustCommandExecutor::pause() {
 void AdjustCommandExecutor::setEnabled() {
     std::string enabledStr = command->getFirstParameterValue("enabled");
     bool enabled = (enabledStr == "true");
-    Adjust2dx::setEnabled(enabled);
+    if (enabled) {
+        Adjust2dx::enable();
+    } else {
+        Adjust2dx::disable();
+    }
 }
 
 void AdjustCommandExecutor::setReferrer() {
@@ -563,71 +561,71 @@ void AdjustCommandExecutor::setReferrer() {
 void AdjustCommandExecutor::setOfflineMode() {
     std::string enabledStr = command->getFirstParameterValue("enabled");
     bool enabled = (enabledStr == "true");
-    Adjust2dx::setOfflineMode(enabled);
+    if (enabled) {
+        Adjust2dx::switchToOfflineMode();
+    } else {
+        Adjust2dx::switchBackToOnlineMode();
+    }
 }
 
-void AdjustCommandExecutor::sendFirstPackages() {
-    Adjust2dx::sendFirstPackages();
-}
-
-void AdjustCommandExecutor::addSessionCallbackParameter() {
+void AdjustCommandExecutor::addGlobalCallbackParameter() {
     if (this->command->containsParameter("KeyValue")) {
         std::vector<std::string> keyValuePairs = command->getParameters("KeyValue");
         for (int i = 0; i < keyValuePairs.size(); i = i + 2) {
             std::string key = keyValuePairs[i];
             std::string value = keyValuePairs[i + 1];
-            Adjust2dx::addSessionCallbackParameter(key, value);
+            Adjust2dx::addGlobalCallbackParameter(key, value);
         }
     }
 }
 
-void AdjustCommandExecutor::addSessionPartnerParameter() {
+void AdjustCommandExecutor::addGlobalPartnerParameter() {
     if (this->command->containsParameter("KeyValue")) {
         std::vector<std::string> keyValuePairs = command->getParameters("KeyValue");
         for (int i = 0; i < keyValuePairs.size(); i = i + 2) {
             std::string key = keyValuePairs[i];
             std::string value = keyValuePairs[i + 1];
-            Adjust2dx::addSessionPartnerParameter(key, value);
+            Adjust2dx::addGlobalPartnerParameter(key, value);
         }
     }
 }
 
-void AdjustCommandExecutor::removeSessionCallbackParameter() {
+void AdjustCommandExecutor::removeGlobalCallbackParameter() {
     if (this->command->containsParameter("key")) {
         std::vector<std::string> keys = command->getParameters("key");
         for (int i = 0; i < keys.size(); i++) {
             std::string key = keys[i];
-            Adjust2dx::removeSessionCallbackParameter(key);
+            Adjust2dx::removeGlobalCallbackParameter(key);
         }
     }
 }
 
-void AdjustCommandExecutor::removeSessionPartnerParameter() {
+void AdjustCommandExecutor::removeGlobalPartnerParameter() {
     if (this->command->containsParameter("key")) {
         std::vector<std::string> keys = command->getParameters("key");
         for (int i = 0; i < keys.size(); i++) {
             std::string key = keys[i];
-            Adjust2dx::removeSessionPartnerParameter(key);
+            Adjust2dx::removeGlobalPartnerParameter(key);
         }
     }
 }
 
-void AdjustCommandExecutor::resetSessionCallbackParameters() {
-    Adjust2dx::resetSessionCallbackParameters();
+void AdjustCommandExecutor::removeGlobalCallbackParameters() {
+    Adjust2dx::removeGlobalCallbackParameters();
 }
 
-void AdjustCommandExecutor::resetSessionPartnerParameters() {
-    Adjust2dx::resetSessionPartnerParameters();
+void AdjustCommandExecutor::removeGlobalPartnerParameters() {
+    Adjust2dx::removeGlobalPartnerParameters();
 }
 
 void AdjustCommandExecutor::setPushToken() {
     std::string token = command->getFirstParameterValue("pushToken");
-    Adjust2dx::setDeviceToken(token);
+    Adjust2dx::setPushTokenAsString(token);
 }
 
 void AdjustCommandExecutor::openDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
-    Adjust2dx::appWillOpenUrl(deeplink);
+    Adjust2dx::processDeeplink(deeplink);
 }
 
 void AdjustCommandExecutor::sendReferrer() {
@@ -641,16 +639,6 @@ void AdjustCommandExecutor::sendReferrer() {
 
 void AdjustCommandExecutor::gdprForgetMe() {
     Adjust2dx::gdprForgetMe();
-}
-
-void AdjustCommandExecutor::disableThirdPartySharing() {
-    Adjust2dx::disableThirdPartySharing();
-}
-
-void AdjustCommandExecutor::trackAdRevenue() {
-    std::string source = command->getFirstParameterValue("adRevenueSource");
-    std::string payload = command->getFirstParameterValue("adRevenueJsonString");
-    Adjust2dx::trackAdRevenue(source, payload);
 }
 
 void AdjustCommandExecutor::trackSubscription() {
@@ -861,7 +849,7 @@ void AdjustCommandExecutor::verifyPurchase() {
 void AdjustCommandExecutor::processDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
     localBasePath = this->basePath;
-    Adjust2dx::processDeeplink(deeplink, [](std::string resolvedLink) {
+    Adjust2dx::processAndResolveDeeplink(deeplink, [](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
         TestLib2dx::sendInfoToServer(localBasePath);
     });

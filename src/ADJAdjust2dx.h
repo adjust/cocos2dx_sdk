@@ -24,44 +24,43 @@ extern const std::string ADJEnvironmentProduction2dx;
 
 class ADJAdjust2dx {
 public:
-    static void appDidLaunch(ADJConfig2dx adjustConfig);
+    static void initSdk(ADJConfig2dx adjustConfig);
     static void trackEvent(ADJEvent2dx adjustEvent);
     static void trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription);
     static void trackSubsessionStart();
     static void trackSubsessionEnd();
-    static void setEnabled(bool isEnabled);
-    static void appWillOpenUrl(std::string url);
-    static void setDeviceToken(std::string deviceToken);
-    static void setOfflineMode(bool isOffline);
-    static void sendFirstPackages();
+    static void enable();
+    static void disable();
+    static void processDeeplink(std::string url);
+    static void setPushTokenAsString(std::string pushToken);
+    static void switchToOfflineMode();
+    static void switchBackToOnlineMode();
     static void gdprForgetMe();
-    static void disableThirdPartySharing();
-    static void addSessionCallbackParameter(std::string key, std::string value);
-    static void addSessionPartnerParameter(std::string key, std::string value);
-    static void removeSessionCallbackParameter(std::string key);
-    static void removeSessionPartnerParameter(std::string key);
-    static void resetSessionCallbackParameters();
-    static void resetSessionPartnerParameters();
-    static void trackAdRevenue(std::string source, std::string payload);
+    static void addGlobalCallbackParameter(std::string key, std::string value);
+    static void addGlobalPartnerParameter(std::string key, std::string value);
+    static void removeGlobalCallbackParameter(std::string key);
+    static void removeGlobalPartnerParameter(std::string key);
+    static void removeGlobalCallbackParameters();
+    static void removeGlobalPartnerParameters();
     static void trackAdRevenueNew(ADJAdRevenue2dx adRevenue);
     static bool isEnabled();
     static std::string getIdfa();
     static std::string getAdid();
     static std::string getSdkVersion();
     static AdjustAttribution2dx getAttribution();
-    static void requestTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
+    static void requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
     static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
-    static void updateConversionValue(int conversionValue);
-    static void updatePostbackConversionValue(int conversionValue, void (*errorCallback)(std::string error));
-    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, void (*errorCallback)(std::string error));
-    static void updatePostbackConversionValue(int conversionValue, std::string coarseValue, bool lockWindow, void (*errorCallback)(std::string error));
-    static void checkForNewAttStatus();
+    static void updateSkanConversionValue(int conversionValue,
+                                          std::string coarseValue,
+                                          bool* optionalLockWindow,
+                                          void (*errorCallback)(std::string error));
     static std::string getLastDeeplink();
     static void verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
+    static void verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static std::string getIdfv();
-    static void processDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
+    static void processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();
