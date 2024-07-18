@@ -148,103 +148,102 @@ void ADJAdjust2dx::trackAdRevenueNew(ADJAdRevenue2dx adRevenue) {
     [Adjust trackAdRevenue:(ADJAdRevenue *)adRevenue.getAdRevenue()];
 }
 
-bool ADJAdjust2dx::isEnabled() {
-    return [Adjust isEnabled];
+void ADJAdjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
+    [Adjust isEnabledWithCompletionHandler:^(BOOL isEnabled) {
+        callbackMethod(isEnabled ? true : false);
+    }];
 }
 
-std::string ADJAdjust2dx::getIdfa() {
-    NSString *idfa = [Adjust idfa];
-    if (nil == idfa) {
-        return "";
-    }
-
-    std::string strIdfa = std::string([idfa UTF8String]);
-    return strIdfa;
+void ADJAdjust2dx::idfaCallback(void(*callbackMethod)(std::string idfa)) {
+    [Adjust idfaWithCompletionHandler:^(NSString * _Nullable idfa) {
+        if (idfa == nil) {
+            callbackMethod("");
+        } else {
+            callbackMethod(std::string([idfa UTF8String]));
+        }
+    }];
 }
 
-std::string ADJAdjust2dx::getAdid() {
-    if (nil == [Adjust adid]) {
-        return "";
-    }
-
-    std::string adid = std::string([[Adjust adid] UTF8String]);
-    return adid;
+void ADJAdjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
+    [Adjust adidWithCompletionHandler:^(NSString * _Nullable adid) {
+        if (adid == nil) {
+            callbackMethod("");
+        } else {
+            callbackMethod(std::string([adid UTF8String]));
+        }
+    }];
 }
 
-std::string ADJAdjust2dx::getSdkVersion() {
-    if (nil == [Adjust sdkVersion]) {
-        return "";
-    }
-
-    std::string sdkVersion = std::string([[Adjust sdkVersion] UTF8String]);
-    return sdkVersion;
+void ADJAdjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)) {
+    [Adjust sdkVersionWithCompletionHandler:^(NSString * _Nullable sdkVersion) {
+        if (sdkVersion == nil) {
+            callbackMethod("");
+        } else {
+            callbackMethod(std::string([sdkVersion UTF8String]));
+        }
+    }];
 }
 
-AdjustAttribution2dx ADJAdjust2dx::getAttribution() {
-    ADJAttribution *attribution = [Adjust attribution];
-    std::string trackerToken;
-    std::string trackerName;
-    std::string network;
-    std::string campaign;
-    std::string adgroup;
-    std::string creative;
-    std::string clickLabel;
-    std::string adid;
-    std::string costType;
-    double costAmount;
-    std::string costCurrency;
-    std::string fbInstallReferrer = NULL;
+void ADJAdjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution)) {
+    [Adjust attributionWithCompletionHandler:^(ADJAttribution * _Nullable attribution) {
+        std::string trackerToken;
+        std::string trackerName;
+        std::string network;
+        std::string campaign;
+        std::string adgroup;
+        std::string creative;
+        std::string clickLabel;
+        std::string adid;
+        std::string costType;
+        double costAmount = -1;
+        std::string costCurrency;
+        std::string fbInstallReferrer = NULL;
 
-    if (nil != attribution) {
-        if (attribution.trackerToken != NULL) {
-            trackerToken = std::string([attribution.trackerToken UTF8String]);
+        if (nil != attribution) {
+            if (attribution.trackerToken != NULL) {
+                trackerToken = std::string([attribution.trackerToken UTF8String]);
+            }
+            if (attribution.trackerName != NULL) {
+                trackerName = std::string([attribution.trackerName UTF8String]);
+            }
+            if (attribution.network != NULL) {
+                network = std::string([attribution.network UTF8String]);
+            }
+            if (attribution.campaign != NULL) {
+                campaign = std::string([attribution.campaign UTF8String]);
+            }
+            if (attribution.adgroup != NULL) {
+                adgroup = std::string([attribution.adgroup UTF8String]);
+            }
+            if (attribution.creative != NULL) {
+                creative = std::string([attribution.creative UTF8String]);
+            }
+            if (attribution.clickLabel != NULL) {
+                clickLabel = std::string([attribution.clickLabel UTF8String]);
+            }
+            if (attribution.costType != NULL) {
+                costType = std::string([attribution.costType UTF8String]);
+            }
+            if (attribution.costType != NULL) {
+                costAmount = [attribution.costAmount doubleValue];
+            }
+            if (attribution.costCurrency != NULL) {
+                costCurrency = std::string([attribution.costCurrency UTF8String]);
+            }
         }
-        if (attribution.trackerName != NULL) {
-            trackerName = std::string([attribution.trackerName UTF8String]);
-        }
-        if (attribution.network != NULL) {
-            network = std::string([attribution.network UTF8String]);
-        }
-        if (attribution.campaign != NULL) {
-            campaign = std::string([attribution.campaign UTF8String]);
-        }
-        if (attribution.adgroup != NULL) {
-            adgroup = std::string([attribution.adgroup UTF8String]);
-        }
-        if (attribution.creative != NULL) {
-            creative = std::string([attribution.creative UTF8String]);
-        }
-        if (attribution.clickLabel != NULL) {
-            clickLabel = std::string([attribution.clickLabel UTF8String]);
-        }
-        if (attribution.adid != NULL) {
-            adid = std::string([attribution.adid UTF8String]);
-        }
-        if (attribution.costType != NULL) {
-            costType = std::string([attribution.costType UTF8String]);
-        }
-        if (attribution.costType != NULL) {
-            costAmount = [attribution.costAmount doubleValue];
-        }
-        if (attribution.costCurrency != NULL) {
-            costCurrency = std::string([attribution.costCurrency UTF8String]);
-        }
-    }
 
-    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
-        trackerToken,
-        trackerName,
-        network,
-        campaign,
-        adgroup,
-        creative,
-        clickLabel,
-        adid,
-        costType,
-        costAmount,
-        costCurrency,
-        fbInstallReferrer);
-    return attribution2dx;
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken,
+                                                                   trackerName,
+                                                                   network,
+                                                                   campaign,
+                                                                   adgroup,
+                                                                   creative,
+                                                                   clickLabel,
+                                                                   costType,
+                                                                   costAmount,
+                                                                   costCurrency,
+                                                                   fbInstallReferrer);
+    }];
 }
 
 void ADJAdjust2dx::requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
@@ -282,28 +281,31 @@ void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
 }
 
-std::string ADJAdjust2dx::getLastDeeplink() {
-    NSURL *lastDeeplink = [Adjust lastDeeplink];
-    if (nil == lastDeeplink) {
-        return "";
-    }
-    NSString *strLastDeeplink = [lastDeeplink absoluteString];
-    if (nil == strLastDeeplink) {
-        return "";
-    }
+void ADJAdjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink)) {
+    [Adjust lastDeeplinkWithCompletionHandler:^(NSURL * _Nullable lastDeeplink) {
+        if (lastDeeplink == nil) {
+            callbackMethod("");
+            return;
+        }
 
-    std::string stdStrLastDeeplink = std::string([strLastDeeplink UTF8String]);
-    return stdStrLastDeeplink;
+        NSString *strLastDeeplink = [lastDeeplink absoluteString];
+        if (strLastDeeplink == nil) {
+            callbackMethod("");
+            return;
+        }
+
+        callbackMethod(std::string([strLastDeeplink UTF8String]));
+    }];
 }
 
-std::string ADJAdjust2dx::getIdfv() {
-    NSString *idfv = [Adjust idfv];
-    if (nil == idfv) {
-        return "";
-    }
-
-    std::string strIdfv = std::string([idfv UTF8String]);
-    return strIdfv;
+void ADJAdjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
+    [Adjust idfvWithCompletionHandler:^(NSString * _Nullable idfv) {
+        if (idfv == nil) {
+            callbackMethod("");
+        } else {
+            callbackMethod(std::string([idfv UTF8String]));
+        }
+    }];
 }
 
 void ADJAdjust2dx::processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
@@ -321,61 +323,17 @@ void ADJAdjust2dx::processAndResolveDeeplink(std::string url, void (*resolvedLin
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
-    AdjustTestOptions *testOptions = [[AdjustTestOptions alloc] init];
-    testOptions.baseUrl = [NSString stringWithUTF8String:testOptionsMap["baseUrl"].c_str()];
-    testOptions.gdprUrl = [NSString stringWithUTF8String:testOptionsMap["gdprUrl"].c_str()];
-    testOptions.subscriptionUrl = [NSString stringWithUTF8String:testOptionsMap["subscriptionUrl"].c_str()];
-    testOptions.purchaseVerificationUrl = [NSString stringWithUTF8String:testOptionsMap["purchaseVerificationUrl"].c_str()];
-
-    if (testOptionsMap.find("extraPath") != testOptionsMap.end()) {
-        testOptions.extraPath = [NSString stringWithUTF8String:testOptionsMap["extraPath"].c_str()];
-    }
-    if (testOptionsMap.find("timerIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *timerIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["timerIntervalInMilliseconds"].c_str()];
-        testOptions.timerIntervalInMilliseconds = [NSNumber numberWithInt:[timerIntervalMilliseconds intValue]];
-    }
-    if (testOptionsMap.find("timerStartInMilliseconds") != testOptionsMap.end()) {
-        NSString *timerStartMilliseconds = [NSString stringWithUTF8String:testOptionsMap["timerStartInMilliseconds"].c_str()];
-        testOptions.timerStartInMilliseconds = [NSNumber numberWithInt:[timerStartMilliseconds intValue]];
-    }
-    if (testOptionsMap.find("sessionIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *sessionIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["sessionIntervalInMilliseconds"].c_str()];
-        testOptions.sessionIntervalInMilliseconds = [NSNumber numberWithInt:[sessionIntervalMilliseconds intValue]];
-    }
-    if (testOptionsMap.find("subsessionIntervalInMilliseconds") != testOptionsMap.end()) {
-        NSString *subsessionIntervalMilliseconds = [NSString stringWithUTF8String:testOptionsMap["subsessionIntervalInMilliseconds"].c_str()];
-        testOptions.subsessionIntervalInMilliseconds = [NSNumber numberWithInt:[subsessionIntervalMilliseconds intValue]];
-    }
-    if (testOptionsMap.find("teardown") != testOptionsMap.end()) {
-        NSString *teardown = [NSString stringWithUTF8String:testOptionsMap["teardown"].c_str()];
-        testOptions.teardown = NO;
-        if ([teardown isEqualToString:@"true"]) {
-            testOptions.teardown = YES;
-        }
-    }
-    if (testOptionsMap.find("deleteState") != testOptionsMap.end()) {
-        NSString *deleteState = [NSString stringWithUTF8String:testOptionsMap["deleteState"].c_str()];
-        testOptions.deleteState = NO;
-        if ([deleteState isEqualToString:@"true"]) {
-            testOptions.deleteState = YES;
-        }
-    }
-    if (testOptionsMap.find("noBackoffWait") != testOptionsMap.end()) {
-        NSString *noBackoffWait = [NSString stringWithUTF8String:testOptionsMap["noBackoffWait"].c_str()];
-        testOptions.noBackoffWait = NO;
-        if ([noBackoffWait isEqualToString:@"true"]) {
-            testOptions.noBackoffWait = YES;
-        }
-    }
-    testOptions.adServicesFrameworkEnabled = NO;
-    if (testOptionsMap.find("adServicesFrameworkEnabled") != testOptionsMap.end()) {
-        NSString *adServicesFrameworkEnabled = [NSString stringWithUTF8String:testOptionsMap["adServicesFrameworkEnabled"].c_str()];
-        if ([adServicesFrameworkEnabled isEqualToString:@"true"]) {
-            testOptions.adServicesFrameworkEnabled = YES;
-        }
+    NSMutableDictionary<NSString *, NSString *> *objcTestOptionsMap =
+        [NSMutableDictionary dictionary];
+    std::map<std::string, std::string>::iterator toIterator = testOptionsMap.begin();
+    for (std::map<std::string, std::string>::iterator toIterator = testOptionsMap.begin();
+         toIterator != testOptionsMap.end(); toIterator++)
+    {
+        [objcTestOptionsMap setObject:[NSString stringWithUTF8String:toIterator->second.c_str()]
+                               forKey:[NSString stringWithUTF8String:toIterator->first.c_str()]];
     }
 
-    [Adjust setTestOptions:testOptions];
+    [Adjust setTestOptions:objcTestOptionsMap];
 }
 
 void ADJAdjust2dx::teardown() {

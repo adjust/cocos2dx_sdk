@@ -43,11 +43,11 @@ public:
     static void removeGlobalCallbackParameters();
     static void removeGlobalPartnerParameters();
     static void trackAdRevenueNew(ADJAdRevenue2dx adRevenue);
-    static bool isEnabled();
-    static std::string getIdfa();
-    static std::string getAdid();
-    static std::string getSdkVersion();
-    static AdjustAttribution2dx getAttribution();
+    static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
+    static void idfaCallback(void(*callbackMethod)(std::string idfa));
+    static void adidCallback(void(*callbackMethod)(std::string adid));
+    static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
+    static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     static void requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
     static void trackThirdPartySharing(ADJThirdPartySharing2dx thirdPartySharing);
@@ -56,10 +56,10 @@ public:
                                           std::string coarseValue,
                                           bool* optionalLockWindow,
                                           void (*errorCallback)(std::string error));
-    static std::string getLastDeeplink();
+    static void lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink));
     static void verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static void verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
-    static std::string getIdfv();
+    static void idfvCallback(void(*callbackMethod)(std::string idfv));
     static void processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);

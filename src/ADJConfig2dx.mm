@@ -51,7 +51,9 @@ void ADJConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
 {
     NSMutableArray *urlStrategyDomainsMut = [[NSMutableArray alloc] init];
     std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
-    while(toIterator != urlStrategyDomains.end()) {
+    for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
+         toIterator != urlStrategyDomains.end(); toIterator++)
+    {
         std::string urlStrategyDomain = (*toIterator);
         [urlStrategyDomainsMut addObject:[NSString stringWithUTF8String:urlStrategyDomain.c_str()]];
     }
@@ -97,12 +99,8 @@ void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string
     deferredDeeplinkCallback = callbackMethod;
 }
 
-void ADJConfig2dx::setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue)) {
-    conversionValueUpdatedCallback = callbackMethod;
-}
-
-void ADJConfig2dx::setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow)) {
-    postbackConversionValueUpdatedCallback = callbackMethod;
+void ADJConfig2dx::setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data)) {
+    skanUpdatedWithConversionDataCallback = callbackMethod;
 }
 
 void* ADJConfig2dx::getConfig() {
@@ -137,10 +135,6 @@ bool(*ADJConfig2dx::getDeferredDeeplinkCallback())(std::string) {
     return deferredDeeplinkCallback;
 }
 
-void(*ADJConfig2dx::getConversionValueUpdatedCallback())(int) {
-    return conversionValueUpdatedCallback;
-}
-
-void(*ADJConfig2dx::getPostbackConversionValueUpdatedCallback())(int, std::string, bool) {
-    return postbackConversionValueUpdatedCallback;
+void(*ADJConfig2dx::getSkanUpdatedWithConversionDataCallback())(std::unordered_map<std::string, std::string>) {
+    return skanUpdatedWithConversionDataCallback;
 }

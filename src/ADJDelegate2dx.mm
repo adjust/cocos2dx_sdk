@@ -21,16 +21,15 @@ static ADJDelegate2dx *defaultInstance = nil;
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-          swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
-  swizzleOfPostbackConversionValueUpdatedCallback:(BOOL)swizzlePostbackConversionValueUpdatedCallback
+     swizzleSkanUpdatedWithConversionDataCallback:(BOOL)swizzleSkanUpdatedWithConversionDataCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId
-         postbackConversionValueUpdatedCallbackId:(void (*)(int conversionValue, std::string coarseValue, bool lockWindow))postbackConversionValueUpdatedCallbackId {
+          skanUpdatedWithConversionDataCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedWithConversionDataCallbackId
+{
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 
@@ -56,16 +55,12 @@ static ADJDelegate2dx *defaultInstance = nil;
                                   swizzledSelector:@selector(adjustSessionTrackingFailedWananbe:)];
         }
         if (swizzleDeferredDeeplinkCallback) {
-            [defaultInstance swizzleCallbackMethod:@selector(adjustDeeplinkResponse:)
-                                  swizzledSelector:@selector(adjustDeeplinkResponseWannabe:)];
+            [defaultInstance swizzleCallbackMethod:@selector(adjustDeferredDeeplinkReceived:)
+                                  swizzledSelector:@selector(adjustDeferredDeeplinkReceivedWannabe:)];
         }
-        if (swizzleConversionValueUpdatedCallback) {
-            [defaultInstance swizzleCallbackMethod:@selector(adjustConversionValueUpdated:)
-                                  swizzledSelector:@selector(adjustConversionValueUpdatedWannabe:)];
-        }
-        if (swizzlePostbackConversionValueUpdatedCallback) {
-            [defaultInstance swizzleCallbackMethod:@selector(adjustConversionValueUpdated:coarseValue:lockWindow:)
-                                  swizzledSelector:@selector(adjustConversionValueUpdatedWannabe:coarseValue:lockWindow:)];
+        if (swizzleSkanUpdatedWithConversionDataCallback) {
+            [defaultInstance swizzleCallbackMethod:@selector(adjustSkanUpdatedWithConversionData:)
+                                  swizzledSelector:@selector(adjustSkanUpdatedWithConversionDataWannabe:)];
         }
 
         [defaultInstance setAttributionCallbackMethod:attributionCallbackId];
@@ -74,8 +69,7 @@ static ADJDelegate2dx *defaultInstance = nil;
         [defaultInstance setSessionSuccessCallbackMethod:sessionSuccessCallbackId];
         [defaultInstance setSessionFailureCallbackMethod:sessionFailureCallbackId];
         [defaultInstance setDeferredDeeplinkCallbackMethod:deferredDeeplinkCallbackId];
-        [defaultInstance setConversionValueUpdatedCallbackMethod:conversionValueUpdatedCallbackId];
-        [defaultInstance setPostbackConversionValueUpdatedCallbackMethod:postbackConversionValueUpdatedCallbackId];
+        [defaultInstance setSkanUpdatedWithConversionDataCallbackMethod:skanUpdatedWithConversionDataCallbackId];
     });
     
     return defaultInstance;
@@ -110,7 +104,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     [self addValueOrEmpty:dictionary key:@"creative" value:attribution.creative];
     [self addValueOrEmpty:dictionary key:@"adgroup" value:attribution.adgroup];
     [self addValueOrEmpty:dictionary key:@"clickLabel" value:attribution.clickLabel];
-    [self addValueOrEmpty:dictionary key:@"adid" value:attribution.adid];
     [self addValueOrEmpty:dictionary key:@"costType" value:attribution.costType];
     [self addValueOrEmpty:dictionary key:@"costAmount" value:attribution.costAmount];
     [self addValueOrEmpty:dictionary key:@"costCurrency" value:attribution.costCurrency];
@@ -122,7 +115,6 @@ static ADJDelegate2dx *defaultInstance = nil;
     std::string creative = std::string([[dictionary objectForKey:@"creative"] UTF8String]);
     std::string adgroup = std::string([[dictionary objectForKey:@"adgroup"] UTF8String]);
     std::string clickLabel = std::string([[dictionary objectForKey:@"clickLabel"] UTF8String]);
-    std::string adid = std::string([[dictionary objectForKey:@"adid"] UTF8String]);
     std::string costType = std::string([[dictionary objectForKey:@"costType"] UTF8String]);
     double costAmount = [dictionary objectForKey:@"costAmount"] != nil ? [[dictionary objectForKey:@"costAmount"] doubleValue] : 0;
     std::string costCurrency = std::string([[dictionary objectForKey:@"costCurrency"] UTF8String]);
@@ -136,7 +128,6 @@ static ADJDelegate2dx *defaultInstance = nil;
         adgroup,
         creative,
         clickLabel,
-        adid,
         costType,
         costAmount,
         costCurrency,
@@ -260,28 +251,20 @@ static ADJDelegate2dx *defaultInstance = nil;
     _sessionFailureCallbackMethod(sessionFailure2dx);
 }
 
-- (BOOL)adjustDeeplinkResponseWannabe:(NSURL *)deeplink {
+- (BOOL)adjustDeferredDeeplinkReceivedWannabe:(NSURL *)deeplink {
     NSString *url = [deeplink absoluteString];
     std::string strDeeplink = std::string([url UTF8String]);
     return _deferredDeeplinkCallbackMethod(strDeeplink);
 }
 
-- (void)adjustConversionValueUpdatedWannabe:(NSNumber *)conversionValue {
-    if (conversionValue == nil) {
-        return;
-    }
-    _conversionValueUpdatedCallbackMethod([conversionValue intValue]);
-}
+- (void)adjustSkanUpdatedWithConversionDataWannabe:(nonnull NSDictionary<NSString *, NSString *> *)data {
+    std::unordered_map<std::string, std::string> cppMap;
 
-- (void)adjustConversionValueUpdatedWannabe:(NSNumber *)fineValue
-                                coarseValue:(NSString *)coarseValue
-                                 lockWindow:(NSNumber *)lockWindow {
-    if (fineValue == nil || coarseValue == nil || lockWindow == nil) {
-        return;
+    for (NSString *key in data) {
+        cppMap[key.UTF8String] = data[key].UTF8String;
     }
-    _postbackConversionValueUpdatedCallbackMethod([fineValue intValue],
-                                                  std::string([coarseValue UTF8String]),
-                                                  [lockWindow boolValue]);
+
+    _skanUpdatedWithConversionDataCallbackMethod(cppMap);
 }
 
 - (void)swizzleCallbackMethod:(SEL)originalSelector

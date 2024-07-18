@@ -116,7 +116,7 @@ void Adjust2dx::disable() {
 #endif
 }
 
-bool Adjust2dx::isEnabled() {
+void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiIsEnabled;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
@@ -125,9 +125,7 @@ bool Adjust2dx::isEnabled() {
     jboolean jIsEnabled = jmiIsEnabled.env->CallStaticBooleanMethod(jmiIsEnabled.classID, jmiIsEnabled.methodID);
     return jIsEnabled;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::isEnabled();
-#else
-    return false;
+    ADJAdjust2dx::isEnabledCallback(callbackMethod);
 #endif
 }
 
@@ -139,7 +137,7 @@ void Adjust2dx::switchToOfflineMode() {
     }
     jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID, isOffline);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::switchToOfflineMode());
+    ADJAdjust2dx::switchToOfflineMode();
 #endif
 }
 
@@ -151,7 +149,7 @@ void Adjust2dx::switchBackToOnlineMode() {
     }
     jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID, isOffline);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::switchBackToOnlineMode());
+    ADJAdjust2dx::switchBackToOnlineMode();
 #endif
 }
 
@@ -332,9 +330,9 @@ void Adjust2dx::trackMeasurementConsent(bool measurementConsent) {
 #endif
 }
 
-std::string Adjust2dx::getAdid() {
+void Adjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getAdid();
+    ADJAdjust2dx::adidCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiGetAdid;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdid", "()Ljava/lang/String;")) {
@@ -353,9 +351,9 @@ std::string Adjust2dx::getAdid() {
 #endif
 }
 
-std::string Adjust2dx::getSdkVersion() {
+void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return AdjustSdkPrefix2dx + "@" + ADJAdjust2dx::getSdkVersion();
+    ADJAdjust2dx::sdkVersionCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiGetSdkVersion;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersion, "com/adjust/sdk/Adjust", "getSdkVersion", "()Ljava/lang/String;")) {
@@ -374,9 +372,9 @@ std::string Adjust2dx::getSdkVersion() {
 #endif
 }
 
-AdjustAttribution2dx Adjust2dx::getAttribution() {
+void Adjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getAttribution();
+    ADJAdjust2dx::attributionCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string trackerToken;
     std::string trackerName;
@@ -703,9 +701,9 @@ void Adjust2dx::onPause() {
 #endif
 }
 
-std::string Adjust2dx::getIdfa() {
+void Adjust2dx::idfaCallback(void(*callbackMethod)(std::string idfa)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getIdfa();
+    ADJAdjust2dx::idfaCallback(callbackMethod);
 #else
     return "";
 #endif
@@ -735,17 +733,17 @@ void Adjust2dx::updateSkanConversionValue(int conversionValue,
 #endif
 }
 
-std::string Adjust2dx::getLastDeeplink() {
+void Adjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getLastDeeplink();
+    return ADJAdjust2dx::lastDeeplinkCallback(callbackMethod);
 #else
     return "";
 #endif
 }
 
-std::string Adjust2dx::getIdfv() {
+void Adjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getIdfv();
+    return ADJAdjust2dx::idfvCallback(callbackMethod);
 #else
     return "";
 #endif

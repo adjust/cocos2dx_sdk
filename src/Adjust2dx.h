@@ -30,7 +30,7 @@ public:
     static void trackEvent(AdjustEvent2dx event);
     static void enable();
     static void disable();
-    static bool isEnabled();
+    static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
     static void switchToOfflineMode();
     static void switchBackToOnlineMode();
     static void processDeeplink(std::string url);
@@ -44,9 +44,9 @@ public:
     static void removeGlobalPartnerParameters();
     static void trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
-    static std::string getAdid();
-    static std::string getSdkVersion();
-    static AdjustAttribution2dx getAttribution();
+    static void adidCallback(void(*callbackMethod)(std::string adid));
+    static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
+    static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     static void trackAdRevenueNew(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(std::string url,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
@@ -59,7 +59,7 @@ public:
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     // iOS specific methods.
-    static std::string getIdfa();
+    static void idfaCallback(void(*callbackMethod)(std::string idfa));
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
     static void requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
@@ -67,10 +67,10 @@ public:
                                           std::string coarseValue,
                                           bool* optionalLockWindow,
                                           void (*errorCallback)(std::string error));
-    static std::string getLastDeeplink();
+    static void lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink));
     static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
-    static std::string getIdfv();
+    static void idfvCallback(void(*callbackMethod)(std::string idfv));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

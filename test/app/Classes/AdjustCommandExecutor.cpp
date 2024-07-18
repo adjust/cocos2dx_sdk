@@ -339,7 +339,6 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
             TestLib2dx::addInfoToSend("creative", attribution.getCreative());
             TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
-            TestLib2dx::addInfoToSend("adid", attribution.getAdid());
             TestLib2dx::addInfoToSend("costType", attribution.getCostType());
             std::ostringstream sstream;
             sstream << attribution.getCostAmount();
@@ -810,9 +809,10 @@ void AdjustCommandExecutor::trackAdRevenueNew() {
 
 void AdjustCommandExecutor::getLastDeeplink() {
     localBasePath = this->basePath;
-    std::string lastDeeplink = Adjust2dx::getLastDeeplink();
-    TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
-    TestLib2dx::sendInfoToServer(localBasePath);
+    Adjust2dx::lastDeeplinkCallback([](std::string lastDeeplink) {
+        TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
 }
 
 void AdjustCommandExecutor::verifyPurchase() {

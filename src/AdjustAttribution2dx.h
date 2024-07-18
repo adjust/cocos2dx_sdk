@@ -20,7 +20,6 @@ private:
     std::string adgroup;
     std::string creative;
     std::string clickLabel;
-    std::string adid;
     std::string costType;
     double costAmount;
     std::string costCurrency;
@@ -35,7 +34,6 @@ public:
         std::string adgroup,
         std::string creative,
         std::string clickLabel,
-        std::string adid,
         std::string costType,
         double costAmount,
         std::string costCurrency,
@@ -47,7 +45,6 @@ public:
         this->adgroup = adgroup;
         this->creative = creative;
         this->clickLabel = clickLabel;
-        this->adid = adid;
         this->costType = costType;
         this->costAmount = costAmount;
         this->costCurrency = costCurrency;
@@ -61,7 +58,6 @@ public:
     std::string getAdgroup();
     std::string getCreative();
     std::string getClickLabel();
-    std::string getAdid();
     std::string getCostType();
     double getCostAmount();
     std::string getCostCurrency();

@@ -104,8 +104,7 @@ public:
     void disableSkanAttribution();
     void disableIdfaReading();
     void disableAdServices();
-    void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
-    void setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow));
+    void setSkanUpdatedWithConversionDataCallback(void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data));
     void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only

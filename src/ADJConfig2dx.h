@@ -36,8 +36,7 @@ private:
     void (*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess) = NULL;
     void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure) = NULL;
     bool (*deferredDeeplinkCallback)(std::string deeplink) = NULL;
-    void (*conversionValueUpdatedCallback)(int conversionValue) = NULL;
-    void (*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow) = NULL;
+    void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data) = NULL;
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix);
 
 public:
@@ -68,8 +67,7 @@ public:
     void setSessionSuccessCallback(void(*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
-    void setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue));
-    void setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow));
+    void setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data));
     void enableDeviceIdsReadingOnce();
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
@@ -78,8 +76,7 @@ public:
     void(*getSessionSuccessCallback())(AdjustSessionSuccess2dx);
     void(*getSessionFailureCallback())(AdjustSessionFailure2dx);
     bool(*getDeferredDeeplinkCallback())(std::string);
-    void(*getConversionValueUpdatedCallback())(int);
-    void(*getPostbackConversionValueUpdatedCallback())(int, std::string, bool);
+    void(*getSkanUpdatedWithConversionDataCallback())(std::unordered_map<std::string, std::string>);
 };
 
 #endif /* _ADJUST_ADJCONFIG2DX_H_ */
