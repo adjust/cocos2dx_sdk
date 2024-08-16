@@ -7,15 +7,15 @@
 //
 
 #include "ADJAppStorePurchase2dx.h"
-#include <AdjustSdk/ADJPurchase.h>
+#include <AdjustSdk/ADJAppStorePurchase.h>
 
 void ADJAppStorePurchase2dx::initPurchase(std::string productId, std::string transactionId, std::string receipt) {
     NSString *strProductId = [NSString stringWithUTF8String:productId.c_str()];
     NSString *strTransactionId = [NSString stringWithUTF8String:transactionId.c_str()];
     NSString *strReceipt = [NSString stringWithUTF8String:receipt.c_str()];
-    purchase = [[ADJPurchase alloc] initWithTransactionId:strTransactionId
-                                                productId:strProductId
-                                               andReceipt:[strReceipt dataUsingEncoding:NSUTF8StringEncoding]];
+    purchase = [[ADJAppStorePurchase alloc] initWithTransactionId:strTransactionId
+                                                        productId:strProductId
+                                                       andReceipt:[strReceipt dataUsingEncoding:NSUTF8StringEncoding]];
 }
 
 void* ADJAppStorePurchase2dx::getPurchase() {
