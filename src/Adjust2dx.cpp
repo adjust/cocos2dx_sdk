@@ -25,7 +25,7 @@ const std::string AdjustEnvironmentProduction2dx = "production";
 void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiOnCreate;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnCreate, "com/adjust/sdk/Adjust", "onCreate", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnCreate, "com/adjust/sdk/Adjust", "initSdk", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
         return;
     }
     jmiOnCreate.env->CallStaticVoidMethod(jmiOnCreate.classID, jmiOnCreate.methodID, adjustConfig.getConfig());
@@ -95,10 +95,10 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, voi
 void Adjust2dx::enable() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetEnabled;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetEnabled, "com/adjust/sdk/Adjust", "enable", "()V")) {
         return;
     }
-    jmiSetEnabled.env->CallStaticVoidMethod(jmiSetEnabled.classID, jmiSetEnabled.methodID, isEnabled);
+    jmiSetEnabled.env->CallStaticVoidMethod(jmiSetEnabled.classID, jmiSetEnabled.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::enable();
 #endif
@@ -107,10 +107,10 @@ void Adjust2dx::enable() {
 void Adjust2dx::disable() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetEnabled;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetEnabled, "com/adjust/sdk/Adjust", "setEnabled", "(Z)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetEnabled, "com/adjust/sdk/Adjust", "disable", "()V")) {
         return;
     }
-    jmiSetEnabled.env->CallStaticVoidMethod(jmiSetEnabled.classID, jmiSetEnabled.methodID, isEnabled);
+    jmiSetEnabled.env->CallStaticVoidMethod(jmiSetEnabled.classID, jmiSetEnabled.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::disable();
 #endif
@@ -131,11 +131,10 @@ void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
 
 void Adjust2dx::switchToOfflineMode() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiIsOffline;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "switchToOfflineMode", "()V")) {
         return;
     }
-    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID, isOffline);
+    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::switchToOfflineMode();
 #endif
@@ -222,16 +221,16 @@ void Adjust2dx::addGlobalCallbackParameter(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addGlobalCallbackParameter(key, value);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiAddSessionCallbackParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddSessionCallbackParameter, "com/adjust/sdk/Adjust", "addSessionCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiAddGlobalCallbackParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddGlobalCallbackParameter, "com/adjust/sdk/Adjust", "addGlobalCallbackParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = jmiAddSessionCallbackParameter.env->NewStringUTF(key.c_str());
-    jstring jValue = jmiAddSessionCallbackParameter.env->NewStringUTF(value.c_str());
-    jmiAddSessionCallbackParameter.env->CallStaticVoidMethod(jmiAddSessionCallbackParameter.classID, jmiAddSessionCallbackParameter.methodID, jKey, jValue);
-    jmiAddSessionCallbackParameter.env->DeleteLocalRef(jKey);
-    jmiAddSessionCallbackParameter.env->DeleteLocalRef(jValue);
+    jstring jKey = jmiAddGlobalCallbackParameter.env->NewStringUTF(key.c_str());
+    jstring jValue = jmiAddGlobalCallbackParameter.env->NewStringUTF(value.c_str());
+    jmiAddGlobalCallbackParameter.env->CallStaticVoidMethod(jmiAddGlobalCallbackParameter.classID, jmiAddGlobalCallbackParameter.methodID, jKey, jValue);
+    jmiAddGlobalCallbackParameter.env->DeleteLocalRef(jKey);
+    jmiAddGlobalCallbackParameter.env->DeleteLocalRef(jValue);
 #endif
 }
 
@@ -239,16 +238,16 @@ void Adjust2dx::addGlobalPartnerParameter(std::string key, std::string value) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::addGlobalPartnerParameter(key, value);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiAddSessionPartnerParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddSessionPartnerParameter, "com/adjust/sdk/Adjust", "addSessionPartnerParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiAddGlobalPartnerParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAddGlobalPartnerParameter, "com/adjust/sdk/Adjust", "addGlobalPartnerParameter", "(Ljava/lang/String;Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = jmiAddSessionPartnerParameter.env->NewStringUTF(key.c_str());
-    jstring jValue = jmiAddSessionPartnerParameter.env->NewStringUTF(value.c_str());
-    jmiAddSessionPartnerParameter.env->CallStaticVoidMethod(jmiAddSessionPartnerParameter.classID, jmiAddSessionPartnerParameter.methodID, jKey, jValue);
-    jmiAddSessionPartnerParameter.env->DeleteLocalRef(jKey);
-    jmiAddSessionPartnerParameter.env->DeleteLocalRef(jValue);
+    jstring jKey = jmiAddGlobalPartnerParameter.env->NewStringUTF(key.c_str());
+    jstring jValue = jmiAddGlobalPartnerParameter.env->NewStringUTF(value.c_str());
+    jmiAddGlobalPartnerParameter.env->CallStaticVoidMethod(jmiAddGlobalPartnerParameter.classID, jmiAddGlobalPartnerParameter.methodID, jKey, jValue);
+    jmiAddGlobalPartnerParameter.env->DeleteLocalRef(jKey);
+    jmiAddGlobalPartnerParameter.env->DeleteLocalRef(jValue);
 #endif
 }
 
@@ -256,14 +255,14 @@ void Adjust2dx::removeGlobalCallbackParameter(std::string key) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeGlobalCallbackParameter(key);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiRemoveSessionCallbackParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveSessionCallbackParameter, "com/adjust/sdk/Adjust", "removeSessionCallbackParameter", "(Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiRemoveGlobalCallbackParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveGlobalCallbackParameter, "com/adjust/sdk/Adjust", "removeGlobalCallbackParameter", "(Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = jmiRemoveSessionCallbackParameter.env->NewStringUTF(key.c_str());
-    jmiRemoveSessionCallbackParameter.env->CallStaticVoidMethod(jmiRemoveSessionCallbackParameter.classID, jmiRemoveSessionCallbackParameter.methodID, jKey);
-    jmiRemoveSessionCallbackParameter.env->DeleteLocalRef(jKey);
+    jstring jKey = jmiRemoveGlobalCallbackParameter.env->NewStringUTF(key.c_str());
+    jmiRemoveGlobalCallbackParameter.env->CallStaticVoidMethod(jmiRemoveGlobalCallbackParameter.classID, jmiRemoveGlobalCallbackParameter.methodID, jKey);
+    jmiRemoveGlobalCallbackParameter.env->DeleteLocalRef(jKey);
 #endif
 }
 
@@ -271,14 +270,14 @@ void Adjust2dx::removeGlobalPartnerParameter(std::string key) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeGlobalPartnerParameter(key);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiRemoveSessionPartnerParameter;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveSessionPartnerParameter, "com/adjust/sdk/Adjust", "removeSessionPartnerParameter", "(Ljava/lang/String;)V")) {
+    cocos2d::JniMethodInfo jmiRemoveGlobalPartnerParameter;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveGlobalPartnerParameter, "com/adjust/sdk/Adjust", "removeGlobalPartnerParameter", "(Ljava/lang/String;)V")) {
         return;
     }
 
-    jstring jKey = jmiRemoveSessionPartnerParameter.env->NewStringUTF(key.c_str());
-    jmiRemoveSessionPartnerParameter.env->CallStaticVoidMethod(jmiRemoveSessionPartnerParameter.classID, jmiRemoveSessionPartnerParameter.methodID, jKey);
-    jmiRemoveSessionPartnerParameter.env->DeleteLocalRef(jKey);
+    jstring jKey = jmiRemoveGlobalPartnerParameter.env->NewStringUTF(key.c_str());
+    jmiRemoveGlobalPartnerParameter.env->CallStaticVoidMethod(jmiRemoveGlobalPartnerParameter.classID, jmiRemoveGlobalPartnerParameter.methodID, jKey);
+    jmiRemoveGlobalPartnerParameter.env->DeleteLocalRef(jKey);
 #endif
 }
 
@@ -286,11 +285,11 @@ void Adjust2dx::removeGlobalCallbackParameters() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeGlobalCallbackParameters();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiResetSessionCallbackParameters;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiResetSessionCallbackParameters, "com/adjust/sdk/Adjust", "resetSessionCallbackParameters", "()V")) {
+    cocos2d::JniMethodInfo jmiRemoveGlobalCallbackParameters;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveGlobalCallbackParameters, "com/adjust/sdk/Adjust", "removeGlobalCallbackParameters", "()V")) {
         return;
     }
-    jmiResetSessionCallbackParameters.env->CallStaticVoidMethod(jmiResetSessionCallbackParameters.classID, jmiResetSessionCallbackParameters.methodID);
+    jmiRemoveGlobalCallbackParameters.env->CallStaticVoidMethod(jmiRemoveGlobalCallbackParameters.classID, jmiRemoveGlobalCallbackParameters.methodID);
 #endif
 }
 
@@ -298,11 +297,11 @@ void Adjust2dx::removeGlobalPartnerParameters() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::removeGlobalPartnerParameters();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiResetSessionPartnerParameters;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiResetSessionPartnerParameters, "com/adjust/sdk/Adjust", "resetSessionPartnerParameters", "()V")) {
+    cocos2d::JniMethodInfo jmiRemoveGlobalPartnerParameters;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveGlobalPartnerParameters, "com/adjust/sdk/Adjust", "removeGlobalPartnerParameters", "()V")) {
         return;
     }
-    jmiResetSessionPartnerParameters.env->CallStaticVoidMethod(jmiResetSessionPartnerParameters.classID, jmiResetSessionPartnerParameters.methodID);
+    jmiRemoveGlobalPartnerParameters.env->CallStaticVoidMethod(jmiRemoveGlobalPartnerParameters.classID, jmiRemoveGlobalvPartnerParameters.methodID);
 #endif
 }
 
