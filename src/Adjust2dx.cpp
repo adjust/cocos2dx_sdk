@@ -142,22 +142,22 @@ void Adjust2dx::switchToOfflineMode() {
 
 void Adjust2dx::switchBackToOnlineMode() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiIsOffline;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "setOfflineMode", "(Z)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "switchBackToOnlineMode", "()V")) {
         return;
     }
-    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID, isOffline);
+    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::switchBackToOnlineMode();
 #endif
 }
 
+// TODO: change Android when iOs is updated as well
 void Adjust2dx::processDeeplink(std::string url) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::processDeeplink(url);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiAppWillOpenUrl;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiAppWillOpenUrl, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Landroid/net/Uri;Landroid/content/Context;)V")) {
+    cocos2d::JniMethodInfo jmiProcessDeeplink;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessDeeplink, "com/adjust/sdk/Adjust", "appWillOpenUrl", "(Lcom/adjust/sdk/AdjustDeeplink;Landroid/content/Context;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiGetContext;
