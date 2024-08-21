@@ -52,8 +52,8 @@ public:
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
     // Android specific methods.
     static void setReferrer(std::string referrer);
-    static void getGoogleAdId(void (*adIdCallback)(std::string adId));
-    static std::string getAmazonAdId();
+    static void getGoogleAdId(void (*callbackMethod)(std::string adId));
+    static void getAmazonAdId(void (*callbackMethod)(std::string adId));
     static void onResume();
     static void onPause();
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);

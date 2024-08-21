@@ -571,6 +571,36 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     return deferredDeeplinkCallbackMethod(deeplink);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_adIdRead
+(JNIEnv *env, jobject obj, jstring jAdId) {
+    if (NULL == googleAdIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jAdId) {
+        return;
+    }
+
+    const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
+    std::string adId = std::string(adIdCStr);
+    googleAdIdCallbackMethod(adId);
+    env->ReleaseStringUTFChars(jAdId, adIdCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_adIdRead
+(JNIEnv *env, jobject obj, jstring jAdId) {
+    if (NULL == amazonAdIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jAdId) {
+        return;
+    }
+
+    const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
+    std::string adId = std::string(adIdCStr);
+    amazonAdIdCallbackMethod(adId);
+    env->ReleaseStringUTFChars(jAdId, adIdCStr);
+}
+
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
 (JNIEnv *env, jobject obj, jstring jAdId) {
     if (NULL == adIdCallbackMethod) {
@@ -655,6 +685,18 @@ void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSess
 void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink)) {
     if (NULL == deferredDeeplinkCallbackMethod) {
         deferredDeeplinkCallbackMethod = callbackMethod;
+    }
+}
+
+void setGoogleAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
+    if (NULL == googleAdIdCallbackMethod) {
+        googleAdIdCallbackMethod = callbackMethod;
+    }
+}
+
+void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
+    if (NULL == amazonAdIdCallbackMethod) {
+        amazonAdIdCallbackMethod = callbackMethod;
     }
 }
 

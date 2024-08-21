@@ -23,6 +23,8 @@ extern "C" {
     static void (*sessionTrackingFailedCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
     static void (*sessionTrackingSucceededCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
     static bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
+    static void (*googleAdIdCallbackMethod)(std::string adId);
+    static void (*amazonAdIdCallbackMethod)(std::string adId);
     static void (*adIdCallbackMethod)(std::string adId);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
     static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
@@ -41,6 +43,10 @@ extern "C" {
     (JNIEnv *, jobject, jobject);
     JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_deferredDeeplinkReceived
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_adIdRead
+    (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_adIdRead
+    (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
@@ -57,6 +63,8 @@ extern "C" {
     void setSessionTrackingFailedCallbackMethod(void (*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink));
+    void setGoogleAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
+    void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
     void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));

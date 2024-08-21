@@ -333,20 +333,22 @@ void Adjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::adidCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiGetAdid;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdid", "()Ljava/lang/String;")) {
-        return "";
+    setAdIdCallbackMethod(callbackMethod);
+
+    cocos2d::JniMethodInfo jmiGetAdIdCallback;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getAdId", "(Lcom/adjust/sdk/OnAdidReadListener;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
+        return;
     }
 
-    jstring jAdid = (jstring)jmiGetAdid.env->CallStaticObjectMethod(jmiGetAdid.classID, jmiGetAdid.methodID);
-    std::string adid = "";
-    if (NULL != jAdid) {
-        const char *adidCStr = jmiGetAdid.env->GetStringUTFChars(jAdid, NULL);
-        adid = std::string(adidCStr);
-        jmiGetAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
-        jmiGetAdid.env->DeleteLocalRef(jAdid);
-    }
-    return adid;
+    jclass clsAdjust2dxAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdIdCallback, jmidInit);
+    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jCallbackProxy);
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
@@ -622,16 +624,16 @@ void Adjust2dx::setReferrer(std::string referrer) {
 #endif
 }
 
-void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
+void Adjust2dx::getGoogleAdId(void (*callbackMethod)(std::string adId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setAdIdCallbackMethod(adIdCallback);
+    setGoogleAdIdCallbackMethod(callbackMethod);
 
     cocos2d::JniMethodInfo jmiGetAdIdCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnDeviceIdsRead;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnGoogleAdIdReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxGoogleAdIdCallback", "<init>", "()V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiGetContext;
@@ -639,9 +641,9 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
         return;
     }
     
-    jclass clsAdjust2dxAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
-    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdIdCallback, jmidInit);
+    jclass clsAdjust2dxGoolgeAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxGoogleAdIdCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxGoogleAdIdCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxGoogleAdIdCallback, jmidInit);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
     jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
@@ -649,30 +651,30 @@ void Adjust2dx::getGoogleAdId(void (*adIdCallback)(std::string adId)) {
 #endif
 }
 
-std::string Adjust2dx::getAmazonAdId() {
+void getAmazonAdId(void (*callbackMethod)(std::string adId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiGetAmazonAdid;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAmazonAdid, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;)Ljava/lang/String;")) {
-        return "";
+    setAmazonAdIdCallbackMethod(callbackMethod);
+
+    cocos2d::JniMethodInfo jmiGetAdIdCallback;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnAmazonAdIdReadListener;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAmazonAdIdCallback", "<init>", "()V")) {
+        return;
     }
     cocos2d::JniMethodInfo jmiGetContext;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
-        return "";
+        return;
     }
 
-    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);    
-    jstring jAdid = (jstring)jmiGetAmazonAdid.env->CallStaticObjectMethod(jmiGetAmazonAdid.classID, jmiGetAmazonAdid.methodID, jContext);
-    std::string adid = "";
-    if (NULL != jAdid) {
-        const char *adidCStr = jmiGetAmazonAdid.env->GetStringUTFChars(jAdid, NULL);
-        adid = std::string(adidCStr);
-        jmiGetAmazonAdid.env->ReleaseStringUTFChars(jAdid, adidCStr);
-        jmiGetAmazonAdid.env->DeleteLocalRef(jAdid);
-    }
+    jclass clsAdjust2dxAmazonAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAmazonAdIdCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAmazonAdIdCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAmazonAdIdCallback, jmidInit);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
-    return adid;
-#else
-    return "";
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
