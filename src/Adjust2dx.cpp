@@ -377,187 +377,22 @@ void Adjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx a
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::attributionCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    std::string trackerToken;
-    std::string trackerName;
-    std::string network;
-    std::string campaign;
-    std::string adgroup;
-    std::string creative;
-    std::string clickLabel;
-    std::string adid;
-    std::string costType;
-    double costAmount;
-    std::string costCurrency;
-    std::string fbInstallReferrer;
+    setAttributionReadCallbackMethod(callbackMethod);
 
-    cocos2d::JniMethodInfo jmiGetAttribution;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttribution, "com/adjust/sdk/Adjust", "getAttribution", "()Lcom/adjust/sdk/AdjustAttribution;")) {
-        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
-            trackerToken,
-            trackerName,
-            network,
-            campaign,
-            adgroup,
-            creative,
-            clickLabel,
-            adid,
-            costType,
-            costAmount,
-            costCurrency,
-            fbInstallReferrer);
-        return attribution2dx;
+    cocos2d::JniMethodInfo jmiGetAttributionReadCallback;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttributionReadCallback, "com/adjust/sdk/Adjust", "getAttribution", "(Lcom/adjust/sdk/OnAttributionReadListener;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAttributionReadCallback", "<init>", "()V")) {
+        return;
     }
 
-    jobject jAttribution = jmiGetAttribution.env->CallStaticObjectMethod(jmiGetAttribution.classID, jmiGetAttribution.methodID);
-    if (NULL != jAttribution) {
-        jclass clsAdjustAttribution = jmiGetAttribution.env->FindClass("com/adjust/sdk/AdjustAttribution");
-        jfieldID jfidTrackerToken = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
-        jfieldID jfidTrackerName = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "trackerName", "Ljava/lang/String;");
-        jfieldID jfidNetwork = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "network", "Ljava/lang/String;");
-        jfieldID jfidCampaign = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "campaign", "Ljava/lang/String;");
-        jfieldID jfidAdgroup = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "adgroup", "Ljava/lang/String;");
-        jfieldID jfidCreative = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "creative", "Ljava/lang/String;");
-        jfieldID jfidClickLabel = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
-        jfieldID jfidAdid = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "adid", "Ljava/lang/String;");
-        jfieldID jfidCostType = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costType", "Ljava/lang/String;");
-        jfieldID jfidCostAmount = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
-        jfieldID jfidCostCurrency = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
-        jfieldID jfidFbInstallReferrer = jmiGetAttribution.env->GetFieldID(clsAdjustAttribution, "fbInstallReferrer", "Ljava/lang/String;");
-        jstring jTrackerToken = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerToken);
-        jstring jTrackerName = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidTrackerName);
-        jstring jNetwork = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidNetwork);
-        jstring jCampaign = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCampaign);
-        jstring jAdgroup = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidAdgroup);
-        jstring jCreative = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCreative);
-        jstring jClickLabel = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidClickLabel);
-        jstring jAdid = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidAdid);
-        jstring jCostType = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostType);
-        jobject jCostAmount = jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostAmount);
-        jstring jCostCurrency = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidCostCurrency);
-        jstring jFbInstallReferrer = (jstring)jmiGetAttribution.env->GetObjectField(jAttribution, jfidFbInstallReferrer);
-
-        if (NULL != jTrackerToken) {
-            const char *trackerTokenCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerToken, NULL);
-            trackerToken = std::string(trackerTokenCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jTrackerToken);
-        } else {
-            trackerToken = "";
-        }
-
-        if (NULL != jTrackerName) {
-            const char *trackerNameCStr = jmiGetAttribution.env->GetStringUTFChars(jTrackerName, NULL);
-            trackerName = std::string(trackerNameCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jTrackerName);
-        } else {
-            trackerName = "";
-        }
-
-        if (NULL != jNetwork) {
-            const char *networkCStr = jmiGetAttribution.env->GetStringUTFChars(jNetwork, NULL);
-            network = std::string(networkCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jNetwork, networkCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jNetwork);
-        } else {
-            network = "";
-        }
-
-        if (NULL != jCampaign) {
-            const char *campaignCStr = jmiGetAttribution.env->GetStringUTFChars(jCampaign, NULL);
-            campaign = std::string(campaignCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jCampaign, campaignCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jCampaign);
-        } else {
-            campaign = "";
-        }
-
-        if (NULL != jAdgroup) {
-            const char *adgroupCStr = jmiGetAttribution.env->GetStringUTFChars(jAdgroup, NULL);
-            adgroup = std::string(adgroupCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jAdgroup);
-        } else {
-            adgroup = "";
-        }
-
-        if (NULL != jCreative) {
-            const char *creativeCStr = jmiGetAttribution.env->GetStringUTFChars(jCreative, NULL);
-            creative = std::string(creativeCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jCreative, creativeCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jCreative);
-        } else {
-            creative = "";
-        }
-
-        if (NULL != jClickLabel) {
-            const char *clickLabelCStr = jmiGetAttribution.env->GetStringUTFChars(jClickLabel, NULL);
-            clickLabel = std::string(clickLabelCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jClickLabel);
-        } else {
-            clickLabel = "";
-        }
-
-        if (NULL != jAdid) {
-            const char *adidCStr = jmiGetAttribution.env->GetStringUTFChars(jAdid, NULL);
-            adid = std::string(adidCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jAdid, adidCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jAdid);
-        } else {
-            adid = "";
-        }
-
-        if (NULL != jCostType) {
-            const char *costTypeCStr = jmiGetAttribution.env->GetStringUTFChars(jCostType, NULL);
-            costType = std::string(costTypeCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jCostType, costTypeCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jCostType);
-        } else {
-            costType = "";
-        }
-
-        if (NULL != jCostAmount) {
-            jclass jcDouble = jmiGetAttribution.env->FindClass("java/lang/Double");
-            jmethodID jmidDoubleValue = jmiGetAttribution.env->GetMethodID(jcDouble, "doubleValue", "()D" );
-            costAmount = jmiGetAttribution.env->CallDoubleMethod(jCostAmount, jmidDoubleValue);
-        } else {
-            costAmount = 0;
-        }
-
-        if (NULL != jCostCurrency) {
-            const char *costCurrencyCStr = jmiGetAttribution.env->GetStringUTFChars(jCostCurrency, NULL);
-            costCurrency = std::string(costCurrencyCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jCostCurrency);
-        } else {
-            costCurrency = "";
-        }
-
-        if (NULL != jFbInstallReferrer) {
-            const char *fbInstallReferrerCStr = jmiGetAttribution.env->GetStringUTFChars(jFbInstallReferrer, NULL);
-            fbInstallReferrer = std::string(fbInstallReferrerCStr);
-            jmiGetAttribution.env->ReleaseStringUTFChars(jFbInstallReferrer, fbInstallReferrerCStr);
-            jmiGetAttribution.env->DeleteLocalRef(jFbInstallReferrer);
-        } else {
-            fbInstallReferrer = "";
-        }
-    }
-
-    AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
-        trackerToken,
-        trackerName,
-        network,
-        campaign,
-        adgroup,
-        creative,
-        clickLabel,
-        adid,
-        costType,
-        costAmount,
-        costCurrency,
-        fbInstallReferrer);
-    return attribution2dx;
+    jclass clsAdjust2dxAttributionReadCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAttributionReadCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAttributionReadCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAttributionReadCallback, jmidInit);
+    jmiGetAttributionReadCallback.env->CallStaticVoidMethod(jmiGetAttributionReadCallback.classID, jmiGetAttributionReadCallback.methodID, jCallbackProxy);
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 

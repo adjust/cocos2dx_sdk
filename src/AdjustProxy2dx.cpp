@@ -613,7 +613,166 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
     std::string adId = std::string(adIdCStr);
     adIdCallbackMethod(adId);
-    env->ReleaseStringUTFChars(jAdId, adIdCStr);    
+    env->ReleaseStringUTFChars(jAdId, adIdCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionRead
+ (JNIEnv *env, jobject obj, jobject attributionObject) {
+    if (NULL == attributionReadCallbackMethod) {
+        return;
+    }
+    if (NULL == attributionObject) {
+        return;
+    }
+
+    std::string trackerToken;
+    std::string trackerName;
+    std::string network;
+    std::string campaign;
+    std::string adgroup;
+    std::string creative;
+    std::string clickLabel;
+
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
+    std::string fbInstallReferrer;
+
+    jclass jclsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
+    jfieldID jfidTrackerToken = env->GetFieldID(jclsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
+    jfieldID jfidTrackerName = env->GetFieldID(jclsAdjustAttribution, "trackerName", "Ljava/lang/String;");
+    jfieldID jfidNetwork = env->GetFieldID(jclsAdjustAttribution, "network", "Ljava/lang/String;");
+    jfieldID jfidCampaign = env->GetFieldID(jclsAdjustAttribution, "campaign", "Ljava/lang/String;");
+    jfieldID jfidAdgroup = env->GetFieldID(jclsAdjustAttribution, "adgroup", "Ljava/lang/String;");
+    jfieldID jfidCreative = env->GetFieldID(jclsAdjustAttribution, "creative", "Ljava/lang/String;");
+    jfieldID jfidClickLabel = env->GetFieldID(jclsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
+    jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
+    jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
+    jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
+    jfieldID jfidFbInstallReferrer = env->GetFieldID(jclsAdjustAttribution, "fbInstallReferrer", "Ljava/lang/String;");
+    jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, jfidTrackerToken);
+    jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, jfidTrackerName);
+    jstring jNetwork = (jstring)env->GetObjectField(attributionObject, jfidNetwork);
+    jstring jCampaign = (jstring)env->GetObjectField(attributionObject, jfidCampaign);
+    jstring jAdgroup = (jstring)env->GetObjectField(attributionObject, jfidAdgroup);
+    jstring jCreative = (jstring)env->GetObjectField(attributionObject, jfidCreative);
+    jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, jfidClickLabel);
+    jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
+    jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
+    jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
+    jstring jFbInstallReferrer = (jstring)env->GetObjectField(attributionObject, jfidFbInstallReferrer);
+
+    if (NULL != jTrackerToken) {
+        const char *trackerTokenCStr = env->GetStringUTFChars(jTrackerToken, NULL);
+        trackerToken = std::string(trackerTokenCStr);
+        env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
+        env->DeleteLocalRef(jTrackerToken);
+    } else {
+        trackerToken = "";
+    }
+
+    if (NULL != jTrackerName) {
+        const char *trackerNameCStr = env->GetStringUTFChars(jTrackerName, NULL);
+        trackerName = std::string(trackerNameCStr);
+        env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
+        env->DeleteLocalRef(jTrackerName);
+    } else {
+        trackerName = "";
+    }
+
+    if (NULL != jNetwork) {
+        const char *networkCStr = env->GetStringUTFChars(jNetwork, NULL);
+        network = std::string(networkCStr);
+        env->ReleaseStringUTFChars(jNetwork, networkCStr);
+        env->DeleteLocalRef(jNetwork);
+    } else {
+        network = "";
+    }
+
+    if (NULL != jCampaign) {
+        const char *campaignCStr = env->GetStringUTFChars(jCampaign, NULL);
+        campaign = std::string(campaignCStr);
+        env->ReleaseStringUTFChars(jCampaign, campaignCStr);
+        env->DeleteLocalRef(jCampaign);
+    } else {
+        campaign = "";
+    }
+
+    if (NULL != jAdgroup) {
+        const char *adgroupCStr = env->GetStringUTFChars(jAdgroup, NULL);
+        adgroup = std::string(adgroupCStr);
+        env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
+        env->DeleteLocalRef(jAdgroup);
+    } else {
+        adgroup = "";
+    }
+
+    if (NULL != jCreative) {
+        const char *creativeCStr = env->GetStringUTFChars(jCreative, NULL);
+        creative = std::string(creativeCStr);
+        env->ReleaseStringUTFChars(jCreative, creativeCStr);
+        env->DeleteLocalRef(jCreative);
+    } else {
+        creative = "";
+    }
+
+    if (NULL != jClickLabel) {
+        const char *clickLabelCStr = env->GetStringUTFChars(jClickLabel, NULL);
+        clickLabel = std::string(clickLabelCStr);
+        env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
+        env->DeleteLocalRef(jClickLabel);
+    } else {
+        clickLabel = "";
+    }
+
+    if (NULL != jCostType) {
+        const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
+        costType = std::string(costTypeCStr);
+        env->ReleaseStringUTFChars(jCostType, costTypeCStr);
+        env->DeleteLocalRef(jCostType);
+    } else {
+        costType = "";
+    }
+
+    if (NULL != jCostAmount) {
+        jclass jcDouble = env->FindClass("java/lang/Double");
+        jmethodID jmidDoubleValue = env->GetMethodID(jcDouble, "doubleValue", "()D" );
+        costAmount = env->CallDoubleMethod(jCostAmount, jmidDoubleValue);
+    } else {
+        costAmount = 0;
+    }
+
+    if (NULL != jCostCurrency) {
+        const char *costCurrencyCStr = env->GetStringUTFChars(jCostCurrency, NULL);
+        costCurrency = std::string(costCurrencyCStr);
+        env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
+        env->DeleteLocalRef(jCostCurrency);
+    } else {
+        costCurrency = "";
+    }
+
+    if (NULL != jFbInstallReferrer) {
+        const char *fbInstallReferrerCStr = env->GetStringUTFChars(jFbInstallReferrer, NULL);
+        fbInstallReferrer = std::string(fbInstallReferrerCStr);
+        env->ReleaseStringUTFChars(jFbInstallReferrer, fbInstallReferrerCStr);
+        env->DeleteLocalRef(jFbInstallReferrer);
+    } else {
+        fbInstallReferrer = "";
+    }
+
+    AdjustAttribution2dx attribution =
+        AdjustAttribution2dx(trackerToken,
+                             trackerName,
+                             network,
+                             campaign,
+                             adgroup,
+                             creative,
+                             clickLabel,
+                             costType,
+                             costAmount,
+                             costCurrency,
+                             fbInstallReferrer);
+    attributionReadCallbackMethod(attribution);
 }
 
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
@@ -703,6 +862,12 @@ void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
 void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
     if (NULL == adIdCallbackMethod) {
         adIdCallbackMethod = callbackMethod;
+    }
+}
+
+void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
+    if (NULL == attributionReadCallbackMethod) {
+        attributionReadCallbackMethod = callbackMethod;
     }
 }
 

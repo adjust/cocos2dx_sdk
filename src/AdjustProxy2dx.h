@@ -26,6 +26,7 @@ extern "C" {
     static void (*googleAdIdCallbackMethod)(std::string adId);
     static void (*amazonAdIdCallbackMethod)(std::string adId);
     static void (*adIdCallbackMethod)(std::string adId);
+    static void (*attributionReadCallbackMethod)(AdjustAttribution2dx attribution);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
     static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
     // Only for testing purposes.
@@ -66,6 +67,7 @@ extern "C" {
     void setGoogleAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
+    void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
     void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
     // Only for testing purposes.
