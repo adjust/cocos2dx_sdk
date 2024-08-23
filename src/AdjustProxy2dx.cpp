@@ -790,6 +790,21 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDee
     env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionRead
+ (JNIEnv *, jobject, jstring jSdkVersion) {
+    if (NULL == sdkVersionCallbackMethod) {
+        return;
+    }
+    if (NULL == jSdkVersion) {
+        return;
+    }
+
+    const char *sdkVersionCStr = env->GetStringUTFChars(jsdkVersion, NULL);
+    std::string sdkVersion = std::string(sdkVersionCStr);
+    sdkVersionCallbackMethod(sdkVersion);
+    env->ReleaseStringUTFChars(jsdkVersion, sdkVersionCStr);
+}
+
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
 (JNIEnv *env, jobject obj, jstring jResolvedLink) {
     if (NULL == resolvedLinkCallbackMethod) {
@@ -889,6 +904,12 @@ void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2d
 void setLastDeeplinkCallbackMethod(void (*callbackMethod)(std::string deeplink)) {
     if (NULL == lastDeeplinkCallbackMethod) {
         lastDeeplinkCallbackMethod = callbackMethod;
+    }
+}
+
+void setSdkVersionCallbackMethod(void (*callbackMethod)(std::string sdkVersion)) {
+    if (NULL == sdkVersionCallbackMethod) {
+        sdkVersionCallbackMethod = callbackMethod;
     }
 }
 

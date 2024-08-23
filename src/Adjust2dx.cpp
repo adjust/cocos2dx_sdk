@@ -356,20 +356,22 @@ void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::sdkVersionCallback(callbackMethod);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiGetSdkVersion;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersion, "com/adjust/sdk/Adjust", "getSdkVersion", "()Ljava/lang/String;")) {
-        return "";
+    setSdkVersionCallbackMethod(callbackMethod);
+
+    cocos2d::JniMethodInfo jmiGetSdkVersionCallback;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersionCallback, "com/adjust/sdk/Adjust", "getSdkVersion", "(Lcom/adjust/sdk/OnSdkVersionReadListener;)V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxSdkVersionCallback", "<init>", "()V")) {
+        return;
     }
 
-    jstring jSdkVersion = (jstring)jmiGetSdkVersion.env->CallStaticObjectMethod(jmiGetSdkVersion.classID, jmiGetSdkVersion.methodID);
-    std::string sdkVersion = "";
-    if (NULL != jSdkVersion) {
-        const char *sdkVersionCStr = jmiGetSdkVersion.env->GetStringUTFChars(jSdkVersion, NULL);
-        sdkVersion = std::string(sdkVersionCStr);
-        jmiGetSdkVersion.env->ReleaseStringUTFChars(jSdkVersion, sdkVersionCStr);
-        jmiGetSdkVersion.env->DeleteLocalRef(jSdkVersion);
-    }
-    return AdjustSdkPrefix2dx + "@" + sdkVersion;
+    jclass clsAdjust2dxSdkVersionCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxSdkVersionCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxSdkVersionCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxSdkVersionCallback, jmidInit);
+    jmiGetSdkVersionCallback.env->CallStaticVoidMethod(jmiGetSdkVersionCallback.classID, jmiGetSdkVersionCallback.methodID, jCallbackProxy);
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
