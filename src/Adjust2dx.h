@@ -58,6 +58,7 @@ public:
     static void onPause();
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
+    static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     // iOS specific methods.
     static void idfaCallback(void(*callbackMethod)(std::string idfa));
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);

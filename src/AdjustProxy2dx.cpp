@@ -820,9 +820,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolve
     env->ReleaseStringUTFChars(jResolvedLink, resolvedLinkCStr);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResult
 (JNIEnv *env, jobject obj, jstring jVerificationStatus, int jCode, jstring jMessage) {
-    if (NULL == purchaseVerificationResultCallbackMethod) {
+    if (NULL == verifyPlayStorePurchaseCallbackMethod) {
         return;
     }
 
@@ -830,7 +830,22 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCa
     std::string verificationStatus = std::string(verificationStatusCStr);
     const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
     std::string message = std::string(messageCStr);
-    purchaseVerificationResultCallbackMethod(verificationStatus, jCode, message);
+    verifyPlayStorePurchaseCallbackMethod(verificationStatus, jCode, message);
+    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    env->ReleaseStringUTFChars(jMessage, messageCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
+(JNIEnv *env, jobject obj, jstring jVerificationStatus, int jCode, jstring jMessage) {
+    if (NULL == verifyAndTrackPlayStorePurchaseCallbackMethod) {
+        return;
+    }
+
+    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+    std::string verificationStatus = std::string(verificationStatusCStr);
+    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+    std::string message = std::string(messageCStr);
+    verifyAndTrackPlayStorePurchaseCallbackMethod(verificationStatus, jCode, message);
     env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
     env->ReleaseStringUTFChars(jMessage, messageCStr);
 }
@@ -919,9 +934,15 @@ void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLi
     }
 }
 
-void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
-    if (NULL == purchaseVerificationResultCallbackMethod) {
-        purchaseVerificationResultCallbackMethod = callbackMethod;
+void setVerifyPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
+    if (NULL == verifyPlayStorePurchaseCallbackMethod) {
+        verifyPlayStorePurchaseCallbackMethod = callbackMethod;
+    }
+}
+
+void setVerifyAndTrackPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
+    if (NULL == verifyAndTrackPlayStorePurchaseCallbackMethod) {
+        verifyAndTrackPlayStorePurchaseCallbackMethod = callbackMethod;
     }
 }
 

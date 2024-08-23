@@ -79,16 +79,33 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
 
 void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setPurchaseVerificationResultCallbackMethod(verificationCallback);
+    setVerifyPlayStorePurchaseCallbackMethod(verificationCallback);
+    
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
         return;
     }
-    jclass clsAdjust2dxPurchaseVerificationResultCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxPurchaseVerificationResultCallback");
-    jmethodID jmidInit = jmiVerifyPlayStorePurchase.env->GetMethodID(clsAdjust2dxPurchaseVerificationResultCallback, "<init>", "()V");
-    jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxPurchaseVerificationResultCallback, jmidInit);
+    jclass clsAdjust2dxVerifyPlayStorePurchaseCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxVerifyPlayStorePurchaseCallback");
+    jmethodID jmidInit = jmiVerifyPlayStorePurchase.env->GetMethodID(clsAdjust2dxVerifyPlayStorePurchaseCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyPlayStorePurchaseCallback, jmidInit);
     jmiVerifyPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyPlayStorePurchase.classID, jmiVerifyPlayStorePurchase.methodID, purchase.getPurchase(), jCallbackProxy);
     jmiVerifyPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
+#endif
+}
+
+void Adjust2dx::verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    setVerifyAndTrackPlayStorePurchaseCallbackMethod(verificationCallback);
+
+    cocos2d::JniMethodInfo jmiVerifyAndTrackPlayStorePurchase;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyAndTrackPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyAndTrackPlayStorePurchase", "(Lcom/adjust/sdk/AdjustEvent;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
+        return;
+    }
+    jclass clsAdjust2dxVerifyAndTrackPlayStorePurchaseCallback = jmiVerifyAndTrackPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxVerifyAndTrackPlayStorePurchaseCallback");
+    jmethodID jmidInit = jmiVerifyAndTrackPlayStorePurchase.env->GetMethodID(clsAdjust2dxVerifyAndTrackPlayStorePurchaseCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiVerifyAndTrackPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyAndTrackPlayStorePurchaseCallback, jmidInit);
+    jmiVerifyAndTrackPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyAndTrackPlayStorePurchase.classID, jmiVerifyAndTrackPlayStorePurchase.methodID, event.getEvent(), jCallbackProxy);
+    jmiVerifyAndTrackPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 

@@ -30,7 +30,8 @@ extern "C" {
     static void (*lastDeeplinkCallbackMethod)(std::string deeplink);
     static void (*sdkVersionCallbackMethod)(std::string deeplink);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
-    static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
+    static void (*verifyPlayStorePurchaseCallbackMethod)(std::string verificationStatus, int code, std::string message);
+    static void (*verifyAndTrackPlayStorePurchaseCallbackMethod)(std::string verificationStatus, int code, std::string message);
     // Only for testing purposes.
     static void (*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters);
 
@@ -60,7 +61,9 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
     (JNIEnv *, jobject, jstring);
-    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResult
+    (JNIEnv *, jobject, jstring, int, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
     (JNIEnv *, jobject, jstring, int, jstring);
     // Only for testing purposes.
     JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
@@ -79,7 +82,8 @@ extern "C" {
     void setLastDeeplinkCallbackMethod(void (*callbackMethod)(std::string deeplink));
     void setSdkVersionCallbackMethod(void (*callbackMethod)(std::string sdkVersion));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
-    void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
+    void setVerifyPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
+    void setVerifyAndTrackPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
     // Only for testing purposes.
     void setExecuteTestLibCommandCallbackMethod(void(*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters));
 }
