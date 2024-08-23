@@ -37,7 +37,8 @@ public:
         std::string costType,
         double costAmount,
         std::string costCurrency,
-        std::string fbInstallReferrer) {
+        std::string fbInstallReferrer)
+    {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
         this->network = network;

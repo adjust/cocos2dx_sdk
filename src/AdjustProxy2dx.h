@@ -27,6 +27,7 @@ extern "C" {
     static void (*amazonAdIdCallbackMethod)(std::string adId);
     static void (*adIdCallbackMethod)(std::string adId);
     static void (*attributionReadCallbackMethod)(AdjustAttribution2dx attribution);
+    static void (*lastDeeplinkCallbackMethod)(std::string deeplink);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
     static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
     // Only for testing purposes.
@@ -50,6 +51,10 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionRead
+    (JNIEnv *, jobject, jobject);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkRead
+    (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
@@ -68,6 +73,7 @@ extern "C" {
     void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));
+    void setLastDeeplinkCallbackMethod(void (*callbackMethod)(std::string deeplink));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
     void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
     // Only for testing purposes.

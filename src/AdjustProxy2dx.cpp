@@ -775,6 +775,21 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attr
     attributionReadCallbackMethod(attribution);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkRead
+(JNIEnv *env, jobject obj, jstring jDeeplink) {
+    if (NULL == lastDeeplinkCallbackMethod) {
+        return;
+    }
+    if (NULL == jDeeplink) {
+        return;
+    }
+
+    const char *deeplinkCStr = env->GetStringUTFChars(jDeeplink, NULL);
+    std::string deeplink = std::string(deeplinkCStr);
+    lastDeeplinkCallbackMethod(deeplink);
+    env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
+}
+
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
 (JNIEnv *env, jobject obj, jstring jResolvedLink) {
     if (NULL == resolvedLinkCallbackMethod) {
@@ -868,6 +883,12 @@ void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
 void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
     if (NULL == attributionReadCallbackMethod) {
         attributionReadCallbackMethod = callbackMethod;
+    }
+}
+
+void setLastDeeplinkCallbackMethod(void (*callbackMethod)(std::string deeplink)) {
+    if (NULL == lastDeeplinkCallbackMethod) {
+        lastDeeplinkCallbackMethod = callbackMethod;
     }
 }
 
