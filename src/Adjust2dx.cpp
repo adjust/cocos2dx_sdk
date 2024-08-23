@@ -81,7 +81,7 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, voi
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setPurchaseVerificationResultCallbackMethod(verificationCallback);
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
         return;
     }
     jclass clsAdjust2dxPurchaseVerificationResultCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxPurchaseVerificationResultCallback");
