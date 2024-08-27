@@ -146,15 +146,12 @@ void AdjustConfig2dx::enableCostDataInAttribution() {
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetNeedsCost;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetNeedsCost, "com/adjust/sdk/AdjustConfig", "setNeedsCost", "(Ljava/lang/Boolean;)V")) {
+    cocos2d::JniMethodInfo jmiEnableCostDataInAttribution;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableCostDataInAttribution, "com/adjust/sdk/AdjustConfig", "enableCostDataInAttribution", "()V")) {
         return;
     }
 
-    jclass jclsBoolean = jmiSetNeedsCost.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetNeedsCost.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jNeedsCost = jmiSetNeedsCost.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, needsCost);
-    jmiSetNeedsCost.env->CallVoidMethod(config, jmiSetNeedsCost.methodID, jNeedsCost);
+    jmiEnableCostDataInAttribution.env->CallVoidMethod(config, jmiEnableCostDataInAttribution.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.enableCostDataInAttribution();
