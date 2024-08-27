@@ -108,7 +108,7 @@ public:
     void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only
-    void setPreinstallTrackingEnabled(bool isEnabled);
+    void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
     void setPlayStoreKidsAppEnabled(bool isEnabled);
     void setFinalAttributionEnabled(bool isEnabled);

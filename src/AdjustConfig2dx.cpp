@@ -283,21 +283,17 @@ void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains
 #endif
 }
 
-void AdjustConfig2dx::setPreinstallTrackingEnabled(bool isEnabled) {
+void AdjustConfig2dx::enablePreinstallTracking() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetPreinstallTrackingEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPreinstallTrackingEnabled, "com/adjust/sdk/AdjustConfig", "jmiSetPreinstallTrackingEnabled", "(Ljava/lang/Boolean;)V")) {
+    cocos2d::JniMethodInfo jmiEnablePreinstallTracking;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnablePreinstallTracking, "com/adjust/sdk/AdjustConfig", "enablePreinstallTracking", "()V")) {
         return;
     }
 
-    jclass jclsBoolean = jmiSetPreinstallTrackingEnabled.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetPreinstallTrackingEnabled.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jIsEnabled = jmiSetPreinstallTrackingEnabled.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, isEnabled);
-    jmiSetPreinstallTrackingEnabled.env->CallVoidMethod(config, jmiSetPreinstallTrackingEnabled.methodID, jIsEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    jmiEnablePreinstallTracking.env->CallVoidMethod(config, jmiEnablePreinstallTracking.methodID);
 #endif
 }
 
