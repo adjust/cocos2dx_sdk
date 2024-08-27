@@ -532,16 +532,16 @@ void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
 #endif
 }
 
-void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
+void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetPlayStoreKidsAppEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPlayStoreKidsAppEnabled, "com/adjust/sdk/AdjustConfig", "setPlayStoreKidsAppEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnablePlayStoreKidsCompliance;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnablePlayStoreKidsCompliance, "com/adjust/sdk/AdjustConfig", "enablePlayStoreKidsCompliance", "()V")) {
         return;
     }
-    jmiSetPlayStoreKidsAppEnabled.env->CallVoidMethod(config, jmiSetPlayStoreKidsAppEnabled.methodID, isEnabled);
+    jmiEnablePlayStoreKidsCompliance.env->CallVoidMethod(config, jmiEnablePlayStoreKidsCompliance.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #endif
 }

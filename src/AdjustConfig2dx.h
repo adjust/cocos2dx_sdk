@@ -110,7 +110,7 @@ public:
     // Android only
     void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
-    void setPlayStoreKidsAppEnabled(bool isEnabled);
+    void enablePlayStoreKidsCompliance();
     void setFinalAttributionEnabled(bool isEnabled);
     void setFbAppId(std::string fbAppId);
 
