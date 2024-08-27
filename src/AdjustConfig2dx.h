@@ -100,6 +100,7 @@ public:
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
     void enableDeviceIdsReadingOnce();
+    // enableCoppaCompliance TODO add to updated iOs & Android
     // iOS only
     void disableSkanAttribution();
     void disableIdfaReading();
@@ -111,7 +112,6 @@ public:
     void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
     void enablePlayStoreKidsCompliance();
-    void setFinalAttributionEnabled(bool isEnabled);
     void setFbAppId(std::string fbAppId);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
