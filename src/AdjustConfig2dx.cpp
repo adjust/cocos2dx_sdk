@@ -520,11 +520,11 @@ void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetReadDeviceInfoOnceEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "setReadDeviceInfoOnceEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnableDeviceIdsReadingOnce;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "enableDeviceIdsReadingOnce", "()V")) {
         return;
     }
-    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiSetReadDeviceInfoOnceEnabled.methodID, isEnabled);
+    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiEnableDeviceIdsReadingOnce.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.enableDeviceIdsReadingOnce();
