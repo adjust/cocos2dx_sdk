@@ -128,12 +128,12 @@ void AdjustConfig2dx::enableSendingInBackground() {
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetSendInBackground;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetSendInBackground, "com/adjust/sdk/AdjustConfig", "setSendInBackground", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnableSendingInBackground;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableSendingInBackground, "com/adjust/sdk/AdjustConfig", "enableSendingInBackground", "()V")) {
         return;
     }
 
-    jmiSetSendInBackground.env->CallVoidMethod(config, jmiSetSendInBackground.methodID, isEnabled);
+    jmiEnableSendingInBackground.env->CallVoidMethod(config, jmiEnableSendingInBackground.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.enableSendingInBackground();
