@@ -80,7 +80,7 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
 void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setVerifyPlayStorePurchaseCallbackMethod(verificationCallback);
-    
+
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
         return;

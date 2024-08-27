@@ -329,19 +329,6 @@ void AdjustConfig2dx::disableSkanAttribution() {
 #endif
 }
 
-void AdjustConfig2dx::setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity) {
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//     if (config == NULL) {
-//         return;
-//     }
-//     cocos2d::JniMethodInfo jmiSetReadMobileEquipmentIdentity;
-//     if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
-//         return;
-//     }
-//     jmiSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, jmiSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
-// #endif
-}
-
 void AdjustConfig2dx::setProcessName(std::string processName) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
