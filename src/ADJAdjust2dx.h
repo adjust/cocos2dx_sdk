@@ -12,6 +12,7 @@
 #include <map>
 #include <iostream>
 #include "ADJEvent2dx.h"
+#include "ADJDeeplink2dx.h"
 #include "ADJConfig2dx.h"
 #include "ADJAppStoreSubscription2dx.h"
 #include "ADJThirdPartySharing2dx.h"
@@ -31,7 +32,7 @@ public:
     static void trackSubsessionEnd();
     static void enable();
     static void disable();
-    static void processDeeplink(std::string url);
+    static void processDeeplink(ADJDeeplink2dx adjustDeeplink);
     static void setPushTokenAsString(std::string pushToken);
     static void switchToOfflineMode();
     static void switchBackToOnlineMode();
@@ -60,7 +61,7 @@ public:
     static void verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static void verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static void idfvCallback(void(*callbackMethod)(std::string idfv));
-    static void processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink));
+    static void processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*resolvedLinkCallback)(std::string resolvedLink));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
     static void teardown();

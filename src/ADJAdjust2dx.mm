@@ -96,9 +96,8 @@ void ADJAdjust2dx::disable() {
     [Adjust disable];
 }
 
-void ADJAdjust2dx::processDeeplink(std::string url) {
-    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
-    [Adjust processDeeplink:pUrl];
+void ADJAdjust2dx::processDeeplink(ADJDeeplink2dx adjustDeeplink) {
+    [Adjust processDeeplink:(ADJDeeplink *)adjustDeeplink.getDeeplink()];
 }
 
 void ADJAdjust2dx::setPushTokenAsString(std::string pushToken) {
@@ -308,9 +307,8 @@ void ADJAdjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
     }];
 }
 
-void ADJAdjust2dx::processAndResolveDeeplink(std::string url, void (*resolvedLinkCallback)(std::string resolvedLink)) {
-    NSURL *pUrl = [NSURL URLWithString:[NSString stringWithUTF8String:url.c_str()]];
-    [Adjust processAndResolveDeeplink:pUrl
+void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+    [Adjust processAndResolveDeeplink:(ADJDeeplink *)adjustDeeplink.getDeeplink()
                 withCompletionHandler:^(NSString * _Nullable resolvedLink) {
         if (resolvedLinkCallback != NULL) {
             if (resolvedLink != nil) {
