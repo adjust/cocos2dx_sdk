@@ -111,6 +111,10 @@ void ADJConfig2dx::enableDeviceIdsReadingOnce() {
     [((ADJConfig *)config) enableDeviceIdsReadingOnce];
 }
 
+void ADJConfig2dx::enableCoppaCompliance() {
+    [((ADJConfig *)config) enableCoppaCompliance];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

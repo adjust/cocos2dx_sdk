@@ -69,6 +69,7 @@ public:
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
     void setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data));
     void enableDeviceIdsReadingOnce();
+    void enableCoppaCompliance();
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

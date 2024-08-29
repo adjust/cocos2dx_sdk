@@ -100,6 +100,7 @@ public:
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
     void enableDeviceIdsReadingOnce();
+    void enableCoppaCompliance();
     // TODO add to updated iOs & Android
     //  enableCoppaCompliance
     //  eventDeduplicationIdsMaxSize

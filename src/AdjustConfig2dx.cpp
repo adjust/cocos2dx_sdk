@@ -532,6 +532,24 @@ void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
 #endif
 }
 
+void AdjustConfig2dx::enableCoppaCompliance() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiEnableCoppaCompliance;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableCoppaCompliance, "com/adjust/sdk/AdjustConfig", "enableCoppaCompliance", "()V")) {
+        return;
+    }
+    jmiEnableCoppaCompliance.env->CallVoidMethod(config, jmiEnableCoppaCompliance.methodID);
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.enableCoppaCompliance();
+    }
+#endif
+}
+
 void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
