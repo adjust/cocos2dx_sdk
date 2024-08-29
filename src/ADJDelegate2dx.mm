@@ -142,7 +142,7 @@ static ADJDelegate2dx *defaultInstance = nil;
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self addValueOrEmpty:dictionary key:@"message" value:eventSuccessResponseData.message];
-    [self addValueOrEmpty:dictionary key:@"timestamp" value:eventSuccessResponseData.timeStamp];
+    [self addValueOrEmpty:dictionary key:@"timestamp" value:eventSuccessResponseData.timestamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:eventSuccessResponseData.adid];
     [self addValueOrEmpty:dictionary key:@"eventToken" value:eventSuccessResponseData.eventToken];
     [self addValueOrEmpty:dictionary key:@"callbackId" value:eventSuccessResponseData.callbackId];
@@ -172,7 +172,7 @@ static ADJDelegate2dx *defaultInstance = nil;
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self addValueOrEmpty:dictionary key:@"message" value:eventFailureResponseData.message];
-    [self addValueOrEmpty:dictionary key:@"timestamp" value:eventFailureResponseData.timeStamp];
+    [self addValueOrEmpty:dictionary key:@"timestamp" value:eventFailureResponseData.timestamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:eventFailureResponseData.adid];
     [self addValueOrEmpty:dictionary key:@"eventToken" value:eventFailureResponseData.eventToken];
     [self addValueOrEmpty:dictionary key:@"callbackId" value:eventFailureResponseData.callbackId];
@@ -204,7 +204,7 @@ static ADJDelegate2dx *defaultInstance = nil;
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self addValueOrEmpty:dictionary key:@"message" value:sessionSuccessResponseData.message];
-    [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionSuccessResponseData.timeStamp];
+    [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionSuccessResponseData.timestamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:sessionSuccessResponseData.adid];
 
     std::string message = std::string([[dictionary objectForKey:@"message"] UTF8String]);
@@ -230,7 +230,7 @@ static ADJDelegate2dx *defaultInstance = nil;
 
     NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
     [self addValueOrEmpty:dictionary key:@"message" value:sessionFailureResponseData.message];
-    [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionFailureResponseData.timeStamp];
+    [self addValueOrEmpty:dictionary key:@"timestamp" value:sessionFailureResponseData.timestamp];
     [self addValueOrEmpty:dictionary key:@"adid" value:sessionFailureResponseData.adid];
     [dictionary setObject:(sessionFailureResponseData.willRetry ? @"true" : @"false") forKey:@"willRetry"];
 
