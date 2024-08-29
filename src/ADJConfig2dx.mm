@@ -8,7 +8,7 @@
 
 #include "ADJConfig2dx.h"
 #include "ADJDelegate2dx.h"
-#include <AdjustSdk/Adjust.h>
+#include <AdjustSdk/AdjustSdk.h>
 
 void ADJConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix) {
     config = [[ADJConfig alloc] initWithAppToken:[NSString stringWithUTF8String:appToken.c_str()]

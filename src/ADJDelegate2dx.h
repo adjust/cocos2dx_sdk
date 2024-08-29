@@ -6,7 +6,7 @@
 //  Copyright © 2016-2019 Adjust GmbH. All rights reserved.
 //
 
-#import <AdjustSdk/Adjust.h>
+#import <AdjustSdk/AdjustSdk.h>
 #include <unordered_map>
 
 @interface ADJDelegate2dx : NSObject<AdjustDelegate>
