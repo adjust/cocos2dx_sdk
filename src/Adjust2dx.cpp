@@ -788,6 +788,14 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
         jmiInit.env->DeleteLocalRef(jNoBackoffWaitObj);
     }
 
+    if (testOptions.find("ignoreSystemLifecycleBootstrap") != testOptions.end()) {
+        jboolean jIgnoreSystemLifecycleBootstrap = testOptions["ignoreSystemLifecycleBootstrap"] == "true" ? JNI_TRUE : JNI_FALSE;
+        jobject jIgnoreSystemLifecycleBootstrapObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jIgnoreSystemLifecycleBootstrap);
+        jfieldID jfidIgnoreSystemLifecycleBootstrap = jmiInit.env->GetFieldID(jclsTestOptions, "ignoreSystemLifecycleBootstrap", "Ljava/lang/Boolean;");
+        jmiInit.env->SetObjectField(jTestOptions, jfidIgnoreSystemLifecycleBootstrap, jIgnoreSystemLifecycleBootstrapObj);
+        jmiInit.env->DeleteLocalRef(jIgnoreSystemLifecycleBootstrapObj);
+    }
+
     return jTestOptions;
 }
 #endif
