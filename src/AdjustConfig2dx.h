@@ -25,13 +25,6 @@
 #endif
 
 extern const std::string AdjustSdkPrefix2dx;
-extern const std::string AdjustUrlStrategyChina;
-extern const std::string AdjustUrlStrategyIndia;
-extern const std::string AdjustUrlStrategyCn;
-extern const std::string AdjustUrlStrategyCnOnly;
-extern const std::string AdjustDataResidencyEU;
-extern const std::string AdjustDataResidencyTR;
-extern const std::string AdjustDataResidencyUS;
 extern const std::string AdjustAdRevenueSourceAppLovinMAX;
 extern const std::string AdjustAdRevenueSourceMopub;
 extern const std::string AdjustAdRevenueSourceAdMob;

@@ -13,13 +13,6 @@
 #endif
 
 const std::string AdjustSdkPrefix2dx = "cocos2d-x4.37.0";
-const std::string AdjustUrlStrategyChina = "china";
-const std::string AdjustUrlStrategyIndia = "india";
-const std::string AdjustUrlStrategyCn = "cn";
-const std::string AdjustUrlStrategyCnOnly = "cn-only";
-const std::string AdjustDataResidencyEU = "data-residency-eu";
-const std::string AdjustDataResidencyTR = "data-residency-tr";
-const std::string AdjustDataResidencyUS = "data-residency-us";
 const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
 const std::string AdjustAdRevenueSourceMopub = "mopub";
 const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
@@ -225,54 +218,47 @@ void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains
     if (config == NULL) {
         return;
     }
+
+    cocos2d::JniMethodInfo jmiInitArrayList;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInitArrayList, "java/util/ArrayList", "<init>", "()V")) {
+        return NULL;
+    }
+
+    jclass clsArrayList = jmiInitArrayList.env->FindClass("java/util/ArrayList");
+    jmethodID jmidInit = jmiInitArrayList.env->GetMethodID(clsArrayList, "<init>", "()V");
+    jobject jArrayList = jmiInitArrayList.env->NewObject(clsArrayList, jmidInit);
+
+    cocos2d::JniMethodInfo jmiAdd;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiAdd, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z")) {
+        return NULL;
+    }
+
+    for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
+         toIterator != urlStrategyDomains.end(); toIterator++)
+    {
+        std::string urlStrategyDomain = (*toIterator);
+        jstring jElement = jmiInitArrayList.env->NewStringUTF(urlStrategyDomain.c_str());
+
+        jboolean jReturnValue = jmiAdd.env->CallBooleanMethod(jArrayList, jmiAdd.methodID, jElement);
+
+        jmiAdd.env->DeleteLocalRef(jElement);
+        jmiAdd.env->DeleteLocalRef(jReturnValue);
+    }
+
     cocos2d::JniMethodInfo jmiSetUrlStrategy;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUrlStrategy, "com/adjust/sdk/AdjustConfig", "setUrlStrategy", "(Ljava/lang/String;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUrlStrategy, "com/adjust/sdk/AdjustConfig", "setUrlStrategy", "(Ljava/util/List;ZZ)V")) {
         return;
     }
 
-    if (urlStrategy.compare(AdjustUrlStrategyChina) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyChina = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CHINA", "Ljava/lang/String;");
-        jstring jUrlStrategyChina = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyChina);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyChina);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyChina);
-    } else if (urlStrategy.compare(AdjustUrlStrategyIndia) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyIndia = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_INDIA", "Ljava/lang/String;");
-        jstring jUrlStrategyIndia = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyIndia);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyIndia);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyIndia);
-    } else if (urlStrategy.compare(AdjustUrlStrategyCn) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyCn = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN", "Ljava/lang/String;");
-        jstring jUrlStrategyCn = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCn);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCn);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCn);
-    } else if (urlStrategy.compare(AdjustUrlStrategyCnOnly) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyCnOnly = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN_ONLY", "Ljava/lang/String;");
-        jstring jUrlStrategyCnOnly = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCnOnly);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCnOnly);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCnOnly);
-    } else if (urlStrategy.compare(AdjustDataResidencyEU) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyEU = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_EU", "Ljava/lang/String;");
-        jstring jDataResidencyEU = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyEU);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyEU);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyEU);
-    } else if (urlStrategy.compare(AdjustDataResidencyTR) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyTR = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_TR", "Ljava/lang/String;");
-        jstring jDataResidencyTR = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyTR);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyTR);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyTR);
-    } else if (urlStrategy.compare(AdjustDataResidencyUS) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyUS = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_US", "Ljava/lang/String;");
-        jstring jDataResidencyUS = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyUS);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyUS);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyUS);
-    }
+    jboolean jUseSubdomains = useSubdomains ? JNI_TRUE : JNI_FALSE;
+    jboolean jIsDataResidency = isDataResidency ? JNI_TRUE : JNI_FALSE;
+
+    jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jArrayList, jUseSubdomains, jIsDataResidency);
+
+    jmiSetUrlStrategy.env->DeleteLocalRef(jArrayList);
+    jmiSetUrlStrategy.env->DeleteLocalRef(jUseSubdomains);
+    jmiSetUrlStrategy.env->DeleteLocalRef(jIsDataResidency);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setUrlStrategy(urlStrategyDomains, useSubdomains, isDataResidency);
