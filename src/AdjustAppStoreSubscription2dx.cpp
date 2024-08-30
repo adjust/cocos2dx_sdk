@@ -11,12 +11,11 @@
 void AdjustAppStoreSubscription2dx::initSubscription(
     std::string price,
     std::string currency,
-    std::string transactionId,
-    std::string receipt
-) {
+    std::string transactionId)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    subscription = ADJAppStoreSubscription2dx(price, currency, transactionId, receipt);
+    subscription = ADJAppStoreSubscription2dx(price, currency, transactionId);
     isSubscriptionSet = true;
 #endif
 }

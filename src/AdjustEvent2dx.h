@@ -50,8 +50,6 @@ public:
     void setPurchaseToken(std::string purchaseToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJEvent2dx getEvent();
-    void setReceipt(std::string receipt, std::string transactionId);
-    void setReceipt(std::string receipt);
 #endif
 };
 

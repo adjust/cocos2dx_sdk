@@ -24,14 +24,14 @@ private:
     bool isSubscriptionSet;
     ADJAppStoreSubscription2dx subscription;
 #endif
-    void initSubscription(std::string price, std::string currency, std::string transactionId, std::string receipt);
+    void initSubscription(std::string price, std::string currency, std::string transactionId);
 
 public:
-    AdjustAppStoreSubscription2dx(std::string price, std::string currency, std::string transactionId, std::string receipt) {
+    AdjustAppStoreSubscription2dx(std::string price, std::string currency, std::string transactionId) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isSubscriptionSet = false;
-        initSubscription(price, currency, transactionId, receipt);
+        initSubscription(price, currency, transactionId);
 #endif
     }
 

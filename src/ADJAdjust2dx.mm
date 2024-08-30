@@ -323,7 +323,7 @@ void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
     NSMutableDictionary<NSString *, NSString *> *objcTestOptionsMap =
         [NSMutableDictionary dictionary];
-    std::map<std::string, std::string>::iterator toIterator = testOptionsMap.begin();
+
     for (std::map<std::string, std::string>::iterator toIterator = testOptionsMap.begin();
          toIterator != testOptionsMap.end(); toIterator++)
     {

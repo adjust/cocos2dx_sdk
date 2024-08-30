@@ -197,18 +197,6 @@ jobject AdjustEvent2dx::getEvent() {
     return event;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
-    if (isEventSet) {
-        event.setReceipt(receipt, transactionId);
-    }
-}
-
-void AdjustEvent2dx::setReceipt(std::string receipt) {
-    if (isEventSet) {
-        event.setReceipt(receipt);
-    }
-}
-
 ADJEvent2dx AdjustEvent2dx::getEvent() {
     return event;
 }

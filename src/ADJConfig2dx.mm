@@ -13,7 +13,7 @@
 void ADJConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix) {
     config = [[ADJConfig alloc] initWithAppToken:[NSString stringWithUTF8String:appToken.c_str()]
                                      environment:[NSString stringWithUTF8String:environment.c_str()]
-                             andSuppressLogLevel:allowSuppressLogLevel];
+                                suppressLogLevel:allowSuppressLogLevel];
     [((ADJConfig *)config) setSdkPrefix:[NSString stringWithUTF8String:sdkPrefix.c_str()]];
 }
 
@@ -50,7 +50,6 @@ void ADJConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
                                   bool isDataResidency)
 {
     NSMutableArray *urlStrategyDomainsMut = [[NSMutableArray alloc] init];
-    std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
     for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
          toIterator != urlStrategyDomains.end(); toIterator++)
     {
@@ -59,8 +58,8 @@ void ADJConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
     }
 
     [((ADJConfig *)config) setUrlStrategy:(NSArray *)urlStrategyDomainsMut
-                           withSubdomains:useSubdomains
-                         andDataResidency:isDataResidency];
+                            useSubdomains:useSubdomains
+                          isDataResidency:isDataResidency];
 }
 
 void ADJConfig2dx::disableSkanAttribution() {

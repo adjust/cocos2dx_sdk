@@ -24,14 +24,14 @@ private:
     bool isPurchaseSet;
     ADJAppStorePurchase2dx purchase;
 #endif
-    void initPurchase(std::string productId, std::string transactionId, std::string receipt);
+    void initPurchase(std::string productId, std::string transactionId);
 
 public:
-    AdjustAppStorePurchase2dx(std::string productId, std::string transactionId, std::string receipt) {
+    AdjustAppStorePurchase2dx(std::string productId, std::string transactionId) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         isPurchaseSet = false;
-        initPurchase(productId, transactionId, receipt);
+        initPurchase(productId, transactionId);
 #endif
     }
 

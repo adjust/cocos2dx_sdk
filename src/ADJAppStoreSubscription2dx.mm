@@ -9,15 +9,13 @@
 #include "ADJAppStoreSubscription2dx.h"
 #include <AdjustSdk/ADJAppStoreSubscription.h>
 
-void ADJAppStoreSubscription2dx::initSubscription(std::string price, std::string currency, std::string transactionId, std::string receipt) {
+void ADJAppStoreSubscription2dx::initSubscription(std::string price, std::string currency, std::string transactionId) {
     NSString *strPrice = [NSString stringWithUTF8String:price.c_str()];
     NSString *strCurrency = [NSString stringWithUTF8String:currency.c_str()];
     NSString *strTransactionId = [NSString stringWithUTF8String:transactionId.c_str()];
-    NSString *strReceipt = [NSString stringWithUTF8String:receipt.c_str()];
     subscription = [[ADJAppStoreSubscription alloc] initWithPrice:[NSDecimalNumber decimalNumberWithString:strPrice]
                                                          currency:strCurrency
-                                                    transactionId:strTransactionId
-                                                       andReceipt:[strReceipt dataUsingEncoding:NSUTF8StringEncoding]];
+                                                    transactionId:strTransactionId];
 }
 
 void ADJAppStoreSubscription2dx::setTransactionDate(std::string transactionDate) {
