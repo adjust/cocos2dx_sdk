@@ -114,6 +114,10 @@ void ADJConfig2dx::enableCoppaCompliance() {
     [((ADJConfig *)config) enableCoppaCompliance];
 }
 
+void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize) {
+    [((ADJConfig *)config).eventDeduplicationIdsMaxSize = eventDeduplicationIdsMaxSize];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

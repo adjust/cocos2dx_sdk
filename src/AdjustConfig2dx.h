@@ -94,8 +94,8 @@ public:
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
+    void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     // TODO add to updated iOs & Android
-    //  enableCoppaCompliance
     //  eventDeduplicationIdsMaxSize
     // iOS only
     void disableSkanAttribution();

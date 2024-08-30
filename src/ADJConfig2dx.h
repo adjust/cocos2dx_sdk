@@ -70,6 +70,7 @@ public:
     void setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data));
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
+    void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

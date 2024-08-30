@@ -536,6 +536,32 @@ void AdjustConfig2dx::enableCoppaCompliance() {
 #endif
 }
 
+void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiEventDeduplicationIdsMaxSize;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEventDeduplicationIdsMaxSize, "com/adjust/sdk/AdjustConfig", "setEventDeduplicationIdsMaxSize", "(Ljava/lang/Integer;)V")) {
+        return;
+    }
+
+    jclass clsInteger = jmiEventDeduplicationIdsMaxSize.env->FindClass("java/lang/Integer");
+    jmethodID midInit = jmiEventDeduplicationIdsMaxSize.env->GetMethodID(clsInteger, "<init>", "(I)V");
+    jobject jEventDeduplicationIdsMaxSize = jmiEventDeduplicationIdsMaxSize.env->NewObject(clsInteger, midInit, eventDeduplicationIdsMaxSize);
+
+    jmiEventDeduplicationIdsMaxSize.env->CallVoidMethod(config, jmiEventDeduplicationIdsMaxSize.methodID, jEventDeduplicationIdsMaxSize);
+
+    jmiEventDeduplicationIdsMaxSize.env->DeleteLocalRef(jEventDeduplicationIdsMaxSize);
+
+
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setEventDeduplicationIdsMaxSize(eventDeduplicationIdsMaxSize);
+    }
+#endif
+}
+
 void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
