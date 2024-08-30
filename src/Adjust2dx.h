@@ -20,6 +20,7 @@
 #include "AdjustAdRevenue2dx.h"
 #include "AdjustPlayStorePurchase2dx.h"
 #include "AdjustAppStorePurchase2dx.h"
+#include "AdjustDeeplink2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
@@ -33,7 +34,7 @@ public:
     static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
     static void switchToOfflineMode();
     static void switchBackToOnlineMode();
-    static void processDeeplink(std::string url);
+    static void processDeeplink(AdjustDeeplink2dx deeplink);
     static void setPushTokenAsString(std::string pushToken);
     static void gdprForgetMe();
     static void addGlobalCallbackParameter(std::string key, std::string value);
@@ -48,7 +49,7 @@ public:
     static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
     static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     static void trackAdRevenueNew(AdjustAdRevenue2dx adRevenue);
-    static void processAndResolveDeeplink(std::string url,
+    static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
     // Android specific methods.
     static void setReferrer(std::string referrer);
