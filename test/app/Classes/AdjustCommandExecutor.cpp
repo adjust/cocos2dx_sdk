@@ -120,7 +120,7 @@ void AdjustCommandExecutor::testOptions() {
     intTestOptions["adServicesFrameworkEnabled"] = 0;
     if (this->command->containsParameter("adServicesFrameworkEnabled")) {
         if (command->getFirstParameterValue("adServicesFrameworkEnabled") == "true") {
-            intTestOptions["noBackoffWait"] = 1;
+            intTestOptions["adServicesFrameworkEnabled"] = 1;
         }
     }
 
