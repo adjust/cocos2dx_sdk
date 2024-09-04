@@ -12,7 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.37.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.0";
 const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
 const std::string AdjustAdRevenueSourceMopub = "mopub";
 const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
