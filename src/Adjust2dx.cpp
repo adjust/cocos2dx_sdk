@@ -410,9 +410,9 @@ void Adjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx a
 #endif
 }
 
-void Adjust2dx::trackAdRevenueNew(AdjustAdRevenue2dx adRevenue) {
+void Adjust2dx::trackAdRevenue(AdjustAdRevenue2dx adRevenue) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::trackAdRevenueNew(adRevenue.getAdRevenue());
+    ADJAdjust2dx::trackAdRevenue(adRevenue.getAdRevenue());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiTrackAdRevenue;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiTrackAdRevenue, "com/adjust/sdk/Adjust", "trackAdRevenue", "(Lcom/adjust/sdk/AdjustAdRevenue;)V")) {

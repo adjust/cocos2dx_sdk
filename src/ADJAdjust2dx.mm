@@ -143,7 +143,7 @@ void ADJAdjust2dx::removeGlobalPartnerParameters() {
     [Adjust removeGlobalPartnerParameters];
 }
 
-void ADJAdjust2dx::trackAdRevenueNew(ADJAdRevenue2dx adRevenue) {
+void ADJAdjust2dx::trackAdRevenue(ADJAdRevenue2dx adRevenue) {
     [Adjust trackAdRevenue:(ADJAdRevenue *)adRevenue.getAdRevenue()];
 }
 

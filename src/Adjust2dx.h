@@ -48,7 +48,7 @@ public:
     static void adidCallback(void(*callbackMethod)(std::string adid));
     static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
     static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
-    static void trackAdRevenueNew(AdjustAdRevenue2dx adRevenue);
+    static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
     // Android specific methods.

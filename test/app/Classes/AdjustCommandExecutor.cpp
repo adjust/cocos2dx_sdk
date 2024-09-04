@@ -69,8 +69,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->trackThirdPartySharing();
     } else if (command->methodName == "measurementConsent") {
         this->trackMeasurementConsent();
-    } else if (command->methodName == "trackAdRevenueV2") {
-        this->trackAdRevenueNew();
+    } else if (command->methodName == "trackAdRevenue") {
+        this->trackAdRevenue();
     } else if (command->methodName == "getLastDeeplink") {
         this->getLastDeeplink();
     } else if (command->methodName == "verifyPurchase") {
@@ -716,7 +716,7 @@ void AdjustCommandExecutor::trackMeasurementConsent() {
     Adjust2dx::trackMeasurementConsent(enabled == "true" ? true : false);
 }
 
-void AdjustCommandExecutor::trackAdRevenueNew() {
+void AdjustCommandExecutor::trackAdRevenue() {
     std::string source = command->getFirstParameterValue("adRevenueSource");
     AdjustAdRevenue2dx *adjustAdRevenue = new AdjustAdRevenue2dx(source);
 
@@ -765,7 +765,7 @@ void AdjustCommandExecutor::trackAdRevenueNew() {
         adjustAdRevenue->setAdRevenuePlacement(adRevenuePlacement);
     }
 
-    Adjust2dx::trackAdRevenueNew(*adjustAdRevenue);
+    Adjust2dx::trackAdRevenue(*adjustAdRevenue);
 }
 
 void AdjustCommandExecutor::getLastDeeplink() {

@@ -43,7 +43,7 @@ public:
     static void removeGlobalPartnerParameter(std::string key);
     static void removeGlobalCallbackParameters();
     static void removeGlobalPartnerParameters();
-    static void trackAdRevenueNew(ADJAdRevenue2dx adRevenue);
+    static void trackAdRevenue(ADJAdRevenue2dx adRevenue);
     static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
     static void idfaCallback(void(*callbackMethod)(std::string idfa));
     static void adidCallback(void(*callbackMethod)(std::string adid));

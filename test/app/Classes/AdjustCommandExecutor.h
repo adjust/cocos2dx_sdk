@@ -61,7 +61,7 @@ private:
     void trackSubscription();
     void trackThirdPartySharing();
     void trackMeasurementConsent();
-    void trackAdRevenueNew();
+    void trackAdRevenue();
     void getLastDeeplink();
     void verifyPurchase();
     void processDeeplink();
