@@ -84,7 +84,7 @@ void AdjustCommandExecutor::testOptions() {
     std::map<std::string, std::string> stringTestOptions;
     std::map<std::string, int> intTestOptions;
 
-    stringTestOptions["urlOverwrite"] = this->urlOverwrite;
+    stringTestOptions["testUrlOverwrite"] = this->urlOverwrite;
 
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
@@ -299,14 +299,9 @@ void AdjustCommandExecutor::config() {
 
     if (this->command->containsParameter("playStoreKids")) {
         std::string playStoreKidsString = command->getFirstParameterValue("playStoreKids");
-        bool playStoreKids = (playStoreKidsString == "true");
-        adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
-    }
-
-    if (this->command->containsParameter("finalAttributionEnabled")) {
-        std::string finalAttributionEnabledString = command->getFirstParameterValue("finalAttributionEnabled");
-        bool finalAttributionEnabled = (finalAttributionEnabledString == "true");
-        adjustConfig->setFinalAttributionEnabled(finalAttributionEnabled);
+        if (playStoreKidsString == "true") {
+            adjustConfig->enablePlayStoreKidsCompliance();
+        }
     }
 
     if (this->command->containsParameter("attributionCallbackSendAll")) {
@@ -483,18 +478,6 @@ void AdjustCommandExecutor::event() {
         std::string productId = command->getFirstParameterValue("productId");
         adjustEvent->setProductId(productId);
     }
-
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (this->command->containsParameter("purchaseToken")) {
-        std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
-        adjustEvent->setPurchaseToken(purchaseToken);
-    }
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (this->command->containsParameter("receipt")) {
-        std::string receipt = command->getFirstParameterValue("receipt");
-        adjustEvent->setReceipt(receipt);
-    }
-#endif
 }
 
 void AdjustCommandExecutor::trackEvent() {
@@ -626,16 +609,13 @@ void AdjustCommandExecutor::trackSubscription() {
     std::string price = command->getFirstParameterValue("revenue");
     std::string currency = command->getFirstParameterValue("currency");
     std::string transactionId = command->getFirstParameterValue("transactionId");
-    std::string receipt = command->getFirstParameterValue("receipt");
     std::string transactionDate = command->getFirstParameterValue("transactionDate");
     std::string salesRegion = command->getFirstParameterValue("salesRegion");
 
     AdjustAppStoreSubscription2dx subscription = AdjustAppStoreSubscription2dx(
         price,
         currency,
-        transactionId,
-        receipt
-    );
+        transactionId);
     subscription.setTransactionDate(transactionDate);
     subscription.setSalesRegion(salesRegion);
 
@@ -800,9 +780,9 @@ void AdjustCommandExecutor::verifyPurchase() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     std::string productId = command->getFirstParameterValue("productId");
     std::string transactionId = command->getFirstParameterValue("transactionId");
-    std::string receipt = command->getFirstParameterValue("receipt");
 
-    AdjustAppStorePurchase2dx purchase = AdjustAppStorePurchase2dx(productId, transactionId, receipt);
+    AdjustAppStorePurchase2dx purchase =
+        AdjustAppStorePurchase2dx(productId, transactionId);
 
     localBasePath = this->basePath;
     Adjust2dx::verifyAppStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
