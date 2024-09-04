@@ -74,7 +74,7 @@ public:
     static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
     static void idfvCallback(void(*callbackMethod)(std::string idfv));
     // For testing purposes only.
-    static void setTestOptions(std::map<std::string, std::string> testOptions);
+    static void setTestOptions(std::map<std::string, std::string> stringTestOptions, std::map<std::string, int> intTestOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void teardown();
 #endif

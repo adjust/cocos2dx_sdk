@@ -320,15 +320,24 @@ void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void
     }];
 }
 
-void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> testOptionsMap) {
-    NSMutableDictionary<NSString *, NSString *> *objcTestOptionsMap =
+void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
+                                  std::map<std::string, int> intTestOptionsMap)
+{
+    NSMutableDictionary<NSString *, id> *objcTestOptionsMap =
         [NSMutableDictionary dictionary];
 
-    for (std::map<std::string, std::string>::iterator toIterator = testOptionsMap.begin();
-         toIterator != testOptionsMap.end(); toIterator++)
+    for (std::map<std::string, std::string>::iterator toStringIterator = stringTestOptionsMap.begin();
+         toStringIterator != stringTestOptionsMap.end(); toStringIterator++)
     {
-        [objcTestOptionsMap setObject:[NSString stringWithUTF8String:toIterator->second.c_str()]
-                               forKey:[NSString stringWithUTF8String:toIterator->first.c_str()]];
+        [objcTestOptionsMap setObject:[NSString stringWithUTF8String:toStringIterator->second.c_str()]
+                               forKey:[NSString stringWithUTF8String:toStringIterator->first.c_str()]];
+    }
+
+    for (std::map<std::string, int>::iterator toIntIterator = intTestOptionsMap.begin();
+         toIntIterator != intTestOptionsMap.end(); toIntIterator++)
+    {
+        [objcTestOptionsMap setObject:[NSNumber numberWithInt:toIntIterator->second]
+                               forKey:[NSString stringWithUTF8String:toIntIterator->first.c_str()]];
     }
 
     [Adjust setTestOptions:objcTestOptionsMap];

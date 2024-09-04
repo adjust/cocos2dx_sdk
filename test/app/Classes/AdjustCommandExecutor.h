@@ -32,15 +32,8 @@
 
 class AdjustCommandExecutor {
 private:
-    std::string baseUrl;
-    std::string gdprUrl;
-    std::string subscriptionUrl;
-    std::string purchaseVerificationUrl;
+    std::string urlOverwrite;
     std::string basePath;
-    std::string gdprPath;
-    std::string subscriptionPath;
-    std::string purchaseVerificationPath;
-    std::string extraPath;
     std::map<std::int8_t, AdjustEvent2dx*> savedEvents;
     std::map<std::int8_t, AdjustConfig2dx*> savedConfigs;
     Command *command;
@@ -74,10 +67,7 @@ private:
     void processDeeplink();
 public:
     static const std::string TAG;
-    AdjustCommandExecutor(std::string baseUrl,
-                          std::string gdprUrl,
-                          std::string subscriptionUrl,
-                          std::string purchaseVerificationUrl);
+    AdjustCommandExecutor(std::string urlOverwrite);
     void executeCommand(Command *command);
 };
 

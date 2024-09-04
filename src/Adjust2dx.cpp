@@ -791,16 +791,18 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
 }
 #endif
 
-void Adjust2dx::setTestOptions(std::map<std::string, std::string> testOptions) {
+void Adjust2dx::setTestOptions(std::map<std::string, std::string> stringTestOptions,
+                               std::map<std::string, int> intTestOptions)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    jobject jTestOptions = getTestOptions(testOptions);
+    jobject jTestOptions = getTestOptions(stringTestOptions, intTestOptions);
     cocos2d::JniMethodInfo jmiSetTestOptions;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetTestOptions, "com/adjust/sdk/Adjust", "setTestOptions", "(Lcom/adjust/sdk/AdjustTestOptions;)V")) {
         return;
     }
     jmiSetTestOptions.env->CallStaticVoidMethod(jmiSetTestOptions.classID, jmiSetTestOptions.methodID, jTestOptions);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::setTestOptions(testOptions);
+    ADJAdjust2dx::setTestOptions(stringTestOptions, intTestOptions);
 #endif
 }
 

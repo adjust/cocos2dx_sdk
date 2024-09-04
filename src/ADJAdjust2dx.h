@@ -63,7 +63,8 @@ public:
     static void idfvCallback(void(*callbackMethod)(std::string idfv));
     static void processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*resolvedLinkCallback)(std::string resolvedLink));
     // For testing purposes only.
-    static void setTestOptions(std::map<std::string, std::string> testOptionsMap);
+    static void setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
+                               std::map<std::string, int> intTestOptionsMap);
     static void teardown();
 };
 

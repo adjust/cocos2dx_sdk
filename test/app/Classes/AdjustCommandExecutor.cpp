@@ -17,14 +17,8 @@
 static std::string localBasePath;
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
-AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl,
-                                             std::string gdprUrl,
-                                             std::string subscriptionUrl,
-                                             std::string purchaseVerificationUrl) {
-    this->baseUrl = baseUrl;
-    this->gdprUrl = gdprUrl;
-    this->subscriptionUrl = subscriptionUrl;
-    this->purchaseVerificationUrl = purchaseVerificationUrl;
+AdjustCommandExecutor::AdjustCommandExecutor(std::string urlOverwrite) {
+    this->urlOverwrite = urlOverwrite;
 }
 
 void AdjustCommandExecutor::executeCommand(Command *command) {
@@ -87,113 +81,100 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
 }
 
 void AdjustCommandExecutor::testOptions() {
-    std::map<std::string, std::string> testOptions;
-    testOptions["baseUrl"] = this->baseUrl;
-    testOptions["gdprUrl"] = this->gdprUrl;
-    testOptions["subscriptionUrl"] = this->subscriptionUrl;
-    testOptions["purchaseVerificationUrl"] = this->purchaseVerificationUrl;
+    std::map<std::string, std::string> stringTestOptions;
+    std::map<std::string, int> intTestOptions;
+
+    stringTestOptions["urlOverwrite"] = this->urlOverwrite;
+
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
-        this->gdprPath = command->getFirstParameterValue("basePath");
-        this->subscriptionPath = command->getFirstParameterValue("basePath");
-        this->purchaseVerificationPath = command->getFirstParameterValue("basePath");
-        this->extraPath = command->getFirstParameterValue("basePath");
     }
     if (this->command->containsParameter("timerInterval")) {
-        testOptions["timerIntervalInMilliseconds"] = command->getFirstParameterValue("timerInterval");
+        intTestOptions["timerIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("timerInterval"));
     }
     if (this->command->containsParameter("timerStart")) {
-        testOptions["timerStartInMilliseconds"] = command->getFirstParameterValue("timerStart");
+        intTestOptions["timerStartInMilliseconds"] = std::stoi(command->getFirstParameterValue("timerStart"));
     }
     if (this->command->containsParameter("sessionInterval")) {
-        testOptions["sessionIntervalInMilliseconds"] = command->getFirstParameterValue("sessionInterval");
+        intTestOptions["sessionIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("sessionInterval"));
     }
     if (this->command->containsParameter("subsessionInterval")) {
-        testOptions["subsessionIntervalInMilliseconds"] = command->getFirstParameterValue("subsessionInterval");
+        intTestOptions["subsessionIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("subsessionInterval"));
     }
-    if (this->command->containsParameter("tryInstallReferrer")) {
-        testOptions["tryInstallReferrer"] = command->getFirstParameterValue("tryInstallReferrer");
+    if (this->command->containsParameter("attStatus")) {
+        intTestOptions["attStatus"] = std::stoi(command->getFirstParameterValue("attStatus"));
     }
+
+    if (this->command->containsParameter("idfa")) {
+        stringTestOptions["idfa"] = command->getFirstParameterValue("idfa");
+    }
+
     if (this->command->containsParameter("noBackoffWait")) {
-        testOptions["noBackoffWait"] = command->getFirstParameterValue("noBackoffWait");
-    }
-    // "false" is default value - iAd will not be used in test app by default.
-    testOptions["iAdFrameworkEnabled"] = "false";
-    if (this->command->containsParameter("iAdFrameworkEnabled")) {
-        testOptions["iAdFrameworkEnabled"] = command->getFirstParameterValue("iAdFrameworkEnabled");
+        if (command->getFirstParameterValue("noBackoffWait") == "true") {
+            intTestOptions["noBackoffWait"] = 1;
+        } else {
+            intTestOptions["noBackoffWait"] = 0;
+        }
     }
     // "false" is default value - AdServices will not be used in test app by default.
-    testOptions["adServicesFrameworkEnabled"] = "false";
+    intTestOptions["adServicesFrameworkEnabled"] = 0;
     if (this->command->containsParameter("adServicesFrameworkEnabled")) {
-        testOptions["adServicesFrameworkEnabled"] = command->getFirstParameterValue("adServicesFrameworkEnabled");
+        if (command->getFirstParameterValue("adServicesFrameworkEnabled") == "true") {
+            intTestOptions["noBackoffWait"] = 1;
+        }
     }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
     bool useTestConnectionOptions = false;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#endif
+
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
         std::vector<std::string>::iterator toIterator = teardownOptions.begin();
         while(toIterator != teardownOptions.end()) {
             std::string teardownOption = (*toIterator);
             if (teardownOption == "resetSdk") {
-                testOptions["teardown"] = "true";
-                testOptions["basePath"] = this->basePath;
-                testOptions["gdprPath"] = this->gdprPath;
-                testOptions["subscriptionPath"] = this->subscriptionPath;
-                testOptions["purchaseVerificationPath"] = this->purchaseVerificationPath;
-                testOptions["extraPath"] = this->extraPath;
+                intTestOptions["teardown"] = 1;
+                stringTestOptions["extraPath"] = this->basePath;
                 // Android specific.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                testOptions["useTestConnectionOptions"] = "true";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
                 useTestConnectionOptions = true;
-#endif
-                testOptions["tryInstallReferrer"] = "false";
+                intTestOptions["tryInstallReferrer"] = 0;
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
 #endif
             }
             if (teardownOption == "deleteState") {
                 // Android specific.
-                testOptions["setContext"] = "true";
+                intTestOptions["setContext"] = 1;
                 // iOS specific.
-                testOptions["deleteState"] = "true";
+                intTestOptions["deleteState"] = 1;
             }
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions["timerIntervalInMilliseconds"] = "-1";
-                testOptions["timerStartInMilliseconds"] = "-1";
-                testOptions["sessionIntervalInMilliseconds"] = "-1";
-                testOptions["subsessionIntervalInMilliseconds"] = "-1";
+                intTestOptions["timerIntervalInMilliseconds"] = -1000;
+                intTestOptions["timerStartInMilliseconds"] = -1000;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1000;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1000;
             }
             if (teardownOption == "sdk") {
-                testOptions["teardown"] = "true";
-                testOptions["basePath"] = "";
-                testOptions["gdprPath"] = "";
-                testOptions["subscriptionPath"] = "";
-                testOptions["purchaseVerificationPath"] = "";
-                testOptions["extraPath"] = "";
+                intTestOptions["teardown"] = 1;
+                stringTestOptions.erase("extraPath");
                 // Android specific.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                testOptions["useTestConnectionOptions"] = "false";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#endif
+                intTestOptions["useTestConnectionOptions"] = 0;
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions["timerIntervalInMilliseconds"] = "-1";
-                testOptions["timerStartInMilliseconds"] = "-1";
-                testOptions["sessionIntervalInMilliseconds"] = "-1";
-                testOptions["subsessionIntervalInMilliseconds"] = "-1";
+                this->basePath = "";
+                intTestOptions["timerIntervalInMilliseconds"] = -1000;
+                intTestOptions["timerStartInMilliseconds"] = -1000;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1000;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1000;
             }
             toIterator++;
         }
     }
 
-    Adjust2dx::setTestOptions(testOptions);
+    Adjust2dx::setTestOptions(stringTestOptions, intTestOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (useTestConnectionOptions == true) {
         TestConnectionOptions2dx::setTestConnectionOptions();
