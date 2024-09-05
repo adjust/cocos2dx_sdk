@@ -118,13 +118,13 @@ void ADJAdjust2dx::gdprForgetMe() {
 }
 
 void ADJAdjust2dx::addGlobalCallbackParameter(std::string key, std::string value) {
-    [Adjust addGlobalCallbackParameter:[NSString stringWithUTF8String:key.c_str()]
-                                forKey:[NSString stringWithUTF8String:value.c_str()]];
+    [Adjust addGlobalCallbackParameter:[NSString stringWithUTF8String:value.c_str()]
+                                forKey:[NSString stringWithUTF8String:key.c_str()]];
 }
 
 void ADJAdjust2dx::addGlobalPartnerParameter(std::string key, std::string value) {
-    [Adjust addGlobalPartnerParameter:[NSString stringWithUTF8String:key.c_str()]
-                               forKey:[NSString stringWithUTF8String:value.c_str()]];
+    [Adjust addGlobalPartnerParameter:[NSString stringWithUTF8String:value.c_str()]
+                               forKey:[NSString stringWithUTF8String:key.c_str()]];
 }
 
 void ADJAdjust2dx::removeGlobalCallbackParameter(std::string key) {
