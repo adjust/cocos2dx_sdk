@@ -77,6 +77,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->verifyPurchase();
     } else if (command->methodName == "processDeeplink") {
         this->processDeeplink();
+    } else if (command->methodName == "attributionGetter") {
+        this->attributionGetter();
     }
 }
 
@@ -308,20 +310,22 @@ void AdjustCommandExecutor::config() {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
             CCLOG("\n[AdjustCommandExecutor]: Attribution received: %s", attribution.getTrackerToken().c_str());
-            TestLib2dx::addInfoToSend("trackerToken", attribution.getTrackerToken());
-            TestLib2dx::addInfoToSend("trackerName", attribution.getTrackerName());
+            TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
+            TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
             TestLib2dx::addInfoToSend("network", attribution.getNetwork());
             TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
             TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
             TestLib2dx::addInfoToSend("creative", attribution.getCreative());
-            TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
-            TestLib2dx::addInfoToSend("costType", attribution.getCostType());
+            TestLib2dx::addInfoToSend("click_label", attribution.getClickLabel());
+            TestLib2dx::addInfoToSend("cost_type", attribution.getCostType());
             std::ostringstream sstream;
             sstream << attribution.getCostAmount();
             std::string strCostAmount = sstream.str();
-            TestLib2dx::addInfoToSend("costAmount", strCostAmount);
-            TestLib2dx::addInfoToSend("costCurrency", attribution.getCostCurrency());
-            TestLib2dx::addInfoToSend("fbInstallReferrer", attribution.getFbInstallReferrer());
+            TestLib2dx::addInfoToSend("cost_amount", strCostAmount);
+            TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#endif
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -812,6 +816,29 @@ void AdjustCommandExecutor::processDeeplink() {
     localBasePath = this->basePath;
     Adjust2dx::processAndResolveDeeplink(deeplink, [](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+}
+
+void AdjustCommandExecutor::attributionGetter() {
+    localBasePath = this->basePath;
+    Adjust2dx::attributionCallback([](AdjustAttribution2dx attribution) {
+        TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
+        TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
+        TestLib2dx::addInfoToSend("network", attribution.getNetwork());
+        TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
+        TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
+        TestLib2dx::addInfoToSend("creative", attribution.getCreative());
+        TestLib2dx::addInfoToSend("click_label", attribution.getClickLabel());
+        TestLib2dx::addInfoToSend("cost_type", attribution.getCostType());
+        std::ostringstream sstream;
+        sstream << attribution.getCostAmount();
+        std::string strCostAmount = sstream.str();
+        TestLib2dx::addInfoToSend("cost_amount", strCostAmount);
+        TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#endif
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 }

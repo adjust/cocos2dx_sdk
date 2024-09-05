@@ -196,37 +196,37 @@ void ADJAdjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2d
         std::string costType;
         double costAmount = -1;
         std::string costCurrency;
-        std::string fbInstallReferrer = NULL;
+        std::string fbInstallReferrer;
 
         if (nil != attribution) {
-            if (attribution.trackerToken != NULL) {
+            if (attribution.trackerToken != nil) {
                 trackerToken = std::string([attribution.trackerToken UTF8String]);
             }
-            if (attribution.trackerName != NULL) {
+            if (attribution.trackerName != nil) {
                 trackerName = std::string([attribution.trackerName UTF8String]);
             }
-            if (attribution.network != NULL) {
+            if (attribution.network != nil) {
                 network = std::string([attribution.network UTF8String]);
             }
-            if (attribution.campaign != NULL) {
+            if (attribution.campaign != nil) {
                 campaign = std::string([attribution.campaign UTF8String]);
             }
-            if (attribution.adgroup != NULL) {
+            if (attribution.adgroup != nil) {
                 adgroup = std::string([attribution.adgroup UTF8String]);
             }
-            if (attribution.creative != NULL) {
+            if (attribution.creative != nil) {
                 creative = std::string([attribution.creative UTF8String]);
             }
-            if (attribution.clickLabel != NULL) {
+            if (attribution.clickLabel != nil) {
                 clickLabel = std::string([attribution.clickLabel UTF8String]);
             }
-            if (attribution.costType != NULL) {
+            if (attribution.costType != nil) {
                 costType = std::string([attribution.costType UTF8String]);
             }
-            if (attribution.costType != NULL) {
+            if (attribution.costType != nil) {
                 costAmount = [attribution.costAmount doubleValue];
             }
-            if (attribution.costCurrency != NULL) {
+            if (attribution.costCurrency != nil) {
                 costCurrency = std::string([attribution.costCurrency UTF8String]);
             }
         }
@@ -242,6 +242,8 @@ void ADJAdjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2d
                                                                    costAmount,
                                                                    costCurrency,
                                                                    fbInstallReferrer);
+
+        callbackMethod(attribution2dx);
     }];
 }
 

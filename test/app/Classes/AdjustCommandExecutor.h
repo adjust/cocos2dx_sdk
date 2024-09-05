@@ -65,6 +65,7 @@ private:
     void getLastDeeplink();
     void verifyPurchase();
     void processDeeplink();
+    void attributionGetter();
 public:
     static const std::string TAG;
     AdjustCommandExecutor(std::string urlOverwrite);
