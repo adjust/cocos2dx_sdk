@@ -239,15 +239,45 @@ void AdjustCommandExecutor::config() {
         }
     }
 
-    /*
-     if ([parameters objectForKey:@"needsCost"]) {
-         NSString *needsCostS = [parameters objectForKey:@"needsCost"][0];
-         if ([needsCostS boolValue] == YES) {
-             [adjustConfig enableCostDataInAttribution];
-         }
-     }
+    if (this->command->containsParameter("checkPasteboard")) {
+        std::string checkPasteboardString = command->getFirstParameterValue("checkPasteboard");
+        bool checkPasteboard = (checkPasteboardString == "true");
+        if (checkPasteboard) {
+            adjustConfig->enableLinkMe();
+        }
+    }
 
-     */
+    if (this->command->containsParameter("skanCallback")) {
+        adjustConfig->setSkanUpdatedWithConversionDataCallback([](std::unordered_map<std::string, std::string> data) {
+            CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
+
+            for (std::unordered_map<std::string, std::string>::iterator toIterator = data.begin();
+                 toIterator != data.end(); toIterator++)
+            {
+                TestLib2dx::addInfoToSend(toIterator->first, toIterator->second);
+
+            }
+            TestLib2dx::sendInfoToServer(localBasePath);
+        });
+    }
+
+    if (this->command->containsParameter("attConsentWaitingSeconds")) {
+        std::string attConsentWaitingSecondsString = command->getFirstParameterValue("attConsentWaitingSeconds");
+        adjustConfig->setAttConsentWaitingInterval(std::stoi(attConsentWaitingSecondsString));
+    }
+
+    if (this->command->containsParameter("eventDeduplicationIdsMaxSize")) {
+        std::string eventDeduplicationIdsMaxSizeString = command->getFirstParameterValue("eventDeduplicationIdsMaxSize");
+        adjustConfig->setEventDeduplicationIdsMaxSize(std::stoi(eventDeduplicationIdsMaxSizeString));
+    }
+
+    if (this->command->containsParameter("coppaCompliant")) {
+        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
+        bool coppaCompliant = (coppaCompliantString == "true");
+        if (coppaCompliant) {
+            adjustConfig->enableCoppaCompliance();
+        }
+    }
 
     if (this->command->containsParameter("needsCost")) {
         std::string needsCostString = command->getFirstParameterValue("needsCost");
