@@ -75,6 +75,8 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->getLastDeeplink();
     } else if (command->methodName == "verifyPurchase") {
         this->verifyPurchase();
+    } else if (command->methodName == "verifyTrack") {
+        this->verifyTrack();
     } else if (command->methodName == "processDeeplink") {
         this->processDeeplink();
     } else if (command->methodName == "attributionGetter") {
@@ -104,7 +106,7 @@ void AdjustCommandExecutor::testOptions() {
         intTestOptions["subsessionIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("subsessionInterval"));
     }
     if (this->command->containsParameter("attStatus")) {
-        intTestOptions["attStatus"] = std::stoi(command->getFirstParameterValue("attStatus"));
+        intTestOptions["attStatusInt"] = std::stoi(command->getFirstParameterValue("attStatus"));
     }
 
     if (this->command->containsParameter("idfa")) {
@@ -248,6 +250,7 @@ void AdjustCommandExecutor::config() {
     }
 
     if (this->command->containsParameter("skanCallback")) {
+        localBasePath = this->basePath;
         adjustConfig->setSkanUpdatedWithConversionDataCallback([](std::unordered_map<std::string, std::string> data) {
             CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
 
@@ -728,6 +731,10 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
             std::string partnerName = granularOptions[i];
             std::string key = granularOptions[i + 1];
             std::string value = granularOptions[i + 2];
+            // Hack around null/undefined handling of json parsing
+            if (partnerName.empty() || key.empty() || value.empty()) {
+                continue;
+            }
             thirdPartySharing.addGranularOption(partnerName, key, value);
         }
     }
@@ -738,6 +745,10 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
             std::string partnerName = partnerSharingSettings[i];
             std::string key = partnerSharingSettings[i + 1];
             bool value = (partnerSharingSettings[i + 2] == "true");
+            // Hack around null/undefined handling of json parsing
+            if (partnerName.empty() || key.empty()) {
+                continue;
+            }
             thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
         }
     }
@@ -839,6 +850,44 @@ void AdjustCommandExecutor::verifyPurchase() {
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 #endif
+}
+
+void AdjustCommandExecutor::verifyTrack() {
+    event();
+    int eventNumber = 0;
+    if (this->command->containsParameter("eventName")) {
+        std::string eventName = command->getFirstParameterValue("eventName");
+        std::string eventNameStr = eventName.substr (eventName.length() - 1, 1);
+        eventNumber = std::stoi(eventNameStr);
+    }
+
+    AdjustEvent2dx *adjustEvent = this->savedEvents[eventNumber];
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    localBasePath = this->basePath;
+
+    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [](std::string verificationStatus, int code, std::string message) {
+        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
+        TestLib2dx::addInfoToSend("code", std::to_string(code));
+        TestLib2dx::addInfoToSend("message", message);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string productId = command->getFirstParameterValue("productId");
+    std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
+
+    AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
+
+    localBasePath = this->basePath;
+    Adjust2dx::verifyPlayStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
+        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
+        TestLib2dx::addInfoToSend("code", std::to_string(code));
+        TestLib2dx::addInfoToSend("message", message);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+#endif
+
+    this->savedEvents.erase(0);
 }
 
 void AdjustCommandExecutor::processDeeplink() {

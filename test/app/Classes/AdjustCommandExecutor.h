@@ -64,6 +64,7 @@ private:
     void trackAdRevenue();
     void getLastDeeplink();
     void verifyPurchase();
+    void verifyTrack();
     void processDeeplink();
     void attributionGetter();
 public:
