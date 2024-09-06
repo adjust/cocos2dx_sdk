@@ -41,6 +41,10 @@ void ADJEvent2dx::setProductId(std::string productId) {
     [((ADJEvent *)event) setProductId:[NSString stringWithUTF8String:productId.c_str()]];
 }
 
+void ADJEvent2dx::setDeduplicationId(std::string deduplicationId) {
+    [((ADJEvent *)event) setDeduplicationId:[NSString stringWithUTF8String:deduplicationId.c_str()]];
+}
+
 bool ADJEvent2dx::isValid() {
     return [((ADJEvent *)event) isValid];
 }

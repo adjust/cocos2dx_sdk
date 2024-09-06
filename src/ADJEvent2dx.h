@@ -28,6 +28,7 @@ public:
     void setTransactionId(std::string transactionId);
     void setCallbackId(std::string callbackId);
     void setProductId(std::string productId);
+    void setDeduplicationId(std::string deduplicationId);
     bool isValid();
     void* getEvent();
 };

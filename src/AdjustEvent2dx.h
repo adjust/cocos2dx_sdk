@@ -45,6 +45,7 @@ public:
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
     void setProductId(std::string productId);
+    void setDeduplicationId(std::string deduplicationId);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getEvent();
     void setPurchaseToken(std::string purchaseToken);

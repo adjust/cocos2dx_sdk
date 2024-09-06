@@ -515,6 +515,11 @@ void AdjustCommandExecutor::event() {
         std::string productId = command->getFirstParameterValue("productId");
         adjustEvent->setProductId(productId);
     }
+
+    if (this->command->containsParameter("deduplicationId")) {
+        std::string deduplicationId = command->getFirstParameterValue("deduplicationId");
+        adjustEvent->setDeduplicationId(deduplicationId);
+    }
 }
 
 void AdjustCommandExecutor::trackEvent() {
