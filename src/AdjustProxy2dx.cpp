@@ -42,7 +42,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string adgroup;
     std::string creative;
     std::string clickLabel;
-    std::string adid;
     std::string costType;
     double costAmount;
     std::string costCurrency;
@@ -56,7 +55,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID jfidAdgroup = env->GetFieldID(jclsAdjustAttribution, "adgroup", "Ljava/lang/String;");
     jfieldID jfidCreative = env->GetFieldID(jclsAdjustAttribution, "creative", "Ljava/lang/String;");
     jfieldID jfidClickLabel = env->GetFieldID(jclsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
-    jfieldID jfidAdid = env->GetFieldID(jclsAdjustAttribution, "adid", "Ljava/lang/String;");
     jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
     jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
     jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
@@ -68,7 +66,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jstring jAdgroup = (jstring)env->GetObjectField(attributionObject, jfidAdgroup);
     jstring jCreative = (jstring)env->GetObjectField(attributionObject, jfidCreative);
     jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, jfidClickLabel);
-    jstring jAdid = (jstring)env->GetObjectField(attributionObject, jfidAdid);
     jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
     jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
     jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
@@ -137,15 +134,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         clickLabel = "";
     }
 
-    if (NULL != jAdid) {
-        const char *adidCStr = env->GetStringUTFChars(jAdid, NULL);
-        adid = std::string(adidCStr);
-        env->ReleaseStringUTFChars(jAdid, adidCStr);
-        env->DeleteLocalRef(jAdid);
-    } else {
-        adid = "";
-    }
-
     if (NULL != jCostType) {
         const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
         costType = std::string(costTypeCStr);
@@ -189,7 +177,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         adgroup,
         creative,
         clickLabel,
-        adid,
         costType,
         costAmount,
         costCurrency,
@@ -571,6 +558,18 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     return deferredDeeplinkCallbackMethod(deeplink);
 }
 
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxIsEnabledCallback_isEnabledRead
+(JNIEnv *env, jobject obj, jboolean jIsEnabled) {
+    if (NULL == isEnabledCallbackMethod) {
+        return;
+    }
+    if (NULL == jIsEnabled) {
+        return;
+    }
+
+    isEnabledCallbackMethod(jIsEnabled);
+}
+
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_adIdRead
 (JNIEnv *env, jobject obj, jstring jAdId) {
     if (NULL == googleAdIdCallbackMethod) {
@@ -791,7 +790,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDee
 }
 
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionRead
- (JNIEnv *, jobject, jstring jSdkVersion) {
+ (JNIEnv *env, jobject obj, jstring jSdkVersion) {
     if (NULL == sdkVersionCallbackMethod) {
         return;
     }
@@ -799,10 +798,10 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersio
         return;
     }
 
-    const char *sdkVersionCStr = env->GetStringUTFChars(jsdkVersion, NULL);
+    const char *sdkVersionCStr = env->GetStringUTFChars(jSdkVersion, NULL);
     std::string sdkVersion = std::string(sdkVersionCStr);
     sdkVersionCallbackMethod(sdkVersion);
-    env->ReleaseStringUTFChars(jsdkVersion, sdkVersionCStr);
+    env->ReleaseStringUTFChars(jSdkVersion, sdkVersionCStr);
 }
 
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
@@ -889,6 +888,12 @@ void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSess
 void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink)) {
     if (NULL == deferredDeeplinkCallbackMethod) {
         deferredDeeplinkCallbackMethod = callbackMethod;
+    }
+}
+
+void setIsEnabledCallbackMethod(void (*callbackMethod)(bool isEnabled)) {
+    if (NULL == isEnabledCallbackMethod) {
+        isEnabledCallbackMethod = callbackMethod;
     }
 }
 

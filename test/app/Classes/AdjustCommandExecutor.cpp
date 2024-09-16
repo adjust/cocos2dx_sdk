@@ -128,6 +128,22 @@ void AdjustCommandExecutor::testOptions() {
         }
     }
 
+    if (this->command->containsParameter("tryInstallReferrer")) {
+        if (command->getFirstParameterValue("tryInstallReferrer") == "true") {
+            intTestOptions["tryInstallReferrer"] = 1;
+        } else {
+            intTestOptions["tryInstallReferrer"] = 0;
+        }
+    }
+
+    if (this->command->containsParameter("doNotIgnoreSystemLifecycleBootstrap")) {
+        if (command->getFirstParameterValue("doNotIgnoreSystemLifecycleBootstrap") == "true") {
+            intTestOptions["doNotIgnoreSystemLifecycleBootstrap"] = 1;
+        } else {
+            intTestOptions["doNotIgnoreSystemLifecycleBootstrap"] = 0;
+        }
+    }
+
     bool useTestConnectionOptions = false;
 
     if (this->command->containsParameter("teardown")) {
@@ -140,7 +156,7 @@ void AdjustCommandExecutor::testOptions() {
                 stringTestOptions["extraPath"] = this->basePath;
                 // Android specific.
                 useTestConnectionOptions = true;
-                intTestOptions["tryInstallReferrer"] = 0;
+                // intTestOptions["tryInstallReferrer"] = 0; // To confirm verify replacement works
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
 #endif

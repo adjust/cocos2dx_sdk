@@ -23,6 +23,7 @@ extern "C" {
     static void (*sessionTrackingFailedCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
     static void (*sessionTrackingSucceededCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
     static bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
+    static void (*isEnabledCallbackMethod)(bool isEnabled);
     static void (*googleAdIdCallbackMethod)(std::string adId);
     static void (*amazonAdIdCallbackMethod)(std::string adId);
     static void (*adIdCallbackMethod)(std::string adId);
@@ -75,6 +76,7 @@ extern "C" {
     void setSessionTrackingFailedCallbackMethod(void (*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink));
+    void setIsEnabledCallbackMethod(void (*callbackMethod)(bool isEnabled));
     void setGoogleAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));

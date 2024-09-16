@@ -221,7 +221,7 @@ void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains
 
     cocos2d::JniMethodInfo jmiInitArrayList;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInitArrayList, "java/util/ArrayList", "<init>", "()V")) {
-        return NULL;
+        return;
     }
 
     jclass clsArrayList = jmiInitArrayList.env->FindClass("java/util/ArrayList");
@@ -230,19 +230,19 @@ void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains
 
     cocos2d::JniMethodInfo jmiAdd;
     if (!cocos2d::JniHelper::getMethodInfo(jmiAdd, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z")) {
-        return NULL;
+        return;
     }
 
     for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
          toIterator != urlStrategyDomains.end(); toIterator++)
     {
         std::string urlStrategyDomain = (*toIterator);
-        jstring jElement = jmiInitArrayList.env->NewStringUTF(urlStrategyDomain.c_str());
+        jstring jElement = jmiAdd.env->NewStringUTF(urlStrategyDomain.c_str());
 
         jboolean jReturnValue = jmiAdd.env->CallBooleanMethod(jArrayList, jmiAdd.methodID, jElement);
 
         jmiAdd.env->DeleteLocalRef(jElement);
-        jmiAdd.env->DeleteLocalRef(jReturnValue);
+        //jmiAdd.env->DeleteLocalRef(jReturnValue);
     }
 
     cocos2d::JniMethodInfo jmiSetUrlStrategy;
@@ -256,8 +256,8 @@ void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains
     jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jArrayList, jUseSubdomains, jIsDataResidency);
 
     jmiSetUrlStrategy.env->DeleteLocalRef(jArrayList);
-    jmiSetUrlStrategy.env->DeleteLocalRef(jUseSubdomains);
-    jmiSetUrlStrategy.env->DeleteLocalRef(jIsDataResidency);
+    //jmiSetUrlStrategy.env->DeleteLocalRef(jUseSubdomains);
+    //jmiSetUrlStrategy.env->DeleteLocalRef(jIsDataResidency);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
@@ -507,10 +507,10 @@ void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
         return;
     }
     cocos2d::JniMethodInfo jmiEnableDeviceIdsReadingOnce;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "enableDeviceIdsReadingOnce", "()V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableDeviceIdsReadingOnce, "com/adjust/sdk/AdjustConfig", "enableDeviceIdsReadingOnce", "()V")) {
         return;
     }
-    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiEnableDeviceIdsReadingOnce.methodID);
+    jmiEnableDeviceIdsReadingOnce.env->CallVoidMethod(config, jmiEnableDeviceIdsReadingOnce.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.enableDeviceIdsReadingOnce();

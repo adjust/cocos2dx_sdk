@@ -135,12 +135,30 @@ void Adjust2dx::disable() {
 
 void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiIsEnabled;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "()Z")) {
-        return false;
+    setIsEnabledCallbackMethod(callbackMethod);
+
+    cocos2d::JniMethodInfo jmiIsEnabledCallback;
+
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabledCallback, "com/adjust/sdk/Adjust", "isEnabled", "(Landroid/content/Context;Lcom/adjust/sdk/OnIsEnabledListener;)V")) {
+        return;
     }
-    jboolean jIsEnabled = jmiIsEnabled.env->CallStaticBooleanMethod(jmiIsEnabled.classID, jmiIsEnabled.methodID);
-    return jIsEnabled;
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxIsEnabledCallback", "<init>", "()V")) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
+        return;
+    }
+
+    jclass clsAdjust2dxIsEnabledCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxIsEnabledCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxIsEnabledCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxIsEnabledCallback, jmidInit);
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+    jmiIsEnabledCallback.env->CallStaticVoidMethod(jmiIsEnabledCallback.classID, jmiIsEnabledCallback.methodID, jContext, jCallbackProxy);
+    jmiGetContext.env->DeleteLocalRef(jContext);
+    jmiInit.env->DeleteLocalRef(jCallbackProxy);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::isEnabledCallback(callbackMethod);
 #endif
@@ -148,10 +166,11 @@ void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
 
 void Adjust2dx::switchToOfflineMode() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "switchToOfflineMode", "()V")) {
+    cocos2d::JniMethodInfo jmiSwitchToOfflineMode;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSwitchToOfflineMode, "com/adjust/sdk/Adjust", "switchToOfflineMode", "()V")) {
         return;
     }
-    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID);
+    jmiSwitchToOfflineMode.env->CallStaticVoidMethod(jmiSwitchToOfflineMode.classID, jmiSwitchToOfflineMode.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::switchToOfflineMode();
 #endif
@@ -159,10 +178,11 @@ void Adjust2dx::switchToOfflineMode() {
 
 void Adjust2dx::switchBackToOnlineMode() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsOffline, "com/adjust/sdk/Adjust", "switchBackToOnlineMode", "()V")) {
+    cocos2d::JniMethodInfo jmiSwitchBackToOnlineMode;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSwitchBackToOnlineMode, "com/adjust/sdk/Adjust", "switchBackToOnlineMode", "()V")) {
         return;
     }
-    jmiIsOffline.env->CallStaticVoidMethod(jmiIsOffline.classID, jmiIsOffline.methodID);
+    jmiSwitchBackToOnlineMode.env->CallStaticVoidMethod(jmiSwitchBackToOnlineMode.classID, jmiSwitchBackToOnlineMode.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::switchBackToOnlineMode();
 #endif
@@ -202,7 +222,7 @@ void Adjust2dx::setPushTokenAsString(std::string pushToken) {
         return;
     }
 
-    jstring jPushToken = jmiSetPushToken.env->NewStringUTF(deviceToken.c_str());
+    jstring jPushToken = jmiSetPushToken.env->NewStringUTF(pushToken.c_str());
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
     jmiSetPushToken.env->CallStaticVoidMethod(jmiSetPushToken.classID, jmiSetPushToken.methodID, jPushToken, jContext);
     jmiSetPushToken.env->DeleteLocalRef(jPushToken);
@@ -313,7 +333,7 @@ void Adjust2dx::removeGlobalPartnerParameters() {
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiRemoveGlobalPartnerParameters, "com/adjust/sdk/Adjust", "removeGlobalPartnerParameters", "()V")) {
         return;
     }
-    jmiRemoveGlobalPartnerParameters.env->CallStaticVoidMethod(jmiRemoveGlobalPartnerParameters.classID, jmiRemoveGlobalvPartnerParameters.methodID);
+    jmiRemoveGlobalPartnerParameters.env->CallStaticVoidMethod(jmiRemoveGlobalPartnerParameters.classID, jmiRemoveGlobalPartnerParameters.methodID);
 #endif
 }
 
@@ -446,7 +466,7 @@ void Adjust2dx::processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
     jmiProcessAndResolveDeeplink.env->CallStaticVoidMethod(jmiProcessAndResolveDeeplink.classID, jmiProcessAndResolveDeeplink.methodID, deeplink.getDeeplink(), jContext, jCallbackProxy);
 
     jmiGetContext.env->DeleteLocalRef(jContext);
-    jmiProcessDeeplink.env->DeleteLocalRef(jCallbackProxy);
+    jmiProcessAndResolveDeeplink.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
@@ -486,7 +506,7 @@ void Adjust2dx::getGoogleAdId(void (*callbackMethod)(std::string adId)) {
         return;
     }
     
-    jclass clsAdjust2dxGoolgeAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxGoogleAdIdCallback");
+    jclass clsAdjust2dxGoogleAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxGoogleAdIdCallback");
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxGoogleAdIdCallback, "<init>", "()V");
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxGoogleAdIdCallback, jmidInit);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
@@ -550,8 +570,6 @@ void Adjust2dx::onPause() {
 void Adjust2dx::idfaCallback(void(*callbackMethod)(std::string idfa)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::idfaCallback(callbackMethod);
-#else
-    return "";
 #endif
 }
 
@@ -611,13 +629,13 @@ void Adjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeepl
 void Adjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     return ADJAdjust2dx::idfvCallback(callbackMethod);
-#else
-    return "";
 #endif
 }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-jobject getTestOptions(std::map<std::string, std::string> testOptions) {
+jobject getTestOptions(std::map<std::string, std::string> stringTestOptions,
+                       std::map<std::string, int> intTestOptions)
+{
     cocos2d::JniMethodInfo jmiInit;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustTestOptions", "<init>", "()V")) {
         return NULL;
@@ -649,60 +667,62 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     jobject jTestOptions = jmiInit.env->NewObject(jclsTestOptions, jmidInit);
 
     // Context.
-    if (testOptions.find("setContext") != testOptions.end()) {
+    if (intTestOptions.find("setContext") != intTestOptions.end()) {
         jfieldID jfidContext = jmiInit.env->GetFieldID(jclsTestOptions, "context", "Landroid/content/Context;");
         jmiInit.env->SetObjectField(jTestOptions, jfidContext, jContext);
     }
     jmiGetContext.env->DeleteLocalRef(jContext);
 
     // Base URL.
-    jstring jBaseUrl = jmiInit.env->NewStringUTF(testOptions["baseUrl"].c_str());
+    jstring jBaseUrl = jmiInit.env->NewStringUTF(stringTestOptions["testUrlOverwrite"].c_str());
     jfieldID jfidBaseUrl = jmiInit.env->GetFieldID(jclsTestOptions, "baseUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidBaseUrl, jBaseUrl);
 
     // GDPR URL.
-    jstring jsGdprUrl = jmiInit.env->NewStringUTF(testOptions["gdprUrl"].c_str());
+    jstring jsGdprUrl = jmiInit.env->NewStringUTF(stringTestOptions["testUrlOverwrite"].c_str());
     jfieldID jfidGdprUrl = jmiInit.env->GetFieldID(jclsTestOptions, "gdprUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidGdprUrl, jsGdprUrl);
 
     // Subscription URL.
-    jstring jsSubscriptionUrl = jmiInit.env->NewStringUTF(testOptions["subscriptionUrl"].c_str());
+    jstring jsSubscriptionUrl = jmiInit.env->NewStringUTF(stringTestOptions["testUrlOverwrite"].c_str());
     jfieldID jfidSubscriptionUrl = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionUrl, jsSubscriptionUrl);
 
     // Purchase verification URL.
-    jstring jsPurchaseVerificationUrl = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationUrl"].c_str());
+    jstring jsPurchaseVerificationUrl = jmiInit.env->NewStringUTF(stringTestOptions["testUrlOverwrite"].c_str());
     jfieldID jfidPurchaseVerificationUrl = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationUrl", "Ljava/lang/String;");
     jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationUrl, jsPurchaseVerificationUrl);
 
     // Base path.
-    if (testOptions.find("basePath") != testOptions.end()) {
-        jstring jsBasePath = jmiInit.env->NewStringUTF(testOptions["basePath"].c_str());
+    if (stringTestOptions.find("extraPath") != stringTestOptions.end()) {
+        jstring jsExtraPath = jmiInit.env->NewStringUTF(stringTestOptions["extraPath"].c_str());
         jfieldID jfidBasePath = jmiInit.env->GetFieldID(jclsTestOptions, "basePath", "Ljava/lang/String;");
-        jmiInit.env->SetObjectField(jTestOptions, jfidBasePath, jsBasePath);
+        jmiInit.env->SetObjectField(jTestOptions, jfidBasePath, jsExtraPath);
     }
 
     // GDPR path.
-    if (testOptions.find("gdprPath") != testOptions.end()) {
-        jstring jsGdprPath = jmiInit.env->NewStringUTF(testOptions["gdprPath"].c_str());
+    if (stringTestOptions.find("extraPath") != stringTestOptions.end()) {
+        jstring jsExtraPath = jmiInit.env->NewStringUTF(stringTestOptions["extraPath"].c_str());
         jfieldID jfidGdprPath = jmiInit.env->GetFieldID(jclsTestOptions, "gdprPath", "Ljava/lang/String;");
-        jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsGdprPath);
+        jmiInit.env->SetObjectField(jTestOptions, jfidGdprPath, jsExtraPath);
     }
 
     // Subscription path.
-    if (testOptions.find("subscriptionPath") != testOptions.end()) {
-        jstring jsSubscriptionPath = jmiInit.env->NewStringUTF(testOptions["subscriptionPath"].c_str());
+    if (stringTestOptions.find("extraPath") != stringTestOptions.end()) {
+        jstring jsExtraPath = jmiInit.env->NewStringUTF(stringTestOptions["extraPath"].c_str());
         jfieldID jfidSubscriptionPath = jmiInit.env->GetFieldID(jclsTestOptions, "subscriptionPath", "Ljava/lang/String;");
-        jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionPath, jsSubscriptionPath);
+        jmiInit.env->SetObjectField(jTestOptions, jfidSubscriptionPath, jsExtraPath);
     }
 
     // Purchase verification path.
-    if (testOptions.find("purchaseVerificationPath") != testOptions.end()) {
-        jstring jsPurchaseVerificationPath = jmiInit.env->NewStringUTF(testOptions["purchaseVerificationPath"].c_str());
+    if (stringTestOptions.find("extraPath") != stringTestOptions.end()) {
+        jstring jsExtraPath = jmiInit.env->NewStringUTF(stringTestOptions["extraPath"].c_str());
         jfieldID jfidPurchaseVerificationPath = jmiInit.env->GetFieldID(jclsTestOptions, "purchaseVerificationPath", "Ljava/lang/String;");
-        jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationPath, jsPurchaseVerificationPath);
+        jmiInit.env->SetObjectField(jTestOptions, jfidPurchaseVerificationPath, jsExtraPath);
     }
-
+/*  TO confirm
+        there is no 'test connection options' in AdjustTestOptions, so
+        it should/cannot be set here
     // Use test connection options.
     if (testOptions.find("useTestConnectionOptions") != testOptions.end()) {
         jboolean jUseTestConnectionOptions = testOptions["useTestConnectionOptions"] == "true" ? JNI_TRUE : JNI_FALSE;
@@ -711,10 +731,10 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
         jmiInit.env->SetObjectField(jTestOptions, jfidUseTestConnectionOptions, jUseTestConnectionOptionsObj);
         jmiInit.env->DeleteLocalRef(jUseTestConnectionOptionsObj);
     }
-
+*/
     // Timer interval in milliseconds.
-    if (testOptions.find("timerIntervalInMilliseconds") != testOptions.end()) {
-        long timerIntervalInMilliseconds = atol(testOptions["timerIntervalInMilliseconds"].c_str());
+    if (intTestOptions.find("timerIntervalInMilliseconds") != intTestOptions.end()) {
+        long timerIntervalInMilliseconds = (long)intTestOptions["timerIntervalInMilliseconds"];
         jlong jTimerIntervalInMilliseconds = (jlong)(timerIntervalInMilliseconds);
         jobject jTimerIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerIntervalInMilliseconds);
         jfieldID jfidTimerIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -723,8 +743,8 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     }
 
     // Timer start in milliseconds.
-    if (testOptions.find("timerStartInMilliseconds") != testOptions.end()) {
-        long timerStartInMilliseconds = atol(testOptions["timerStartInMilliseconds"].c_str());
+    if (intTestOptions.find("timerStartInMilliseconds") != intTestOptions.end()) {
+        long timerStartInMilliseconds = (long)intTestOptions["timerStartInMilliseconds"];
         jlong jTimerStartInMilliseconds = (jlong)(timerStartInMilliseconds);
         jobject jTimerStartInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jTimerStartInMilliseconds);
         jfieldID jfidTimerStartInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "timerStartInMilliseconds", "Ljava/lang/Long;");
@@ -733,8 +753,8 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     }
 
     // Session interval in milliseconds.
-    if (testOptions.find("sessionIntervalInMilliseconds") != testOptions.end()) {
-        long sessionIntervalInMilliseconds = atol(testOptions["sessionIntervalInMilliseconds"].c_str());
+    if (intTestOptions.find("sessionIntervalInMilliseconds") != intTestOptions.end()) {
+        long sessionIntervalInMilliseconds = (long)intTestOptions["sessionIntervalInMilliseconds"];
         jlong jSessionIntervalInMilliseconds = (jlong)(sessionIntervalInMilliseconds);
         jobject jSessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSessionIntervalInMilliseconds);
         jfieldID jfidSessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "sessionIntervalInMilliseconds", "Ljava/lang/Long;");
@@ -743,18 +763,32 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     }
 
     // Sub-session interval in milliseconds.
-    if (testOptions.find("subsessionIntervalInMilliseconds") != testOptions.end()) {
-        long subsessionIntervalInMilliseconds = atol(testOptions["subsessionIntervalInMilliseconds"].c_str());
+    if (intTestOptions.find("subsessionIntervalInMilliseconds") != intTestOptions.end()) {
+        long subsessionIntervalInMilliseconds = (long)intTestOptions["subsessionIntervalInMilliseconds"];
         jlong jSubsessionIntervalInMilliseconds = (jlong)(subsessionIntervalInMilliseconds);
         jobject jSubsessionIntervalInMillisecondsObj = jmiInitLong.env->NewObject(clsLong, midInitLong, jSubsessionIntervalInMilliseconds);
         jfieldID jfidSubsessionIntervalInMilliseconds = jmiInit.env->GetFieldID(jclsTestOptions, "subsessionIntervalInMilliseconds", "Ljava/lang/Long;");
         jmiInit.env->SetObjectField(jTestOptions, jfidSubsessionIntervalInMilliseconds, jSubsessionIntervalInMillisecondsObj);
         jmiInit.env->DeleteLocalRef(jSubsessionIntervalInMillisecondsObj);
     }
+/*
+ if (command.containsParameter("doNotIgnoreSystemLifecycleBootstrap")) {
+     String doNotIgnoreSystemLifecycleBootstrapString =
+       command.getFirstParameterValue("doNotIgnoreSystemLifecycleBootstrap");
+     Boolean doNotIgnoreSystemLifecycleBootstrap =
+       Util.strictParseStringToBoolean(doNotIgnoreSystemLifecycleBootstrapString);
+     if (doNotIgnoreSystemLifecycleBootstrap != null
+       && doNotIgnoreSystemLifecycleBootstrap.booleanValue())
+     {
+         testOptions.ignoreSystemLifecycleBootstrap = false;
+     }
+ }
+ public Boolean ignoreSystemLifecycleBootstrap = true;
 
+ */
     // Teardown.
-    if (testOptions.find("teardown") != testOptions.end()) {
-        jboolean jTeardown = testOptions["teardown"] == "true" ? JNI_TRUE : JNI_FALSE;
+    if (intTestOptions.find("teardown") != intTestOptions.end()) {
+        jboolean jTeardown = intTestOptions["teardown"] == 1 ? JNI_TRUE : JNI_FALSE;
         jobject jTeardownObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jTeardown);
         jfieldID jfidTeardown = jmiInit.env->GetFieldID(jclsTestOptions, "teardown", "Ljava/lang/Boolean;");
         jmiInit.env->SetObjectField(jTestOptions, jfidTeardown, jTeardownObj);
@@ -762,8 +796,8 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     }
 
     // Try install referrer.
-    if (testOptions.find("tryInstallReferrer") != testOptions.end()) {
-        jboolean jTryInstallReferrer = testOptions["tryInstallReferrer"] == "true" ? JNI_TRUE : JNI_FALSE;
+    if (intTestOptions.find("tryInstallReferrer") != intTestOptions.end()) {
+        jboolean jTryInstallReferrer = intTestOptions["tryInstallReferrer"] == 1 ? JNI_TRUE : JNI_FALSE;
         jobject jTryInstallReferrerObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jTryInstallReferrer);
         jfieldID jfidTryInstallReferrer = jmiInit.env->GetFieldID(jclsTestOptions, "tryInstallReferrer", "Ljava/lang/Boolean;");
         jmiInit.env->SetObjectField(jTestOptions, jfidTryInstallReferrer, jTryInstallReferrerObj);
@@ -771,20 +805,22 @@ jobject getTestOptions(std::map<std::string, std::string> testOptions) {
     }
 
     // No backoff wait.
-    if (testOptions.find("noBackoffWait") != testOptions.end()) { 
-        jboolean jNoBackoffWait = testOptions["noBackoffWait"] == "true" ? JNI_TRUE : JNI_FALSE;
+    if (intTestOptions.find("noBackoffWait") != intTestOptions.end()) {
+        jboolean jNoBackoffWait = intTestOptions["noBackoffWait"] == 1 ? JNI_TRUE : JNI_FALSE;
         jobject jNoBackoffWaitObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jNoBackoffWait);
         jfieldID jfidNoBackoffWait = jmiInit.env->GetFieldID(jclsTestOptions, "noBackoffWait", "Ljava/lang/Boolean;");
         jmiInit.env->SetObjectField(jTestOptions, jfidNoBackoffWait, jNoBackoffWaitObj);
         jmiInit.env->DeleteLocalRef(jNoBackoffWaitObj);
     }
 
-    if (testOptions.find("ignoreSystemLifecycleBootstrap") != testOptions.end()) {
-        jboolean jIgnoreSystemLifecycleBootstrap = testOptions["ignoreSystemLifecycleBootstrap"] == "true" ? JNI_TRUE : JNI_FALSE;
-        jobject jIgnoreSystemLifecycleBootstrapObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jIgnoreSystemLifecycleBootstrap);
-        jfieldID jfidIgnoreSystemLifecycleBootstrap = jmiInit.env->GetFieldID(jclsTestOptions, "ignoreSystemLifecycleBootstrap", "Ljava/lang/Boolean;");
-        jmiInit.env->SetObjectField(jTestOptions, jfidIgnoreSystemLifecycleBootstrap, jIgnoreSystemLifecycleBootstrapObj);
-        jmiInit.env->DeleteLocalRef(jIgnoreSystemLifecycleBootstrapObj);
+    if (intTestOptions.find("doNotIgnoreSystemLifecycleBootstrap") != intTestOptions.end()) {
+        if (intTestOptions["doNotIgnoreSystemLifecycleBootstrap"] == 1) {
+            jboolean jIgnoreSystemLifecycleBootstrap = JNI_FALSE;
+            jobject jIIgnoreSystemLifecycleBootstrapObj = jmiInitBoolean.env->NewObject(jclsBoolean, midInitBoolean, jIgnoreSystemLifecycleBootstrap);
+            jfieldID jfidIgnoreSystemLifecycleBootstrap = jmiInit.env->GetFieldID(jclsTestOptions, "ignoreSystemLifecycleBootstrap", "Ljava/lang/Boolean;");
+            jmiInit.env->SetObjectField(jTestOptions, jfidIgnoreSystemLifecycleBootstrap, jIIgnoreSystemLifecycleBootstrapObj);
+            jmiInit.env->DeleteLocalRef(jIIgnoreSystemLifecycleBootstrapObj);
+        }
     }
 
     return jTestOptions;

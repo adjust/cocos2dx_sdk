@@ -25,7 +25,7 @@ void AdjustDeeplink2dx::initDeeplink(std::string deeplinkStr) {
     jclass jclsAdjustDeeplink = jmiInit.env->FindClass("com/adjust/sdk/AdjustDeeplink");
     jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustDeeplink, "<init>", "(Landroid/net/Uri;)V");
 
-    event = jmiInit.env->NewObject(jclsAdjustDeeplink, jmidInit, jUri);
+    deeplink = jmiInit.env->NewObject(jclsAdjustDeeplink, jmidInit, jUri);
 
     jmiInit.env->DeleteLocalRef(jDeeplinkStr);
     jmiInit.env->DeleteLocalRef(jUri);
