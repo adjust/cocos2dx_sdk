@@ -252,12 +252,20 @@ static ADJDelegate2dx *defaultInstance = nil;
 }
 
 - (BOOL)adjustDeferredDeeplinkReceivedWannabe:(NSURL *)deeplink {
+    if (nil == deeplink || NULL == _deferredDeeplinkCallbackMethod) {
+        return NO;
+    }
+
     NSString *url = [deeplink absoluteString];
     std::string strDeeplink = std::string([url UTF8String]);
     return _deferredDeeplinkCallbackMethod(strDeeplink);
 }
 
 - (void)adjustSkanUpdatedWithConversionDataWannabe:(nonnull NSDictionary<NSString *, NSString *> *)data {
+    if (nil == data || NULL == _skanUpdatedWithConversionDataCallbackMethod) {
+        return;
+    }
+
     std::unordered_map<std::string, std::string> cppMap;
 
     for (NSString *key in data) {
