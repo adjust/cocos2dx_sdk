@@ -170,10 +170,10 @@ void AdjustCommandExecutor::testOptions() {
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                intTestOptions["timerIntervalInMilliseconds"] = -1000;
-                intTestOptions["timerStartInMilliseconds"] = -1000;
-                intTestOptions["sessionIntervalInMilliseconds"] = -1000;
-                intTestOptions["subsessionIntervalInMilliseconds"] = -1000;
+                intTestOptions["timerIntervalInMilliseconds"] = -1;
+                intTestOptions["timerStartInMilliseconds"] = -1;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1;
             }
             if (teardownOption == "sdk") {
                 intTestOptions["teardown"] = 1;
@@ -185,10 +185,10 @@ void AdjustCommandExecutor::testOptions() {
                 savedEvents.clear();
                 savedConfigs.clear();
                 this->basePath = "";
-                intTestOptions["timerIntervalInMilliseconds"] = -1000;
-                intTestOptions["timerStartInMilliseconds"] = -1000;
-                intTestOptions["sessionIntervalInMilliseconds"] = -1000;
-                intTestOptions["subsessionIntervalInMilliseconds"] = -1000;
+                intTestOptions["timerIntervalInMilliseconds"] = -1;
+                intTestOptions["timerStartInMilliseconds"] = -1;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1;
             }
             toIterator++;
         }
