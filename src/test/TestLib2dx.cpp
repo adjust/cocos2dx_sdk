@@ -28,12 +28,17 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, vo
     setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
 
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/test/TestLibrary", "<init>", "(Ljava/lang/String;Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/test/TestLibrary", "<init>", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;Lcom/adjust/test/ICommandJsonListener;)V")) {
+        return;
+    }
+
+    cocos2d::JniMethodInfo jmiGetContext;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
         return;
     }
 
     jclass jclsTestLibrary = jmiInit.env->FindClass("com/adjust/test/TestLibrary");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsTestLibrary, "<init>", "(Ljava/lang/String;Ljava/lang/String;Lcom/adjust/test/ICommandJsonListener;)V");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsTestLibrary, "<init>", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;Lcom/adjust/test/ICommandJsonListener;)V");
     // Base URL.
     jstring jBaseUrl = jmiInit.env->NewStringUTF(baseUrl.c_str());
     // Control URL.
@@ -48,10 +53,13 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, vo
     jmethodID jmidInitCommJsonListener = jmiInitCommJsonListener.env->GetMethodID(jclsAdjust2dxCommandJsonListenerCallback, "<init>", "()V");
     jobject jCommListenerCallbackProxy = jmiInitCommJsonListener.env->NewObject(jclsAdjust2dxCommandJsonListenerCallback, jmidInitCommJsonListener);
 
+    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
+
     // Initialise test library
-    jobject jTestLib = jmiInit.env->NewObject(jclsTestLibrary, jmidInit, jBaseUrl, jControlUrl, jCommListenerCallbackProxy);
+    jobject jTestLib = jmiInit.env->NewObject(jclsTestLibrary, jmidInit, jBaseUrl, jControlUrl, jContext, jCommListenerCallbackProxy);
     testLibrary = cocos2d::JniHelper::getEnv()->NewGlobalRef(jTestLib);
 
+    jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jBaseUrl);
     jmiInit.env->DeleteLocalRef(jControlUrl);
     jmiInit.env->DeleteLocalRef(jCommListenerCallbackProxy);
