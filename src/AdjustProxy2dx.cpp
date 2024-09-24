@@ -576,6 +576,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_adIdRead
         return;
     }
     if (NULL == jAdId) {
+        googleAdIdCallbackMethod(std::string());
         return;
     }
 
@@ -591,6 +592,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_adIdRead
         return;
     }
     if (NULL == jAdId) {
+        amazonAdIdCallbackMethod(std::string());
         return;
     }
 
@@ -606,6 +608,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
         return;
     }
     if (NULL == jAdId) {
+        adIdCallbackMethod(std::string());
         return;
     }
 
@@ -780,6 +783,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDee
         return;
     }
     if (NULL == jDeeplink) {
+        lastDeeplinkCallbackMethod(std::string());
         return;
     }
 
@@ -795,6 +799,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersio
         return;
     }
     if (NULL == jSdkVersion) {
+        sdkVersionCallbackMethod(std::string());
         return;
     }
 
@@ -810,6 +815,7 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolve
         return;
     }
     if (NULL == jResolvedLink) {
+        resolvedLinkCallbackMethod(std::string());
         return;
     }
 
