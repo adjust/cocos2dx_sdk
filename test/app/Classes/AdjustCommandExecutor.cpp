@@ -903,13 +903,8 @@ void AdjustCommandExecutor::verifyTrack() {
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    std::string productId = command->getFirstParameterValue("productId");
-    std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
-
-    AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
-
     localBasePath = this->basePath;
-    Adjust2dx::verifyPlayStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
+    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [](std::string verificationStatus, int code, std::string message) {
         TestLib2dx::addInfoToSend("verification_status", verificationStatus);
         TestLib2dx::addInfoToSend("code", std::to_string(code));
         TestLib2dx::addInfoToSend("message", message);

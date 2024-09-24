@@ -82,7 +82,7 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, voi
     setVerifyPlayStorePurchaseCallbackMethod(verificationCallback);
 
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPlayStorePurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
         return;
     }
     jclass clsAdjust2dxVerifyPlayStorePurchaseCallback = jmiVerifyPlayStorePurchase.env->FindClass("com/adjust/sdk/Adjust2dxVerifyPlayStorePurchaseCallback");
@@ -608,7 +608,7 @@ void Adjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeepl
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dx   Callback", "<init>", "()V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxLastDeeplinkCallback", "<init>", "()V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiGetContext;
