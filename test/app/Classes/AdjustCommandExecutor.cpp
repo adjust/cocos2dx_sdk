@@ -446,11 +446,12 @@ void AdjustCommandExecutor::config() {
         std::string openDeeplinkString = command->getFirstParameterValue("deferredDeeplinkCallback");
         // TODO: Figure out how to pass return value parameter into lambda method.
         // bool openDeeplink = (openDeeplinkString == "true");
+        static bool openDeeplink = (openDeeplinkString == "true");
         adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
             CCLOG("\n[AdjustCommandExecutor]: Deferred deep link received: %s", deeplink.c_str());
             TestLib2dx::addInfoToSend("deeplink", deeplink);
             TestLib2dx::sendInfoToServer(localBasePath);
-            return true;
+            return openDeeplink;
         });
     }
 }
