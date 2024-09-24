@@ -47,7 +47,7 @@ public:
     static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
     static void idfaCallback(void(*callbackMethod)(std::string idfa));
     static void adidCallback(void(*callbackMethod)(std::string adid));
-    static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
+    static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion), std::string sdkPrefix);
     static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     static void requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
     static int getAppTrackingAuthorizationStatus();
