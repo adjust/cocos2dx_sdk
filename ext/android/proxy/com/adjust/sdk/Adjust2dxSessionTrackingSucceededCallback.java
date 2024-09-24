@@ -6,7 +6,7 @@ public class Adjust2dxSessionTrackingSucceededCallback implements OnSessionTrack
 	public Adjust2dxSessionTrackingSucceededCallback() {}
 	
 	@Override
-	public void onFinishedSessionTrackingSucceeded(AdjustSessionSuccess sessionSuccessResponseData) {
+	public void onSessionTrackingSucceeded(AdjustSessionSuccess sessionSuccessResponseData) {
 		sessionTrackingSucceeded(sessionSuccessResponseData);
 	}
 }

@@ -6,7 +6,7 @@ public class Adjust2dxEventTrackingFailedCallback implements OnEventTrackingFail
 	public Adjust2dxEventTrackingFailedCallback() {}
 	
 	@Override
-	public void onFinishedEventTrackingFailed(AdjustEventFailure eventFailureResponseData) {
+	public void onEventTrackingFailed(AdjustEventFailure eventFailureResponseData) {
 		eventTrackingFailed(eventFailureResponseData);
 	}
 }

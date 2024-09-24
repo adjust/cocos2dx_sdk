@@ -6,7 +6,7 @@ public class Adjust2dxSessionTrackingFailedCallback implements OnSessionTracking
 	public Adjust2dxSessionTrackingFailedCallback() {}
 	
 	@Override
-	public void onFinishedSessionTrackingFailed(AdjustSessionFailure failureResponseData) {
+	public void onSessionTrackingFailed(AdjustSessionFailure failureResponseData) {
 		sessionTrackingFailed(failureResponseData);
 	}
 }
