@@ -537,6 +537,14 @@ void AdjustCommandExecutor::event() {
         std::string deduplicationId = command->getFirstParameterValue("deduplicationId");
         adjustEvent->setDeduplicationId(deduplicationId);
     }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (this->command->containsParameter("purchaseToken")) {
+        std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
+        adjustEvent->setPurchaseToken(purchaseToken);
+    }
+#endif
+
 }
 
 void AdjustCommandExecutor::trackEvent() {
