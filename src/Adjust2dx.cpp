@@ -29,11 +29,9 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
         return;
     }
     jmiOnCreate.env->CallStaticVoidMethod(jmiOnCreate.classID, jmiOnCreate.methodID, adjustConfig.getConfig());
-    onResume();
     jmiOnCreate.env->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::initSdk(adjustConfig.getConfig());
-    onResume();
 #endif
 }
 
