@@ -6,7 +6,8 @@
 //  Copyright © 2016-2019 Adjust GmbH. All rights reserved.
 //
 
-#import <AdjustSdk/Adjust.h>
+#import <AdjustSdk/AdjustSdk.h>
+#include <unordered_map>
 
 @interface ADJDelegate2dx : NSObject<AdjustDelegate>
 
@@ -16,8 +17,7 @@
 @property (nonatomic) void (*sessionSuccessCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
 @property (nonatomic) void (*sessionFailureCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
 @property (nonatomic) bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
-@property (nonatomic) void (*conversionValueUpdatedCallbackMethod)(int conversionValue);
-@property (nonatomic) void (*postbackConversionValueUpdatedCallbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow);
+@property (nonatomic) void (*skanUpdatedWithConversionDataCallbackMethod)(std::unordered_map<std::string, std::string> data);
 
 + (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
                     swizzleOfEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
@@ -25,16 +25,14 @@
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-          swizzleOfConversionValueUpdatedCallback:(BOOL)swizzleConversionValueUpdatedCallback
-  swizzleOfPostbackConversionValueUpdatedCallback:(BOOL)swizzlePostbackConversionValueUpdatedCallback
+     swizzleSkanUpdatedWithConversionDataCallback:(BOOL)swizzleSkanUpdatedWithConversionDataCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-                 conversionValueUpdatedCallbackId:(void (*)(int conversionValue))conversionValueUpdatedCallbackId
-         postbackConversionValueUpdatedCallbackId:(void (*)(int conversionValue, std::string coarseValue, bool lockWindow))postbackConversionValueUpdatedCallbackId;
+          skanUpdatedWithConversionDataCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedWithConversionDataCallbackId;
 + (void)teardown;
 
 @end

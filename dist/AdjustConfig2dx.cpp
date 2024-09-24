@@ -12,14 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x4.37.0";
-const std::string AdjustUrlStrategyChina = "china";
-const std::string AdjustUrlStrategyIndia = "india";
-const std::string AdjustUrlStrategyCn = "cn";
-const std::string AdjustUrlStrategyCnOnly = "cn-only";
-const std::string AdjustDataResidencyEU = "data-residency-eu";
-const std::string AdjustDataResidencyTR = "data-residency-tr";
-const std::string AdjustDataResidencyUS = "data-residency-us";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.0";
 const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
 const std::string AdjustAdRevenueSourceMopub = "mopub";
 const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
@@ -123,124 +116,56 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
 #endif
 }
 
-void AdjustConfig2dx::setDelayStart(double delayStart) {
+void AdjustConfig2dx::enableSendingInBackground() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetDelayStart;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetDelayStart, "com/adjust/sdk/AdjustConfig", "setDelayStart", "(D)V")) {
+    cocos2d::JniMethodInfo jmiEnableSendingInBackground;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableSendingInBackground, "com/adjust/sdk/AdjustConfig", "enableSendingInBackground", "()V")) {
         return;
     }
 
-    jmiSetDelayStart.env->CallVoidMethod(config, jmiSetDelayStart.methodID, delayStart);
+    jmiEnableSendingInBackground.env->CallVoidMethod(config, jmiEnableSendingInBackground.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setDelayStart(delayStart);
+        config.enableSendingInBackground();
     }
 #endif
 }
 
-void AdjustConfig2dx::setSendInBackground(bool isEnabled) {
+void AdjustConfig2dx::enableCostDataInAttribution() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetSendInBackground;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetSendInBackground, "com/adjust/sdk/AdjustConfig", "setSendInBackground", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnableCostDataInAttribution;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableCostDataInAttribution, "com/adjust/sdk/AdjustConfig", "enableCostDataInAttribution", "()V")) {
         return;
     }
 
-    jmiSetSendInBackground.env->CallVoidMethod(config, jmiSetSendInBackground.methodID, isEnabled);
+    jmiEnableCostDataInAttribution.env->CallVoidMethod(config, jmiEnableCostDataInAttribution.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSendInBackground(isEnabled);
+        config.enableCostDataInAttribution();
     }
 #endif
 }
 
-void AdjustConfig2dx::setEventBufferingEnabled(bool isEnabled) {
+void AdjustConfig2dx::disableIdfaReading() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetEventBufferingEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetEventBufferingEnabled, "com/adjust/sdk/AdjustConfig", "setEventBufferingEnabled", "(Ljava/lang/Boolean;)V")) {
-        return;
-    }
-
-    jclass jclsBoolean = jmiSetEventBufferingEnabled.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetEventBufferingEnabled.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jIsEnabled = jmiSetEventBufferingEnabled.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, isEnabled);
-    jmiSetEventBufferingEnabled.env->CallVoidMethod(config, jmiSetEventBufferingEnabled.methodID, jIsEnabled);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setEventBufferingEnabled(isEnabled);
+        config.disableIdfaReading();
     }
 #endif
 }
 
-void AdjustConfig2dx::setNeedsCost(bool needsCost) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetNeedsCost;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetNeedsCost, "com/adjust/sdk/AdjustConfig", "setNeedsCost", "(Ljava/lang/Boolean;)V")) {
-        return;
-    }
-
-    jclass jclsBoolean = jmiSetNeedsCost.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetNeedsCost.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jNeedsCost = jmiSetNeedsCost.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, needsCost);
-    jmiSetNeedsCost.env->CallVoidMethod(config, jmiSetNeedsCost.methodID, jNeedsCost);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setNeedsCost(needsCost);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setAllowIdfaReading(bool isAllowed) {
+void AdjustConfig2dx::disableAdServices() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setAllowIdfaReading(isAllowed);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setAllowiAdInfoReading(isAllowed);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setAllowAdServicesInfoReading(bool isAllowed) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setAllowAdServicesInfoReading(isAllowed);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setUserAgent(std::string userAgent) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiSetUserAgent;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUserAgent, "com/adjust/sdk/AdjustConfig", "setUserAgent", "(Ljava/lang/String;)V")) {
-        return;
-    }
-
-    jstring jUserAgent = jmiSetUserAgent.env->NewStringUTF(userAgent.c_str());
-    jmiSetUserAgent.env->CallVoidMethod(config, jmiSetUserAgent.methodID, jUserAgent);
-    jmiSetUserAgent.env->DeleteLocalRef(jUserAgent);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setUserAgent(userAgent);
+        config.disableAdServices();
     }
 #endif
 }
@@ -285,81 +210,73 @@ void AdjustConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
 #endif
 }
 
-void AdjustConfig2dx::setUrlStrategy(std::string urlStrategy) {
+void AdjustConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                                     bool useSubdomains,
+                                     bool isDataResidency)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetUrlStrategy;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUrlStrategy, "com/adjust/sdk/AdjustConfig", "setUrlStrategy", "(Ljava/lang/String;)V")) {
+
+    cocos2d::JniMethodInfo jmiInitArrayList;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInitArrayList, "java/util/ArrayList", "<init>", "()V")) {
         return;
     }
 
-    if (urlStrategy.compare(AdjustUrlStrategyChina) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyChina = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CHINA", "Ljava/lang/String;");
-        jstring jUrlStrategyChina = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyChina);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyChina);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyChina);
-    } else if (urlStrategy.compare(AdjustUrlStrategyIndia) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyIndia = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_INDIA", "Ljava/lang/String;");
-        jstring jUrlStrategyIndia = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyIndia);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyIndia);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyIndia);
-    } else if (urlStrategy.compare(AdjustUrlStrategyCn) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyCn = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN", "Ljava/lang/String;");
-        jstring jUrlStrategyCn = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCn);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCn);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCn);
-    } else if (urlStrategy.compare(AdjustUrlStrategyCnOnly) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidUrlStrategyCnOnly = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "URL_STRATEGY_CN_ONLY", "Ljava/lang/String;");
-        jstring jUrlStrategyCnOnly = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidUrlStrategyCnOnly);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jUrlStrategyCnOnly);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jUrlStrategyCnOnly);
-    } else if (urlStrategy.compare(AdjustDataResidencyEU) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyEU = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_EU", "Ljava/lang/String;");
-        jstring jDataResidencyEU = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyEU);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyEU);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyEU);
-    } else if (urlStrategy.compare(AdjustDataResidencyTR) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyTR = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_TR", "Ljava/lang/String;");
-        jstring jDataResidencyTR = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyTR);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyTR);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyTR);
-    } else if (urlStrategy.compare(AdjustDataResidencyUS) == 0) {
-        jclass jclsAdjustConfig = jmiSetUrlStrategy.env->FindClass("com/adjust/sdk/AdjustConfig");
-        jfieldID jfidDataResidencyUS = jmiSetUrlStrategy.env->GetStaticFieldID(jclsAdjustConfig, "DATA_RESIDENCY_US", "Ljava/lang/String;");
-        jstring jDataResidencyUS = (jstring)jmiSetUrlStrategy.env->GetStaticObjectField(jclsAdjustConfig, jfidDataResidencyUS);
-        jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jDataResidencyUS);
-        jmiSetUrlStrategy.env->DeleteLocalRef(jDataResidencyUS);
+    jclass clsArrayList = jmiInitArrayList.env->FindClass("java/util/ArrayList");
+    jmethodID jmidInit = jmiInitArrayList.env->GetMethodID(clsArrayList, "<init>", "()V");
+    jobject jArrayList = jmiInitArrayList.env->NewObject(clsArrayList, jmidInit);
+
+    cocos2d::JniMethodInfo jmiAdd;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiAdd, "java/util/ArrayList", "add", "(Ljava/lang/Object;)Z")) {
+        return;
     }
+
+    for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
+         toIterator != urlStrategyDomains.end(); toIterator++)
+    {
+        std::string urlStrategyDomain = (*toIterator);
+        jstring jElement = jmiAdd.env->NewStringUTF(urlStrategyDomain.c_str());
+
+        jboolean jReturnValue = jmiAdd.env->CallBooleanMethod(jArrayList, jmiAdd.methodID, jElement);
+
+        jmiAdd.env->DeleteLocalRef(jElement);
+        //jmiAdd.env->DeleteLocalRef(jReturnValue);
+    }
+
+    cocos2d::JniMethodInfo jmiSetUrlStrategy;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetUrlStrategy, "com/adjust/sdk/AdjustConfig", "setUrlStrategy", "(Ljava/util/List;ZZ)V")) {
+        return;
+    }
+
+    jboolean jUseSubdomains = useSubdomains ? JNI_TRUE : JNI_FALSE;
+    jboolean jIsDataResidency = isDataResidency ? JNI_TRUE : JNI_FALSE;
+
+    jmiSetUrlStrategy.env->CallVoidMethod(config, jmiSetUrlStrategy.methodID, jArrayList, jUseSubdomains, jIsDataResidency);
+
+    jmiSetUrlStrategy.env->DeleteLocalRef(jArrayList);
+    //jmiSetUrlStrategy.env->DeleteLocalRef(jUseSubdomains);
+    //jmiSetUrlStrategy.env->DeleteLocalRef(jIsDataResidency);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setUrlStrategy(urlStrategy);
+        config.setUrlStrategy(urlStrategyDomains, useSubdomains, isDataResidency);
     }
 #endif
 }
 
-void AdjustConfig2dx::setPreinstallTrackingEnabled(bool isEnabled) {
+void AdjustConfig2dx::enablePreinstallTracking() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetPreinstallTrackingEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPreinstallTrackingEnabled, "com/adjust/sdk/AdjustConfig", "jmiSetPreinstallTrackingEnabled", "(Ljava/lang/Boolean;)V")) {
+    cocos2d::JniMethodInfo jmiEnablePreinstallTracking;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnablePreinstallTracking, "com/adjust/sdk/AdjustConfig", "enablePreinstallTracking", "()V")) {
         return;
     }
 
-    jclass jclsBoolean = jmiSetPreinstallTrackingEnabled.env->FindClass("java/lang/Boolean");
-    jmethodID jmidValueOf = jmiSetPreinstallTrackingEnabled.env->GetStaticMethodID(jclsBoolean, "valueOf", "(Z)Ljava/lang/Boolean;");
-    jobject jIsEnabled = jmiSetPreinstallTrackingEnabled.env->CallStaticObjectMethod(jclsBoolean, jmidValueOf, isEnabled);
-    jmiSetPreinstallTrackingEnabled.env->CallVoidMethod(config, jmiSetPreinstallTrackingEnabled.methodID, jIsEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    jmiEnablePreinstallTracking.env->CallVoidMethod(config, jmiEnablePreinstallTracking.methodID);
 #endif
 }
 
@@ -383,59 +300,12 @@ void AdjustConfig2dx::setPreinstallFilePath(std::string externalDeviceId) {
 #endif
 }
 
-void AdjustConfig2dx::setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetAppSecret;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetAppSecret, "com/adjust/sdk/AdjustConfig", "setAppSecret", "(JJJJJ)V")) {
-        return;
-    }
-    jmiSetAppSecret.env->CallVoidMethod(config, jmiSetAppSecret.methodID, secretId, info1, info2, info3, info4);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setAppSecret(secretId, info1, info2, info3, info4);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setDeviceKnown(bool isDeviceKnown) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    if (config == NULL) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiSetDeviceKnown;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetDeviceKnown, "com/adjust/sdk/AdjustConfig", "setDeviceKnown", "(Z)V")) {
-        return;
-    }
-    jmiSetDeviceKnown.env->CallVoidMethod(config, jmiSetDeviceKnown.methodID, isDeviceKnown);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setIsDeviceKnown(isDeviceKnown);
-    }
-#endif
-}
-
-void AdjustConfig2dx::deactivateSkAdNetworkHandling() {
+void AdjustConfig2dx::disableSkanAttribution() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.deactivateSkAdNetworkHandling();
+        config.disableSkanAttribution();
     }
 #endif
-}
-
-void AdjustConfig2dx::setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity) {
-// #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-//     if (config == NULL) {
-//         return;
-//     }
-//     cocos2d::JniMethodInfo jmiSetReadMobileEquipmentIdentity;
-//     if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadMobileEquipmentIdentity, "com/adjust/sdk/AdjustConfig", "setReadMobileEquipmentIdentity", "(Z)V")) {
-//         return;
-//     }
-//     jmiSetReadMobileEquipmentIdentity.env->CallVoidMethod(config, jmiSetReadMobileEquipmentIdentity.methodID, readMobileEquipmentIdentity);
-// #endif
 }
 
 void AdjustConfig2dx::setProcessName(std::string processName) {
@@ -602,7 +472,7 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
 
     setDeferredDeeplinkCallbackMethod(deferredDeeplinkCallback);
     cocos2d::JniMethodInfo jmiSetCallback;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnDeeplinkResponseListener", "(Lcom/adjust/sdk/OnDeeplinkResponseListener;)V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnDeferredDeeplinkResponseListener", "(Lcom/adjust/sdk/OnDeferredDeeplinkResponseListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -622,82 +492,86 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
 #endif
 }
 
-void AdjustConfig2dx::setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue)) {
+void AdjustConfig2dx::setSkanUpdatedWithConversionDataCallback(void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setConversionValueUpdatedCallback(conversionValueUpdatedCallback);
+        config.setSkanUpdatedWithConversionDataCallback(skanUpdatedWithConversionDataCallback);
     }
 #endif
 }
 
-void AdjustConfig2dx::setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow)) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (isConfigSet) {
-        config.setPostbackConversionValueUpdatedCallback(postbackConversionValueUpdatedCallback);
-    }
-#endif
-}
-
-void AdjustConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
+void AdjustConfig2dx::enableDeviceIdsReadingOnce() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetCoppaCompliantEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetCoppaCompliantEnabled, "com/adjust/sdk/AdjustConfig", "setCoppaCompliantEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnableDeviceIdsReadingOnce;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableDeviceIdsReadingOnce, "com/adjust/sdk/AdjustConfig", "enableDeviceIdsReadingOnce", "()V")) {
         return;
     }
-    jmiSetCoppaCompliantEnabled.env->CallVoidMethod(config, jmiSetCoppaCompliantEnabled.methodID, isEnabled);
+    jmiEnableDeviceIdsReadingOnce.env->CallVoidMethod(config, jmiEnableDeviceIdsReadingOnce.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setCoppaCompliantEnabled(isEnabled);
+        config.enableDeviceIdsReadingOnce();
     }
 #endif
 }
 
-void AdjustConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
+void AdjustConfig2dx::enableCoppaCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetReadDeviceInfoOnceEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetReadDeviceInfoOnceEnabled, "com/adjust/sdk/AdjustConfig", "setReadDeviceInfoOnceEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnableCoppaCompliance;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableCoppaCompliance, "com/adjust/sdk/AdjustConfig", "enableCoppaCompliance", "()V")) {
         return;
     }
-    jmiSetReadDeviceInfoOnceEnabled.env->CallVoidMethod(config, jmiSetReadDeviceInfoOnceEnabled.methodID, isEnabled);
+    jmiEnableCoppaCompliance.env->CallVoidMethod(config, jmiEnableCoppaCompliance.methodID);
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setReadDeviceInfoOnceEnabled(isEnabled);
+        config.enableCoppaCompliance();
     }
 #endif
 }
 
-void AdjustConfig2dx::setPlayStoreKidsAppEnabled(bool isEnabled) {
+void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetPlayStoreKidsAppEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetPlayStoreKidsAppEnabled, "com/adjust/sdk/AdjustConfig", "setPlayStoreKidsAppEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEventDeduplicationIdsMaxSize;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEventDeduplicationIdsMaxSize, "com/adjust/sdk/AdjustConfig", "setEventDeduplicationIdsMaxSize", "(Ljava/lang/Integer;)V")) {
         return;
     }
-    jmiSetPlayStoreKidsAppEnabled.env->CallVoidMethod(config, jmiSetPlayStoreKidsAppEnabled.methodID, isEnabled);
+
+    jclass clsInteger = jmiEventDeduplicationIdsMaxSize.env->FindClass("java/lang/Integer");
+    jmethodID midInit = jmiEventDeduplicationIdsMaxSize.env->GetMethodID(clsInteger, "<init>", "(I)V");
+    jobject jEventDeduplicationIdsMaxSize = jmiEventDeduplicationIdsMaxSize.env->NewObject(clsInteger, midInit, eventDeduplicationIdsMaxSize);
+
+    jmiEventDeduplicationIdsMaxSize.env->CallVoidMethod(config, jmiEventDeduplicationIdsMaxSize.methodID, jEventDeduplicationIdsMaxSize);
+
+    jmiEventDeduplicationIdsMaxSize.env->DeleteLocalRef(jEventDeduplicationIdsMaxSize);
+
+
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setEventDeduplicationIdsMaxSize(eventDeduplicationIdsMaxSize);
+    }
 #endif
 }
 
-void AdjustConfig2dx::setFinalAttributionEnabled(bool isEnabled) {
+void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
-    cocos2d::JniMethodInfo jmiSetFinalAttributionEnabled;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiSetFinalAttributionEnabled, "com/adjust/sdk/AdjustConfig", "setFinalAttributionEnabled", "(Z)V")) {
+    cocos2d::JniMethodInfo jmiEnablePlayStoreKidsCompliance;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnablePlayStoreKidsCompliance, "com/adjust/sdk/AdjustConfig", "enablePlayStoreKidsCompliance", "()V")) {
         return;
     }
-    jmiSetFinalAttributionEnabled.env->CallVoidMethod(config, jmiSetFinalAttributionEnabled.methodID, isEnabled);
+    jmiEnablePlayStoreKidsCompliance.env->CallVoidMethod(config, jmiEnablePlayStoreKidsCompliance.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 #endif
 }
@@ -719,11 +593,11 @@ void AdjustConfig2dx::setFbAppId(std::string fbAppId) {
 #endif
 }
 
-void AdjustConfig2dx::setLinkMeEnabled(bool isEnabled) {
+void AdjustConfig2dx::enableLinkMe() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setLinkMeEnabled(isEnabled);
+        config.enableLinkMe();
     }
 #endif
 }

@@ -37,18 +37,12 @@ void ADJEvent2dx::setCallbackId(std::string callbackId) {
     [((ADJEvent *)event) setCallbackId:[NSString stringWithUTF8String:callbackId.c_str()]];
 }
 
-void ADJEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
-    [((ADJEvent *)event) setReceipt:
-     [[NSString stringWithUTF8String:receipt.c_str()] dataUsingEncoding:NSUTF8StringEncoding]
-                       transactionId:[NSString stringWithUTF8String:transactionId.c_str()]];
-}
-
 void ADJEvent2dx::setProductId(std::string productId) {
     [((ADJEvent *)event) setProductId:[NSString stringWithUTF8String:productId.c_str()]];
 }
 
-void ADJEvent2dx::setReceipt(std::string receipt) {
-    [((ADJEvent *)event) setReceipt:[[NSString stringWithUTF8String:receipt.c_str()] dataUsingEncoding:NSUTF8StringEncoding]];
+void ADJEvent2dx::setDeduplicationId(std::string deduplicationId) {
+    [((ADJEvent *)event) setDeduplicationId:[NSString stringWithUTF8String:deduplicationId.c_str()]];
 }
 
 bool ADJEvent2dx::isValid() {

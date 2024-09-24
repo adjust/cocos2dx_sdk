@@ -10,12 +10,11 @@
 
 void AdjustAppStorePurchase2dx::initPurchase(
     std::string productId,
-    std::string transactionId,
-    std::string receipt
-) {
+    std::string transactionId)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    purchase = ADJAppStorePurchase2dx(productId, transactionId, receipt);
+    purchase = ADJAppStorePurchase2dx(productId, transactionId);
     isPurchaseSet = true;
 #endif
 }

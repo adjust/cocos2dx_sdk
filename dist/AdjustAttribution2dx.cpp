@@ -36,10 +36,6 @@ std::string AdjustAttribution2dx::getClickLabel() {
     return this->clickLabel;
 }
 
-std::string AdjustAttribution2dx::getAdid() {
-	return this->adid;
-}
-
 std::string AdjustAttribution2dx::getCostType() {
     return this->costType;
 }

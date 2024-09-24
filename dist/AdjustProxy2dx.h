@@ -23,9 +23,16 @@ extern "C" {
     static void (*sessionTrackingFailedCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
     static void (*sessionTrackingSucceededCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
     static bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
+    static void (*isEnabledCallbackMethod)(bool isEnabled);
+    static void (*googleAdIdCallbackMethod)(std::string adId);
+    static void (*amazonAdIdCallbackMethod)(std::string adId);
     static void (*adIdCallbackMethod)(std::string adId);
+    static void (*attributionReadCallbackMethod)(AdjustAttribution2dx attribution);
+    static void (*lastDeeplinkCallbackMethod)(std::string deeplink);
+    static void (*sdkVersionCallbackMethod)(std::string deeplink);
     static void (*resolvedLinkCallbackMethod)(std::string resolvedLink);
-    static void (*purchaseVerificationResultCallbackMethod)(std::string verificationStatus, int code, std::string message);
+    static void (*verifyPlayStorePurchaseCallbackMethod)(std::string verificationStatus, int code, std::string message);
+    static void (*verifyAndTrackPlayStorePurchaseCallbackMethod)(std::string verificationStatus, int code, std::string message);
     // Only for testing purposes.
     static void (*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters);
 
@@ -41,11 +48,23 @@ extern "C" {
     (JNIEnv *, jobject, jobject);
     JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_deferredDeeplinkReceived
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_adIdRead
+    (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_adIdRead
+    (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
+    (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionRead
+    (JNIEnv *, jobject, jobject);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkRead
+    (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionRead
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
     (JNIEnv *, jobject, jstring);
-    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResult
+    (JNIEnv *, jobject, jstring, int, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
     (JNIEnv *, jobject, jstring, int, jstring);
     // Only for testing purposes.
     JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
@@ -57,9 +76,16 @@ extern "C" {
     void setSessionTrackingFailedCallbackMethod(void (*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink));
+    void setIsEnabledCallbackMethod(void (*callbackMethod)(bool isEnabled));
+    void setGoogleAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
+    void setAmazonAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
     void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId));
+    void setAttributionReadCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution));
+    void setLastDeeplinkCallbackMethod(void (*callbackMethod)(std::string deeplink));
+    void setSdkVersionCallbackMethod(void (*callbackMethod)(std::string sdkVersion));
     void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink));
-    void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
+    void setVerifyPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
+    void setVerifyAndTrackPlayStorePurchaseCallbackMethod(void (*callbackMethod)(std::string verificationStatus, int code, std::string message));
     // Only for testing purposes.
     void setExecuteTestLibCommandCallbackMethod(void(*executeTestLibCommandCallbackMethod)(std::string className, std::string methodName, std::string jsonParameters));
 }

@@ -15,7 +15,6 @@
 
 class TestApp : public cocos2d::Scene {
 private:
-    TestLib2dx *testLibrary;
     void initTestLibrary();
 
 public:

@@ -14,12 +14,12 @@
 class ADJAppStorePurchase2dx {
 private:
     void* purchase;
-    void initPurchase(std::string productId, std::string transactionId, std::string receipt);
+    void initPurchase(std::string productId, std::string transactionId);
 
 public:
     ADJAppStorePurchase2dx() {}
-    ADJAppStorePurchase2dx(std::string productId, std::string transactionId, std::string receipt) {
-        initPurchase(productId, transactionId, receipt);
+    ADJAppStorePurchase2dx(std::string productId, std::string transactionId) {
+        initPurchase(productId, transactionId);
     }
 
     void* getPurchase();

@@ -18,8 +18,9 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.8.119";
+static std::string serverIp = "192.168.8.129";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
+static TestLib2dx *testLibrary;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 static std::string urlOverwrite = "http://" + serverIp + ":8080";
@@ -36,7 +37,7 @@ void TestApp::initTestLibrary() {
         commandExecutorInstance->executeCommand(command);
     };
 
-    this->testLibrary = new TestLib2dx(urlOverwrite, controlUrl, func);
+    testLibrary = new TestLib2dx(urlOverwrite, controlUrl, func);
 }
 
 bool TestApp::init() {
@@ -75,8 +76,10 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    // this->testLibrary->addTestDirectory("purchase-verification");
-    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
+    // testLibrary->addTestDirectory("purchase-verification");
+    Adjust2dx::sdkVersionCallback([] (std::string sdkVersion) {
+        testLibrary->startTestSession(sdkVersion);
+    });
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
@@ -86,7 +89,9 @@ bool TestApp::init() {
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
-    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
+    Adjust2dx::sdkVersionCallback([] (std::string sdkVersion) {
+        testLibrary->startTestSession(sdkVersion);
+    });
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {

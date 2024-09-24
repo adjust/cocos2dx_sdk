@@ -10,11 +10,11 @@
 #include <AdjustSdk/ADJThirdPartySharing.h>
 
 void ADJThirdPartySharing2dx::initThirdPartySharing() {
-    thirdPartySharing = [[ADJThirdPartySharing alloc] initWithIsEnabledNumberBool:nil];
+    thirdPartySharing = [[ADJThirdPartySharing alloc] initWithIsEnabled:nil];
 }
 
 void ADJThirdPartySharing2dx::initThirdPartySharing(bool isEnabled) {
-    thirdPartySharing = [[ADJThirdPartySharing alloc] initWithIsEnabledNumberBool:[NSNumber numberWithBool:isEnabled]];
+    thirdPartySharing = [[ADJThirdPartySharing alloc] initWithIsEnabled:[NSNumber numberWithBool:isEnabled]];
 }
 
 void ADJThirdPartySharing2dx::addGranularOption(std::string partnerName, std::string key, std::string value) {

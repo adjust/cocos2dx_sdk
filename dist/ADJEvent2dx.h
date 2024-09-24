@@ -27,9 +27,8 @@ public:
     void addPartnerParameter(std::string key, std::string value);
     void setTransactionId(std::string transactionId);
     void setCallbackId(std::string callbackId);
-    void setReceipt(std::string receipt, std::string transactionId);
     void setProductId(std::string productId);
-    void setReceipt(std::string receipt);
+    void setDeduplicationId(std::string deduplicationId);
     bool isValid();
     void* getEvent();
 };

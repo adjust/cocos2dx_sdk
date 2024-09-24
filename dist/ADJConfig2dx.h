@@ -10,6 +10,7 @@
 #define _ADJUST_ADJCONFIG2DX_H_
 
 #include <iostream>
+#include <vector>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
 #include "AdjustEventSuccess2dx.h"
@@ -35,8 +36,7 @@ private:
     void (*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess) = NULL;
     void (*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure) = NULL;
     bool (*deferredDeeplinkCallback)(std::string deeplink) = NULL;
-    void (*conversionValueUpdatedCallback)(int conversionValue) = NULL;
-    void (*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow) = NULL;
+    void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data) = NULL;
     void initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix);
 
 public:
@@ -48,23 +48,18 @@ public:
         initConfig(appToken, environment, allowSuppressLogLevel, sdkPrefix);
     }
 
-    void setDelayStart(double delayStart);
     void setLogLevel(ADJLogLevel2dx logLevel);
-    void setSendInBackground(bool isEnabled);
-    void setEventBufferingEnabled(bool isEnabled);
-    void setAllowIdfaReading(bool isAllowed);
-    void setAllowiAdInfoReading(bool isAllowed);
-    void setAllowAdServicesInfoReading(bool isAllowed);
-    void setNeedsCost(bool needsCost);
-    void setUserAgent(std::string userAgent);
+    void enableSendingInBackground();
+    void disableIdfaReading();
+    void disableAdServices();
+    void enableCostDataInAttribution();
     void setDefaultTracker(std::string defaultTracker);
     void setExternalDeviceId(std::string externalDeviceId);
-    void setAppSecret(long secretId, long info1, long info2, long info3, long info4);
-    void setIsDeviceKnown(bool isDeviceKnown);
-    void setUrlStrategy(std::string urlStrategy);
-    void deactivateSkAdNetworkHandling();
-    void setCoppaCompliantEnabled(bool isEnabled);
-    void setLinkMeEnabled(bool isEnabled);
+    void setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                        bool useSubdomains,
+                        bool isDataResidency);
+    void disableSkanAttribution();
+    void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     void setAttributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*callbackMethod)(AdjustEventSuccess2dx eventSuccess));
@@ -72,9 +67,10 @@ public:
     void setSessionSuccessCallback(void(*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*callbackMethod)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string deeplink));
-    void setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue));
-    void setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow));
-    void setReadDeviceInfoOnceEnabled(bool isEnabled);
+    void setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data));
+    void enableDeviceIdsReadingOnce();
+    void enableCoppaCompliance();
+    void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);
@@ -82,8 +78,7 @@ public:
     void(*getSessionSuccessCallback())(AdjustSessionSuccess2dx);
     void(*getSessionFailureCallback())(AdjustSessionFailure2dx);
     bool(*getDeferredDeeplinkCallback())(std::string);
-    void(*getConversionValueUpdatedCallback())(int);
-    void(*getPostbackConversionValueUpdatedCallback())(int, std::string, bool);
+    void(*getSkanUpdatedWithConversionDataCallback())(std::unordered_map<std::string, std::string>);
 };
 
 #endif /* _ADJUST_ADJCONFIG2DX_H_ */
