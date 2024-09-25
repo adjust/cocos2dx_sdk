@@ -29,11 +29,9 @@ void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
         return;
     }
     jmiOnCreate.env->CallStaticVoidMethod(jmiOnCreate.classID, jmiOnCreate.methodID, adjustConfig.getConfig());
-    onResume();
     jmiOnCreate.env->DeleteGlobalRef(adjustConfig.getConfig());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::initSdk(adjustConfig.getConfig());
-    onResume();
 #endif
 }
 
@@ -386,7 +384,7 @@ void Adjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
 
 void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::sdkVersionCallback(callbackMethod);
+    ADJAdjust2dx::sdkVersionCallback(callbackMethod, AdjustSdkPrefix2dx);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setSdkVersionCallbackMethod(callbackMethod);
 
@@ -395,15 +393,18 @@ void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxSdkVersionCallback", "<init>", "()V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxSdkVersionCallback", "<init>", "(Ljava/lang/String;)V")) {
         return;
     }
 
     jclass clsAdjust2dxSdkVersionCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxSdkVersionCallback");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxSdkVersionCallback, "<init>", "()V");
-    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxSdkVersionCallback, jmidInit);
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxSdkVersionCallback, "<init>", "(Ljava/lang/String;)V");
+    jstring jSdkPrefix = jmiInit.env->NewStringUTF(AdjustSdkPrefix2dx.c_str());
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxSdkVersionCallback, jmidInit, jSdkPrefix);
     jmiGetSdkVersionCallback.env->CallStaticVoidMethod(jmiGetSdkVersionCallback.classID, jmiGetSdkVersionCallback.methodID, jCallbackProxy);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
+    jmiInit.env->DeleteLocalRef(jSdkPrefix);
+
 #endif
 }
 
