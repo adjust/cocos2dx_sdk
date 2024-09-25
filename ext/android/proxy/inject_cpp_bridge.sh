@@ -17,8 +17,10 @@ JAVAC=$JAVA_HOME_7/bin/javac
 
 # ======================================== #
 
-echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Unpacking adjust-android.jar file ... ${NC}"
-$JAVAC -cp "adjust-android.jar:$ANDROID_JAR" com/adjust/sdk/*.java
+echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Unpacking adjust-android.aar file ... ${NC}"
+rm -rf temp
+unzip adjust-android.aar -d temp
+$JAVAC -cp "temp/classes.jar:$ANDROID_JAR" com/adjust/sdk/*.java
 echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 
 # ======================================== #
@@ -31,8 +33,10 @@ fi
 
 # ======================================== #
 
-echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Injecting C++ bridge Java classes to adjust-android.jar ... ${NC}"
-$JAR uf adjust-android.jar com/adjust/sdk/*.class
+echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Injecting C++ bridge Java classes to adjust-android.aar ... ${NC}"
+$JAR uf temp/classes.jar com/adjust/sdk/*.class
+$JAR cvf adjust-android.aar -C temp .
+rm -rf temp
 echo -e "${CYAN}* [ADJUST-SDK-BUILD][CPP-BRIDGE]:${GREEN} Done! ${NC}"
 
 # ======================================== #

@@ -192,7 +192,7 @@ def adb_shell(app_package):
 
 def gradle_make_release_jar(do_clean=False):
     if (do_clean):
-        execute_command(['./gradlew', 'clean', 'adjustCoreJarRelease'])
+        execute_command(['./gradlew', 'clean', 'adjustCoreRelease'])
     else:
         execute_command(['./gradlew', 'adjustCoreJarRelease'])
 
@@ -200,7 +200,19 @@ def gradle_make_debug_jar(do_clean=False):
     if (do_clean):
         execute_command(['./gradlew', 'clean', 'adjustCoreJarDebug'])
     else:
-        execute_command(['./gradlew', 'adjustCoreJarDebug'])    
+        execute_command(['./gradlew', 'adjustCoreJarDebug'])
+
+def gradle_make_release_aar(do_clean=False):
+    if (do_clean):
+        execute_command(['./gradlew', 'clean', 'adjustCoreAarRelease'])
+    else:
+        execute_command(['./gradlew', 'adjustCoreAarRelease'])
+
+def gradle_make_debug_aar(do_clean=False):
+    if (do_clean):
+        execute_command(['./gradlew', 'clean', 'adjustCoreAarDebug'])
+    else:
+        execute_command(['./gradlew', 'adjustCoreAarDebug'])    
 
 def gradle_run(options):
     cmd_params = ['./gradlew']
