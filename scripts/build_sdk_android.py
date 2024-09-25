@@ -158,7 +158,7 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-options project ...')
         gradle_run(['clean', ':tests:test-options:assembleDebug'])
         if (configuration == 'release'):
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/release'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
         else:
             test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
 
@@ -239,7 +239,7 @@ def _build_sdk_aar(root_dir, android_submodule_dir, configuration, with_test_lib
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-options project ...')
         gradle_run(['clean', ':tests:test-options:assembleDebug'])
         if (configuration == 'release'):
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/release'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
         else:
             test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
 
