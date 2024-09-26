@@ -151,6 +151,15 @@ void AdjustConfig2dx::disableIdfaReading() {
 #endif
 }
 
+void AdjustConfig2dx::disableIdfvReading() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.disableIdfvReading();
+    }
+#endif
+}
+
 void AdjustConfig2dx::disableAdServices() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)

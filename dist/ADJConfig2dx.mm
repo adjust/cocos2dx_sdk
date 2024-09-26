@@ -29,6 +29,10 @@ void ADJConfig2dx::disableIdfaReading() {
     [((ADJConfig *)config) disableIdfaReading];
 }
 
+void ADJConfig2dx::disableIdfvReading() {
+    [((ADJConfig *)config) disableIdfvReading];
+}
+
 void ADJConfig2dx::disableAdServices() {
     [((ADJConfig *)config) disableAdServices];
 }

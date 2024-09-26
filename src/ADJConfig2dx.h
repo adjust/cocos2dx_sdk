@@ -51,6 +51,7 @@ public:
     void setLogLevel(ADJLogLevel2dx logLevel);
     void enableSendingInBackground();
     void disableIdfaReading();
+    void disableIdfvReading();
     void disableAdServices();
     void enableCostDataInAttribution();
     void setDefaultTracker(std::string defaultTracker);
