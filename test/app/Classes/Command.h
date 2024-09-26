@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef  _TESTAPP_COMMAND_H_

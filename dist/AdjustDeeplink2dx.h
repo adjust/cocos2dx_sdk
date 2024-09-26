@@ -2,6 +2,9 @@
 //  AdjustDeeplink2dx.h
 //  Adjust SDK
 //
+//  Created by Pedro Silva (@nonelse) on 30th August 2024.
+//  Copyright © 2024-Present Adjust GmbH. All rights reserved.
+//
 
 #ifndef ADJUST_ADJUSTDEEPLINK2DX_H_
 #define ADJUST_ADJUSTDEEPLINK2DX_H_

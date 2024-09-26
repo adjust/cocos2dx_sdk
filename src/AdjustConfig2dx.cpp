@@ -2,7 +2,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustConfig2dx.h"

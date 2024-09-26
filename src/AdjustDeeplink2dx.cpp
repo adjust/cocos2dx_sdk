@@ -1,6 +1,9 @@
 //
-//  AdjustDeeplink2dx.cpp
+//  AdjustDeeplink2dx.h
 //  Adjust SDK
+//
+//  Created by Pedro Silva (@nonelse) on 30th August 2024.
+//  Copyright © 2024-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustDeeplink2dx.h"

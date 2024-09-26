@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2020 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUST2DX_H_

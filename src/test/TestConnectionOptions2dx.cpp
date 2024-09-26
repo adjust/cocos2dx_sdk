@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Ugljesa Erceg (@uerceg) on 14th September 2021.
-//  Copyright © 2021 Adjust GmbH. All rights reserved.
+//  Copyright © 2021-Present Adjust GmbH. All rights reserved.
 //
 
 #include "cocos2d.h"

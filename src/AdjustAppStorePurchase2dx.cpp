@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 17th January 2024.
-//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
+//  Copyright © 2024-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustAppStorePurchase2dx.h"
