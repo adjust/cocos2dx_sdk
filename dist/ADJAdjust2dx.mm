@@ -31,20 +31,20 @@ void ADJAdjust2dx::initSdk(ADJConfig2dx adjustConfig) {
         || isSkanUpdatedWithConversionDataCallbackImplemented)
     {
         ((ADJConfig *)adjustConfig.getConfig()).delegate =
-        [ADJDelegate2dx getInstanceWithSwizzleOfAttributionCallback:isAttributionCallbackImplemented
-                                      swizzleOfEventSuccessCallback:isEventSuccessCallbackImplemented
-                                      swizzleOfEventFailureCallback:isEventFailureCallbackImplemented
-                                    swizzleOfSessionSuccessCallback:isSessionSuccessCallbackImplemented
-                                    swizzleOfSessionFailureCallback:isSessionFailureCallbackImplemented
-                                  swizzleOfDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
-                       swizzleSkanUpdatedWithConversionDataCallback:isSkanUpdatedWithConversionDataCallbackImplemented
-                                           andAttributionCallbackId:adjustConfig.getAttributionCallback()
-                                             eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
-                                             eventFailureCallbackId:adjustConfig.getEventFailureCallback()
-                                           sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
-                                           sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
-                                         deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
-                            skanUpdatedWithConversionDataCallbackId:adjustConfig.getSkanUpdatedWithConversionDataCallback()];
+        [ADJDelegate2dx getInstanceWithSwizzleAttributionCallback:isAttributionCallbackImplemented
+                                      swizzleEventSuccessCallback:isEventSuccessCallbackImplemented
+                                      swizzleEventFailureCallback:isEventFailureCallbackImplemented
+                                    swizzleSessionSuccessCallback:isSessionSuccessCallbackImplemented
+                                    swizzleSessionFailureCallback:isSessionFailureCallbackImplemented
+                                  swizzleDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
+                                       swizzleSkanUpdatedCallback:isSkanUpdatedWithConversionDataCallbackImplemented
+                                            attributionCallbackId:adjustConfig.getAttributionCallback()
+                                           eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
+                                           eventFailureCallbackId:adjustConfig.getEventFailureCallback()
+                                         sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
+                                         sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
+                                       deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
+                                            skanUpdatedCallbackId:adjustConfig.getSkanUpdatedWithConversionDataCallback()];
     }
 
     [Adjust initSdk:(ADJConfig *)adjustConfig.getConfig()];
@@ -65,11 +65,11 @@ void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void 
             if (verificationResult == nil) {
                 callback(AdjustPurchaseVerificationResult2dx());
             } else {
-                AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
+                AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
                     std::string([verificationResult.verificationStatus UTF8String]),
                     std::string([verificationResult.message UTF8String]),
                     verificationResult.code);
-                callback(verificationResult);
+                callback(verificationResult2dx);
             }
         }
     }];
@@ -82,11 +82,11 @@ void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void 
             if (verificationResult == nil) {
                 callback(AdjustPurchaseVerificationResult2dx());
             } else {
-                AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
+                AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
                     std::string([verificationResult.verificationStatus UTF8String]),
                     std::string([verificationResult.message UTF8String]),
                     verificationResult.code);
-                callback(verificationResult);
+                callback(verificationResult2dx);
             }
         }
     }];
@@ -189,13 +189,13 @@ void ADJAdjust2dx::getAdid(void(*callback)(std::string adid)) {
     }];
 }
 
-void ADJAdjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion)) {
+void ADJAdjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion), std::string sdkPrefix) {
     if (callback == NULL) {
         return;
     }
 
     [Adjust sdkVersionWithCompletionHandler:^(NSString * _Nullable sdkVersion) {
-        callback(sdkVersion != nil ? std::string([sdkVersion UTF8String]) : std::string());
+        callback(sdkVersion != nil ? sdkPrefix + "@" + std::string([sdkVersion UTF8String]) : std::string());
     }];
 }
 
@@ -314,7 +314,7 @@ void ADJAdjust2dx::getLastDeeplink(void(*callback)(std::string lastDeeplink)) {
         }
 
         NSString *strLastDeeplink = [lastDeeplink absoluteString];
-        callback(strLastDeeplink != null ? std::string([strLastDeeplink UTF8String]) : std::string());
+        callback(strLastDeeplink != nil ? std::string([strLastDeeplink UTF8String]) : std::string());
     }];
 }
 
@@ -324,7 +324,7 @@ void ADJAdjust2dx::getIdfv(void(*callback)(std::string idfv)) {
     }
 
     [Adjust idfvWithCompletionHandler:^(NSString * _Nullable idfv) {
-        callback(idfv != null ? std::string([idfv UTF8String]) : std::string());
+        callback(idfv != nil ? std::string([idfv UTF8String]) : std::string());
     }];
 }
 

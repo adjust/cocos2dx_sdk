@@ -15,20 +15,20 @@ static ADJDelegate2dx *defaultInstance = nil;
 
 @implementation ADJDelegate2dx
 
-+ (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
-                    swizzleOfEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
-                    swizzleOfEventFailureCallback:(BOOL)swizzleEventFailureCallback
-                  swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
-                  swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
-                swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-                       swizzleSkanUpdatedCallback:(BOOL)swizzleSkanUpdatedCallback
-                         andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
-                           eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
-                           eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
-                         sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
-                         sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
-                       deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-                            skanUpdatedCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedCallbackId {
++ (id)getInstanceWithSwizzleAttributionCallback:(BOOL)swizzleAttributionCallback
+                    swizzleEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
+                    swizzleEventFailureCallback:(BOOL)swizzleEventFailureCallback
+                  swizzleSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
+                  swizzleSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
+                swizzleDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
+                     swizzleSkanUpdatedCallback:(BOOL)swizzleSkanUpdatedCallback
+                          attributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
+                         eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
+                         eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
+                       sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
+                       sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
+                     deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
+                          skanUpdatedCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedCallbackId {
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 

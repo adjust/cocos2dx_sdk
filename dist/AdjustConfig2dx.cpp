@@ -365,7 +365,7 @@ void AdjustConfig2dx::setEventSuccessCallback(void(*callback)(AdjustEventSuccess
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setEventSuccessCallbackMethod(callback);
+        config.setEventSuccessCallback(callback);
     }
 #endif
 }
@@ -393,7 +393,7 @@ void AdjustConfig2dx::setEventFailureCallback(void(*callback)(AdjustEventFailure
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setEventFailureCallbackMethod(callback);
+        config.setEventFailureCallback(callback);
     }
 #endif
 }
@@ -421,7 +421,7 @@ void AdjustConfig2dx::setSessionSuccessCallback(void(*callback)(AdjustSessionSuc
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSessionSuccessCallbackMethod(callback);
+        config.setSessionSuccessCallback(callback);
     }
 #endif
 }
@@ -449,7 +449,7 @@ void AdjustConfig2dx::setSessionFailureCallback(void(*callback)(AdjustSessionFai
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSessionFailureCallbackMethod(callback);
+        config.setSessionFailureCallback(callback);
     }
 #endif
 }
@@ -477,7 +477,7 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setDeferredDeeplinkCallbackMethod(deferredDeeplinkCallback);
+        config.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
     }
 #endif
 }
@@ -610,4 +610,3 @@ ADJConfig2dx AdjustConfig2dx::getConfig() {
     return config;
 }
 #endif
-
