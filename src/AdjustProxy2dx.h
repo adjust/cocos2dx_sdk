@@ -49,6 +49,8 @@ extern "C" {
     (JNIEnv *, jobject, jobject);
     JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_deferredDeeplinkReceived
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxIsEnabledCallback_isEnabledRead
+    (JNIEnv *, jobject, jboolean);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_googleAdIdRead
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_amazonAdIdRead

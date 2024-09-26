@@ -98,8 +98,8 @@ void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string
     deferredDeeplinkCallback = callbackMethod;
 }
 
-void ADJConfig2dx::setSkanUpdatedWithConversionDataCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data)) {
-    skanUpdatedWithConversionDataCallback = callbackMethod;
+void ADJConfig2dx::setSkanUpdatedCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data)) {
+    skanUpdatedCallback = callbackMethod;
 }
 
 void* ADJConfig2dx::getConfig() {

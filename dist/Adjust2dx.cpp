@@ -136,7 +136,6 @@ void Adjust2dx::isEnabled(void(*callback)(bool isEnabled)) {
     setIsEnabledCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiIsEnabled;
-
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "(Landroid/content/Context;Lcom/adjust/sdk/OnIsEnabledListener;)V")) {
         return;
     }

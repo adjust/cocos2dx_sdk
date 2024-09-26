@@ -482,11 +482,11 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
 #endif
 }
 
-void AdjustConfig2dx::setSkanUpdatedWithConversionDataCallback(void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data)) {
+void AdjustConfig2dx::setSkanUpdatedCallback(void (*callback)(std::unordered_map<std::string, std::string> data)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSkanUpdatedWithConversionDataCallback(skanUpdatedWithConversionDataCallback);
+        config.setSkanUpdatedCallback(callback);
     }
 #endif
 }

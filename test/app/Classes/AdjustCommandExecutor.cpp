@@ -263,7 +263,7 @@ void AdjustCommandExecutor::config() {
 
     if (this->command->containsParameter("skanCallback")) {
         localBasePath = this->basePath;
-        adjustConfig->setSkanUpdatedWithConversionDataCallback([](std::unordered_map<std::string, std::string> data) {
+        adjustConfig->setSkanUpdatedCallback([](std::unordered_map<std::string, std::string> data) {
             CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
 
             for (std::unordered_map<std::string, std::string>::iterator toIterator = data.begin();
