@@ -51,7 +51,7 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_googleAdIdRead
     (JNIEnv *, jobject, jstring);
-    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_AmazonAdIdRead
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_amazonAdIdRead
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdidCallback_adidRead
     (JNIEnv *, jobject, jstring);

@@ -366,15 +366,15 @@ void Adjust2dx::getAdid(void(*callback)(std::string adid)) {
     setAdidCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiGetAdid;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdId", "(Lcom/adjust/sdk/OnAdidReadListener;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdid", "(Lcom/adjust/sdk/OnAdidReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
-    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAdIdCallback", "<init>", "()V")) {
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/Adjust2dxAdidCallback", "<init>", "()V")) {
         return;
     }
 
-    jclass clsAdjust2dxAdidCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
+    jclass clsAdjust2dxAdidCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdidCallback");
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdidCallback, "<init>", "()V");
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdidCallback, jmidInit);
     jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jCallbackProxy);
@@ -496,7 +496,7 @@ void Adjust2dx::getGoogleAdId(void (*callback)(std::string googleAdId)) {
 #endif
 }
 
-void getAmazonAdId(void (*callback)(std::string amazonAdId)) {
+void Adjust2dx::getAmazonAdId(void (*callback)(std::string amazonAdId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     setAmazonAdIdCallbackMethod(callback);
 

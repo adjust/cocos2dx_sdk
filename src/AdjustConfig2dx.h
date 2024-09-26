@@ -85,9 +85,6 @@ public:
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
-    // TODO add to updated iOs & Android
-    //  eventDeduplicationIdsMaxSize
-    // iOS only
     void disableSkanAttribution();
     void disableIdfaReading();
     void disableAdServices();
