@@ -17,7 +17,7 @@
 @property (nonatomic) void (*sessionSuccessCallbackMethod)(AdjustSessionSuccess2dx sessionSuccess);
 @property (nonatomic) void (*sessionFailureCallbackMethod)(AdjustSessionFailure2dx sessionFailure);
 @property (nonatomic) bool (*deferredDeeplinkCallbackMethod)(std::string deeplink);
-@property (nonatomic) void (*skanUpdatedWithConversionDataCallbackMethod)(std::unordered_map<std::string, std::string> data);
+@property (nonatomic) void (*skanUpdatedCallbackMethod)(std::unordered_map<std::string, std::string> data);
 
 + (id)getInstanceWithSwizzleOfAttributionCallback:(BOOL)swizzleAttributionCallback
                     swizzleOfEventSuccessCallback:(BOOL)swizzleEventSuccessCallback
@@ -25,14 +25,14 @@
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-     swizzleSkanUpdatedWithConversionDataCallback:(BOOL)swizzleSkanUpdatedWithConversionDataCallback
+                       swizzleSkanUpdatedCallback:(BOOL)swizzleSkanUpdatedCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-          skanUpdatedWithConversionDataCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedWithConversionDataCallbackId;
+                            skanUpdatedCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedCallbackId;
 + (void)teardown;
 
 @end

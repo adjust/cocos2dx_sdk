@@ -77,7 +77,7 @@ bool TestApp::init() {
     
     CCLOG("[AdjustTest]: Start test session called!");
     // testLibrary->addTestDirectory("purchase-verification");
-    Adjust2dx::sdkVersionCallback([] (std::string sdkVersion) {
+    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
         testLibrary->startTestSession(sdkVersion);
     });
 
@@ -89,7 +89,7 @@ bool TestApp::init() {
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
-    Adjust2dx::sdkVersionCallback([] (std::string sdkVersion) {
+    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
         testLibrary->startTestSession(sdkVersion);
     });
 }

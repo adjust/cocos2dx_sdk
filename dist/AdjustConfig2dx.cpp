@@ -13,16 +13,6 @@
 #endif
 
 const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.0";
-const std::string AdjustAdRevenueSourceAppLovinMAX = "applovin_max_sdk";
-const std::string AdjustAdRevenueSourceMopub = "mopub";
-const std::string AdjustAdRevenueSourceAdMob = "admob_sdk";
-const std::string AdjustAdRevenueSourceIronSource = "ironsource_sdk";
-const std::string AdjustAdRevenueSourceAdMostSource = "admost_sdk";
-const std::string AdjustAdRevenueSourceUnity = "unity_sdk";
-const std::string AdjustAdRevenueSourceHeliumChartboost = "helium_chartboost_sdk";
-const std::string AdjustAdRevenueSourcePublisher = "publisher_sdk";
-const std::string AdjustAdRevenueSourceTopOn = "topon_sdk";
-const std::string AdjustAdRevenueSourceAdx = "adx_sdk";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -324,13 +314,13 @@ void AdjustConfig2dx::setProcessName(std::string processName) {
 #endif
 }
 
-void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution)) {
+void AdjustConfig2dx::setAttributionCallback(void(*callback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
 
-    setAttributionCallbackMethod(attributionCallback);
+    setAttributionCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiSetCallback;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnAttributionChangedListener", "(Lcom/adjust/sdk/OnAttributionChangedListener;)V")) {
         return;
@@ -347,18 +337,18 @@ void AdjustConfig2dx::setAttributionCallback(void(*attributionCallback)(AdjustAt
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setAttributionCallback(attributionCallback);
+        config.setAttributionCallback(callback);
     }
 #endif
 }
 
-void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess)) {
+void AdjustConfig2dx::setEventSuccessCallback(void(*callback)(AdjustEventSuccess2dx eventSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
 
-    setEventTrackingSucceededCallbackMethod(eventSuccessCallback);
+    setEventTrackingSucceededCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiSetCallback;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnEventTrackingSucceededListener", "(Lcom/adjust/sdk/OnEventTrackingSucceededListener;)V")) {
         return;
@@ -375,18 +365,18 @@ void AdjustConfig2dx::setEventSuccessCallback(void(*eventSuccessCallback)(Adjust
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setEventSuccessCallback(eventSuccessCallback);
+        config.setEventSuccessCallbackMethod(callback);
     }
 #endif
 }
 
-void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure)) {
+void AdjustConfig2dx::setEventFailureCallback(void(*callback)(AdjustEventFailure2dx eventFailure)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
 
-    setEventTrackingFailedCallbackMethod(eventFailureCallback);
+    setEventTrackingFailedCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiSetCallback;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnEventTrackingFailedListener", "(Lcom/adjust/sdk/OnEventTrackingFailedListener;)V")) {
         return;
@@ -403,18 +393,18 @@ void AdjustConfig2dx::setEventFailureCallback(void(*eventFailureCallback)(Adjust
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setEventFailureCallback(eventFailureCallback);
+        config.setEventFailureCallbackMethod(callback);
     }
 #endif
 }
 
-void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess)) {
+void AdjustConfig2dx::setSessionSuccessCallback(void(*callback)(AdjustSessionSuccess2dx sessionSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
 
-    setSessionTrackingSucceededCallbackMethod(sessionSuccessCallback);
+    setSessionTrackingSucceededCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiSetCallback;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnSessionTrackingSucceededListener", "(Lcom/adjust/sdk/OnSessionTrackingSucceededListener;)V")) {
         return;
@@ -431,18 +421,18 @@ void AdjustConfig2dx::setSessionSuccessCallback(void(*sessionSuccessCallback)(Ad
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSessionSuccessCallback(sessionSuccessCallback);
+        config.setSessionSuccessCallbackMethod(callback);
     }
 #endif
 }
 
-void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure)) {
+void AdjustConfig2dx::setSessionFailureCallback(void(*callback)(AdjustSessionFailure2dx sessionFailure)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
         return;
     }
 
-    setSessionTrackingFailedCallbackMethod(sessionFailureCallback);
+    setSessionTrackingFailedCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiSetCallback;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetCallback, "com/adjust/sdk/AdjustConfig", "setOnSessionTrackingFailedListener", "(Lcom/adjust/sdk/OnSessionTrackingFailedListener;)V")) {
         return;
@@ -459,7 +449,7 @@ void AdjustConfig2dx::setSessionFailureCallback(void(*sessionFailureCallback)(Ad
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setSessionFailureCallback(sessionFailureCallback);
+        config.setSessionFailureCallbackMethod(callback);
     }
 #endif
 }
@@ -487,7 +477,7 @@ void AdjustConfig2dx::setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
-        config.setDeferredDeeplinkCallback(deferredDeeplinkCallback);
+        config.setDeferredDeeplinkCallbackMethod(deferredDeeplinkCallback);
     }
 #endif
 }

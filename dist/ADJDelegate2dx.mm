@@ -21,15 +21,14 @@ static ADJDelegate2dx *defaultInstance = nil;
                   swizzleOfSessionSuccessCallback:(BOOL)swizzleSessionSuccessCallback
                   swizzleOfSessionFailureCallback:(BOOL)swizzleSessionFailureCallback
                 swizzleOfDeferredDeeplinkCallback:(BOOL)swizzleDeferredDeeplinkCallback
-     swizzleSkanUpdatedWithConversionDataCallback:(BOOL)swizzleSkanUpdatedWithConversionDataCallback
+                       swizzleSkanUpdatedCallback:(BOOL)swizzleSkanUpdatedCallback
                          andAttributionCallbackId:(void (*)(AdjustAttribution2dx attribution))attributionCallbackId
                            eventSuccessCallbackId:(void (*)(AdjustEventSuccess2dx eventSuccess))eventSuccessCallbackId
                            eventFailureCallbackId:(void (*)(AdjustEventFailure2dx eventFailure))eventFailureCallbackId
                          sessionSuccessCallbackId:(void (*)(AdjustSessionSuccess2dx sessionSuccess))sessionSuccessCallbackId
                          sessionFailureCallbackId:(void (*)(AdjustSessionFailure2dx sessionFailure))sessionFailureCallbackId
                        deferredDeeplinkCallbackId:(bool (*)(std::string deeplink))deferredDeeplinkCallbackId
-          skanUpdatedWithConversionDataCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedWithConversionDataCallbackId
-{
+                            skanUpdatedCallbackId:(void (*)(std::unordered_map<std::string, std::string> data))skanUpdatedCallbackId {
     dispatch_once(&onceToken, ^{
         defaultInstance = [[ADJDelegate2dx alloc] init];
 
@@ -58,7 +57,7 @@ static ADJDelegate2dx *defaultInstance = nil;
             [defaultInstance swizzleCallbackMethod:@selector(adjustDeferredDeeplinkReceived:)
                                   swizzledSelector:@selector(adjustDeferredDeeplinkReceivedWannabe:)];
         }
-        if (swizzleSkanUpdatedWithConversionDataCallback) {
+        if (swizzleSkanUpdatedCallback) {
             [defaultInstance swizzleCallbackMethod:@selector(adjustSkanUpdatedWithConversionData:)
                                   swizzledSelector:@selector(adjustSkanUpdatedWithConversionDataWannabe:)];
         }
@@ -69,7 +68,7 @@ static ADJDelegate2dx *defaultInstance = nil;
         [defaultInstance setSessionSuccessCallbackMethod:sessionSuccessCallbackId];
         [defaultInstance setSessionFailureCallbackMethod:sessionFailureCallbackId];
         [defaultInstance setDeferredDeeplinkCallbackMethod:deferredDeeplinkCallbackId];
-        [defaultInstance setSkanUpdatedWithConversionDataCallbackMethod:skanUpdatedWithConversionDataCallbackId];
+        [defaultInstance setSkanUpdatedCallbackMethod:skanUpdatedCallbackId];
     });
     
     return defaultInstance;
@@ -262,7 +261,7 @@ static ADJDelegate2dx *defaultInstance = nil;
 }
 
 - (void)adjustSkanUpdatedWithConversionDataWannabe:(nonnull NSDictionary<NSString *, NSString *> *)data {
-    if (nil == data || NULL == _skanUpdatedWithConversionDataCallbackMethod) {
+    if (nil == data || NULL == _skanUpdatedCallbackMethod) {
         return;
     }
 
@@ -272,7 +271,7 @@ static ADJDelegate2dx *defaultInstance = nil;
         cppMap[key.UTF8String] = data[key].UTF8String;
     }
 
-    _skanUpdatedWithConversionDataCallbackMethod(cppMap);
+    _skanUpdatedCallbackMethod(cppMap);
 }
 
 - (void)swizzleCallbackMethod:(SEL)originalSelector

@@ -22,7 +22,7 @@
 const std::string AdjustEnvironmentSandbox2dx = "sandbox";
 const std::string AdjustEnvironmentProduction2dx = "production";
 
-void Adjust2dx::start(AdjustConfig2dx adjustConfig) {
+void Adjust2dx::initSdk(AdjustConfig2dx adjustConfig) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiOnCreate;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiOnCreate, "com/adjust/sdk/Adjust", "initSdk", "(Lcom/adjust/sdk/AdjustConfig;)V")) {
@@ -53,15 +53,15 @@ void Adjust2dx::trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscrip
 #endif
 }
 
-void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), verificationCallback);
+    ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), callback);
 #endif
 }
 
-void Adjust2dx::verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void Adjust2dx::verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::verifyAndTrackAppStorePurchase(event.getEvent(), verificationCallback);
+    ADJAdjust2dx::verifyAndTrackAppStorePurchase(event.getEvent(), callback);
 #endif
 }
 
@@ -75,9 +75,9 @@ void Adjust2dx::trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscr
 #endif
 }
 
-void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setVerifyPlayStorePurchaseCallbackMethod(verificationCallback);
+    setVerifyPlayStorePurchaseCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiVerifyPlayStorePurchase;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyPlayStorePurchase", "(Lcom/adjust/sdk/AdjustPlayStorePurchase;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
@@ -91,9 +91,9 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, voi
 #endif
 }
 
-void Adjust2dx::verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void Adjust2dx::verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setVerifyAndTrackPlayStorePurchaseCallbackMethod(verificationCallback);
+    setVerifyAndTrackPlayStorePurchaseCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiVerifyAndTrackPlayStorePurchase;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiVerifyAndTrackPlayStorePurchase, "com/adjust/sdk/Adjust", "verifyAndTrackPlayStorePurchase", "(Lcom/adjust/sdk/AdjustEvent;Lcom/adjust/sdk/OnPurchaseVerificationFinishedListener;)V")) {
@@ -131,13 +131,13 @@ void Adjust2dx::disable() {
 #endif
 }
 
-void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
+void Adjust2dx::isEnabled(void(*callback)(bool isEnabled)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setIsEnabledCallbackMethod(callbackMethod);
+    setIsEnabledCallbackMethod(callback);
 
-    cocos2d::JniMethodInfo jmiIsEnabledCallback;
+    cocos2d::JniMethodInfo jmiIsEnabled;
 
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabledCallback, "com/adjust/sdk/Adjust", "isEnabled", "(Landroid/content/Context;Lcom/adjust/sdk/OnIsEnabledListener;)V")) {
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiIsEnabled, "com/adjust/sdk/Adjust", "isEnabled", "(Landroid/content/Context;Lcom/adjust/sdk/OnIsEnabledListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -153,12 +153,12 @@ void Adjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxIsEnabledCallback, "<init>", "()V");
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxIsEnabledCallback, jmidInit);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
-    jmiIsEnabledCallback.env->CallStaticVoidMethod(jmiIsEnabledCallback.classID, jmiIsEnabledCallback.methodID, jContext, jCallbackProxy);
+    jmiIsEnabled.env->CallStaticVoidMethod(jmiIsEnabled.classID, jmiIsEnabled.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::isEnabledCallback(callbackMethod);
+    ADJAdjust2dx::isEnabled(callback);
 #endif
 }
 
@@ -207,9 +207,9 @@ void Adjust2dx::processDeeplink(AdjustDeeplink2dx deeplink) {
 #endif
 }
 
-void Adjust2dx::setPushTokenAsString(std::string pushToken) {
+void Adjust2dx::setPushToken(std::string pushToken) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::setPushTokenAsString(pushToken);
+    ADJAdjust2dx::setPushToken(pushToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiSetPushToken;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetPushToken, "com/adjust/sdk/Adjust", "setPushToken", "(Ljava/lang/String;Landroid/content/Context;)V")) {
@@ -359,14 +359,14 @@ void Adjust2dx::trackMeasurementConsent(bool measurementConsent) {
 #endif
 }
 
-void Adjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
+void Adjust2dx::getAdid(void(*callback)(std::string adid)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::adidCallback(callbackMethod);
+    ADJAdjust2dx::getAdid(callback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setAdIdCallbackMethod(callbackMethod);
+    setAdidCallbackMethod(callback);
 
-    cocos2d::JniMethodInfo jmiGetAdIdCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getAdId", "(Lcom/adjust/sdk/OnAdidReadListener;)V")) {
+    cocos2d::JniMethodInfo jmiGetAdid;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAdId", "(Lcom/adjust/sdk/OnAdidReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -374,22 +374,22 @@ void Adjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
         return;
     }
 
-    jclass clsAdjust2dxAdIdCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
-    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdIdCallback, "<init>", "()V");
-    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdIdCallback, jmidInit);
-    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jCallbackProxy);
+    jclass clsAdjust2dxAdidCallback = jmiInit.env->FindClass("com/adjust/sdk/Adjust2dxAdIdCallback");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAdidCallback, "<init>", "()V");
+    jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAdidCallback, jmidInit);
+    jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jCallbackProxy);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
-void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)) {
+void Adjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::sdkVersionCallback(callbackMethod, AdjustSdkPrefix2dx);
+    ADJAdjust2dx::getSdkVersion(callback, AdjustSdkPrefix2dx);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setSdkVersionCallbackMethod(callbackMethod);
+    setSdkVersionCallbackMethod(callback);
 
-    cocos2d::JniMethodInfo jmiGetSdkVersionCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersionCallback, "com/adjust/sdk/Adjust", "getSdkVersion", "(Lcom/adjust/sdk/OnSdkVersionReadListener;)V")) {
+    cocos2d::JniMethodInfo jmiGetSdkVersion;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetSdkVersion, "com/adjust/sdk/Adjust", "getSdkVersion", "(Lcom/adjust/sdk/OnSdkVersionReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -401,18 +401,18 @@ void Adjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxSdkVersionCallback, "<init>", "(Ljava/lang/String;)V");
     jstring jSdkPrefix = jmiInit.env->NewStringUTF(AdjustSdkPrefix2dx.c_str());
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxSdkVersionCallback, jmidInit, jSdkPrefix);
-    jmiGetSdkVersionCallback.env->CallStaticVoidMethod(jmiGetSdkVersionCallback.classID, jmiGetSdkVersionCallback.methodID, jCallbackProxy);
+    jmiGetSdkVersion.env->CallStaticVoidMethod(jmiGetSdkVersion.classID, jmiGetSdkVersion.methodID, jCallbackProxy);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
     jmiInit.env->DeleteLocalRef(jSdkPrefix);
 
 #endif
 }
 
-void Adjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution)) {
+void Adjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attribution)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::attributionCallback(callbackMethod);
+    ADJAdjust2dx::getAttribution(callback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setAttributionReadCallbackMethod(callbackMethod);
+    setAttributionReadCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiGetAttributionReadCallback;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAttributionReadCallback, "com/adjust/sdk/Adjust", "getAttribution", "(Lcom/adjust/sdk/OnAttributionReadListener;)V")) {
@@ -443,13 +443,11 @@ void Adjust2dx::trackAdRevenue(AdjustAdRevenue2dx adRevenue) {
 #endif
 }
 
-void Adjust2dx::processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
-                                          void (*resolvedLinkCallback)(std::string resolvedLink))
-{
+void Adjust2dx::processAndResolveDeeplink(AdjustDeeplink2dx deeplink, void (*callback)(std::string resolvedLink)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::processAndResolveDeeplink(deeplink.getDeeplink(), resolvedLinkCallback);
+    ADJAdjust2dx::processAndResolveDeeplink(deeplink.getDeeplink(), callback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setResolvedLinkCallbackMethod(resolvedLinkCallback);
+    setResolvedLinkCallbackMethod(callback);
     cocos2d::JniMethodInfo jmiProcessAndResolveDeeplink;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiProcessAndResolveDeeplink, "com/adjust/sdk/Adjust", "processAndResolveDeeplink", "(Lcom/adjust/sdk/AdjustDeeplink;Landroid/content/Context;Lcom/adjust/sdk/OnDeeplinkResolvedListener;)V")) {
         return;
@@ -471,31 +469,12 @@ void Adjust2dx::processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
 #endif
 }
 
-void Adjust2dx::setReferrer(std::string referrer) {
+void Adjust2dx::getGoogleAdId(void (*callback)(std::string googleAdId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    cocos2d::JniMethodInfo jmiSetReferrer;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetReferrer, "com/adjust/sdk/Adjust", "setReferrer", "(Ljava/lang/String;Landroid/content/Context;)V")) {
-        return;
-    }
-    cocos2d::JniMethodInfo jmiGetContext;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetContext, "org/cocos2dx/lib/Cocos2dxActivity", "getContext", "()Landroid/content/Context;")) {
-        return;
-    }
+    setGoogleAdIdCallbackMethod(callback);
 
-    jstring jReferrer = jmiSetReferrer.env->NewStringUTF(referrer.c_str());
-    jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
-    jmiSetReferrer.env->CallStaticVoidMethod(jmiSetReferrer.classID, jmiSetReferrer.methodID, jReferrer, jContext);
-    jmiSetReferrer.env->DeleteLocalRef(jReferrer);
-    jmiGetContext.env->DeleteLocalRef(jContext);
-#endif
-}
-
-void Adjust2dx::getGoogleAdId(void (*callbackMethod)(std::string adId)) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setGoogleAdIdCallbackMethod(callbackMethod);
-
-    cocos2d::JniMethodInfo jmiGetAdIdCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnGoogleAdIdReadListener;)V")) {
+    cocos2d::JniMethodInfo jmiGetAdid;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getGoogleAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnGoogleAdIdReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -511,18 +490,18 @@ void Adjust2dx::getGoogleAdId(void (*callbackMethod)(std::string adId)) {
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxGoogleAdIdCallback, "<init>", "()V");
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxGoogleAdIdCallback, jmidInit);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
-    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jContext, jCallbackProxy);
+    jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
 }
 
-void getAmazonAdId(void (*callbackMethod)(std::string adId)) {
+void getAmazonAdId(void (*callback)(std::string amazonAdId)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setAmazonAdIdCallbackMethod(callbackMethod);
+    setAmazonAdIdCallbackMethod(callback);
 
-    cocos2d::JniMethodInfo jmiGetAdIdCallback;
-    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdIdCallback, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnAmazonAdIdReadListener;)V")) {
+    cocos2d::JniMethodInfo jmiGetAdid;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetAdid, "com/adjust/sdk/Adjust", "getAmazonAdId", "(Landroid/content/Context;Lcom/adjust/sdk/OnAmazonAdIdReadListener;)V")) {
         return;
     }
     cocos2d::JniMethodInfo jmiInit;
@@ -538,7 +517,7 @@ void getAmazonAdId(void (*callbackMethod)(std::string adId)) {
     jmethodID jmidInit = jmiInit.env->GetMethodID(clsAdjust2dxAmazonAdIdCallback, "<init>", "()V");
     jobject jCallbackProxy = jmiInit.env->NewObject(clsAdjust2dxAmazonAdIdCallback, jmidInit);
     jobject jContext = (jobject)jmiGetContext.env->CallStaticObjectMethod(jmiGetContext.classID, jmiGetContext.methodID);
-    jmiGetAdIdCallback.env->CallStaticVoidMethod(jmiGetAdIdCallback.classID, jmiGetAdIdCallback.methodID, jContext, jCallbackProxy);
+    jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
 #endif
@@ -568,15 +547,15 @@ void Adjust2dx::onPause() {
 #endif
 }
 
-void Adjust2dx::idfaCallback(void(*callbackMethod)(std::string idfa)) {
+void Adjust2dx::getIdfa(void(*callback)(std::string idfa)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::idfaCallback(callbackMethod);
+    ADJAdjust2dx::getIdfa(callback);
 #endif
 }
 
-void Adjust2dx::requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
+void Adjust2dx::requestAppTrackingAuthorization(void (*callback)(int status)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::requestAppTrackingAuthorizationWithCompletionHandler(trackingStatusCallback);
+    ADJAdjust2dx::requestAppTrackingAuthorization(callback);
 #endif
 }
 
@@ -590,19 +569,19 @@ int Adjust2dx::getAppTrackingAuthorizationStatus() {
 
 void Adjust2dx::updateSkanConversionValue(int conversionValue,
                                           std::string coarseValue,
-                                          bool* optionalLockWindow,
-                                          void (*errorCallback)(std::string error))
+                                          bool lockWindow,
+                                          void (*callback)(std::string error))
 {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::updateSkanConversionValue(conversionValue, coarseValue, optionalLockWindow, errorCallback);
+    ADJAdjust2dx::updateSkanConversionValue(conversionValue, coarseValue, lockWindow, callback);
 #endif
 }
 
-void Adjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink)) {
+void Adjust2dx::getLastDeeplink(void(*callback)(std::string lastDeeplink)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    ADJAdjust2dx::lastDeeplinkCallback(callbackMethod);
+    ADJAdjust2dx::getLastDeeplink(callback);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setLastDeeplinkCallbackMethod(callbackMethod);
+    setLastDeeplinkCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiGetLastDeeplinkCallback;
     if (!cocos2d::JniHelper::getStaticMethodInfo(jmiGetLastDeeplinkCallback, "com/adjust/sdk/Adjust", "getLastDeeplink", "(Landroid/content/Context;Lcom/adjust/sdk/OnLastDeeplinkReadListener;)V")) {
@@ -627,9 +606,9 @@ void Adjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeepl
 #endif
 }
 
-void Adjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
+void Adjust2dx::getIdfv(void(*callback)(std::string idfv)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::idfvCallback(callbackMethod);
+    return ADJAdjust2dx::getIdfv(callback);
 #endif
 }
 

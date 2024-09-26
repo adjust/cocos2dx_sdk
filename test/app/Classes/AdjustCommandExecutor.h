@@ -27,6 +27,8 @@
 #include "Adjust/AdjustAdRevenue2dx.h"
 #include "Adjust/AdjustAppStorePurchase2dx.h"
 #include "Adjust/AdjustPlayStorePurchase2dx.h"
+#include "Adjust/AdjustDeeplink2dx.h"
+#include "Adjust/AdjustPurchaseVerificationResult2dx.h"
 #include "Adjust/test/TestLib2dx.h"
 #include "Adjust/test/TestConnectionOptions2dx.h"
 
@@ -43,7 +45,6 @@ private:
     void start();
     void event();
     void trackEvent();
-    void setReferrer();
     void pause();
     void resume();
     void setEnabled();
@@ -56,7 +57,6 @@ private:
     void removeGlobalPartnerParameters();
     void setPushToken();
     void openDeeplink();
-    void sendReferrer();
     void gdprForgetMe();
     void trackSubscription();
     void trackThirdPartySharing();

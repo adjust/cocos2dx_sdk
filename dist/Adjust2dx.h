@@ -21,21 +21,22 @@
 #include "AdjustPlayStorePurchase2dx.h"
 #include "AdjustAppStorePurchase2dx.h"
 #include "AdjustDeeplink2dx.h"
+#include "AdjustPurchaseVerificationResult2dx.h"
 
 extern const std::string AdjustEnvironmentSandbox2dx;
 extern const std::string AdjustEnvironmentProduction2dx;
 
 class Adjust2dx {
 public:
-    static void start(AdjustConfig2dx adjustConfig);
+    static void initSdk(AdjustConfig2dx adjustConfig);
     static void trackEvent(AdjustEvent2dx event);
     static void enable();
     static void disable();
-    static void isEnabledCallback(void(*callbackMethod)(bool isEnabled));
+    static void isEnabled(void(*callback)(bool isEnabled));
     static void switchToOfflineMode();
     static void switchBackToOnlineMode();
     static void processDeeplink(AdjustDeeplink2dx deeplink);
-    static void setPushTokenAsString(std::string pushToken);
+    static void setPushToken(std::string pushToken);
     static void gdprForgetMe();
     static void addGlobalCallbackParameter(std::string key, std::string value);
     static void addGlobalPartnerParameter(std::string key, std::string value);
@@ -45,36 +46,35 @@ public:
     static void removeGlobalPartnerParameters();
     static void trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
-    static void adidCallback(void(*callbackMethod)(std::string adid));
-    static void sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion));
-    static void attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution));
+    static void getAdid(void(*callback)(std::string adid));
+    static void getSdkVersion(void(*callback)(std::string sdkVersion));
+    static void getAttribution(void(*callback)(AdjustAttribution2dx attribution));
     static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
     // Android specific methods.
-    static void setReferrer(std::string referrer);
-    static void getGoogleAdId(void (*callbackMethod)(std::string adId));
-    static void getAmazonAdId(void (*callbackMethod)(std::string adId));
-    static void onResume();
-    static void onPause();
+    static void getGoogleAdId(void (*callback)(std::string googleAdId));
+    static void getAmazonAdId(void (*callback)(std::string amazonAdId));
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
-    static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
-    static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
+    static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     // iOS specific methods.
-    static void idfaCallback(void(*callbackMethod)(std::string idfa));
+    static void getIdfa(void(*callback)(std::string idfa));
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
-    static void requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status));
+    static void requestAppTrackingAuthorization(void (*callback)(int status));
     static int getAppTrackingAuthorizationStatus();
     static void updateSkanConversionValue(int conversionValue,
                                           std::string coarseValue,
-                                          bool* optionalLockWindow,
-                                          void (*errorCallback)(std::string error));
-    static void lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink));
-    static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
-    static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*verificationCallback)(std::string verificationStatus, int code, std::string message));
-    static void idfvCallback(void(*callbackMethod)(std::string idfv));
+                                          bool lockWindow,
+                                          void (*callback)(std::string error));
+    static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
+    static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void getIdfv(void(*callback)(std::string idfv));
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> stringTestOptions, std::map<std::string, int> intTestOptions);
+    static void onResume();
+    static void onPause();
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void teardown();
 #endif

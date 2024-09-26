@@ -25,16 +25,6 @@
 #endif
 
 extern const std::string AdjustSdkPrefix2dx;
-extern const std::string AdjustAdRevenueSourceAppLovinMAX;
-extern const std::string AdjustAdRevenueSourceMopub;
-extern const std::string AdjustAdRevenueSourceAdMob;
-extern const std::string AdjustAdRevenueSourceIronSource;
-extern const std::string AdjustAdRevenueSourceAdMostSource;
-extern const std::string AdjustAdRevenueSourceUnity;
-extern const std::string AdjustAdRevenueSourceHeliumChartboost;
-extern const std::string AdjustAdRevenueSourcePublisher;
-extern const std::string AdjustAdRevenueSourceTopOn;
-extern const std::string AdjustAdRevenueSourceAdx;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,

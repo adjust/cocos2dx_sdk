@@ -23,9 +23,9 @@ static jobject testLibrary;
 static ATLTestLibrary2dx testLibrary;
 #endif
 
-void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, void(*executeCommandCallback)(std::string className, std::string methodName, std::string jsonParameters)) {
+void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, void(*callback)(std::string className, std::string methodName, std::string jsonParameters)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    setExecuteTestLibCommandCallbackMethod(executeCommandCallback);
+    setExecuteTestLibCommandCallbackMethod(callback);
 
     cocos2d::JniMethodInfo jmiInit;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/test/TestLibrary", "<init>", "(Ljava/lang/String;Ljava/lang/String;Landroid/content/Context;Lcom/adjust/test/ICommandJsonListener;)V")) {
@@ -64,7 +64,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, vo
     jmiInit.env->DeleteLocalRef(jControlUrl);
     jmiInit.env->DeleteLocalRef(jCommListenerCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary = ATLTestLibrary2dx(baseUrl, controlUrl, executeCommandCallback);
+    testLibrary = ATLTestLibrary2dx(baseUrl, controlUrl, callback);
 #endif
 }
 

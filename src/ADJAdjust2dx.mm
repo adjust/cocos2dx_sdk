@@ -58,24 +58,36 @@ void ADJAdjust2dx::trackAppStoreSubscription(ADJAppStoreSubscription2dx subscrip
     [Adjust trackAppStoreSubscription:(ADJAppStoreSubscription *)subscription.getSubscription()];
 }
 
-void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
     [Adjust verifyAppStorePurchase:(ADJAppStorePurchase *)purchase.getPurchase()
              withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
-        if (verificationCallback != NULL) {
-            verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
-                                 verificationResult.code,
-                                 std::string([verificationResult.message UTF8String]));
+        if (callback != NULL) {
+            if (verificationResult == nil) {
+                callback(AdjustPurchaseVerificationResult2dx());
+            } else {
+                AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
+                    std::string([verificationResult.verificationStatus UTF8String]),
+                    std::string([verificationResult.message UTF8String]),
+                    verificationResult.code);
+                callback(verificationResult2dx);
+            }
         }
     }];
 }
 
-void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*verificationCallback)(std::string verificationStatus, int code, std::string message)) {
+void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
     [Adjust verifyAndTrackAppStorePurchase:(ADJEvent *)adjustEvent.getEvent()
                      withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
-        if (verificationResult != NULL) {
-            verificationCallback(std::string([verificationResult.verificationStatus UTF8String]),
-                                 verificationResult.code,
-                                 std::string([verificationResult.message UTF8String]));
+        if (callback != NULL) {
+            if (verificationResult == nil) {
+                callback(AdjustPurchaseVerificationResult2dx());
+            } else {
+                AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
+                    std::string([verificationResult.verificationStatus UTF8String]),
+                    std::string([verificationResult.message UTF8String]),
+                    verificationResult.code);
+                callback(verificationResult2dx);
+            }
         }
     }];
 }
@@ -100,9 +112,9 @@ void ADJAdjust2dx::processDeeplink(ADJDeeplink2dx adjustDeeplink) {
     [Adjust processDeeplink:(ADJDeeplink *)adjustDeeplink.getDeeplink()];
 }
 
-void ADJAdjust2dx::setPushTokenAsString(std::string pushToken) {
-    NSString *pPushToken = [NSString stringWithUTF8String:pushToken.c_str()];
-    [Adjust setPushTokenAsString:pPushToken];
+void ADJAdjust2dx::setPushToken(std::string pushToken) {
+    NSString *strPushToken = [NSString stringWithUTF8String:pushToken.c_str()];
+    [Adjust setPushTokenAsString:strPushToken];
 }
 
 void ADJAdjust2dx::switchToOfflineMode() {
@@ -147,43 +159,51 @@ void ADJAdjust2dx::trackAdRevenue(ADJAdRevenue2dx adRevenue) {
     [Adjust trackAdRevenue:(ADJAdRevenue *)adRevenue.getAdRevenue()];
 }
 
-void ADJAdjust2dx::isEnabledCallback(void(*callbackMethod)(bool isEnabled)) {
+void ADJAdjust2dx::isEnabled(void(*callback)(bool isEnabled)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust isEnabledWithCompletionHandler:^(BOOL isEnabled) {
-        callbackMethod(isEnabled ? true : false);
+        callback(isEnabled ? true : false);
     }];
 }
 
-void ADJAdjust2dx::idfaCallback(void(*callbackMethod)(std::string idfa)) {
+void ADJAdjust2dx::getIdfa(void(*callback)(std::string idfa)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust idfaWithCompletionHandler:^(NSString * _Nullable idfa) {
-        if (idfa == nil) {
-            callbackMethod("");
-        } else {
-            callbackMethod(std::string([idfa UTF8String]));
-        }
+        callback(idfa != nil ? std::string([idfa UTF8String]) : std::string());
     }];
 }
 
-void ADJAdjust2dx::adidCallback(void(*callbackMethod)(std::string adid)) {
+void ADJAdjust2dx::getAdid(void(*callback)(std::string adid)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust adidWithCompletionHandler:^(NSString * _Nullable adid) {
-        if (adid == nil) {
-            callbackMethod("");
-        } else {
-            callbackMethod(std::string([adid UTF8String]));
-        }
+        callback(adid != nil ? std::string([adid UTF8String]) : std::string());
     }];
 }
 
-void ADJAdjust2dx::sdkVersionCallback(void(*callbackMethod)(std::string sdkVersion)) {
+void ADJAdjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion), std::string sdkPrefix) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust sdkVersionWithCompletionHandler:^(NSString * _Nullable sdkVersion) {
-        if (sdkVersion == nil) {
-            callbackMethod("");
-        } else {
-            callbackMethod(std::string([sdkVersion UTF8String]));
-        }
+        callback(sdkVersion != nil ? sdkPrefix + "@" + std::string([sdkVersion UTF8String]) : std::string());
     }];
 }
 
-void ADJAdjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2dx attribution)) {
+void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attribution)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust attributionWithCompletionHandler:^(ADJAttribution * _Nullable attribution) {
         std::string trackerToken;
         std::string trackerName;
@@ -231,26 +251,27 @@ void ADJAdjust2dx::attributionCallback(void(*callbackMethod)(AdjustAttribution2d
             }
         }
 
-        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(trackerToken,
-                                                                   trackerName,
-                                                                   network,
-                                                                   campaign,
-                                                                   adgroup,
-                                                                   creative,
-                                                                   clickLabel,
-                                                                   costType,
-                                                                   costAmount,
-                                                                   costCurrency,
-                                                                   fbInstallReferrer);
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+            trackerToken,
+            trackerName,
+            network,
+            campaign,
+            adgroup,
+            creative,
+            clickLabel,
+            costType,
+            costAmount,
+            costCurrency,
+            fbInstallReferrer);
 
-        callbackMethod(attribution2dx);
+        callback(attribution2dx);
     }];
 }
 
-void ADJAdjust2dx::requestAppTrackingAuthorizationWithCompletionHandler(void (*trackingStatusCallback)(int status)) {
+void ADJAdjust2dx::requestAppTrackingAuthorization(void (*callback)(int status)) {
     [Adjust requestAppTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
-        if (trackingStatusCallback != NULL) {
-            trackingStatusCallback((int)status);
+        if (callback != NULL) {
+            callback((int)status);
         }
     }];
 }
@@ -261,15 +282,14 @@ int ADJAdjust2dx::getAppTrackingAuthorizationStatus() {
 
 void ADJAdjust2dx::updateSkanConversionValue(int conversionValue,
                                              std::string coarseValue,
-                                             bool* optionalLockWindow,
-                                             void (*errorCallback)(std::string error))
-{
+                                             bool lockWindow,
+                                             void (*callback)(std::string error)) {
     [Adjust updateSkanConversionValue:conversionValue
                           coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
-                           lockWindow:optionalLockWindow ? @(*optionalLockWindow) : nil
+                           lockWindow:@(lockWindow)
                 withCompletionHandler:^(NSError * _Nullable error) {
-        if (errorCallback != NULL) {
-            errorCallback(std::string([error.localizedDescription UTF8String]));
+        if (callback != NULL) {
+            callback(error != nil ? std::string([error.localizedDescription UTF8String]) : std::string());
         }
     }];
 }
@@ -282,62 +302,56 @@ void ADJAdjust2dx::trackMeasurementConsent(bool measurementConsent) {
     [Adjust trackMeasurementConsent:measurementConsent];
 }
 
-void ADJAdjust2dx::lastDeeplinkCallback(void(*callbackMethod)(std::string lastDeeplink)) {
+void ADJAdjust2dx::getLastDeeplink(void(*callback)(std::string lastDeeplink)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust lastDeeplinkWithCompletionHandler:^(NSURL * _Nullable lastDeeplink) {
         if (lastDeeplink == nil) {
-            callbackMethod("");
+            callback(std::string());
             return;
         }
 
         NSString *strLastDeeplink = [lastDeeplink absoluteString];
-        if (strLastDeeplink == nil) {
-            callbackMethod("");
-            return;
-        }
-
-        callbackMethod(std::string([strLastDeeplink UTF8String]));
+        callback(strLastDeeplink != nil ? std::string([strLastDeeplink UTF8String]) : std::string());
     }];
 }
 
-void ADJAdjust2dx::idfvCallback(void(*callbackMethod)(std::string idfv)) {
+void ADJAdjust2dx::getIdfv(void(*callback)(std::string idfv)) {
+    if (callback == NULL) {
+        return;
+    }
+
     [Adjust idfvWithCompletionHandler:^(NSString * _Nullable idfv) {
-        if (idfv == nil) {
-            callbackMethod("");
-        } else {
-            callbackMethod(std::string([idfv UTF8String]));
-        }
+        callback(idfv != nil ? std::string([idfv UTF8String]) : std::string());
     }];
 }
 
-void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*resolvedLinkCallback)(std::string resolvedLink)) {
+void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*callback)(std::string resolvedLink)) {
     [Adjust processAndResolveDeeplink:(ADJDeeplink *)adjustDeeplink.getDeeplink()
                 withCompletionHandler:^(NSString * _Nullable resolvedLink) {
-        if (resolvedLinkCallback != NULL) {
-            if (resolvedLink != nil) {
-                resolvedLinkCallback(std::string([resolvedLink UTF8String]));
-            } else {
-                resolvedLinkCallback("");
-            }
+        if (callback != NULL) {
+            callback(resolvedLink != nil ? std::string([resolvedLink UTF8String]) : std::string());
         }
     }];
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
-                                  std::map<std::string, int> intTestOptionsMap)
-{
+                                  std::map<std::string, int> intTestOptionsMap) {
     NSMutableDictionary<NSString *, id> *objcTestOptionsMap =
         [NSMutableDictionary dictionary];
 
     for (std::map<std::string, std::string>::iterator toStringIterator = stringTestOptionsMap.begin();
-         toStringIterator != stringTestOptionsMap.end(); toStringIterator++)
-    {
+         toStringIterator != stringTestOptionsMap.end();
+         toStringIterator++) {
         [objcTestOptionsMap setObject:[NSString stringWithUTF8String:toStringIterator->second.c_str()]
                                forKey:[NSString stringWithUTF8String:toStringIterator->first.c_str()]];
     }
 
     for (std::map<std::string, int>::iterator toIntIterator = intTestOptionsMap.begin();
-         toIntIterator != intTestOptionsMap.end(); toIntIterator++)
-    {
+         toIntIterator != intTestOptionsMap.end();
+         toIntIterator++) {
         [objcTestOptionsMap setObject:[NSNumber numberWithInt:toIntIterator->second]
                                forKey:[NSString stringWithUTF8String:toIntIterator->first.c_str()]];
     }
