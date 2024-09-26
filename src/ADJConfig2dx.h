@@ -79,7 +79,7 @@ public:
     void(*getSessionSuccessCallback())(AdjustSessionSuccess2dx);
     void(*getSessionFailureCallback())(AdjustSessionFailure2dx);
     bool(*getDeferredDeeplinkCallback())(std::string);
-    void(*getSkanUpdatedWithConversionDataCallback())(std::unordered_map<std::string, std::string>);
+    void(*getSkanUpdatedCallback())(std::unordered_map<std::string, std::string>);
 };
 
 #endif /* _ADJUST_ADJCONFIG2DX_H_ */

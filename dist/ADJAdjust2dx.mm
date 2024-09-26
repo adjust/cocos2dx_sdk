@@ -20,7 +20,7 @@ void ADJAdjust2dx::initSdk(ADJConfig2dx adjustConfig) {
     BOOL isSessionSuccessCallbackImplemented = NULL != adjustConfig.getSessionSuccessCallback() ? YES : NO;
     BOOL isSessionFailureCallbackImplemented = NULL != adjustConfig.getSessionFailureCallback() ? YES : NO;
     BOOL isDeferredDeeplinkCallbackImplemented = NULL != adjustConfig.getDeferredDeeplinkCallback() ? YES : NO;
-    BOOL isSkanUpdatedWithConversionDataCallbackImplemented = NULL != adjustConfig.getSkanUpdatedWithConversionDataCallback() ? YES : NO;
+    BOOL isSkanUpdatedCallbackImplemented = NULL != adjustConfig.getSkanUpdatedCallback() ? YES : NO;
 
     if (isAttributionCallbackImplemented
         || isEventSuccessCallbackImplemented
@@ -28,7 +28,7 @@ void ADJAdjust2dx::initSdk(ADJConfig2dx adjustConfig) {
         || isSessionSuccessCallbackImplemented
         || isSessionFailureCallbackImplemented
         || isDeferredDeeplinkCallbackImplemented
-        || isSkanUpdatedWithConversionDataCallbackImplemented)
+        || isSkanUpdatedCallbackImplemented)
     {
         ((ADJConfig *)adjustConfig.getConfig()).delegate =
         [ADJDelegate2dx getInstanceWithSwizzleAttributionCallback:isAttributionCallbackImplemented
@@ -37,14 +37,14 @@ void ADJAdjust2dx::initSdk(ADJConfig2dx adjustConfig) {
                                     swizzleSessionSuccessCallback:isSessionSuccessCallbackImplemented
                                     swizzleSessionFailureCallback:isSessionFailureCallbackImplemented
                                   swizzleDeferredDeeplinkCallback:isDeferredDeeplinkCallbackImplemented
-                                       swizzleSkanUpdatedCallback:isSkanUpdatedWithConversionDataCallbackImplemented
+                                       swizzleSkanUpdatedCallback:isSkanUpdatedCallbackImplemented
                                             attributionCallbackId:adjustConfig.getAttributionCallback()
                                            eventSuccessCallbackId:adjustConfig.getEventSuccessCallback()
                                            eventFailureCallbackId:adjustConfig.getEventFailureCallback()
                                          sessionSuccessCallbackId:adjustConfig.getSessionSuccessCallback()
                                          sessionFailureCallbackId:adjustConfig.getSessionFailureCallback()
                                        deferredDeeplinkCallbackId:adjustConfig.getDeferredDeeplinkCallback()
-                                            skanUpdatedCallbackId:adjustConfig.getSkanUpdatedWithConversionDataCallback()];
+                                            skanUpdatedCallbackId:adjustConfig.getSkanUpdatedCallback()];
     }
 
     [Adjust initSdk:(ADJConfig *)adjustConfig.getConfig()];

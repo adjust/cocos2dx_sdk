@@ -146,6 +146,6 @@ bool(*ADJConfig2dx::getDeferredDeeplinkCallback())(std::string) {
     return deferredDeeplinkCallback;
 }
 
-void(*ADJConfig2dx::getSkanUpdatedWithConversionDataCallback())(std::unordered_map<std::string, std::string>) {
-    return skanUpdatedWithConversionDataCallback;
+void(*ADJConfig2dx::getSkanUpdatedCallback())(std::unordered_map<std::string, std::string>) {
+    return skanUpdatedCallback;
 }
