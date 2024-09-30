@@ -928,63 +928,43 @@ void setDeferredDeeplinkCallbackMethod(bool (*callback)(std::string deeplink)) {
 }
 
 void setIsEnabledCallbackMethod(void (*callback)(bool isEnabled)) {
-    if (NULL == isEnabledCallbackMethod) {
-        isEnabledCallbackMethod = callback;
-    }
+    isEnabledCallbackMethod = callback;
 }
 
 void setGoogleAdIdCallbackMethod(void (*callback)(std::string googleAdId)) {
-    if (NULL == googleAdIdCallbackMethod) {
-        googleAdIdCallbackMethod = callback;
-    }
+    googleAdIdCallbackMethod = callback;
 }
 
 void setAmazonAdIdCallbackMethod(void (*callback)(std::string amazonAdId)) {
-    if (NULL == amazonAdIdCallbackMethod) {
-        amazonAdIdCallbackMethod = callback;
-    }
+    amazonAdIdCallbackMethod = callback;
 }
 
 void setAdidCallbackMethod(void (*callback)(std::string adid)) {
-    if (NULL == adidCallbackMethod) {
-        adidCallbackMethod = callback;
-    }
+    adidCallbackMethod = callback;
 }
 
 void setAttributionReadCallbackMethod(void (*callback)(AdjustAttribution2dx attribution)) {
-    if (NULL == attributionReadCallbackMethod) {
-        attributionReadCallbackMethod = callback;
-    }
+    attributionReadCallbackMethod = callback;
 }
 
 void setLastDeeplinkCallbackMethod(void (*callback)(std::string deeplink)) {
-    if (NULL == lastDeeplinkCallbackMethod) {
-        lastDeeplinkCallbackMethod = callback;
-    }
+    lastDeeplinkCallbackMethod = callback;
 }
 
 void setSdkVersionCallbackMethod(void (*callback)(std::string sdkVersion)) {
-    if (NULL == sdkVersionCallbackMethod) {
-        sdkVersionCallbackMethod = callback;
-    }
+    sdkVersionCallbackMethod = callback;
 }
 
 void setResolvedLinkCallbackMethod(void (*callback)(std::string resolvedLink)) {
-    if (NULL == resolvedLinkCallbackMethod) {
-        resolvedLinkCallbackMethod = callback;
-    }
+    resolvedLinkCallbackMethod = callback;
 }
 
 void setVerifyPlayStorePurchaseCallbackMethod(void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
-    if (NULL == verifyPlayStorePurchaseCallbackMethod) {
-        verifyPlayStorePurchaseCallbackMethod = callback;
-    }
+    verifyPlayStorePurchaseCallbackMethod = callback;
 }
 
 void setVerifyAndTrackPlayStorePurchaseCallbackMethod(void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
-    if (NULL == verifyAndTrackPlayStorePurchaseCallbackMethod) {
-        verifyAndTrackPlayStorePurchaseCallbackMethod = callback;
-    }
+    verifyAndTrackPlayStorePurchaseCallbackMethod = callback;
 }
 
 #endif
