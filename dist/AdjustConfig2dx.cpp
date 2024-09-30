@@ -62,7 +62,7 @@ void AdjustConfig2dx::setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)
     std::string enumValue;
     switch (logLevel) {
         case AdjustLogLevel2dxSuppress: {
-            enumValue = "SUPRESS";
+            enumValue = "SUPPRESS";
             break;
         }
         case AdjustLogLevel2dxAssert: {
