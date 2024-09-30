@@ -89,7 +89,7 @@ public:
     void disableIdfaReading();
     void disableIdfvReading();
     void disableAdServices();
-    void setSkanUpdatedCallback(void (*skanUpdatedWithConversionDataCallback)(std::unordered_map<std::string, std::string> data));
+    void setSkanUpdatedCallback(void (*skanUpdatedCallback)(std::unordered_map<std::string, std::string> data));
     void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only

@@ -60,16 +60,16 @@ CWHITEBG2  = '\33[107m'
 ### file system util methods
 
 def copy_file(sourceFile, destFile):
-    debug('copying: {0} -> {1}'.format(sourceFile, destFile))
+    debug('Copying: {0} -> {1}'.format(sourceFile, destFile))
     shutil.copyfile(sourceFile, destFile)
 
 def copy_files(fileNamePattern, sourceDir, destDir):
     for file in glob.glob(sourceDir + '/' + fileNamePattern):
-        debug('copying: {0} -> {1}'.format(file, destDir))
+        debug('Copying: {0} -> {1}'.format(file, destDir))
         shutil.copy(file, destDir)
 
 def copy_dir_contents(source_dir, dest_dir, copy_symlinks=False):
-    debug('copying dir contents: {0} -> {1}'.format(source_dir, dest_dir))
+    debug('Copying dir contents: {0} -> {1}'.format(source_dir, dest_dir))
     if not copy_symlinks:
         copy_tree(source_dir, dest_dir)
     else:
@@ -78,12 +78,12 @@ def copy_dir_contents(source_dir, dest_dir, copy_symlinks=False):
 def remove_files(fileNamePattern, sourceDir, log=True):
     for file in glob.glob(sourceDir + '/' + fileNamePattern):
         if log:
-            debug('deleting: ' + file)
+            debug('Deleting: ' + file)
         os.remove(file)
 
 def rename_file(fileNamePattern, newFileName, sourceDir):
     for file in glob.glob(sourceDir + '/' + fileNamePattern):
-        debug('rename: {0} -> {1}'.format(file, newFileName))
+        debug('Rename: {0} -> {1}'.format(file, newFileName))
         os.rename(file, sourceDir + '/' + newFileName)
 
 def remove_dir_if_exists(path):
@@ -91,14 +91,14 @@ def remove_dir_if_exists(path):
         debug('deleting dir: ' + path)
         shutil.rmtree(path)
     else:
-        error('canot delete {0}. dir does not exist'.format(path))
+        error('Can not delete {0}. dir does not exist'.format(path))
 
 def remove_file_if_exists(path):
     if os.path.exists(path):
         debug('deleting: ' + path)
         os.remove(path)
     else:
-        error('canot delete {0}. file does not exist'.format(path))
+        error('Can not delete {0}. file does not exist'.format(path))
 
 def clear_dir(dir):
     shutil.rmtree(dir)
