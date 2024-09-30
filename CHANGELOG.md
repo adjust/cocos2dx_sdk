@@ -1,3 +1,19 @@
+### Version 5.0.0 (1st October 2024)
+
+We're excited to release our major new SDK version (v5). Among many internal improvements, our spoofing protection solution is now included out of the box, reinforcing our commitment to accurate, actionable, and fraud-free data.
+
+To try out SDK v5 in your app, you can follow our new v4 to v5 [migration guide](https://dev.adjust.com/en/sdk/cocos2dx/migration/v4-to-v5).
+
+If you are a current Adjust client and have questions about SDK v5, please email [sdk-v5@adjust.com](mailto:sdk-v5@adjust.com).
+
+In case you were using beta version of the SDK v5, please switch to the official v5 release.
+
+#### Native SDKs
+- [iOS@v5.0.1][ios_sdk_v5.0.1]
+- [Android@v5.0.1][android_sdk_v5.0.1]
+
+---
+
 ### Version 4.37.0 (22nd January 2024)
 #### Added
 - Added support for SKAD 4.0.
@@ -415,6 +431,7 @@
 [ios_sdk_v4.29.6]: https://github.com/adjust/ios_sdk/tree/v4.29.6
 [ios_sdk_v4.32.1]: https://github.com/adjust/ios_sdk/tree/v4.32.1
 [ios_sdk_v4.37.0]: https://github.com/adjust/ios_sdk/tree/v4.37.0
+[ios_sdk_v5.0.1]: https://github.com/adjust/ios_sdk/tree/v5.0.1
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -439,5 +456,6 @@
 [android_sdk_v4.28.4]: https://github.com/adjust/android_sdk/tree/v4.28.4
 [android_sdk_v4.33.0]: https://github.com/adjust/android_sdk/tree/v4.33.0
 [android_sdk_v4.38.0]: https://github.com/adjust/android_sdk/tree/v4.38.0
+[android_sdk_v5.0.1]: https://github.com/adjust/android_sdk/tree/v5.0.1
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
