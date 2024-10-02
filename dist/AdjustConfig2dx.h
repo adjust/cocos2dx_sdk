@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTCONFIG2DX_H_
@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include <iostream>
+#include <vector>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
 #include "AdjustEventSuccess2dx.h"
@@ -24,23 +25,6 @@
 #endif
 
 extern const std::string AdjustSdkPrefix2dx;
-extern const std::string AdjustUrlStrategyChina;
-extern const std::string AdjustUrlStrategyIndia;
-extern const std::string AdjustUrlStrategyCn;
-extern const std::string AdjustUrlStrategyCnOnly;
-extern const std::string AdjustDataResidencyEU;
-extern const std::string AdjustDataResidencyTR;
-extern const std::string AdjustDataResidencyUS;
-extern const std::string AdjustAdRevenueSourceAppLovinMAX;
-extern const std::string AdjustAdRevenueSourceMopub;
-extern const std::string AdjustAdRevenueSourceAdMob;
-extern const std::string AdjustAdRevenueSourceIronSource;
-extern const std::string AdjustAdRevenueSourceAdMostSource;
-extern const std::string AdjustAdRevenueSourceUnity;
-extern const std::string AdjustAdRevenueSourceHeliumChartboost;
-extern const std::string AdjustAdRevenueSourcePublisher;
-extern const std::string AdjustAdRevenueSourceTopOn;
-extern const std::string AdjustAdRevenueSourceAdx;
 
 enum AdjustLogLevel2dx {
     AdjustLogLevel2dxVerbose = 1,
@@ -83,41 +67,35 @@ public:
 #endif
     }
 
-    void setDeviceKnown(bool isDeviceKnown);
-    void setSendInBackground(bool isEnabled);
-    void setEventBufferingEnabled(bool isEnabled);
-    void setNeedsCost(bool needsCost);
-    void setUserAgent(std::string userAgent);
+    void enableSendingInBackground();
+    void enableCostDataInAttribution();
     void setProcessName(std::string processName);
     void setDefaultTracker(std::string defaultTracker);
     void setExternalDeviceId(std::string externalDeviceId);
-    void setUrlStrategy(std::string urlStrategy);
-    void setDelayStart(double delayStart);    
+    void setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                        bool useSubdomains,
+                        bool isDataResidency);
     void setLogLevel(AdjustLogLevel2dx logLevel, void(*logCallback)(const char* log) = NULL);
-    void setAppSecret(unsigned long long secretId, unsigned long long info1, unsigned long long info2, unsigned long long info3, unsigned long long info4);
     void setAttributionCallback(void(*attributionCallback)(AdjustAttribution2dx attribution));
     void setEventSuccessCallback(void(*eventSuccessCallback)(AdjustEventSuccess2dx eventSuccess));
     void setEventFailureCallback(void(*eventFailureCallback)(AdjustEventFailure2dx eventFailure));
     void setSessionSuccessCallback(void(*sessionSuccessCallback)(AdjustSessionSuccess2dx sessionSuccess));
     void setSessionFailureCallback(void(*sessionFailureCallback)(AdjustSessionFailure2dx sessionFailure));
     void setDeferredDeeplinkCallback(bool(*deferredDeeplinkCallback)(std::string deeplink));
-    void setCoppaCompliantEnabled(bool isEnabled);
-    void setReadDeviceInfoOnceEnabled(bool isEnabled);
-    // iOS only
-    void deactivateSkAdNetworkHandling();
-    void setAllowIdfaReading(bool isAllowed);
-    void setAllowiAdInfoReading(bool isAllowed);
-    void setAllowAdServicesInfoReading(bool isAllowed);
-    void setConversionValueUpdatedCallback(void(*conversionValueUpdatedCallback)(int conversionValue));
-    void setPostbackConversionValueUpdatedCallback(void(*postbackConversionValueUpdatedCallback)(int conversionValue, std::string coarseValue, bool lockWindow));
-    void setLinkMeEnabled(bool isEnabled);
+    void enableDeviceIdsReadingOnce();
+    void enableCoppaCompliance();
+    void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
+    void disableSkanAttribution();
+    void disableIdfaReading();
+    void disableIdfvReading();
+    void disableAdServices();
+    void setSkanUpdatedCallback(void (*skanUpdatedCallback)(std::unordered_map<std::string, std::string> data));
+    void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
     // Android only
-    void setReadMobileEquipmentIdentity(bool readMobileEquipmentIdentity);
-    void setPreinstallTrackingEnabled(bool isEnabled);
+    void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
-    void setPlayStoreKidsAppEnabled(bool isEnabled);
-    void setFinalAttributionEnabled(bool isEnabled);
+    void enablePlayStoreKidsCompliance();
     void setFbAppId(std::string fbAppId);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

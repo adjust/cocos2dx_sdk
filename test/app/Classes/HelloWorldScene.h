@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef __TESTAPP_SCENE_H__
@@ -15,7 +15,6 @@
 
 class TestApp : public cocos2d::Scene {
 private:
-    TestLib2dx *testLibrary;
     void initTestLibrary();
 
 public:

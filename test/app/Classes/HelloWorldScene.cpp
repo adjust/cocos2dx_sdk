@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-Present Adjust GmbH. All rights reserved.
 //
 
 #include <platform/CCApplication.h>
@@ -18,25 +18,17 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.21";
+static std::string serverIp = "192.168.8.129";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
+static TestLib2dx *testLibrary;
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-static std::string baseUrl = "http://" + serverIp + ":8080";
-static std::string gdprUrl = "http://" + serverIp + ":8080";
-static std::string subscriptionUrl = "http://" + serverIp + ":8080";
-static std::string purchaseVerificationUrl = "http://" + serverIp + ":8080";
+static std::string urlOverwrite = "http://" + serverIp + ":8080";
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-static std::string baseUrl = "https://" + serverIp + ":8443";
-static std::string gdprUrl = "https://" + serverIp + ":8443";
-static std::string subscriptionUrl = "https://" + serverIp + ":8443";
-static std::string purchaseVerificationUrl = "https://" + serverIp + ":8443";
+static std::string urlOverwrite = "https://" + serverIp + ":8443";
 #endif
 
-static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(baseUrl,
-                                                                                  gdprUrl,
-                                                                                  subscriptionUrl,
-                                                                                  purchaseVerificationUrl);
+static AdjustCommandExecutor *commandExecutorInstance = new AdjustCommandExecutor(urlOverwrite);
 
 void TestApp::initTestLibrary() {
     auto func = [](std::string className, std::string methodName, std::string jsonParameters) {
@@ -45,7 +37,7 @@ void TestApp::initTestLibrary() {
         commandExecutorInstance->executeCommand(command);
     };
 
-    this->testLibrary = new TestLib2dx(baseUrl, controlUrl, func);
+    testLibrary = new TestLib2dx(urlOverwrite, controlUrl, func);
 }
 
 bool TestApp::init() {
@@ -84,8 +76,10 @@ bool TestApp::init() {
     TestApp::initTestLibrary();
     
     CCLOG("[AdjustTest]: Start test session called!");
-    // this->testLibrary->addTestDirectory("purchase-verification");
-    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
+    // testLibrary->addTestDirectory("purchase-verification");
+    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
+        testLibrary->startTestSession(sdkVersion);
+    });
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
@@ -95,7 +89,9 @@ bool TestApp::init() {
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
-    this->testLibrary->startTestSession(Adjust2dx::getSdkVersion());
+    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
+        testLibrary->startTestSession(sdkVersion);
+    });
 }
 
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {

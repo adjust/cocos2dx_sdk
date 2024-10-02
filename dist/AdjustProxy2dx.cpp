@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 3rd September 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustProxy2dx.h"
@@ -42,7 +42,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     std::string adgroup;
     std::string creative;
     std::string clickLabel;
-    std::string adid;
     std::string costType;
     double costAmount;
     std::string costCurrency;
@@ -56,7 +55,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jfieldID jfidAdgroup = env->GetFieldID(jclsAdjustAttribution, "adgroup", "Ljava/lang/String;");
     jfieldID jfidCreative = env->GetFieldID(jclsAdjustAttribution, "creative", "Ljava/lang/String;");
     jfieldID jfidClickLabel = env->GetFieldID(jclsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
-    jfieldID jfidAdid = env->GetFieldID(jclsAdjustAttribution, "adid", "Ljava/lang/String;");
     jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
     jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
     jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
@@ -68,7 +66,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
     jstring jAdgroup = (jstring)env->GetObjectField(attributionObject, jfidAdgroup);
     jstring jCreative = (jstring)env->GetObjectField(attributionObject, jfidCreative);
     jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, jfidClickLabel);
-    jstring jAdid = (jstring)env->GetObjectField(attributionObject, jfidAdid);
     jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
     jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
     jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
@@ -137,15 +134,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         clickLabel = "";
     }
 
-    if (NULL != jAdid) {
-        const char *adidCStr = env->GetStringUTFChars(jAdid, NULL);
-        adid = std::string(adidCStr);
-        env->ReleaseStringUTFChars(jAdid, adidCStr);
-        env->DeleteLocalRef(jAdid);
-    } else {
-        adid = "";
-    }
-
     if (NULL != jCostType) {
         const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
         costType = std::string(costTypeCStr);
@@ -189,7 +177,6 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionCallback_attribut
         adgroup,
         creative,
         clickLabel,
-        adid,
         costType,
         costAmount,
         costCurrency,
@@ -301,7 +288,14 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingFailedCallback_
         }
     }
 
-    AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(adid, message, timestamp, willRetry, eventToken, callbackId, jsonResponse);
+    AdjustEventFailure2dx eventFailure = AdjustEventFailure2dx(
+        adid,
+        message,
+        timestamp,
+        willRetry,
+        eventToken,
+        callbackId,
+        jsonResponse);
     eventTrackingFailedCallbackMethod(eventFailure);
 }
 
@@ -396,7 +390,13 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxEventTrackingSucceededCallba
         }
     }
 
-    AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(adid, message, timestamp, eventToken, callbackId, jsonResponse);
+    AdjustEventSuccess2dx eventSuccess = AdjustEventSuccess2dx(
+        adid,
+        message,
+        timestamp,
+        eventToken,
+        callbackId,
+        jsonResponse);
     eventTrackingSucceededCallbackMethod(eventSuccess);
 }
 
@@ -480,7 +480,12 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingFailedCallbac
         }
     }
 
-    AdjustSessionFailure2dx sessionFailure = AdjustSessionFailure2dx(adid, message, timestamp, willRetry, jsonResponse);
+    AdjustSessionFailure2dx sessionFailure = AdjustSessionFailure2dx(
+        adid,
+        message,
+        timestamp,
+        willRetry,
+        jsonResponse);
     sessionTrackingFailedCallbackMethod(sessionFailure);
 }
 
@@ -552,7 +557,11 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSessionTrackingSucceededCall
         }
     }
 
-    AdjustSessionSuccess2dx sessionSuccess = AdjustSessionSuccess2dx(adid, message, timestamp, jsonResponse);
+    AdjustSessionSuccess2dx sessionSuccess = AdjustSessionSuccess2dx(
+        adid,
+        message,
+        timestamp,
+        jsonResponse);
     sessionTrackingSucceededCallbackMethod(sessionSuccess);
 }
 
@@ -571,27 +580,264 @@ JNIEXPORT bool JNICALL Java_com_adjust_sdk_Adjust2dxDeferredDeeplinkCallback_def
     return deferredDeeplinkCallbackMethod(deeplink);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdIdCallback_adIdRead
-(JNIEnv *env, jobject obj, jstring jAdId) {
-    if (NULL == adIdCallbackMethod) {
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxIsEnabledCallback_isEnabledRead
+(JNIEnv *env, jobject obj, jboolean jIsEnabled) {
+    if (NULL == isEnabledCallbackMethod) {
         return;
     }
-    if (NULL == jAdId) {
+    if (NULL == jIsEnabled) {
         return;
     }
 
-    const char *adIdCStr = env->GetStringUTFChars(jAdId, NULL);
-    std::string adId = std::string(adIdCStr);
-    adIdCallbackMethod(adId);
-    env->ReleaseStringUTFChars(jAdId, adIdCStr);    
+    isEnabledCallbackMethod(jIsEnabled);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolvedLink
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_googleAdIdRead
+(JNIEnv *env, jobject obj, jstring jGoogleAdId) {
+    if (NULL == googleAdIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jGoogleAdId) {
+        googleAdIdCallbackMethod(std::string());
+        return;
+    }
+
+    const char *googleAdIdCStr = env->GetStringUTFChars(jGoogleAdId, NULL);
+    std::string googleAdId = std::string(googleAdIdCStr);
+    googleAdIdCallbackMethod(googleAdId);
+    env->ReleaseStringUTFChars(jGoogleAdId, googleAdIdCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_amazonAdIdRead
+(JNIEnv *env, jobject obj, jstring jAmazonAdId) {
+    if (NULL == amazonAdIdCallbackMethod) {
+        return;
+    }
+    if (NULL == jAmazonAdId) {
+        amazonAdIdCallbackMethod(std::string());
+        return;
+    }
+
+    const char *amazionAdIdCStr = env->GetStringUTFChars(jAmazonAdId, NULL);
+    std::string amazonAdId = std::string(amazionAdIdCStr);
+    amazonAdIdCallbackMethod(amazonAdId);
+    env->ReleaseStringUTFChars(jAmazonAdId, amazionAdIdCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdidCallback_adidRead
+(JNIEnv *env, jobject obj, jstring jAdid) {
+    if (NULL == adidCallbackMethod) {
+        return;
+    }
+    if (NULL == jAdid) {
+        adidCallbackMethod(std::string());
+        return;
+    }
+
+    const char *adidCStr = env->GetStringUTFChars(jAdid, NULL);
+    std::string adid = std::string(adidCStr);
+    adidCallbackMethod(adid);
+    env->ReleaseStringUTFChars(jAdid, adidCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionRead
+ (JNIEnv *env, jobject obj, jobject attributionObject) {
+    if (NULL == attributionReadCallbackMethod) {
+        return;
+    }
+    if (NULL == attributionObject) {
+        return;
+    }
+
+    std::string trackerToken;
+    std::string trackerName;
+    std::string network;
+    std::string campaign;
+    std::string adgroup;
+    std::string creative;
+    std::string clickLabel;
+
+    std::string costType;
+    double costAmount;
+    std::string costCurrency;
+    std::string fbInstallReferrer;
+
+    jclass jclsAdjustAttribution = env->FindClass("com/adjust/sdk/AdjustAttribution");
+    jfieldID jfidTrackerToken = env->GetFieldID(jclsAdjustAttribution, "trackerToken", "Ljava/lang/String;");
+    jfieldID jfidTrackerName = env->GetFieldID(jclsAdjustAttribution, "trackerName", "Ljava/lang/String;");
+    jfieldID jfidNetwork = env->GetFieldID(jclsAdjustAttribution, "network", "Ljava/lang/String;");
+    jfieldID jfidCampaign = env->GetFieldID(jclsAdjustAttribution, "campaign", "Ljava/lang/String;");
+    jfieldID jfidAdgroup = env->GetFieldID(jclsAdjustAttribution, "adgroup", "Ljava/lang/String;");
+    jfieldID jfidCreative = env->GetFieldID(jclsAdjustAttribution, "creative", "Ljava/lang/String;");
+    jfieldID jfidClickLabel = env->GetFieldID(jclsAdjustAttribution, "clickLabel", "Ljava/lang/String;");
+    jfieldID jfidCostType = env->GetFieldID(jclsAdjustAttribution, "costType", "Ljava/lang/String;");
+    jfieldID jfidCostAmount = env->GetFieldID(jclsAdjustAttribution, "costAmount", "Ljava/lang/Double;");
+    jfieldID jfidCostCurrency = env->GetFieldID(jclsAdjustAttribution, "costCurrency", "Ljava/lang/String;");
+    jfieldID jfidFbInstallReferrer = env->GetFieldID(jclsAdjustAttribution, "fbInstallReferrer", "Ljava/lang/String;");
+    jstring jTrackerToken = (jstring)env->GetObjectField(attributionObject, jfidTrackerToken);
+    jstring jTrackerName = (jstring)env->GetObjectField(attributionObject, jfidTrackerName);
+    jstring jNetwork = (jstring)env->GetObjectField(attributionObject, jfidNetwork);
+    jstring jCampaign = (jstring)env->GetObjectField(attributionObject, jfidCampaign);
+    jstring jAdgroup = (jstring)env->GetObjectField(attributionObject, jfidAdgroup);
+    jstring jCreative = (jstring)env->GetObjectField(attributionObject, jfidCreative);
+    jstring jClickLabel = (jstring)env->GetObjectField(attributionObject, jfidClickLabel);
+    jstring jCostType = (jstring)env->GetObjectField(attributionObject, jfidCostType);
+    jobject jCostAmount = env->GetObjectField(attributionObject, jfidCostAmount);
+    jstring jCostCurrency = (jstring)env->GetObjectField(attributionObject, jfidCostCurrency);
+    jstring jFbInstallReferrer = (jstring)env->GetObjectField(attributionObject, jfidFbInstallReferrer);
+
+    if (NULL != jTrackerToken) {
+        const char *trackerTokenCStr = env->GetStringUTFChars(jTrackerToken, NULL);
+        trackerToken = std::string(trackerTokenCStr);
+        env->ReleaseStringUTFChars(jTrackerToken, trackerTokenCStr);
+        env->DeleteLocalRef(jTrackerToken);
+    } else {
+        trackerToken = "";
+    }
+
+    if (NULL != jTrackerName) {
+        const char *trackerNameCStr = env->GetStringUTFChars(jTrackerName, NULL);
+        trackerName = std::string(trackerNameCStr);
+        env->ReleaseStringUTFChars(jTrackerName, trackerNameCStr);
+        env->DeleteLocalRef(jTrackerName);
+    } else {
+        trackerName = "";
+    }
+
+    if (NULL != jNetwork) {
+        const char *networkCStr = env->GetStringUTFChars(jNetwork, NULL);
+        network = std::string(networkCStr);
+        env->ReleaseStringUTFChars(jNetwork, networkCStr);
+        env->DeleteLocalRef(jNetwork);
+    } else {
+        network = "";
+    }
+
+    if (NULL != jCampaign) {
+        const char *campaignCStr = env->GetStringUTFChars(jCampaign, NULL);
+        campaign = std::string(campaignCStr);
+        env->ReleaseStringUTFChars(jCampaign, campaignCStr);
+        env->DeleteLocalRef(jCampaign);
+    } else {
+        campaign = "";
+    }
+
+    if (NULL != jAdgroup) {
+        const char *adgroupCStr = env->GetStringUTFChars(jAdgroup, NULL);
+        adgroup = std::string(adgroupCStr);
+        env->ReleaseStringUTFChars(jAdgroup, adgroupCStr);
+        env->DeleteLocalRef(jAdgroup);
+    } else {
+        adgroup = "";
+    }
+
+    if (NULL != jCreative) {
+        const char *creativeCStr = env->GetStringUTFChars(jCreative, NULL);
+        creative = std::string(creativeCStr);
+        env->ReleaseStringUTFChars(jCreative, creativeCStr);
+        env->DeleteLocalRef(jCreative);
+    } else {
+        creative = "";
+    }
+
+    if (NULL != jClickLabel) {
+        const char *clickLabelCStr = env->GetStringUTFChars(jClickLabel, NULL);
+        clickLabel = std::string(clickLabelCStr);
+        env->ReleaseStringUTFChars(jClickLabel, clickLabelCStr);
+        env->DeleteLocalRef(jClickLabel);
+    } else {
+        clickLabel = "";
+    }
+
+    if (NULL != jCostType) {
+        const char *costTypeCStr = env->GetStringUTFChars(jCostType, NULL);
+        costType = std::string(costTypeCStr);
+        env->ReleaseStringUTFChars(jCostType, costTypeCStr);
+        env->DeleteLocalRef(jCostType);
+    } else {
+        costType = "";
+    }
+
+    if (NULL != jCostAmount) {
+        jclass jcDouble = env->FindClass("java/lang/Double");
+        jmethodID jmidDoubleValue = env->GetMethodID(jcDouble, "doubleValue", "()D" );
+        costAmount = env->CallDoubleMethod(jCostAmount, jmidDoubleValue);
+    } else {
+        costAmount = 0;
+    }
+
+    if (NULL != jCostCurrency) {
+        const char *costCurrencyCStr = env->GetStringUTFChars(jCostCurrency, NULL);
+        costCurrency = std::string(costCurrencyCStr);
+        env->ReleaseStringUTFChars(jCostCurrency, costCurrencyCStr);
+        env->DeleteLocalRef(jCostCurrency);
+    } else {
+        costCurrency = "";
+    }
+
+    if (NULL != jFbInstallReferrer) {
+        const char *fbInstallReferrerCStr = env->GetStringUTFChars(jFbInstallReferrer, NULL);
+        fbInstallReferrer = std::string(fbInstallReferrerCStr);
+        env->ReleaseStringUTFChars(jFbInstallReferrer, fbInstallReferrerCStr);
+        env->DeleteLocalRef(jFbInstallReferrer);
+    } else {
+        fbInstallReferrer = "";
+    }
+
+    AdjustAttribution2dx attribution = AdjustAttribution2dx(
+        trackerToken,
+        trackerName,
+        network,
+        campaign,
+        adgroup,
+        creative,
+        clickLabel,
+        costType,
+        costAmount,
+        costCurrency,
+        fbInstallReferrer);
+    attributionReadCallbackMethod(attribution);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkRead
+(JNIEnv *env, jobject obj, jstring jDeeplink) {
+    if (NULL == lastDeeplinkCallbackMethod) {
+        return;
+    }
+    if (NULL == jDeeplink) {
+        lastDeeplinkCallbackMethod(std::string());
+        return;
+    }
+
+    const char *deeplinkCStr = env->GetStringUTFChars(jDeeplink, NULL);
+    std::string deeplink = std::string(deeplinkCStr);
+    lastDeeplinkCallbackMethod(deeplink);
+    env->ReleaseStringUTFChars(jDeeplink, deeplinkCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionRead
+ (JNIEnv *env, jobject obj, jstring jSdkVersion) {
+    if (NULL == sdkVersionCallbackMethod) {
+        return;
+    }
+    if (NULL == jSdkVersion) {
+        sdkVersionCallbackMethod(std::string());
+        return;
+    }
+
+    const char *sdkVersionCStr = env->GetStringUTFChars(jSdkVersion, NULL);
+    std::string sdkVersion = std::string(sdkVersionCStr);
+    sdkVersionCallbackMethod(sdkVersion);
+    env->ReleaseStringUTFChars(jSdkVersion, sdkVersionCStr);
+}
+
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_deeplinkResolved
 (JNIEnv *env, jobject obj, jstring jResolvedLink) {
     if (NULL == resolvedLinkCallbackMethod) {
         return;
     }
     if (NULL == jResolvedLink) {
+        resolvedLinkCallbackMethod(std::string());
         return;
     }
 
@@ -601,9 +847,9 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_resolve
     env->ReleaseStringUTFChars(jResolvedLink, resolvedLinkCStr);
 }
 
-JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCallback_verificationResult
-(JNIEnv *env, jobject obj, jstring jVerificationStatus, int jCode, jstring jMessage) {
-    if (NULL == purchaseVerificationResultCallbackMethod) {
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResult
+(JNIEnv *env, jobject obj, jstring jVerificationStatus, int code, jstring jMessage) {
+    if (NULL == verifyPlayStorePurchaseCallbackMethod) {
         return;
     }
 
@@ -611,69 +857,114 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxPurchaseVerificationResultCa
     std::string verificationStatus = std::string(verificationStatusCStr);
     const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
     std::string message = std::string(messageCStr);
-    purchaseVerificationResultCallbackMethod(verificationStatus, jCode, message);
+    AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
+        verificationStatus,
+        message,
+        code);
+    verifyPlayStorePurchaseCallbackMethod(verificationResult);
     env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
     env->ReleaseStringUTFChars(jMessage, messageCStr);
 }
 
-void setExecuteTestLibCommandCallbackMethod(void(*callbackMethod)(std::string className, std::string methodName, std::string jsonParameters)) {
+JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
+(JNIEnv *env, jobject obj, jstring jVerificationStatus, int code, jstring jMessage) {
+    if (NULL == verifyAndTrackPlayStorePurchaseCallbackMethod) {
+        return;
+    }
+
+    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+    std::string verificationStatus = std::string(verificationStatusCStr);
+    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+    std::string message = std::string(messageCStr);
+    AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
+        verificationStatus,
+        message,
+        code);
+    verifyPlayStorePurchaseCallbackMethod(verificationResult);
+    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    env->ReleaseStringUTFChars(jMessage, messageCStr);
+}
+
+void setExecuteTestLibCommandCallbackMethod(void(*callback)(std::string className, std::string methodName, std::string jsonParameters)) {
     if (NULL == executeTestLibCommandCallbackMethod) {
-        executeTestLibCommandCallbackMethod = callbackMethod;
+        executeTestLibCommandCallbackMethod = callback;
     }
 }
 
-void setAttributionCallbackMethod(void (*callbackMethod)(AdjustAttribution2dx attribution)) {
+void setAttributionCallbackMethod(void (*callback)(AdjustAttribution2dx attribution)) {
     if (NULL == attributionCallbackMethod) {
-        attributionCallbackMethod = callbackMethod;
+        attributionCallbackMethod = callback;
     }
 }
 
-void setEventTrackingFailedCallbackMethod(void (*callbackMethod)(AdjustEventFailure2dx eventFailure)) {
+void setEventTrackingFailedCallbackMethod(void (*callback)(AdjustEventFailure2dx eventFailure)) {
     if (NULL == eventTrackingFailedCallbackMethod) {
-        eventTrackingFailedCallbackMethod = callbackMethod;
+        eventTrackingFailedCallbackMethod = callback;
     }
 }
 
-void setEventTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustEventSuccess2dx eventSuccess)) {
+void setEventTrackingSucceededCallbackMethod(void (*callback)(AdjustEventSuccess2dx eventSuccess)) {
     if (NULL == eventTrackingSucceededCallbackMethod) {
-        eventTrackingSucceededCallbackMethod = callbackMethod;
+        eventTrackingSucceededCallbackMethod = callback;
     }
 }
 
-void setSessionTrackingFailedCallbackMethod(void (*callbackMethod)(AdjustSessionFailure2dx sessionFailure)) {
+void setSessionTrackingFailedCallbackMethod(void (*callback)(AdjustSessionFailure2dx sessionFailure)) {
     if (NULL == sessionTrackingFailedCallbackMethod) {
-        sessionTrackingFailedCallbackMethod = callbackMethod;
+        sessionTrackingFailedCallbackMethod = callback;
     }
 }
 
-void setSessionTrackingSucceededCallbackMethod(void (*callbackMethod)(AdjustSessionSuccess2dx sessionSuccess)) {
+void setSessionTrackingSucceededCallbackMethod(void (*callback)(AdjustSessionSuccess2dx sessionSuccess)) {
     if (NULL == sessionTrackingSucceededCallbackMethod) {
-        sessionTrackingSucceededCallbackMethod = callbackMethod;
+        sessionTrackingSucceededCallbackMethod = callback;
     }
 }
 
-void setDeferredDeeplinkCallbackMethod(bool (*callbackMethod)(std::string deeplink)) {
+void setDeferredDeeplinkCallbackMethod(bool (*callback)(std::string deeplink)) {
     if (NULL == deferredDeeplinkCallbackMethod) {
-        deferredDeeplinkCallbackMethod = callbackMethod;
+        deferredDeeplinkCallbackMethod = callback;
     }
 }
 
-void setAdIdCallbackMethod(void (*callbackMethod)(std::string adId)) {
-    if (NULL == adIdCallbackMethod) {
-        adIdCallbackMethod = callbackMethod;
-    }
+void setIsEnabledCallbackMethod(void (*callback)(bool isEnabled)) {
+    isEnabledCallbackMethod = callback;
 }
 
-void setResolvedLinkCallbackMethod(void (*callbackMethod)(std::string resolvedLink)) {
-    if (NULL == resolvedLinkCallbackMethod) {
-        resolvedLinkCallbackMethod = callbackMethod;
-    }
+void setGoogleAdIdCallbackMethod(void (*callback)(std::string googleAdId)) {
+    googleAdIdCallbackMethod = callback;
 }
 
-void setPurchaseVerificationResultCallbackMethod(void (*callbackMethod)(std::string verificationResult, int code, std::string message)) {
-    if (NULL == purchaseVerificationResultCallbackMethod) {
-        purchaseVerificationResultCallbackMethod = callbackMethod;
-    }
+void setAmazonAdIdCallbackMethod(void (*callback)(std::string amazonAdId)) {
+    amazonAdIdCallbackMethod = callback;
+}
+
+void setAdidCallbackMethod(void (*callback)(std::string adid)) {
+    adidCallbackMethod = callback;
+}
+
+void setAttributionReadCallbackMethod(void (*callback)(AdjustAttribution2dx attribution)) {
+    attributionReadCallbackMethod = callback;
+}
+
+void setLastDeeplinkCallbackMethod(void (*callback)(std::string deeplink)) {
+    lastDeeplinkCallbackMethod = callback;
+}
+
+void setSdkVersionCallbackMethod(void (*callback)(std::string sdkVersion)) {
+    sdkVersionCallbackMethod = callback;
+}
+
+void setResolvedLinkCallbackMethod(void (*callback)(std::string resolvedLink)) {
+    resolvedLinkCallbackMethod = callback;
+}
+
+void setVerifyPlayStorePurchaseCallbackMethod(void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
+    verifyPlayStorePurchaseCallbackMethod = callback;
+}
+
+void setVerifyAndTrackPlayStorePurchaseCallbackMethod(void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
+    verifyAndTrackPlayStorePurchaseCallbackMethod = callback;
 }
 
 #endif

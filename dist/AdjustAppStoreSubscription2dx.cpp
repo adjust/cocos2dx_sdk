@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 12th June 2020.
-//  Copyright © 2015-2020 Adjust GmbH. All rights reserved.
+//  Copyright © 2020-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustAppStoreSubscription2dx.h"
@@ -11,12 +11,11 @@
 void AdjustAppStoreSubscription2dx::initSubscription(
     std::string price,
     std::string currency,
-    std::string transactionId,
-    std::string receipt
-) {
+    std::string transactionId)
+{
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    subscription = ADJAppStoreSubscription2dx(price, currency, transactionId, receipt);
+    subscription = ADJAppStoreSubscription2dx(price, currency, transactionId);
     isSubscriptionSet = true;
 #endif
 }

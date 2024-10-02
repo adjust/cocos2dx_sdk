@@ -61,7 +61,7 @@ def build_test(root_dir, ios_submodule_dir, configuration, app_path):
 def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # ------------------------------------------------------------------
     # Paths.
-    build_dir          = '{0}/sdk'.format(ios_submodule_dir)
+    build_dir          = '{0}'.format(ios_submodule_dir)
     test_lib_build_dir = '{0}/AdjustTests/AdjustTestLibrary'.format(build_dir)
     lib_out_dir        = '{0}/libs/ios'.format(root_dir)
     test_lib_out_dir   = '{0}/test/libs/ios'.format(root_dir)
@@ -81,28 +81,29 @@ def _build_sdk(root_dir, ios_submodule_dir, configuration, with_test_lib=False):
     # Rebuilding AdjustSdk.framework file.
     debug_green('Rebuilding AdjustSdk.framework file ...')
     change_dir(build_dir)
-    if configuration == 'debug':
-        xcode_build('AdjustStatic', 'Debug')
-    else:
-        xcode_build('AdjustStatic', 'Release')
+    # if configuration == 'debug':
+    #     xcode_build('AdjustStatic', 'Debug')
+    # else:
+    #     xcode_build('AdjustStatic', 'Release')
+    execute_command(['./scripts/build_frameworks.sh', '-fs', '-ios'])
+
+    # ------------------------------------------------------------------
+    # Copying AdjustSdk.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.
+    debug_green('Copying AdjustSdk.framework to {0} ...'.format(lib_out_dir))
+    copy_dir_contents('{0}/sdk_distribution/frameworks-static/AdjustSdk-iOS-Static/AdjustSdk.framework'.format(build_dir), '{0}/AdjustSdk.framework'.format(lib_out_dir), copy_symlinks=True)
 
     # ------------------------------------------------------------------
     # Rebuilding AdjustTestLibrary.framework file.
     if with_test_lib:
         debug_green('Rebuilding AdjustTestLibrary.framework file ...')
-        change_dir(test_lib_build_dir)
-        if configuration == 'debug':
-            xcode_build('AdjustTestLibraryStatic', 'Debug')
-        else:
-            xcode_build('AdjustTestLibraryStatic', 'Release')
+        # change_dir(test_lib_build_dir)
+        # if configuration == 'debug':
+        #     xcode_build('AdjustTestLibraryStatic', 'Debug')
+        # else:
+        #     xcode_build('AdjustTestLibraryStatic', 'Release')
+        execute_command(['./scripts/build_frameworks.sh', '-test', '-ios'])
 
-    # ------------------------------------------------------------------
-    # Copying AdjustSdk.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.
-    debug_green('Copying AdjustSdk.framework to {0} ...'.format(lib_out_dir))
-    copy_dir_contents('{0}/Frameworks/Static/AdjustSdk.framework'.format(build_dir), '{0}/AdjustSdk.framework'.format(lib_out_dir), copy_symlinks=True)
-
-    # ------------------------------------------------------------------
-    # Copying AdjustTestLibrary.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.
-    if with_test_lib:
+        # ------------------------------------------------------------------
+        # Copying AdjustTestLibrary.framework to ${ROOT_DIR}/${LIB_OUT_DIR}.
         debug_green('Copying AdjustTestLibrary.framework to {0} ...'.format(test_lib_out_dir))
         copy_dir_contents('{0}/sdk_distribution/test-static-framework/AdjustTestLibrary.framework'.format(build_dir), '{0}/AdjustTestLibrary.framework'.format(test_lib_out_dir), copy_symlinks=True)

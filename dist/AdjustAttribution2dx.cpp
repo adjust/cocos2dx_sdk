@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustAttribution2dx.h"
@@ -34,10 +34,6 @@ std::string AdjustAttribution2dx::getCreative() {
 
 std::string AdjustAttribution2dx::getClickLabel() {
     return this->clickLabel;
-}
-
-std::string AdjustAttribution2dx::getAdid() {
-	return this->adid;
 }
 
 std::string AdjustAttribution2dx::getCostType() {

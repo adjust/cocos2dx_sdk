@@ -32,7 +32,7 @@ try:
     if args.platform == 'ios':
         set_log_tag('IOS-SDK-BUILD')
         check_submodule_dir('iOS', dir_ext_ios + '/sdk')
-        ios.build(dir_root, dir_ext_ios, args.apptype, args.configuration, args.apppath)
+        ios.build(dir_root, dir_ext_ios + '/sdk', args.apptype, args.configuration, args.apppath)
     else:
         set_log_tag('ANROID-SDK-BUILD')
         check_submodule_dir('Android', dir_ext_android + '/sdk')

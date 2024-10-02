@@ -6,7 +6,7 @@ public class Adjust2dxEventTrackingSucceededCallback implements OnEventTrackingS
 	public Adjust2dxEventTrackingSucceededCallback() {}
 	
 	@Override
-	public void onFinishedEventTrackingSucceeded(AdjustEventSuccess eventSuccessResponseData) {
+	public void onEventTrackingSucceeded(AdjustEventSuccess eventSuccessResponseData) {
 		eventTrackingSucceeded(eventSuccessResponseData);
 	}
 }

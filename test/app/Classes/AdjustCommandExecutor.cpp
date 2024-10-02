@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Srdjan Tubin (@2beens) on 4th June 2018.
-//  Copyright © 2018-2020 Adjust GmbH. All rights reserved.
+//  Copyright © 2018-Present Adjust GmbH. All rights reserved.
 //
 
 #define COCOS2D_DEBUG 1
@@ -17,14 +17,8 @@
 static std::string localBasePath;
 const std::string AdjustCommandExecutor::TAG = "AdjustCommandExecutor";
 
-AdjustCommandExecutor::AdjustCommandExecutor(std::string baseUrl,
-                                             std::string gdprUrl,
-                                             std::string subscriptionUrl,
-                                             std::string purchaseVerificationUrl) {
-    this->baseUrl = baseUrl;
-    this->gdprUrl = gdprUrl;
-    this->subscriptionUrl = subscriptionUrl;
-    this->purchaseVerificationUrl = purchaseVerificationUrl;
+AdjustCommandExecutor::AdjustCommandExecutor(std::string urlOverwrite) {
+    this->urlOverwrite = urlOverwrite;
 }
 
 void AdjustCommandExecutor::executeCommand(Command *command) {
@@ -45,161 +39,158 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->pause();
     } else if (command->methodName == "setEnabled") {
         this->setEnabled();
-    } else if (command->methodName == "setReferrer") {
-        this->setReferrer();
     } else if (command->methodName == "setOfflineMode") {
         this->setOfflineMode();
-    } else if (command->methodName == "sendFirstPackages") {
-        this->sendFirstPackages();
-    } else if (command->methodName == "addSessionCallbackParameter") {
-        this->addSessionCallbackParameter();
-    } else if (command->methodName == "addSessionPartnerParameter") {
-        this->addSessionPartnerParameter();
-    } else if (command->methodName == "removeSessionCallbackParameter") {
-        this->removeSessionCallbackParameter();
-    } else if (command->methodName == "removeSessionPartnerParameter") {
-        this->removeSessionPartnerParameter();
-    } else if (command->methodName == "resetSessionCallbackParameters") {
-        this->resetSessionCallbackParameters();
-    } else if (command->methodName == "resetSessionPartnerParameters") {
-        this->resetSessionPartnerParameters();
+    } else if (command->methodName == "addGlobalCallbackParameter") {
+        this->addGlobalCallbackParameter();
+    } else if (command->methodName == "addGlobalPartnerParameter") {
+        this->addGlobalPartnerParameter();
+    } else if (command->methodName == "removeGlobalCallbackParameter") {
+        this->removeGlobalCallbackParameter();
+    } else if (command->methodName == "removeGlobalPartnerParameter") {
+        this->removeGlobalPartnerParameter();
+    } else if (command->methodName == "removeGlobalCallbackParameters") {
+        this->removeGlobalCallbackParameters();
+    } else if (command->methodName == "removeGlobalPartnerParameters") {
+        this->removeGlobalPartnerParameters();
     } else if (command->methodName == "setPushToken") {
         this->setPushToken();
     } else if (command->methodName == "openDeeplink") {
         this->openDeeplink();
-    } else if (command->methodName == "sendReferrer") {
-        this->sendReferrer();
     } else if (command->methodName == "gdprForgetMe") {
         this->gdprForgetMe();
-    } else if (command->methodName == "trackAdRevenue") {
-        this->trackAdRevenue();
-    } else if (command->methodName == "disableThirdPartySharing") {
-        this->disableThirdPartySharing();
     } else if (command->methodName == "trackSubscription") {
         this->trackSubscription();
     } else if (command->methodName == "thirdPartySharing") {
         this->trackThirdPartySharing();
     } else if (command->methodName == "measurementConsent") {
         this->trackMeasurementConsent();
-    } else if (command->methodName == "trackAdRevenueV2") {
-        this->trackAdRevenueNew();
+    } else if (command->methodName == "trackAdRevenue") {
+        this->trackAdRevenue();
     } else if (command->methodName == "getLastDeeplink") {
         this->getLastDeeplink();
     } else if (command->methodName == "verifyPurchase") {
         this->verifyPurchase();
+    } else if (command->methodName == "verifyTrack") {
+        this->verifyTrack();
     } else if (command->methodName == "processDeeplink") {
         this->processDeeplink();
+    } else if (command->methodName == "attributionGetter") {
+        this->attributionGetter();
     }
 }
 
 void AdjustCommandExecutor::testOptions() {
-    std::map<std::string, std::string> testOptions;
-    testOptions["baseUrl"] = this->baseUrl;
-    testOptions["gdprUrl"] = this->gdprUrl;
-    testOptions["subscriptionUrl"] = this->subscriptionUrl;
-    testOptions["purchaseVerificationUrl"] = this->purchaseVerificationUrl;
+    std::map<std::string, std::string> stringTestOptions;
+    std::map<std::string, int> intTestOptions;
+
+    stringTestOptions["testUrlOverwrite"] = this->urlOverwrite;
+
     if (this->command->containsParameter("basePath")) {
         this->basePath = command->getFirstParameterValue("basePath");
-        this->gdprPath = command->getFirstParameterValue("basePath");
-        this->subscriptionPath = command->getFirstParameterValue("basePath");
-        this->purchaseVerificationPath = command->getFirstParameterValue("basePath");
-        this->extraPath = command->getFirstParameterValue("basePath");
     }
     if (this->command->containsParameter("timerInterval")) {
-        testOptions["timerIntervalInMilliseconds"] = command->getFirstParameterValue("timerInterval");
+        intTestOptions["timerIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("timerInterval"));
     }
     if (this->command->containsParameter("timerStart")) {
-        testOptions["timerStartInMilliseconds"] = command->getFirstParameterValue("timerStart");
+        intTestOptions["timerStartInMilliseconds"] = std::stoi(command->getFirstParameterValue("timerStart"));
     }
     if (this->command->containsParameter("sessionInterval")) {
-        testOptions["sessionIntervalInMilliseconds"] = command->getFirstParameterValue("sessionInterval");
+        intTestOptions["sessionIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("sessionInterval"));
     }
     if (this->command->containsParameter("subsessionInterval")) {
-        testOptions["subsessionIntervalInMilliseconds"] = command->getFirstParameterValue("subsessionInterval");
+        intTestOptions["subsessionIntervalInMilliseconds"] = std::stoi(command->getFirstParameterValue("subsessionInterval"));
     }
-    if (this->command->containsParameter("tryInstallReferrer")) {
-        testOptions["tryInstallReferrer"] = command->getFirstParameterValue("tryInstallReferrer");
+    if (this->command->containsParameter("attStatus")) {
+        intTestOptions["attStatusInt"] = std::stoi(command->getFirstParameterValue("attStatus"));
     }
+
+    if (this->command->containsParameter("idfa")) {
+        stringTestOptions["idfa"] = command->getFirstParameterValue("idfa");
+    }
+
     if (this->command->containsParameter("noBackoffWait")) {
-        testOptions["noBackoffWait"] = command->getFirstParameterValue("noBackoffWait");
-    }
-    // "false" is default value - iAd will not be used in test app by default.
-    testOptions["iAdFrameworkEnabled"] = "false";
-    if (this->command->containsParameter("iAdFrameworkEnabled")) {
-        testOptions["iAdFrameworkEnabled"] = command->getFirstParameterValue("iAdFrameworkEnabled");
+        if (command->getFirstParameterValue("noBackoffWait") == "true") {
+            intTestOptions["noBackoffWait"] = 1;
+        } else {
+            intTestOptions["noBackoffWait"] = 0;
+        }
     }
     // "false" is default value - AdServices will not be used in test app by default.
-    testOptions["adServicesFrameworkEnabled"] = "false";
+    intTestOptions["adServicesFrameworkEnabled"] = 0;
     if (this->command->containsParameter("adServicesFrameworkEnabled")) {
-        testOptions["adServicesFrameworkEnabled"] = command->getFirstParameterValue("adServicesFrameworkEnabled");
+        if (command->getFirstParameterValue("adServicesFrameworkEnabled") == "true") {
+            intTestOptions["adServicesFrameworkEnabled"] = 1;
+        }
     }
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
+    if (this->command->containsParameter("tryInstallReferrer")) {
+        if (command->getFirstParameterValue("tryInstallReferrer") == "true") {
+            intTestOptions["tryInstallReferrer"] = 1;
+        } else {
+            intTestOptions["tryInstallReferrer"] = 0;
+        }
+    }
+
+    if (this->command->containsParameter("doNotIgnoreSystemLifecycleBootstrap")) {
+        if (command->getFirstParameterValue("doNotIgnoreSystemLifecycleBootstrap") == "true") {
+            intTestOptions["doNotIgnoreSystemLifecycleBootstrap"] = 1;
+        } else {
+            intTestOptions["doNotIgnoreSystemLifecycleBootstrap"] = 0;
+        }
+    }
+
     bool useTestConnectionOptions = false;
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-#endif
+
     if (this->command->containsParameter("teardown")) {
         std::vector<std::string> teardownOptions = command->getParameters("teardown");
         std::vector<std::string>::iterator toIterator = teardownOptions.begin();
         while(toIterator != teardownOptions.end()) {
             std::string teardownOption = (*toIterator);
             if (teardownOption == "resetSdk") {
-                testOptions["teardown"] = "true";
-                testOptions["basePath"] = this->basePath;
-                testOptions["gdprPath"] = this->gdprPath;
-                testOptions["subscriptionPath"] = this->subscriptionPath;
-                testOptions["purchaseVerificationPath"] = this->purchaseVerificationPath;
-                testOptions["extraPath"] = this->extraPath;
+                intTestOptions["teardown"] = 1;
+                stringTestOptions["extraPath"] = this->basePath;
                 // Android specific.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                testOptions["useTestConnectionOptions"] = "true";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
                 useTestConnectionOptions = true;
-#endif
-                testOptions["tryInstallReferrer"] = "false";
+                // intTestOptions["tryInstallReferrer"] = 0; // To confirm verify replacement works
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
                 Adjust2dx::teardown();
 #endif
             }
             if (teardownOption == "deleteState") {
                 // Android specific.
-                testOptions["setContext"] = "true";
+                intTestOptions["setContext"] = 1;
                 // iOS specific.
-                testOptions["deleteState"] = "true";
+                intTestOptions["deleteState"] = 1;
             }
             if (teardownOption == "resetTest") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions["timerIntervalInMilliseconds"] = "-1";
-                testOptions["timerStartInMilliseconds"] = "-1";
-                testOptions["sessionIntervalInMilliseconds"] = "-1";
-                testOptions["subsessionIntervalInMilliseconds"] = "-1";
+                intTestOptions["timerIntervalInMilliseconds"] = -1;
+                intTestOptions["timerStartInMilliseconds"] = -1;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1;
             }
             if (teardownOption == "sdk") {
-                testOptions["teardown"] = "true";
-                testOptions["basePath"] = "";
-                testOptions["gdprPath"] = "";
-                testOptions["subscriptionPath"] = "";
-                testOptions["purchaseVerificationPath"] = "";
-                testOptions["extraPath"] = "";
+                intTestOptions["teardown"] = 1;
+                stringTestOptions.erase("extraPath");
                 // Android specific.
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-                testOptions["useTestConnectionOptions"] = "false";
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#endif
+                intTestOptions["useTestConnectionOptions"] = 0;
             }
             if (teardownOption == "test") {
                 savedEvents.clear();
                 savedConfigs.clear();
-                testOptions["timerIntervalInMilliseconds"] = "-1";
-                testOptions["timerStartInMilliseconds"] = "-1";
-                testOptions["sessionIntervalInMilliseconds"] = "-1";
-                testOptions["subsessionIntervalInMilliseconds"] = "-1";
+                this->basePath = "";
+                intTestOptions["timerIntervalInMilliseconds"] = -1;
+                intTestOptions["timerStartInMilliseconds"] = -1;
+                intTestOptions["sessionIntervalInMilliseconds"] = -1;
+                intTestOptions["subsessionIntervalInMilliseconds"] = -1;
             }
             toIterator++;
         }
     }
 
-    Adjust2dx::setTestOptions(testOptions);
+    Adjust2dx::setTestOptions(stringTestOptions, intTestOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (useTestConnectionOptions == true) {
         TestConnectionOptions2dx::setTestConnectionOptions();
@@ -262,76 +253,85 @@ void AdjustCommandExecutor::config() {
         }
     }
 
-    if (this->command->containsParameter("appSecret")) {
-        try {
-            std::vector<std::string> appSecretArray = command->getParameters("appSecret");
+    if (this->command->containsParameter("checkPasteboard")) {
+        std::string checkPasteboardString = command->getFirstParameterValue("checkPasteboard");
+        bool checkPasteboard = (checkPasteboardString == "true");
+        if (checkPasteboard) {
+            adjustConfig->enableLinkMe();
+        }
+    }
 
-            if (appSecretArray[0].length() > 0
-                && appSecretArray[1].length() > 0
-                && appSecretArray[2].length() > 0
-                && appSecretArray[3].length() > 0
-                && appSecretArray[4].length() > 0) {
-                unsigned long long secretId = strtoull(appSecretArray[0].c_str(), NULL, 10);
-                unsigned long long info1 = strtoull(appSecretArray[1].c_str(), NULL, 10);
-                unsigned long long info2 = strtoull(appSecretArray[2].c_str(), NULL, 10);
-                unsigned long long info3 = strtoull(appSecretArray[3].c_str(), NULL, 10);
-                unsigned long long info4 = strtoull(appSecretArray[4].c_str(), NULL, 10);
-                adjustConfig->setAppSecret(secretId, info1, info2, info3, info4);
+    if (this->command->containsParameter("skanCallback")) {
+        localBasePath = this->basePath;
+        adjustConfig->setSkanUpdatedCallback([](std::unordered_map<std::string, std::string> data) {
+            CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
+
+            for (std::unordered_map<std::string, std::string>::iterator toIterator = data.begin();
+                 toIterator != data.end(); toIterator++)
+            {
+                TestLib2dx::addInfoToSend(toIterator->first, toIterator->second);
+
             }
+            TestLib2dx::sendInfoToServer(localBasePath);
+        });
+    }
+
+    if (this->command->containsParameter("attConsentWaitingSeconds")) {
+        std::string attConsentWaitingSecondsString = command->getFirstParameterValue("attConsentWaitingSeconds");
+        adjustConfig->setAttConsentWaitingInterval(std::stoi(attConsentWaitingSecondsString));
+    }
+
+    if (this->command->containsParameter("eventDeduplicationIdsMaxSize")) {
+        std::string eventDeduplicationIdsMaxSizeString = command->getFirstParameterValue("eventDeduplicationIdsMaxSize");
+        adjustConfig->setEventDeduplicationIdsMaxSize(std::stoi(eventDeduplicationIdsMaxSizeString));
+    }
+
+    if (this->command->containsParameter("coppaCompliant")) {
+        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
+        bool coppaCompliant = (coppaCompliantString == "true");
+        if (coppaCompliant) {
+            adjustConfig->enableCoppaCompliance();
         }
-        catch (const std::exception &e) {
-            CCLOG("\n[AdjustCommandExecutor]: appSecret exception: %s", e.what());
+    }
+
+    if (this->command->containsParameter("needsCost")) {
+        std::string needsCostString = command->getFirstParameterValue("needsCost");
+        bool needsCost = (needsCostString == "true");
+        if (needsCost) {
+            adjustConfig->enableCostDataInAttribution();
         }
-    }
-
-    if (this->command->containsParameter("delayStart")) {
-        std::string delayStartString = command->getFirstParameterValue("delayStart");
-        double delayStart = std::stod(delayStartString);
-        adjustConfig->setDelayStart(delayStart);
-    }
-
-    if (this->command->containsParameter("deviceKnown")) {
-        std::string deviceKnownString = command->getFirstParameterValue("deviceKnown");
-        bool deviceKnown = (deviceKnownString == "true");
-        adjustConfig->setDeviceKnown(deviceKnown);
-    }
-
-    if (this->command->containsParameter("eventBufferingEnabled")) {
-        std::string eventBufferingEnabledString = command->getFirstParameterValue("eventBufferingEnabled");
-        bool eventBufferingEnabled = (eventBufferingEnabledString == "true");
-        adjustConfig->setEventBufferingEnabled(eventBufferingEnabled);
     }
 
     if (this->command->containsParameter("allowIdfaReading")) {
         std::string allowIdfaReadingString = command->getFirstParameterValue("allowIdfaReading");
         bool allowIdfaReading = (allowIdfaReadingString == "true");
-        adjustConfig->setAllowIdfaReading(allowIdfaReading);
+        if (! allowIdfaReading) {
+            adjustConfig->disableIdfaReading();
+        }
     }
 
-    if (this->command->containsParameter("allowiAdInfoReading")) {
-        std::string allowiAdInfoReadingString = command->getFirstParameterValue("allowiAdInfoReading");
-        bool allowiAdInfoReading = (allowiAdInfoReadingString == "true");
-        adjustConfig->setAllowiAdInfoReading(allowiAdInfoReading);
-    }
-    
     if (this->command->containsParameter("allowAdServicesInfoReading")) {
         std::string allowAdServicesInfoReadingString = command->getFirstParameterValue("allowAdServicesInfoReading");
         bool allowAdServicesInfoReading = (allowAdServicesInfoReadingString == "true");
-        adjustConfig->setAllowAdServicesInfoReading(allowAdServicesInfoReading);
+        if (! allowAdServicesInfoReading) {
+            adjustConfig->disableAdServices();
+        }
     }
 
     if (this->command->containsParameter("allowSkAdNetworkHandling")) {
         std::string allowSkAdNetworkHandlingString = command->getFirstParameterValue("allowSkAdNetworkHandling");
         bool allowSkAdNetworkHandling = (allowSkAdNetworkHandlingString == "true");
         if (allowSkAdNetworkHandling == false) {
-            adjustConfig->deactivateSkAdNetworkHandling();
+            adjustConfig->disableSkanAttribution();
         }
     }
 
     if (this->command->containsParameter("sendInBackground")) {
         std::string sendInBackgroundString = command->getFirstParameterValue("sendInBackground");
         bool sendInBackground = (sendInBackgroundString == "true");
-        adjustConfig->setSendInBackground(sendInBackground);
+        if (sendInBackground) {
+            adjustConfig->enableSendingInBackground();
+        }
     }
 
     if (this->command->containsParameter("defaultTracker")) {
@@ -344,48 +344,33 @@ void AdjustCommandExecutor::config() {
         adjustConfig->setExternalDeviceId(externalDeviceId);
     }
 
-    if (this->command->containsParameter("userAgent")) {
-        std::string userAgent = command->getFirstParameterValue("userAgent");
-        adjustConfig->setUserAgent(userAgent);
-    }
-
-    if (this->command->containsParameter("coppaCompliant")) {
-        std::string coppaCompliantString = command->getFirstParameterValue("coppaCompliant");
-        bool coppaCompliant = (coppaCompliantString == "true");
-        adjustConfig->setCoppaCompliantEnabled(coppaCompliant);
-    }
-
     if (this->command->containsParameter("playStoreKids")) {
         std::string playStoreKidsString = command->getFirstParameterValue("playStoreKids");
-        bool playStoreKids = (playStoreKidsString == "true");
-        adjustConfig->setPlayStoreKidsAppEnabled(playStoreKids);
-    }
-
-    if (this->command->containsParameter("finalAttributionEnabled")) {
-        std::string finalAttributionEnabledString = command->getFirstParameterValue("finalAttributionEnabled");
-        bool finalAttributionEnabled = (finalAttributionEnabledString == "true");
-        adjustConfig->setFinalAttributionEnabled(finalAttributionEnabled);
+        if (playStoreKidsString == "true") {
+            adjustConfig->enablePlayStoreKidsCompliance();
+        }
     }
 
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
             CCLOG("\n[AdjustCommandExecutor]: Attribution received: %s", attribution.getTrackerToken().c_str());
-            TestLib2dx::addInfoToSend("trackerToken", attribution.getTrackerToken());
-            TestLib2dx::addInfoToSend("trackerName", attribution.getTrackerName());
+            TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
+            TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
             TestLib2dx::addInfoToSend("network", attribution.getNetwork());
             TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
             TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
             TestLib2dx::addInfoToSend("creative", attribution.getCreative());
-            TestLib2dx::addInfoToSend("clickLabel", attribution.getClickLabel());
-            TestLib2dx::addInfoToSend("adid", attribution.getAdid());
-            TestLib2dx::addInfoToSend("costType", attribution.getCostType());
+            TestLib2dx::addInfoToSend("click_label", attribution.getClickLabel());
+            TestLib2dx::addInfoToSend("cost_type", attribution.getCostType());
             std::ostringstream sstream;
             sstream << attribution.getCostAmount();
             std::string strCostAmount = sstream.str();
-            TestLib2dx::addInfoToSend("costAmount", strCostAmount);
-            TestLib2dx::addInfoToSend("costCurrency", attribution.getCostCurrency());
-            TestLib2dx::addInfoToSend("fbInstallReferrer", attribution.getFbInstallReferrer());
+            TestLib2dx::addInfoToSend("cost_amount", strCostAmount);
+            TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#endif
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -457,11 +442,12 @@ void AdjustCommandExecutor::config() {
         std::string openDeeplinkString = command->getFirstParameterValue("deferredDeeplinkCallback");
         // TODO: Figure out how to pass return value parameter into lambda method.
         // bool openDeeplink = (openDeeplinkString == "true");
+        static bool openDeeplink = (openDeeplinkString == "true");
         adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
             CCLOG("\n[AdjustCommandExecutor]: Deferred deep link received: %s", deeplink.c_str());
             TestLib2dx::addInfoToSend("deeplink", deeplink);
             TestLib2dx::sendInfoToServer(localBasePath);
-            return true;
+            return openDeeplink;
         });
     }
 }
@@ -476,7 +462,7 @@ void AdjustCommandExecutor::start() {
     }
 
     AdjustConfig2dx *adjustConfig = this->savedConfigs[configNumber];
-    Adjust2dx::start(*adjustConfig);
+    Adjust2dx::initSdk(*adjustConfig);
     this->savedConfigs.erase(0);
 }
 
@@ -543,17 +529,18 @@ void AdjustCommandExecutor::event() {
         adjustEvent->setProductId(productId);
     }
 
+    if (this->command->containsParameter("deduplicationId")) {
+        std::string deduplicationId = command->getFirstParameterValue("deduplicationId");
+        adjustEvent->setDeduplicationId(deduplicationId);
+    }
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (this->command->containsParameter("purchaseToken")) {
         std::string purchaseToken = command->getFirstParameterValue("purchaseToken");
         adjustEvent->setPurchaseToken(purchaseToken);
     }
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    if (this->command->containsParameter("receipt")) {
-        std::string receipt = command->getFirstParameterValue("receipt");
-        adjustEvent->setReceipt(receipt);
-    }
 #endif
+
 }
 
 void AdjustCommandExecutor::trackEvent() {
@@ -581,109 +568,86 @@ void AdjustCommandExecutor::pause() {
 void AdjustCommandExecutor::setEnabled() {
     std::string enabledStr = command->getFirstParameterValue("enabled");
     bool enabled = (enabledStr == "true");
-    Adjust2dx::setEnabled(enabled);
-}
-
-void AdjustCommandExecutor::setReferrer() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    std::string referrer = command->getFirstParameterValue("referrer");
-    Adjust2dx::setReferrer(referrer);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // No referrer in iOS.
-#endif
+    if (enabled) {
+        Adjust2dx::enable();
+    } else {
+        Adjust2dx::disable();
+    }
 }
 
 void AdjustCommandExecutor::setOfflineMode() {
     std::string enabledStr = command->getFirstParameterValue("enabled");
     bool enabled = (enabledStr == "true");
-    Adjust2dx::setOfflineMode(enabled);
+    if (enabled) {
+        Adjust2dx::switchToOfflineMode();
+    } else {
+        Adjust2dx::switchBackToOnlineMode();
+    }
 }
 
-void AdjustCommandExecutor::sendFirstPackages() {
-    Adjust2dx::sendFirstPackages();
-}
-
-void AdjustCommandExecutor::addSessionCallbackParameter() {
+void AdjustCommandExecutor::addGlobalCallbackParameter() {
     if (this->command->containsParameter("KeyValue")) {
         std::vector<std::string> keyValuePairs = command->getParameters("KeyValue");
         for (int i = 0; i < keyValuePairs.size(); i = i + 2) {
             std::string key = keyValuePairs[i];
             std::string value = keyValuePairs[i + 1];
-            Adjust2dx::addSessionCallbackParameter(key, value);
+            Adjust2dx::addGlobalCallbackParameter(key, value);
         }
     }
 }
 
-void AdjustCommandExecutor::addSessionPartnerParameter() {
+void AdjustCommandExecutor::addGlobalPartnerParameter() {
     if (this->command->containsParameter("KeyValue")) {
         std::vector<std::string> keyValuePairs = command->getParameters("KeyValue");
         for (int i = 0; i < keyValuePairs.size(); i = i + 2) {
             std::string key = keyValuePairs[i];
             std::string value = keyValuePairs[i + 1];
-            Adjust2dx::addSessionPartnerParameter(key, value);
+            Adjust2dx::addGlobalPartnerParameter(key, value);
         }
     }
 }
 
-void AdjustCommandExecutor::removeSessionCallbackParameter() {
+void AdjustCommandExecutor::removeGlobalCallbackParameter() {
     if (this->command->containsParameter("key")) {
         std::vector<std::string> keys = command->getParameters("key");
         for (int i = 0; i < keys.size(); i++) {
             std::string key = keys[i];
-            Adjust2dx::removeSessionCallbackParameter(key);
+            Adjust2dx::removeGlobalCallbackParameter(key);
         }
     }
 }
 
-void AdjustCommandExecutor::removeSessionPartnerParameter() {
+void AdjustCommandExecutor::removeGlobalPartnerParameter() {
     if (this->command->containsParameter("key")) {
         std::vector<std::string> keys = command->getParameters("key");
         for (int i = 0; i < keys.size(); i++) {
             std::string key = keys[i];
-            Adjust2dx::removeSessionPartnerParameter(key);
+            Adjust2dx::removeGlobalPartnerParameter(key);
         }
     }
 }
 
-void AdjustCommandExecutor::resetSessionCallbackParameters() {
-    Adjust2dx::resetSessionCallbackParameters();
+void AdjustCommandExecutor::removeGlobalCallbackParameters() {
+    Adjust2dx::removeGlobalCallbackParameters();
 }
 
-void AdjustCommandExecutor::resetSessionPartnerParameters() {
-    Adjust2dx::resetSessionPartnerParameters();
+void AdjustCommandExecutor::removeGlobalPartnerParameters() {
+    Adjust2dx::removeGlobalPartnerParameters();
 }
 
 void AdjustCommandExecutor::setPushToken() {
     std::string token = command->getFirstParameterValue("pushToken");
-    Adjust2dx::setDeviceToken(token);
+    Adjust2dx::setPushToken(token);
 }
 
 void AdjustCommandExecutor::openDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
-    Adjust2dx::appWillOpenUrl(deeplink);
-}
-
-void AdjustCommandExecutor::sendReferrer() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    std::string referrer = command->getFirstParameterValue("referrer");
-    Adjust2dx::setReferrer(referrer);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    // No referrer in iOS.
-#endif
+    AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
+    Adjust2dx::processDeeplink(adjustDeeplink);
 }
 
 void AdjustCommandExecutor::gdprForgetMe() {
     Adjust2dx::gdprForgetMe();
-}
-
-void AdjustCommandExecutor::disableThirdPartySharing() {
-    Adjust2dx::disableThirdPartySharing();
-}
-
-void AdjustCommandExecutor::trackAdRevenue() {
-    std::string source = command->getFirstParameterValue("adRevenueSource");
-    std::string payload = command->getFirstParameterValue("adRevenueJsonString");
-    Adjust2dx::trackAdRevenue(source, payload);
 }
 
 void AdjustCommandExecutor::trackSubscription() {
@@ -691,16 +655,13 @@ void AdjustCommandExecutor::trackSubscription() {
     std::string price = command->getFirstParameterValue("revenue");
     std::string currency = command->getFirstParameterValue("currency");
     std::string transactionId = command->getFirstParameterValue("transactionId");
-    std::string receipt = command->getFirstParameterValue("receipt");
     std::string transactionDate = command->getFirstParameterValue("transactionDate");
     std::string salesRegion = command->getFirstParameterValue("salesRegion");
 
     AdjustAppStoreSubscription2dx subscription = AdjustAppStoreSubscription2dx(
         price,
         currency,
-        transactionId,
-        receipt
-    );
+        transactionId);
     subscription.setTransactionDate(transactionDate);
     subscription.setSalesRegion(salesRegion);
 
@@ -779,6 +740,10 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
             std::string partnerName = granularOptions[i];
             std::string key = granularOptions[i + 1];
             std::string value = granularOptions[i + 2];
+            // Hack around null/undefined handling of json parsing
+            if (partnerName.empty() || key.empty() || value.empty()) {
+                continue;
+            }
             thirdPartySharing.addGranularOption(partnerName, key, value);
         }
     }
@@ -789,6 +754,10 @@ void AdjustCommandExecutor::trackThirdPartySharing() {
             std::string partnerName = partnerSharingSettings[i];
             std::string key = partnerSharingSettings[i + 1];
             bool value = (partnerSharingSettings[i + 2] == "true");
+            // Hack around null/undefined handling of json parsing
+            if (partnerName.empty() || key.empty()) {
+                continue;
+            }
             thirdPartySharing.addPartnerSharingSetting(partnerName, key, value);
         }
     }
@@ -801,7 +770,7 @@ void AdjustCommandExecutor::trackMeasurementConsent() {
     Adjust2dx::trackMeasurementConsent(enabled == "true" ? true : false);
 }
 
-void AdjustCommandExecutor::trackAdRevenueNew() {
+void AdjustCommandExecutor::trackAdRevenue() {
     std::string source = command->getFirstParameterValue("adRevenueSource");
     AdjustAdRevenue2dx *adjustAdRevenue = new AdjustAdRevenue2dx(source);
 
@@ -850,29 +819,30 @@ void AdjustCommandExecutor::trackAdRevenueNew() {
         adjustAdRevenue->setAdRevenuePlacement(adRevenuePlacement);
     }
 
-    Adjust2dx::trackAdRevenueNew(*adjustAdRevenue);
+    Adjust2dx::trackAdRevenue(*adjustAdRevenue);
 }
 
 void AdjustCommandExecutor::getLastDeeplink() {
     localBasePath = this->basePath;
-    std::string lastDeeplink = Adjust2dx::getLastDeeplink();
-    TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
-    TestLib2dx::sendInfoToServer(localBasePath);
+    Adjust2dx::getLastDeeplink([](std::string lastDeeplink) {
+        TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
 }
 
 void AdjustCommandExecutor::verifyPurchase() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     std::string productId = command->getFirstParameterValue("productId");
     std::string transactionId = command->getFirstParameterValue("transactionId");
-    std::string receipt = command->getFirstParameterValue("receipt");
 
-    AdjustAppStorePurchase2dx purchase = AdjustAppStorePurchase2dx(productId, transactionId, receipt);
+    AdjustAppStorePurchase2dx purchase =
+        AdjustAppStorePurchase2dx(productId, transactionId);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyAppStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
-        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
-        TestLib2dx::addInfoToSend("code", std::to_string(code));
-        TestLib2dx::addInfoToSend("message", message);
+    Adjust2dx::verifyAppStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+        TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
+        TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
+        TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -882,20 +852,77 @@ void AdjustCommandExecutor::verifyPurchase() {
     AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyPlayStorePurchase(purchase, [](std::string verificationStatus, int code, std::string message) {
-        TestLib2dx::addInfoToSend("verification_status", verificationStatus);
-        TestLib2dx::addInfoToSend("code", std::to_string(code));
-        TestLib2dx::addInfoToSend("message", message);
+    Adjust2dx::verifyPlayStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+        TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
+        TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
+        TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 #endif
 }
 
+void AdjustCommandExecutor::verifyTrack() {
+    event();
+    int eventNumber = 0;
+    if (this->command->containsParameter("eventName")) {
+        std::string eventName = command->getFirstParameterValue("eventName");
+        std::string eventNameStr = eventName.substr (eventName.length() - 1, 1);
+        eventNumber = std::stoi(eventNameStr);
+    }
+
+    AdjustEvent2dx *adjustEvent = this->savedEvents[eventNumber];
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    localBasePath = this->basePath;
+
+    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+        TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
+        TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
+        TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    localBasePath = this->basePath;
+    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+        TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
+        TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
+        TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+#endif
+
+    this->savedEvents.erase(0);
+}
+
 void AdjustCommandExecutor::processDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
+    AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
     localBasePath = this->basePath;
-    Adjust2dx::processDeeplink(deeplink, [](std::string resolvedLink) {
+    Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+}
+
+void AdjustCommandExecutor::attributionGetter() {
+    localBasePath = this->basePath;
+    Adjust2dx::getAttribution([](AdjustAttribution2dx attribution) {
+        TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
+        TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
+        TestLib2dx::addInfoToSend("network", attribution.getNetwork());
+        TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
+        TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
+        TestLib2dx::addInfoToSend("creative", attribution.getCreative());
+        TestLib2dx::addInfoToSend("click_label", attribution.getClickLabel());
+        TestLib2dx::addInfoToSend("cost_type", attribution.getCostType());
+        std::ostringstream sstream;
+        sstream << attribution.getCostAmount();
+        std::string strCostAmount = sstream.str();
+        TestLib2dx::addInfoToSend("cost_amount", strCostAmount);
+        TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#endif
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 }

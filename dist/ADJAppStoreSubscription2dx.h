@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 12th June 2020.
-//  Copyright © 2015-2020 Adjust GmbH. All rights reserved.
+//  Copyright © 2020-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef _ADJUST_ADJAPPSTORESUBSCRIPTION2DX_H_
@@ -14,12 +14,12 @@
 class ADJAppStoreSubscription2dx {
 private:
     void* subscription;
-    void initSubscription(std::string price, std::string currency, std::string transactionId, std::string receipt);
+    void initSubscription(std::string price, std::string currency, std::string transactionId);
 
 public:
     ADJAppStoreSubscription2dx() {}
-    ADJAppStoreSubscription2dx(std::string price, std::string currency, std::string transactionId, std::string receipt) {
-        initSubscription(price, currency, transactionId, receipt);
+    ADJAppStoreSubscription2dx(std::string price, std::string currency, std::string transactionId) {
+        initSubscription(price, currency, transactionId);
     }
 
     void setTransactionDate(std::string transactionDate);

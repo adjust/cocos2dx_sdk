@@ -3,17 +3,17 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #include "ADJConfig2dx.h"
 #include "ADJDelegate2dx.h"
-#include <AdjustSdk/Adjust.h>
+#include <AdjustSdk/AdjustSdk.h>
 
 void ADJConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel, std::string sdkPrefix) {
     config = [[ADJConfig alloc] initWithAppToken:[NSString stringWithUTF8String:appToken.c_str()]
                                      environment:[NSString stringWithUTF8String:environment.c_str()]
-                           allowSuppressLogLevel:allowSuppressLogLevel];
+                                suppressLogLevel:allowSuppressLogLevel];
     [((ADJConfig *)config) setSdkPrefix:[NSString stringWithUTF8String:sdkPrefix.c_str()]];
 }
 
@@ -21,37 +21,24 @@ void ADJConfig2dx::setLogLevel(ADJLogLevel2dx logLevel) {
     ((ADJConfig *)config).logLevel = (ADJLogLevel)logLevel;
 }
 
-void ADJConfig2dx::setDelayStart(double delayStart) {
-    ((ADJConfig *)config).delayStart = delayStart;
+void ADJConfig2dx::enableSendingInBackground() {
+    [((ADJConfig *)config) enableSendingInBackground];
 }
 
-void ADJConfig2dx::setSendInBackground(bool isEnabled) {
-    ((ADJConfig *)config).sendInBackground = isEnabled;
+void ADJConfig2dx::disableIdfaReading() {
+    [((ADJConfig *)config) disableIdfaReading];
 }
 
-void ADJConfig2dx::setEventBufferingEnabled(bool isEnabled) {
-    ((ADJConfig *)config).eventBufferingEnabled = isEnabled;
+void ADJConfig2dx::disableIdfvReading() {
+    [((ADJConfig *)config) disableIdfvReading];
 }
 
-void ADJConfig2dx::setAllowIdfaReading(bool isAllowed) {
-    ((ADJConfig *)config).allowIdfaReading = isAllowed;
+void ADJConfig2dx::disableAdServices() {
+    [((ADJConfig *)config) disableAdServices];
 }
 
-void ADJConfig2dx::setAllowiAdInfoReading(bool isAllowed) {
-    // deprecated
-    // ((ADJConfig *)config).allowiAdInfoReading = isAllowed;
-}
-
-void ADJConfig2dx::setAllowAdServicesInfoReading(bool isAllowed) {
-    ((ADJConfig *)config).allowAdServicesInfoReading = isAllowed;
-}
-
-void ADJConfig2dx::setNeedsCost(bool needsCost) {
-    ((ADJConfig *)config).needsCost = needsCost;
-}
-
-void ADJConfig2dx::setUserAgent(std::string userAgent) {
-    ((ADJConfig *)config).userAgent = [NSString stringWithUTF8String:userAgent.c_str()];
+void ADJConfig2dx::enableCostDataInAttribution() {
+    [((ADJConfig *)config) enableCostDataInAttribution];
 }
 
 void ADJConfig2dx::setDefaultTracker(std::string defaultTracker) {
@@ -62,35 +49,29 @@ void ADJConfig2dx::setExternalDeviceId(std::string externalDeviceId) {
     ((ADJConfig *)config).externalDeviceId = [NSString stringWithUTF8String:externalDeviceId.c_str()];
 }
 
-void ADJConfig2dx::setUrlStrategy(std::string urlStrategy) {
-    NSString *strUrlStrategy = [NSString stringWithUTF8String:urlStrategy.c_str()];
-    if ([strUrlStrategy isEqualToString:@"china"]) {
-        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyChina;
-    } else if ([strUrlStrategy isEqualToString:@"india"]) {
-        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyIndia;
-    } else if ([strUrlStrategy isEqualToString:@"cn"]) {
-        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyCn;
-    } else if ([strUrlStrategy isEqualToString:@"cn-only"]) {
-        ((ADJConfig *)config).urlStrategy = ADJUrlStrategyCnOnly;
-    } else if ([strUrlStrategy isEqualToString:@"data-residency-eu"]) {
-        ((ADJConfig *)config).urlStrategy = ADJDataResidencyEU;
-    } else if ([strUrlStrategy isEqualToString:@"data-residency-tr"]) {
-        ((ADJConfig *)config).urlStrategy = ADJDataResidencyTR;
-    } else if ([strUrlStrategy isEqualToString:@"data-residency-us"]) {
-        ((ADJConfig *)config).urlStrategy = ADJDataResidencyUS;
+void ADJConfig2dx::setUrlStrategy(std::vector<std::string> urlStrategyDomains,
+                                  bool useSubdomains,
+                                  bool isDataResidency)
+{
+    NSMutableArray *urlStrategyDomainsMut = [[NSMutableArray alloc] init];
+    for (std::vector<std::string>::iterator toIterator = urlStrategyDomains.begin();
+         toIterator != urlStrategyDomains.end(); toIterator++)
+    {
+        std::string urlStrategyDomain = (*toIterator);
+        [urlStrategyDomainsMut addObject:[NSString stringWithUTF8String:urlStrategyDomain.c_str()]];
     }
+
+    [((ADJConfig *)config) setUrlStrategy:(NSArray *)urlStrategyDomainsMut
+                            useSubdomains:useSubdomains
+                          isDataResidency:isDataResidency];
 }
 
-void ADJConfig2dx::deactivateSkAdNetworkHandling() {
-    [((ADJConfig *)config) deactivateSKAdNetworkHandling];
+void ADJConfig2dx::disableSkanAttribution() {
+    [((ADJConfig *)config) disableSkanAttribution];
 }
 
-void ADJConfig2dx::setCoppaCompliantEnabled(bool isEnabled) {
-    ((ADJConfig *)config).coppaCompliantEnabled = isEnabled;
-}
-
-void ADJConfig2dx::setLinkMeEnabled(bool isEnabled) {
-    ((ADJConfig *)config).linkMeEnabled = isEnabled;
+void ADJConfig2dx::enableLinkMe() {
+    [((ADJConfig *)config) enableLinkMe];
 }
 
 void ADJConfig2dx::setAttConsentWaitingInterval(int numberOfSeconds) {
@@ -121,28 +102,24 @@ void ADJConfig2dx::setDeferredDeeplinkCallback(bool(*callbackMethod)(std::string
     deferredDeeplinkCallback = callbackMethod;
 }
 
-void ADJConfig2dx::setConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue)) {
-    conversionValueUpdatedCallback = callbackMethod;
-}
-
-void ADJConfig2dx::setPostbackConversionValueUpdatedCallback(void(*callbackMethod)(int conversionValue, std::string coarseValue, bool lockWindow)) {
-    postbackConversionValueUpdatedCallback = callbackMethod;
+void ADJConfig2dx::setSkanUpdatedCallback(void(*callbackMethod)(std::unordered_map<std::string, std::string> data)) {
+    skanUpdatedCallback = callbackMethod;
 }
 
 void* ADJConfig2dx::getConfig() {
     return config;
 }
 
-void ADJConfig2dx::setAppSecret(long secretId, long info1, long info2, long info3, long info4) {
-    [((ADJConfig *)config) setAppSecret:secretId info1:info1 info2:info2 info3:info3 info4:info4];
+void ADJConfig2dx::enableDeviceIdsReadingOnce() {
+    [((ADJConfig *)config) enableDeviceIdsReadingOnce];
 }
 
-void ADJConfig2dx::setIsDeviceKnown(bool isDeviceKnown) {
-    [((ADJConfig *)config) setIsDeviceKnown:isDeviceKnown];
+void ADJConfig2dx::enableCoppaCompliance() {
+    [((ADJConfig *)config) enableCoppaCompliance];
 }
 
-void ADJConfig2dx::setReadDeviceInfoOnceEnabled(bool isEnabled) {
-    ((ADJConfig *)config).readDeviceInfoOnceEnabled = isEnabled;
+void ADJConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize) {
+    ((ADJConfig *)config).eventDeduplicationIdsMaxSize = eventDeduplicationIdsMaxSize;
 }
 
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
@@ -169,10 +146,6 @@ bool(*ADJConfig2dx::getDeferredDeeplinkCallback())(std::string) {
     return deferredDeeplinkCallback;
 }
 
-void(*ADJConfig2dx::getConversionValueUpdatedCallback())(int) {
-    return conversionValueUpdatedCallback;
-}
-
-void(*ADJConfig2dx::getPostbackConversionValueUpdatedCallback())(int, std::string, bool) {
-    return postbackConversionValueUpdatedCallback;
+void(*ADJConfig2dx::getSkanUpdatedCallback())(std::unordered_map<std::string, std::string>) {
+    return skanUpdatedCallback;
 }

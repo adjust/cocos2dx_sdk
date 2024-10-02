@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #include "AdjustEvent2dx.h"
@@ -178,6 +178,26 @@ void AdjustEvent2dx::setProductId(std::string productId) {
 #endif
 }
 
+void AdjustEvent2dx::setDeduplicationId(std::string deduplicationId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isEventSet) {
+        event.setDeduplicationId(deduplicationId);
+    }
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (event == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetDeduplicationId;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetDeduplicationId, "com/adjust/sdk/AdjustEvent", "setDeduplicationId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jDeduplicationId = jmiSetDeduplicationId.env->NewStringUTF(deduplicationId.c_str());
+    jmiSetDeduplicationId.env->CallVoidMethod(event, jmiSetDeduplicationId.methodID, jDeduplicationId);
+    jmiSetDeduplicationId.env->DeleteLocalRef(jDeduplicationId);
+#endif
+}
+
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 void AdjustEvent2dx::setPurchaseToken(std::string purchaseToken) {
     if (event == NULL) {
@@ -197,18 +217,6 @@ jobject AdjustEvent2dx::getEvent() {
     return event;
 }
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-void AdjustEvent2dx::setReceipt(std::string receipt, std::string transactionId) {
-    if (isEventSet) {
-        event.setReceipt(receipt, transactionId);
-    }
-}
-
-void AdjustEvent2dx::setReceipt(std::string receipt) {
-    if (isEventSet) {
-        event.setReceipt(receipt);
-    }
-}
-
 ADJEvent2dx AdjustEvent2dx::getEvent() {
     return event;
 }

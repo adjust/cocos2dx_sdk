@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 16th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef ADJUST_ADJUSTEVENT2DX_H_
@@ -45,13 +45,12 @@ public:
     void addCallbackParameter(std::string key, std::string value);
     void addPartnerParameter(std::string key, std::string value);
     void setProductId(std::string productId);
+    void setDeduplicationId(std::string deduplicationId);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getEvent();
     void setPurchaseToken(std::string purchaseToken);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJEvent2dx getEvent();
-    void setReceipt(std::string receipt, std::string transactionId);
-    void setReceipt(std::string receipt);
 #endif
 };
 

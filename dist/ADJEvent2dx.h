@@ -3,7 +3,7 @@
 //  Adjust SDK
 //
 //  Created by Uglješa Erceg (@uerceg) on 17th June 2015.
-//  Copyright © 2015-2019 Adjust GmbH. All rights reserved.
+//  Copyright © 2015-Present Adjust GmbH. All rights reserved.
 //
 
 #ifndef _ADJUST_ADJEVENT2DX_H_
@@ -27,9 +27,8 @@ public:
     void addPartnerParameter(std::string key, std::string value);
     void setTransactionId(std::string transactionId);
     void setCallbackId(std::string callbackId);
-    void setReceipt(std::string receipt, std::string transactionId);
     void setProductId(std::string productId);
-    void setReceipt(std::string receipt);
+    void setDeduplicationId(std::string deduplicationId);
     bool isValid();
     void* getEvent();
 };

@@ -1,12 +1,12 @@
 package com.adjust.sdk;
 
-public class Adjust2dxAdIdCallback implements OnDeviceIdsRead {
-	public native void adIdRead(String adId);
-	
-	public Adjust2dxAdIdCallback() {}
-	
+public class Adjust2dxAdidCallback implements OnAdidReadListener {
+	public native void adidRead(String adid);
+
+	public Adjust2dxAdidCallback() {}
+
 	@Override
-	public void onGoogleAdIdRead(String playAdId) {
-		adIdRead(playAdId);
+	public void onAdidRead(String adid) {
+		adidRead(adid);
 	}
 }
