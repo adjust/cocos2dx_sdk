@@ -11,6 +11,7 @@
 
 #include "cocos2d.h"
 #include <iostream>
+#include <unordered_map>
 #include <vector>
 #include "AdjustAttribution2dx.h"
 #include "AdjustEventFailure2dx.h"
