@@ -12,7 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.0";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.1";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
