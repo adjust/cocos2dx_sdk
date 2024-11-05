@@ -1,6 +1,6 @@
 ### Version 5.0.1 (5th November 2024)
 #### Fixed
-- Added missing `unsorted_map` imports to header files.
+- Added missing `unordered_map` imports to header files.
 
 #### Native SDKs
 - [iOS@v5.0.1][ios_sdk_v5.0.1]
