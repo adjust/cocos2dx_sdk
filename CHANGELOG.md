@@ -1,3 +1,13 @@
+### Version 5.0.1 (5th November 2024)
+#### Fixed
+- Added missing `unsorted_map` imports to header files.
+
+#### Native SDKs
+- [iOS@v5.0.1][ios_sdk_v5.0.1]
+- [Android@v5.0.1][android_sdk_v5.0.1]
+
+---
+
 ### Version 5.0.0 (2nd October 2024)
 
 We're excited to release our major new SDK version (v5). Among many internal improvements, our spoofing protection solution is now included out of the box, reinforcing our commitment to accurate, actionable, and fraud-free data.
