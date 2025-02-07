@@ -1,3 +1,20 @@
+### Version 5.0.2 (7th February 2025)
+#### Added
+- Added sending of the additional parameter to improve troubleshooting of `SKAdNetwork` related issues.
+
+#### Fixed
+- Fixed occasional occurrences in which ATT waiting interval timer was not being started.
+- Pinned version 3.35.2 of the Adjust signature library, which addresses occasional crashes on iOS 18 (https://github.com/adjust/ios_sdk/issues/742).
+
+#### Changed
+- Switched to depending on a specific version of the signature library.
+
+#### Native SDKs
+- [iOS@v5.0.2][ios_sdk_v5.0.2]
+- [Android@v5.0.2][android_sdk_v5.0.2]
+
+---
+
 ### Version 5.0.1 (5th November 2024)
 #### Fixed
 - Added missing `unordered_map` imports to header files.
@@ -442,6 +459,7 @@ In case you were using beta version of the SDK v5, please switch to the official
 [ios_sdk_v4.32.1]: https://github.com/adjust/ios_sdk/tree/v4.32.1
 [ios_sdk_v4.37.0]: https://github.com/adjust/ios_sdk/tree/v4.37.0
 [ios_sdk_v5.0.1]: https://github.com/adjust/ios_sdk/tree/v5.0.1
+[ios_sdk_v5.0.2]: https://github.com/adjust/ios_sdk/tree/v5.0.2
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -467,5 +485,6 @@ In case you were using beta version of the SDK v5, please switch to the official
 [android_sdk_v4.33.0]: https://github.com/adjust/android_sdk/tree/v4.33.0
 [android_sdk_v4.38.0]: https://github.com/adjust/android_sdk/tree/v4.38.0
 [android_sdk_v5.0.1]: https://github.com/adjust/android_sdk/tree/v5.0.1
+[android_sdk_v5.0.2]: https://github.com/adjust/android_sdk/tree/v5.0.2
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
