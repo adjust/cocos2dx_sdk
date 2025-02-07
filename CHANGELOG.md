@@ -1,4 +1,4 @@
-### Version 5.0.2 (5th February 2025)
+### Version 5.0.2 (7th February 2025)
 #### Added
 - Added sending of the additional parameter to improve troubleshooting of `SKAdNetwork` related issues.
 
