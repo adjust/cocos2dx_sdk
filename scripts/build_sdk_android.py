@@ -142,25 +142,25 @@ def _build_sdk(root_dir, android_submodule_dir, configuration, with_test_lib=Fal
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test library project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-library project ...')
-        gradle_run(['clean', 'tests:test-library:adjustTestLibraryJarDebug'])
+        gradle_run(['clean', 'tests:test-library:assembleDebug'])
         if (configuration == 'release'):
-            test_libs_in_dir = '{0}/tests/test-library/build/libs'.format(build_dir)
+            test_libs_in_dir = '{0}/tests/test-library/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
         else:
-            test_libs_in_dir = '{0}/tests/test-library/build/libs'.format(build_dir)
+            test_libs_in_dir = '{0}/tests/test-library/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
 
         # ------------------------------------------------------------------
         # Copying test-library JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
         debug_green('Copying test-library JAR from {0} to {1} ...'.format(test_libs_in_dir, proxy_dir))
-        copy_file('{0}/test-library-debug.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
+        copy_file('{0}/classes.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
 
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test options project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-options project ...')
         gradle_run(['clean', ':tests:test-options:assembleDebug'])
         if (configuration == 'release'):
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
         else:
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
 
         # ------------------------------------------------------------------
         # Copying test-options JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
@@ -223,25 +223,25 @@ def _build_sdk_aar(root_dir, android_submodule_dir, configuration, with_test_lib
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test library project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-library project ...')
-        gradle_run(['clean', 'tests:test-library:adjustTestLibraryJarDebug'])
+        gradle_run(['clean', 'tests:test-library:assembleDebug'])
         if (configuration == 'release'):
-            test_libs_in_dir = '{0}/tests/test-library/build/libs'.format(build_dir)
+            test_libs_in_dir = '{0}/tests/test-library/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
         else:
-            test_libs_in_dir = '{0}/tests/test-library/build/libs'.format(build_dir)
+            test_libs_in_dir = '{0}/tests/test-library/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
 
         # ------------------------------------------------------------------
         # Copying test-library JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
         debug_green('Copying test-library JAR from {0} to {1} ...'.format(test_libs_in_dir, proxy_dir))
-        copy_file('{0}/test-library-debug.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
+        copy_file('{0}/classes.jar'.format(test_libs_in_dir), '{0}/adjust-test-library.jar'.format(proxy_dir))
 
         # ------------------------------------------------------------------
         # Running clean and makeJar Gradle tasks for Adjust test options project.
         debug_green('Running clean and makeJar Gradle tasks for Adjust test-options project ...')
         gradle_run(['clean', ':tests:test-options:assembleDebug'])
         if (configuration == 'release'):
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
         else:
-            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug'.format(build_dir)
+            test_options_in_dir = '{0}/tests/test-options/build/intermediates/aar_main_jar/debug/syncDebugLibJars'.format(build_dir)
 
         # ------------------------------------------------------------------
         # Copying test-options JAR from ${TESTLIB_JAR_IN_DIR} to ${PROXY_DIR}.
