@@ -575,6 +575,16 @@ void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsM
 #endif
 }
 
+void AdjustConfig2dx::enableFirstSessionDelay() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    // TBD
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.enableFirstSessionDelay();
+    }
+#endif
+}
+
 void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {

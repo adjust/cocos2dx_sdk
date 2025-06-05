@@ -67,6 +67,10 @@ private:
     void verifyTrack();
     void processDeeplink();
     void attributionGetter();
+    void endFirstSessionDelay();
+    void coppaComplianceInDelay();
+    void playStoreKidsComplianceInDelay();
+    void externalDeviceIdInDelay();
 public:
     static const std::string TAG;
     AdjustCommandExecutor(std::string urlOverwrite);

@@ -86,6 +86,7 @@ public:
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
+    void enableFirstSessionDelay();
     // ios only
     void disableSkanAttribution();
     void disableIdfaReading();

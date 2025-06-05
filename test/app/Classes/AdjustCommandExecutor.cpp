@@ -77,6 +77,14 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->processDeeplink();
     } else if (command->methodName == "attributionGetter") {
         this->attributionGetter();
+    } else if (command->methodName == "endFirstSessionDelay") {
+        this->endFirstSessionDelay();
+    } else if (command->methodName == "coppaComplianceInDelay") {
+        this->coppaComplianceInDelay();
+    } else if (command->methodName == "playStoreKidsComplianceInDelay") {
+        this->playStoreKidsComplianceInDelay();
+    } else if (command->methodName == "externalDeviceIdInDelay") {
+        this->externalDeviceIdInDelay();
     }
 }
 
@@ -355,6 +363,13 @@ void AdjustCommandExecutor::config() {
         std::string allowAttUsageString = command->getFirstParameterValue("allowAttUsage");
         if (allowAttUsageString == "false") {
             adjustConfig->disableAppTrackingTransparencyUsage();
+        }
+    }
+
+    if (this->command->containsParameter("firstSessionDelayEnabled")) {
+        std::string firstSessionDelayEnabledString = command->getFirstParameterValue("firstSessionDelayEnabled");
+        if (firstSessionDelayEnabledString == "true") {
+            adjustConfig->enableFirstSessionDelay();
         }
     }
 
@@ -962,4 +977,33 @@ void AdjustCommandExecutor::attributionGetter() {
 #endif
         TestLib2dx::sendInfoToServer(localBasePath);
     });
+}
+
+void AdjustCommandExecutor::endFirstSessionDelay() {
+    Adjust2dx::endFirstSessionDelay();
+}
+
+void AdjustCommandExecutor::coppaComplianceInDelay() {
+    std::string strIsEnabled = command->getFirstParameterValue("isEnabled");
+    bool enabled = (strIsEnabled == "true");
+    if (enabled) {
+        Adjust2dx::enableCoppaComplianceInDelay();
+    } else {
+        Adjust2dx::disableCoppaComplianceInDelay();
+    }
+}
+
+void AdjustCommandExecutor::playStoreKidsComplianceInDelay() {
+    std::string strIsEnabled = command->getFirstParameterValue("isEnabled");
+    bool enabled = (strIsEnabled == "true");
+    if (enabled) {
+        Adjust2dx::enablePlayStoreKidsComplianceInDelay();
+    } else {
+        Adjust2dx::disablePlayStoreKidsComplianceInDelay();
+    }
+}
+
+void AdjustCommandExecutor::externalDeviceIdInDelay() {
+    std::string externalDeviceId = command->getFirstParameterValue("externalDeviceId");
+    Adjust2dx::setExternalDeviceIdInDelay(externalDeviceId);
 }

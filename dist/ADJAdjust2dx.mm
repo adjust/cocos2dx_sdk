@@ -348,6 +348,23 @@ void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void
     }];
 }
 
+void ADJAdjust2dx::endFirstSessionDelay() {
+    [Adjust endFirstSessionDelay];
+}
+
+void ADJAdjust2dx::enableCoppaComplianceInDelay() {
+    [Adjust enableCoppaComplianceInDelay];
+}
+
+void ADJAdjust2dx::disableCoppaComplianceInDelay() {
+    [Adjust disableCoppaComplianceInDelay];
+}
+
+void ADJAdjust2dx::setExternalDeviceIdInDelay(std::string externalDeviceId) {
+    NSString *strExternalDeviceId = [NSString stringWithUTF8String:externalDeviceId.c_str()];
+    [Adjust setExternalDeviceIdInDelay:strExternalDeviceId];
+}
+
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
                                   std::map<std::string, int> intTestOptionsMap) {
     NSMutableDictionary<NSString *, id> *objcTestOptionsMap =

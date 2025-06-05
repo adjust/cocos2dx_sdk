@@ -63,6 +63,10 @@ public:
     static void verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void getIdfv(void(*callback)(std::string idfv));
     static void processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*callback)(std::string resolvedLink));
+    static void endFirstSessionDelay();
+    static void enableCoppaComplianceInDelay();
+    static void disableCoppaComplianceInDelay();
+    static void setExternalDeviceIdInDelay(std::string);
     // For testing purposes only.
     static void setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
                                std::map<std::string, int> intTestOptionsMap);

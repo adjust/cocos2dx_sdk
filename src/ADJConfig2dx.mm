@@ -126,6 +126,10 @@ void ADJConfig2dx::disableAppTrackingTransparencyUsage() {
     [((ADJConfig *)config) disableAppTrackingTransparencyUsage];
 }
 
+void ADJConfig2dx::enableFirstSessionDelay() {
+    [((ADJConfig *)config) enableFirstSessionDelay];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

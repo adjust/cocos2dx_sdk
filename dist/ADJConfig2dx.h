@@ -74,6 +74,7 @@ public:
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     void disableAppTrackingTransparencyUsage();
+    void enableFirstSessionDelay();
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

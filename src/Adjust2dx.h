@@ -52,12 +52,19 @@ public:
     static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
+    static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
+    static void endFirstSessionDelay();
+    static void enableCoppaComplianceInDelay();
+    static void disableCoppaComplianceInDelay();
+    static void setExternalDeviceIdInDelay(std::string);
     // Android specific methods.
     static void getGoogleAdId(void (*callback)(std::string googleAdId));
     static void getAmazonAdId(void (*callback)(std::string amazonAdId));
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void enablePlayStoreKidsComplianceInDelay();
+    static void disablePlayStoreKidsComplianceInDelay();
     // iOS specific methods.
     static void getIdfa(void(*callback)(std::string idfa));
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
@@ -67,7 +74,6 @@ public:
                                           std::string coarseValue,
                                           bool lockWindow,
                                           void (*callback)(std::string error));
-    static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
     static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void getIdfv(void(*callback)(std::string idfv));
