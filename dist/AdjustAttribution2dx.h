@@ -23,6 +23,8 @@ private:
     std::string costType;
     double costAmount;
     std::string costCurrency;
+    std::string jsonResponse;
+    // android only
     std::string fbInstallReferrer;
 public:
     AdjustAttribution2dx() {}
@@ -37,7 +39,8 @@ public:
         std::string costType,
         double costAmount,
         std::string costCurrency,
-        std::string fbInstallReferrer)
+        std::string fbInstallReferrer,
+        std::string jsonResponse)
     {
         this->trackerToken = trackerToken;
         this->trackerName = trackerName;
@@ -50,6 +53,7 @@ public:
         this->costAmount = costAmount;
         this->costCurrency = costCurrency;
         this->fbInstallReferrer = fbInstallReferrer;
+        this->jsonResponse = jsonResponse;
     }
 
     std::string getTrackerToken();
@@ -63,6 +67,7 @@ public:
     double getCostAmount();
     std::string getCostCurrency();
     std::string getFbInstallReferrer();
+    std::string getJsonResponse();
 };
 
 #endif /* ADJUST_ADJUSTATTRIBUTION2DX_H_ */

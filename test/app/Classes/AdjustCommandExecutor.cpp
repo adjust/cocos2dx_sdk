@@ -377,6 +377,19 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
             TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            // remove fb_install_referrer on ios
+            std::string jsonStr = attribution.getJsonResponse();
+            try {
+                nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
+                // remove the fb_install_referrer key if it exists
+                jsonObj.erase("fb_install_referrer");
+                // convert back to string
+                jsonStr = jsonObj.dump();
+            } catch (const std::exception& e) {
+                CCLOG("[AdjustCommandExecutor]: Failed to parse or modify JSON: %s", e.what());
+            }
+            TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
             TestLib2dx::sendInfoToServer(localBasePath);
         });
@@ -649,7 +662,9 @@ void AdjustCommandExecutor::setPushToken() {
 
 void AdjustCommandExecutor::openDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
+    std::string referrer = command->getFirstParameterValue("referrer");
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
+    adjustDeeplink.setReferrer(referrer);
     Adjust2dx::processDeeplink(adjustDeeplink);
 }
 
@@ -903,7 +918,9 @@ void AdjustCommandExecutor::verifyTrack() {
 
 void AdjustCommandExecutor::processDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
+    std::string referrer = command->getFirstParameterValue("referrer");
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
+    adjustDeeplink.setReferrer(referrer);
     localBasePath = this->basePath;
     Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
@@ -929,6 +946,19 @@ void AdjustCommandExecutor::attributionGetter() {
         TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        // remove fb_install_referrer on ios
+        std::string jsonStr = attribution.getJsonResponse();
+        try {
+            nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
+            // remove the fb_install_referrer key if it exists
+            jsonObj.erase("fb_install_referrer");
+            // convert back to string
+            jsonStr = jsonObj.dump();
+        } catch (const std::exception& e) {
+            CCLOG("[AdjustCommandExecutor]: Failed to parse or modify JSON: %s", e.what());
+        }
+        TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
         TestLib2dx::sendInfoToServer(localBasePath);
     });

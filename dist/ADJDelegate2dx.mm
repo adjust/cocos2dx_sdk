@@ -95,29 +95,61 @@ static ADJDelegate2dx *defaultInstance = nil;
         return;
     }
 
-    NSMutableDictionary *dictionary = [NSMutableDictionary dictionary];
-    [self addValueOrEmpty:dictionary key:@"trackerToken" value:attribution.trackerToken];
-    [self addValueOrEmpty:dictionary key:@"trackerName" value:attribution.trackerName];
-    [self addValueOrEmpty:dictionary key:@"network" value:attribution.network];
-    [self addValueOrEmpty:dictionary key:@"campaign" value:attribution.campaign];
-    [self addValueOrEmpty:dictionary key:@"creative" value:attribution.creative];
-    [self addValueOrEmpty:dictionary key:@"adgroup" value:attribution.adgroup];
-    [self addValueOrEmpty:dictionary key:@"clickLabel" value:attribution.clickLabel];
-    [self addValueOrEmpty:dictionary key:@"costType" value:attribution.costType];
-    [self addValueOrEmpty:dictionary key:@"costAmount" value:attribution.costAmount];
-    [self addValueOrEmpty:dictionary key:@"costCurrency" value:attribution.costCurrency];
-    
-    std::string trackerToken = std::string([[dictionary objectForKey:@"trackerToken"] UTF8String]);
-    std::string trackerName = std::string([[dictionary objectForKey:@"trackerName"] UTF8String]);
-    std::string network = std::string([[dictionary objectForKey:@"network"] UTF8String]);
-    std::string campaign = std::string([[dictionary objectForKey:@"campaign"] UTF8String]);
-    std::string creative = std::string([[dictionary objectForKey:@"creative"] UTF8String]);
-    std::string adgroup = std::string([[dictionary objectForKey:@"adgroup"] UTF8String]);
-    std::string clickLabel = std::string([[dictionary objectForKey:@"clickLabel"] UTF8String]);
-    std::string costType = std::string([[dictionary objectForKey:@"costType"] UTF8String]);
-    double costAmount = [dictionary objectForKey:@"costAmount"] != nil ? [[dictionary objectForKey:@"costAmount"] doubleValue] : 0;
-    std::string costCurrency = std::string([[dictionary objectForKey:@"costCurrency"] UTF8String]);
-    std::string fbInstallReferrer;
+    std::string trackerToken;
+    std::string trackerName;
+    std::string network;
+    std::string campaign;
+    std::string adgroup;
+    std::string creative;
+    std::string clickLabel;
+    std::string adid;
+    std::string costType;
+    double costAmount = -1;
+    std::string costCurrency;
+    std::string fbInstallReferrer; // unused in ios
+    std::string jsonResponse;
+
+    if (nil != attribution) {
+        if (attribution.trackerToken != nil) {
+            trackerToken = std::string([attribution.trackerToken UTF8String]);
+        }
+        if (attribution.trackerName != nil) {
+            trackerName = std::string([attribution.trackerName UTF8String]);
+        }
+        if (attribution.network != nil) {
+            network = std::string([attribution.network UTF8String]);
+        }
+        if (attribution.campaign != nil) {
+            campaign = std::string([attribution.campaign UTF8String]);
+        }
+        if (attribution.adgroup != nil) {
+            adgroup = std::string([attribution.adgroup UTF8String]);
+        }
+        if (attribution.creative != nil) {
+            creative = std::string([attribution.creative UTF8String]);
+        }
+        if (attribution.clickLabel != nil) {
+            clickLabel = std::string([attribution.clickLabel UTF8String]);
+        }
+        if (attribution.costType != nil) {
+            costType = std::string([attribution.costType UTF8String]);
+        }
+        if (attribution.costType != nil) {
+            costAmount = [attribution.costAmount doubleValue];
+        }
+        if (attribution.costCurrency != nil) {
+            costCurrency = std::string([attribution.costCurrency UTF8String]);
+        }
+        if (attribution.jsonResponse != nil) {
+            NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:attribution.jsonResponse
+                                                                       options:0
+                                                                         error:nil];
+            NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                    length:[dataJsonResponse length]
+                                                                  encoding:NSUTF8StringEncoding];
+            jsonResponse = std::string([stringJsonResponse UTF8String]);
+        }
+    }
 
     AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
         trackerToken,
@@ -130,7 +162,8 @@ static ADJDelegate2dx *defaultInstance = nil;
         costType,
         costAmount,
         costCurrency,
-        fbInstallReferrer);
+        fbInstallReferrer,
+        jsonResponse);
     _attributionCallbackMethod(attribution2dx);
 }
 

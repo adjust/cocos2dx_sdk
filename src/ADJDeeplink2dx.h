@@ -22,6 +22,8 @@ public:
         initDeeplink(deeplinkStr);
     }
 
+    void setReferrer(std::string referrer);
+
     void* getDeeplink();
 };
 

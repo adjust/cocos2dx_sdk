@@ -30,13 +30,13 @@ private:
 
 public:
     AdjustDeeplink2dx(std::string deeplinkStr) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initDeeplink(deeplinkStr);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isDeeplinkSet = false;
-        initDeeplink(deeplinkStr);
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        isDeeplinkSet = true;
 #endif
     }
+
+    void setReferrer(std::string referrer);
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getDeeplink();
