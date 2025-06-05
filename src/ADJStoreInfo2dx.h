@@ -2,7 +2,7 @@
 //  ADJStoreInfo2dx.h
 //  Adjust SDK
 //
-//  Created by Ugljesa Erceg (@uerceg) on 5th June 2025.
+//  Created by Uglješa Erceg (@uerceg) on 5th June 2025.
 //  Copyright © 2025-Present Adjust GmbH. All rights reserved.
 //
 

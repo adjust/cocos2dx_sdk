@@ -29,8 +29,6 @@ public:
     static void initSdk(ADJConfig2dx adjustConfig);
     static void trackEvent(ADJEvent2dx adjustEvent);
     static void trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription);
-    static void trackSubsessionStart();
-    static void trackSubsessionEnd();
     static void enable();
     static void disable();
     static void processDeeplink(ADJDeeplink2dx adjustDeeplink);
@@ -67,7 +65,9 @@ public:
     static void enableCoppaComplianceInDelay();
     static void disableCoppaComplianceInDelay();
     static void setExternalDeviceIdInDelay(std::string);
-    // For testing purposes only.
+    // testing only
+    static void trackSubsessionStart();
+    static void trackSubsessionEnd();
     static void setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
                                std::map<std::string, int> intTestOptionsMap);
     static void teardown();

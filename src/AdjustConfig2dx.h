@@ -50,23 +50,11 @@ private:
 
 public:
     AdjustConfig2dx() {}
-
     AdjustConfig2dx(std::string appToken, std::string environment) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initConfig(appToken, environment, false);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isConfigSet = false;
-        initConfig(appToken, environment, false);
-#endif
     }
-
     AdjustConfig2dx(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initConfig(appToken, environment, allowSuppressLogLevel);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isConfigSet = false;
-        initConfig(appToken, environment, allowSuppressLogLevel);
-#endif
     }
 
     void enableSendingInBackground();

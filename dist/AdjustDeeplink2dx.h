@@ -31,9 +31,6 @@ private:
 public:
     AdjustDeeplink2dx(std::string deeplinkStr) {
         initDeeplink(deeplinkStr);
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isDeeplinkSet = true;
-#endif
     }
 
     void setReferrer(std::string referrer);

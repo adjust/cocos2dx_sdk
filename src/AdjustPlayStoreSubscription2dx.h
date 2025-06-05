@@ -27,8 +27,7 @@ private:
         std::string sku,
         std::string orderId,
         std::string signature,
-        std::string purchaseToken
-    );
+        std::string purchaseToken);
 
 public:
     AdjustPlayStoreSubscription2dx(
@@ -37,11 +36,9 @@ public:
         std::string sku,
         std::string orderId,
         std::string signature,
-        std::string purchaseToken
-    ) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        std::string purchaseToken)
+    {
         initSubscription(price, currency, sku, orderId, signature, purchaseToken);
-#endif
     }
 
     void setPurchaseTime(std::string purchaseTime);

@@ -2,7 +2,7 @@
 //  ADJStoreInfo2dx.mm
 //  Adjust SDK
 //
-//  Created by Ugljesa Erceg (@uerceg) on 5th June 2024.
+//  Created by Uglješa Erceg (@uerceg) on 5th June 2024.
 //  Copyright © 2025-Present Adjust GmbH. All rights reserved.
 //
 

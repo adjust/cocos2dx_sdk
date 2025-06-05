@@ -11,18 +11,15 @@
 void AdjustAppStoreSubscription2dx::initSubscription(
     std::string price,
     std::string currency,
-    std::string transactionId)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    std::string transactionId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     subscription = ADJAppStoreSubscription2dx(price, currency, transactionId);
     isSubscriptionSet = true;
 #endif
 }
 
 void AdjustAppStoreSubscription2dx::setTransactionDate(std::string transactionDate) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isSubscriptionSet) {
         subscription.setTransactionDate(transactionDate);
     }
@@ -30,8 +27,7 @@ void AdjustAppStoreSubscription2dx::setTransactionDate(std::string transactionDa
 }
 
 void AdjustAppStoreSubscription2dx::setSalesRegion(std::string salesRegion) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isSubscriptionSet) {
         subscription.setSalesRegion(salesRegion);
     }
@@ -39,8 +35,7 @@ void AdjustAppStoreSubscription2dx::setSalesRegion(std::string salesRegion) {
 }
 
 void AdjustAppStoreSubscription2dx::addCallbackParameter(std::string key, std::string value) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isSubscriptionSet) {
         subscription.addCallbackParameter(key, value);
     }
@@ -48,16 +43,14 @@ void AdjustAppStoreSubscription2dx::addCallbackParameter(std::string key, std::s
 }
 
 void AdjustAppStoreSubscription2dx::addPartnerParameter(std::string key, std::string value) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isSubscriptionSet) {
         subscription.addPartnerParameter(key, value);
     }
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 ADJAppStoreSubscription2dx AdjustAppStoreSubscription2dx::getSubscription() {
     return subscription;
 }

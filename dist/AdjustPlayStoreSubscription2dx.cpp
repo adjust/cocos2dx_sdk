@@ -19,8 +19,7 @@ void AdjustPlayStoreSubscription2dx::initSubscription(
     std::string sku,
     std::string orderId,
     std::string signature,
-    std::string purchaseToken
-) {
+    std::string purchaseToken) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     cocos2d::JniMethodInfo jmiInit;
     if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustPlayStoreSubscription", "<init>", "(JLjava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;)V")) {

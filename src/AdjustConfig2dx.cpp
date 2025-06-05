@@ -562,12 +562,8 @@ void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsM
     jclass clsInteger = jmiEventDeduplicationIdsMaxSize.env->FindClass("java/lang/Integer");
     jmethodID midInit = jmiEventDeduplicationIdsMaxSize.env->GetMethodID(clsInteger, "<init>", "(I)V");
     jobject jEventDeduplicationIdsMaxSize = jmiEventDeduplicationIdsMaxSize.env->NewObject(clsInteger, midInit, eventDeduplicationIdsMaxSize);
-
     jmiEventDeduplicationIdsMaxSize.env->CallVoidMethod(config, jmiEventDeduplicationIdsMaxSize.methodID, jEventDeduplicationIdsMaxSize);
-
     jmiEventDeduplicationIdsMaxSize.env->DeleteLocalRef(jEventDeduplicationIdsMaxSize);
-
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setEventDeduplicationIdsMaxSize(eventDeduplicationIdsMaxSize);
