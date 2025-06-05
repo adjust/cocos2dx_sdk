@@ -351,6 +351,13 @@ void AdjustCommandExecutor::config() {
         }
     }
 
+    if (this->command->containsParameter("allowAttUsage")) {
+        std::string allowAttUsageString = command->getFirstParameterValue("allowAttUsage");
+        if (allowAttUsageString == "false") {
+            adjustConfig->disableAppTrackingTransparencyUsage();
+        }
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {

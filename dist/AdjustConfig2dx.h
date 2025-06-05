@@ -86,6 +86,7 @@ public:
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
+    // ios only
     void disableSkanAttribution();
     void disableIdfaReading();
     void disableIdfvReading();
@@ -93,7 +94,8 @@ public:
     void setSkanUpdatedCallback(void (*skanUpdatedCallback)(std::unordered_map<std::string, std::string> data));
     void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
-    // Android only
+    void disableAppTrackingTransparencyUsage();
+    // android only
     void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
     void enablePlayStoreKidsCompliance();

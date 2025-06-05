@@ -122,6 +122,10 @@ void ADJConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxS
     ((ADJConfig *)config).eventDeduplicationIdsMaxSize = eventDeduplicationIdsMaxSize;
 }
 
+void ADJConfig2dx::disableAppTrackingTransparencyUsage() {
+    [((ADJConfig *)config) disableAppTrackingTransparencyUsage];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }

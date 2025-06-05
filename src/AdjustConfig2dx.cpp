@@ -351,6 +351,20 @@ void AdjustConfig2dx::setAttributionCallback(void(*callback)(AdjustAttribution2d
 #endif
 }
 
+void AdjustConfig2dx::disableAppTrackingTransparencyUsage() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+
+    // TBD
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.disableAppTrackingTransparencyUsage();
+    }
+#endif
+}
+
 void AdjustConfig2dx::setEventSuccessCallback(void(*callback)(AdjustEventSuccess2dx eventSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
