@@ -18,6 +18,7 @@
 #include "AdjustEventSuccess2dx.h"
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
+#include "AdjustStoreInfo2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -87,6 +88,7 @@ public:
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     void enableFirstSessionDelay();
+    void setStoreInfo(AdjustStoreInfo2dx storeInfo);
     // ios only
     void disableSkanAttribution();
     void disableIdfaReading();

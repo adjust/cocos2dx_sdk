@@ -585,6 +585,16 @@ void AdjustConfig2dx::enableFirstSessionDelay() {
 #endif
 }
 
+void AdjustConfig2dx::setStoreInfo(AdjustStoreInfo2dx storeInfo) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    // TBD
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setStoreInfo(storeInfo.getStoreInfo());
+    }
+#endif
+}
+
 void AdjustConfig2dx::enablePlayStoreKidsCompliance() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {

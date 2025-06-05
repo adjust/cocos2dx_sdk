@@ -29,6 +29,7 @@
 #include "Adjust/AdjustPlayStorePurchase2dx.h"
 #include "Adjust/AdjustDeeplink2dx.h"
 #include "Adjust/AdjustPurchaseVerificationResult2dx.h"
+#include "Adjust/AdjustStoreInfo2dx.h"
 #include "Adjust/test/TestLib2dx.h"
 #include "Adjust/test/TestConnectionOptions2dx.h"
 

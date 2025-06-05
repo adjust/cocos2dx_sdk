@@ -373,6 +373,16 @@ void AdjustCommandExecutor::config() {
         }
     }
 
+    if (this->command->containsParameter("storeName")) {
+        std::string storeName = command->getFirstParameterValue("storeName");
+        AdjustStoreInfo2dx storeInfo = AdjustStoreInfo2dx(storeName);
+        if (this->command->containsParameter("storeAppId")) {
+            std::string storeAppId = command->getFirstParameterValue("storeAppId");
+            storeInfo.setStoreAppId(storeAppId);
+        }
+        adjustConfig->setStoreInfo(storeInfo);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {

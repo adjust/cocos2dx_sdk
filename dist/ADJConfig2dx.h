@@ -17,6 +17,7 @@
 #include "AdjustEventSuccess2dx.h"
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
+#include "ADJStoreInfo2dx.h"
 
 enum ADJLogLevel2dx {
     ADJLogLevel2dxVerbose = 1,
@@ -75,6 +76,7 @@ public:
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
     void disableAppTrackingTransparencyUsage();
     void enableFirstSessionDelay();
+    void setStoreInfo(ADJStoreInfo2dx storeInfo);
     void* getConfig();
     void(*getAttributionCallback())(AdjustAttribution2dx);
     void(*getEventSuccessCallback())(AdjustEventSuccess2dx);

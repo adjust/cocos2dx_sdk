@@ -130,6 +130,10 @@ void ADJConfig2dx::enableFirstSessionDelay() {
     [((ADJConfig *)config) enableFirstSessionDelay];
 }
 
+void ADJConfig2dx::setStoreInfo(ADJStoreInfo2dx storeInfo) {
+    [((ADJConfig *)config) setStoreInfo:(ADJStoreInfo *)storeInfo.getStoreInfo()];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }
