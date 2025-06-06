@@ -573,7 +573,14 @@ void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsM
 
 void AdjustConfig2dx::enableFirstSessionDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiEnableFirstSessionDelay;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableFirstSessionDelay, "com/adjust/sdk/AdjustConfig", "enableFirstSessionDelay", "()V")) {
+        return;
+    }
+    jmiEnableFirstSessionDelay.env->CallVoidMethod(config, jmiEnableFirstSessionDelay.methodID);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.enableFirstSessionDelay();

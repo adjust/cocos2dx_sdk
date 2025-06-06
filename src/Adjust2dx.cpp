@@ -497,7 +497,11 @@ void Adjust2dx::endFirstSessionDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::endFirstSessionDelay();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiEndFirstSessionDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiEndFirstSessionDelay, "com/adjust/sdk/Adjust", "endFirstSessionDelay", "()V")) {
+        return;
+    }
+    jmiEndFirstSessionDelay.env->CallStaticVoidMethod(jmiEndFirstSessionDelay.classID, jmiEndFirstSessionDelay.methodID);
 #endif
 }
 
@@ -505,7 +509,11 @@ void Adjust2dx::enableCoppaComplianceInDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::enableCoppaComplianceInDelay();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiEnableCoppaComplianceInDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiEnableCoppaComplianceInDelay, "com/adjust/sdk/Adjust", "enableCoppaComplianceInDelay", "()V")) {
+        return;
+    }
+    jmiEnableCoppaComplianceInDelay.env->CallStaticVoidMethod(jmiEnableCoppaComplianceInDelay.classID, jmiEnableCoppaComplianceInDelay.methodID);
 #endif
 }
 
@@ -513,7 +521,11 @@ void Adjust2dx::disableCoppaComplianceInDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::disableCoppaComplianceInDelay();
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiDisableCoppaComplianceInDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiDisableCoppaComplianceInDelay, "com/adjust/sdk/Adjust", "disableCoppaComplianceInDelay", "()V")) {
+        return;
+    }
+    jmiDisableCoppaComplianceInDelay.env->CallStaticVoidMethod(jmiDisableCoppaComplianceInDelay.classID, jmiDisableCoppaComplianceInDelay.methodID);
 #endif
 }
 
@@ -521,7 +533,14 @@ void Adjust2dx::setExternalDeviceIdInDelay(std::string externalDeviceId) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::setExternalDeviceIdInDelay(externalDeviceId);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiSetExternalDeviceIdInDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiSetExternalDeviceIdInDelay, "com/adjust/sdk/Adjust", "setExternalDeviceIdInDelay", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jExternalDeviceId = jmiSetExternalDeviceIdInDelay.env->NewStringUTF(externalDeviceId.c_str());
+    jmiSetExternalDeviceIdInDelay.env->CallStaticVoidMethod(jmiSetExternalDeviceIdInDelay.classID, jmiSetExternalDeviceIdInDelay.methodID, jExternalDeviceId);
+    jmiSetExternalDeviceIdInDelay.env->DeleteLocalRef(jExternalDeviceId);
 #endif
 }
 
@@ -583,7 +602,11 @@ void Adjust2dx::enablePlayStoreKidsComplianceInDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     // android only method
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiEnablePlayStoreKidsComplianceInDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiEnablePlayStoreKidsComplianceInDelay, "com/adjust/sdk/Adjust", "enablePlayStoreKidsComplianceInDelay", "()V")) {
+        return;
+    }
+    jmiEnablePlayStoreKidsComplianceInDelay.env->CallStaticVoidMethod(jmiEnablePlayStoreKidsComplianceInDelay.classID, jmiEnablePlayStoreKidsComplianceInDelay.methodID);
 #endif
 }
 
@@ -591,7 +614,11 @@ void Adjust2dx::disablePlayStoreKidsComplianceInDelay() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     // android only method
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiDisablePlayStoreKidsComplianceInDelay;
+    if (!cocos2d::JniHelper::getStaticMethodInfo(jmiDisablePlayStoreKidsComplianceInDelay, "com/adjust/sdk/Adjust", "disablePlayStoreKidsComplianceInDelay", "()V")) {
+        return;
+    }
+    jmiDisablePlayStoreKidsComplianceInDelay.env->CallStaticVoidMethod(jmiDisablePlayStoreKidsComplianceInDelay.classID, jmiDisablePlayStoreKidsComplianceInDelay.methodID);
 #endif
 }
 
