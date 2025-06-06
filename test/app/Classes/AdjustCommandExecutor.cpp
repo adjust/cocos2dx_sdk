@@ -402,6 +402,7 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
             TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+            TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
             // remove fb_install_referrer on ios
             std::string jsonStr = attribution.getJsonResponse();
@@ -971,6 +972,7 @@ void AdjustCommandExecutor::attributionGetter() {
         TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+        TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         // remove fb_install_referrer on ios
         std::string jsonStr = attribution.getJsonResponse();

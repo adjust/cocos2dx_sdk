@@ -1,7 +1,7 @@
 package com.adjust.sdk;
 
 public class Adjust2dxAttributionCallback implements OnAttributionChangedListener {
-	public native void attributionChanged(Object attributionString);
+	public native void attributionChanged(Object attribution);
 	
 	public Adjust2dxAttributionCallback() {}
 	
