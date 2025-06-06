@@ -77,6 +77,14 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->processDeeplink();
     } else if (command->methodName == "attributionGetter") {
         this->attributionGetter();
+    } else if (command->methodName == "endFirstSessionDelay") {
+        this->endFirstSessionDelay();
+    } else if (command->methodName == "coppaComplianceInDelay") {
+        this->coppaComplianceInDelay();
+    } else if (command->methodName == "playStoreKidsComplianceInDelay") {
+        this->playStoreKidsComplianceInDelay();
+    } else if (command->methodName == "externalDeviceIdInDelay") {
+        this->externalDeviceIdInDelay();
     }
 }
 
@@ -351,6 +359,30 @@ void AdjustCommandExecutor::config() {
         }
     }
 
+    if (this->command->containsParameter("allowAttUsage")) {
+        std::string allowAttUsageString = command->getFirstParameterValue("allowAttUsage");
+        if (allowAttUsageString == "false") {
+            adjustConfig->disableAppTrackingTransparencyUsage();
+        }
+    }
+
+    if (this->command->containsParameter("firstSessionDelayEnabled")) {
+        std::string firstSessionDelayEnabledString = command->getFirstParameterValue("firstSessionDelayEnabled");
+        if (firstSessionDelayEnabledString == "true") {
+            adjustConfig->enableFirstSessionDelay();
+        }
+    }
+
+    if (this->command->containsParameter("storeName")) {
+        std::string storeName = command->getFirstParameterValue("storeName");
+        AdjustStoreInfo2dx storeInfo = AdjustStoreInfo2dx(storeName);
+        if (this->command->containsParameter("storeAppId")) {
+            std::string storeAppId = command->getFirstParameterValue("storeAppId");
+            storeInfo.setStoreAppId(storeAppId);
+        }
+        adjustConfig->setStoreInfo(storeInfo);
+    }
+
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
@@ -370,6 +402,20 @@ void AdjustCommandExecutor::config() {
             TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
             TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+            TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            // remove fb_install_referrer on ios
+            std::string jsonStr = attribution.getJsonResponse();
+            try {
+                nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
+                // remove the fb_install_referrer key if it exists
+                jsonObj.erase("fb_install_referrer");
+                // convert back to string
+                jsonStr = jsonObj.dump();
+            } catch (const std::exception& e) {
+                CCLOG("[AdjustCommandExecutor]: Failed to parse or modify JSON: %s", e.what());
+            }
+            TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
             TestLib2dx::sendInfoToServer(localBasePath);
         });
@@ -642,7 +688,9 @@ void AdjustCommandExecutor::setPushToken() {
 
 void AdjustCommandExecutor::openDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
+    std::string referrer = command->getFirstParameterValue("referrer");
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
+    adjustDeeplink.setReferrer(referrer);
     Adjust2dx::processDeeplink(adjustDeeplink);
 }
 
@@ -896,7 +944,9 @@ void AdjustCommandExecutor::verifyTrack() {
 
 void AdjustCommandExecutor::processDeeplink() {
     std::string deeplink = command->getFirstParameterValue("deeplink");
+    std::string referrer = command->getFirstParameterValue("referrer");
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
+    adjustDeeplink.setReferrer(referrer);
     localBasePath = this->basePath;
     Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
@@ -922,7 +972,50 @@ void AdjustCommandExecutor::attributionGetter() {
         TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+        TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+        // remove fb_install_referrer on ios
+        std::string jsonStr = attribution.getJsonResponse();
+        try {
+            nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
+            // remove the fb_install_referrer key if it exists
+            jsonObj.erase("fb_install_referrer");
+            // convert back to string
+            jsonStr = jsonObj.dump();
+        } catch (const std::exception& e) {
+            CCLOG("[AdjustCommandExecutor]: Failed to parse or modify JSON: %s", e.what());
+        }
+        TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
         TestLib2dx::sendInfoToServer(localBasePath);
     });
+}
+
+void AdjustCommandExecutor::endFirstSessionDelay() {
+    Adjust2dx::endFirstSessionDelay();
+}
+
+void AdjustCommandExecutor::coppaComplianceInDelay() {
+    std::string strIsEnabled = command->getFirstParameterValue("isEnabled");
+    bool enabled = (strIsEnabled == "true");
+    if (enabled) {
+        Adjust2dx::enableCoppaComplianceInDelay();
+    } else {
+        Adjust2dx::disableCoppaComplianceInDelay();
+    }
+}
+
+void AdjustCommandExecutor::playStoreKidsComplianceInDelay() {
+    std::string strIsEnabled = command->getFirstParameterValue("isEnabled");
+    bool enabled = (strIsEnabled == "true");
+    if (enabled) {
+        Adjust2dx::enablePlayStoreKidsComplianceInDelay();
+    } else {
+        Adjust2dx::disablePlayStoreKidsComplianceInDelay();
+    }
+}
+
+void AdjustCommandExecutor::externalDeviceIdInDelay() {
+    std::string externalDeviceId = command->getFirstParameterValue("externalDeviceId");
+    Adjust2dx::setExternalDeviceIdInDelay(externalDeviceId);
 }

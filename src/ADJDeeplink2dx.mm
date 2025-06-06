@@ -10,8 +10,13 @@
 #include <AdjustSdk/ADJDeeplink.h>
 
 void ADJDeeplink2dx::initDeeplink(std::string deeplinkStr) {
-    deeplink = [[ADJDeeplink alloc] initWithDeeplink:
-             [NSURL URLWithString:[NSString stringWithUTF8String:deeplinkStr.c_str()]]];
+    NSURL *deeplinkUrl = [NSURL URLWithString:[NSString stringWithUTF8String:deeplinkStr.c_str()]];
+    deeplink = [[ADJDeeplink alloc] initWithDeeplink:deeplinkUrl];
+}
+
+void ADJDeeplink2dx::setReferrer(std::string referrer) {
+    NSURL *referrerUrl = [NSURL URLWithString:[NSString stringWithUTF8String:referrer.c_str()]];
+    [((ADJDeeplink *)deeplink) setReferrer:referrerUrl];
 }
 
 void* ADJDeeplink2dx::getDeeplink() {

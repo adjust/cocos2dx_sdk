@@ -51,3 +51,7 @@ std::string AdjustAttribution2dx::getCostCurrency() {
 std::string AdjustAttribution2dx::getFbInstallReferrer() {
     return this->fbInstallReferrer;
 }
+
+std::string AdjustAttribution2dx::getJsonResponse() {
+    return this->jsonResponse;
+}

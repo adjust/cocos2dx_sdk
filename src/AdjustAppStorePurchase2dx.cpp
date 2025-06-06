@@ -8,19 +8,14 @@
 
 #include "AdjustAppStorePurchase2dx.h"
 
-void AdjustAppStorePurchase2dx::initPurchase(
-    std::string productId,
-    std::string transactionId)
-{
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+void AdjustAppStorePurchase2dx::initPurchase(std::string productId, std::string transactionId) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     purchase = ADJAppStorePurchase2dx(productId, transactionId);
     isPurchaseSet = true;
 #endif
 }
 
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
 ADJAppStorePurchase2dx AdjustAppStorePurchase2dx::getPurchase() {
     return purchase;
 }

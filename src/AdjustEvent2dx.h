@@ -29,13 +29,9 @@ private:
     void initEvent(std::string eventToken);
 
 public:
+    AdjustEvent2dx() {}
     AdjustEvent2dx(std::string eventToken) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initEvent(eventToken);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isEventSet = false;
-        initEvent(eventToken);
-#endif
     }
 
     bool isValid();

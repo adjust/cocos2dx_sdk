@@ -29,8 +29,6 @@ public:
     static void initSdk(ADJConfig2dx adjustConfig);
     static void trackEvent(ADJEvent2dx adjustEvent);
     static void trackAppStoreSubscription(ADJAppStoreSubscription2dx subscription);
-    static void trackSubsessionStart();
-    static void trackSubsessionEnd();
     static void enable();
     static void disable();
     static void processDeeplink(ADJDeeplink2dx adjustDeeplink);
@@ -63,7 +61,13 @@ public:
     static void verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void getIdfv(void(*callback)(std::string idfv));
     static void processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void (*callback)(std::string resolvedLink));
-    // For testing purposes only.
+    static void endFirstSessionDelay();
+    static void enableCoppaComplianceInDelay();
+    static void disableCoppaComplianceInDelay();
+    static void setExternalDeviceIdInDelay(std::string);
+    // testing only
+    static void trackSubsessionStart();
+    static void trackSubsessionEnd();
     static void setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
                                std::map<std::string, int> intTestOptionsMap);
     static void teardown();

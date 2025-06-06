@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.8.129";
+static std::string serverIp = "192.168.86.227";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 static TestLib2dx *testLibrary;
 
@@ -77,9 +77,13 @@ bool TestApp::init() {
     
     CCLOG("[AdjustTest]: Start test session called!");
     // testLibrary->addTestDirectory("purchase-verification");
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    testLibrary->startTestSession("cocos2d-x5.4.0@ios5.4.0");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
         testLibrary->startTestSession(sdkVersion);
     });
+#endif
 
     // Add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);

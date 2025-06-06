@@ -30,34 +30,21 @@ private:
     void initThirdPartySharing(bool isEnabled);
 
 public:
-    // nullable workaround
-    // consider more meaningful API for v5
     AdjustThirdPartySharing2dx() {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initThirdPartySharing();
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isThirdPartySharingSet = false;
-        initThirdPartySharing();
-#endif
     }
 
     AdjustThirdPartySharing2dx(bool isEnabled) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initThirdPartySharing(isEnabled);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isThirdPartySharingSet = false;
-        initThirdPartySharing(isEnabled);
-#endif
     }
 
     void addGranularOption(std::string partnerName, std::string key, std::string value);
     void addPartnerSharingSetting(std::string partnerName, std::string key, bool value);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getThirdPartySharing();
-};
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJThirdPartySharing2dx getThirdPartySharing();
-};
 #endif
+};
 
 #endif /* ADJUST_ADJUSTTHIRDPARTYSHARING_H_ */

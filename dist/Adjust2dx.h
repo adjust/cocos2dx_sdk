@@ -52,13 +52,20 @@ public:
     static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
-    // Android specific methods.
+    static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
+    static void endFirstSessionDelay();
+    static void enableCoppaComplianceInDelay();
+    static void disableCoppaComplianceInDelay();
+    static void setExternalDeviceIdInDelay(std::string);
+    // androind only
     static void getGoogleAdId(void (*callback)(std::string googleAdId));
     static void getAmazonAdId(void (*callback)(std::string amazonAdId));
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
-    // iOS specific methods.
+    static void enablePlayStoreKidsComplianceInDelay();
+    static void disablePlayStoreKidsComplianceInDelay();
+    // ios only
     static void getIdfa(void(*callback)(std::string idfa));
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
     static void requestAppTrackingAuthorization(void (*callback)(int status));
@@ -67,14 +74,13 @@ public:
                                           std::string coarseValue,
                                           bool lockWindow,
                                           void (*callback)(std::string error));
-    static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
     static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
     static void getIdfv(void(*callback)(std::string idfv));
-    // For testing purposes only.
-    static void setTestOptions(std::map<std::string, std::string> stringTestOptions, std::map<std::string, int> intTestOptions);
+    // testing only
     static void onResume();
     static void onPause();
+    static void setTestOptions(std::map<std::string, std::string> stringTestOptions, std::map<std::string, int> intTestOptions);
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     static void teardown();
 #endif

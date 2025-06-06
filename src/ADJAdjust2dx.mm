@@ -216,7 +216,8 @@ void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attributi
         std::string costType;
         double costAmount = -1;
         std::string costCurrency;
-        std::string fbInstallReferrer;
+        std::string fbInstallReferrer; // unused in ios
+        std::string jsonResponse;
 
         if (nil != attribution) {
             if (attribution.trackerToken != nil) {
@@ -249,6 +250,15 @@ void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attributi
             if (attribution.costCurrency != nil) {
                 costCurrency = std::string([attribution.costCurrency UTF8String]);
             }
+            if (attribution.jsonResponse != nil) {
+                NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:attribution.jsonResponse
+                                                                           options:0
+                                                                             error:nil];
+                NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                        length:[dataJsonResponse length]
+                                                                      encoding:NSUTF8StringEncoding];
+                jsonResponse = std::string([stringJsonResponse UTF8String]);
+            }
         }
 
         AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
@@ -262,7 +272,8 @@ void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attributi
             costType,
             costAmount,
             costCurrency,
-            fbInstallReferrer);
+            fbInstallReferrer,
+            jsonResponse);
 
         callback(attribution2dx);
     }];
@@ -335,6 +346,23 @@ void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void
             callback(resolvedLink != nil ? std::string([resolvedLink UTF8String]) : std::string());
         }
     }];
+}
+
+void ADJAdjust2dx::endFirstSessionDelay() {
+    [Adjust endFirstSessionDelay];
+}
+
+void ADJAdjust2dx::enableCoppaComplianceInDelay() {
+    [Adjust enableCoppaComplianceInDelay];
+}
+
+void ADJAdjust2dx::disableCoppaComplianceInDelay() {
+    [Adjust disableCoppaComplianceInDelay];
+}
+
+void ADJAdjust2dx::setExternalDeviceIdInDelay(std::string externalDeviceId) {
+    NSString *strExternalDeviceId = [NSString stringWithUTF8String:externalDeviceId.c_str()];
+    [Adjust setExternalDeviceIdInDelay:strExternalDeviceId];
 }
 
 void ADJAdjust2dx::setTestOptions(std::map<std::string, std::string> stringTestOptionsMap,
