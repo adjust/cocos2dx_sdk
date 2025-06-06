@@ -1,3 +1,17 @@
+### Version 5.4.0 (6th June 2025)
+#### Added
+- Added support for configuring store information via the `AdjustStoreInfo2dx` object. You can now specify the store name and store app ID via `setStoreInfo` method on your `AdjustConfig2dx` instance. This enables the SDK to record the intended app store source during initialization. For more details about this feature, refer to the [official documentation](https://dev.adjust.com/en/sdk/cocos2dx/setup/store-type).
+- Added ability to initialize the SDK for the first session in delayed mode. You can start the SDK in the delayed mode by calling the `enableFirstSessionDelay` method on your `AdjustConfig2dx` instance. To end the delay, make sure to call `endFirstSessionDelay` method of `Adjust2dx` instance. For more details about this feature, refer to the [official documentation](https://dev.adjust.com/en/sdk/cocos2dx/features/first-session-delay).
+- Added ability to send organic search referrer together with deep link. You can send it via `setReferrer` method of the `AdjustDeeplink2dx` instance. For more details about this feature, refer to the [official documentation](https://dev.adjust.com/en/sdk/cocos2dx/features/deep-links#handling-deeplinks-with-referrer).
+- Added ability to disable SDK's interaction with `AppTrackingTransparency.framework` API. You can disable it by calling the `disableAppTrackingTransparencyUsage` method on your `AdjustConfig2dx` instance. For more details about this feature, refer to the [official documentation](https://dev.adjust.com/en/sdk/cocos2dx/features/att#disable-att-framework).
+- Added `jsonResponse` member to `AdjustAttribution2dx` class which represents the JSON string sent by the backend as part of the attribution response.
+
+#### Native SDKs
+- [iOS@v5.4.0][ios_sdk_v5.4.0]
+- [Android@v5.4.0][android_sdk_v5.4.0]
+
+---
+
 ### Version 5.0.2 (7th February 2025)
 #### Added
 - Added sending of the additional parameter to improve troubleshooting of `SKAdNetwork` related issues.
@@ -460,6 +474,7 @@ In case you were using beta version of the SDK v5, please switch to the official
 [ios_sdk_v4.37.0]: https://github.com/adjust/ios_sdk/tree/v4.37.0
 [ios_sdk_v5.0.1]: https://github.com/adjust/ios_sdk/tree/v5.0.1
 [ios_sdk_v5.0.2]: https://github.com/adjust/ios_sdk/tree/v5.0.2
+[ios_sdk_v5.4.0]: https://github.com/adjust/ios_sdk/tree/v5.4.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -486,5 +501,6 @@ In case you were using beta version of the SDK v5, please switch to the official
 [android_sdk_v4.38.0]: https://github.com/adjust/android_sdk/tree/v4.38.0
 [android_sdk_v5.0.1]: https://github.com/adjust/android_sdk/tree/v5.0.1
 [android_sdk_v5.0.2]: https://github.com/adjust/android_sdk/tree/v5.0.2
+[android_sdk_v5.4.0]: https://github.com/adjust/android_sdk/tree/v5.4.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
