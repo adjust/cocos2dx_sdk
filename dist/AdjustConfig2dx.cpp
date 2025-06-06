@@ -12,7 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x5.0.2";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x5.4.0";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -351,6 +351,20 @@ void AdjustConfig2dx::setAttributionCallback(void(*callback)(AdjustAttribution2d
 #endif
 }
 
+void AdjustConfig2dx::disableAppTrackingTransparencyUsage() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+
+    // TBD
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.disableAppTrackingTransparencyUsage();
+    }
+#endif
+}
+
 void AdjustConfig2dx::setEventSuccessCallback(void(*callback)(AdjustEventSuccess2dx eventSuccess)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {
@@ -548,15 +562,46 @@ void AdjustConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsM
     jclass clsInteger = jmiEventDeduplicationIdsMaxSize.env->FindClass("java/lang/Integer");
     jmethodID midInit = jmiEventDeduplicationIdsMaxSize.env->GetMethodID(clsInteger, "<init>", "(I)V");
     jobject jEventDeduplicationIdsMaxSize = jmiEventDeduplicationIdsMaxSize.env->NewObject(clsInteger, midInit, eventDeduplicationIdsMaxSize);
-
     jmiEventDeduplicationIdsMaxSize.env->CallVoidMethod(config, jmiEventDeduplicationIdsMaxSize.methodID, jEventDeduplicationIdsMaxSize);
-
     jmiEventDeduplicationIdsMaxSize.env->DeleteLocalRef(jEventDeduplicationIdsMaxSize);
-
-
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setEventDeduplicationIdsMaxSize(eventDeduplicationIdsMaxSize);
+    }
+#endif
+}
+
+void AdjustConfig2dx::enableFirstSessionDelay() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiEnableFirstSessionDelay;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiEnableFirstSessionDelay, "com/adjust/sdk/AdjustConfig", "enableFirstSessionDelay", "()V")) {
+        return;
+    }
+    jmiEnableFirstSessionDelay.env->CallVoidMethod(config, jmiEnableFirstSessionDelay.methodID);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.enableFirstSessionDelay();
+    }
+#endif
+}
+
+void AdjustConfig2dx::setStoreInfo(AdjustStoreInfo2dx storeInfo) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetStoreInfo;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetStoreInfo, "com/adjust/sdk/AdjustConfig", "setStoreInfo", "(Lcom/adjust/sdk/AdjustStoreInfo;)V")) {
+        return;
+    }
+
+    jmiSetStoreInfo.env->CallVoidMethod(config, jmiSetStoreInfo.methodID, storeInfo.getStoreInfo());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    if (isConfigSet) {
+        config.setStoreInfo(storeInfo.getStoreInfo());
     }
 #endif
 }

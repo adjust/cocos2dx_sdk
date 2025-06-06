@@ -25,9 +25,7 @@ private:
 
 public:
     AdjustPlayStorePurchase2dx(std::string productId, std::string purchaseToken) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initPurchase(productId, purchaseToken);
-#endif
     }
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)

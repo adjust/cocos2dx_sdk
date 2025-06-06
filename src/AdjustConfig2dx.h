@@ -18,6 +18,7 @@
 #include "AdjustEventSuccess2dx.h"
 #include "AdjustSessionSuccess2dx.h"
 #include "AdjustSessionFailure2dx.h"
+#include "AdjustStoreInfo2dx.h"
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
@@ -49,23 +50,11 @@ private:
 
 public:
     AdjustConfig2dx() {}
-
     AdjustConfig2dx(std::string appToken, std::string environment) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initConfig(appToken, environment, false);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isConfigSet = false;
-        initConfig(appToken, environment, false);
-#endif
     }
-
     AdjustConfig2dx(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initConfig(appToken, environment, allowSuppressLogLevel);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isConfigSet = false;
-        initConfig(appToken, environment, allowSuppressLogLevel);
-#endif
     }
 
     void enableSendingInBackground();
@@ -86,6 +75,9 @@ public:
     void enableDeviceIdsReadingOnce();
     void enableCoppaCompliance();
     void setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxSize);
+    void enableFirstSessionDelay();
+    void setStoreInfo(AdjustStoreInfo2dx storeInfo);
+    // ios only
     void disableSkanAttribution();
     void disableIdfaReading();
     void disableIdfvReading();
@@ -93,7 +85,8 @@ public:
     void setSkanUpdatedCallback(void (*skanUpdatedCallback)(std::unordered_map<std::string, std::string> data));
     void enableLinkMe();
     void setAttConsentWaitingInterval(int numberOfSeconds);
-    // Android only
+    void disableAppTrackingTransparencyUsage();
+    // android only
     void enablePreinstallTracking();
     void setPreinstallFilePath(std::string filePath);
     void enablePlayStoreKidsCompliance();

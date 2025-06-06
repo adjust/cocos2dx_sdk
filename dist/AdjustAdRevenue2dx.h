@@ -30,12 +30,7 @@ private:
 
 public:
     AdjustAdRevenue2dx(std::string source) {
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         initAdRevenue(source);
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-        isAdRevenueSet = false;
-        initAdRevenue(source);
-#endif
     }
 
     void setRevenue(double amount, std::string currency);

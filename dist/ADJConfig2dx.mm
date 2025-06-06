@@ -122,6 +122,18 @@ void ADJConfig2dx::setEventDeduplicationIdsMaxSize(int eventDeduplicationIdsMaxS
     ((ADJConfig *)config).eventDeduplicationIdsMaxSize = eventDeduplicationIdsMaxSize;
 }
 
+void ADJConfig2dx::disableAppTrackingTransparencyUsage() {
+    [((ADJConfig *)config) disableAppTrackingTransparencyUsage];
+}
+
+void ADJConfig2dx::enableFirstSessionDelay() {
+    [((ADJConfig *)config) enableFirstSessionDelay];
+}
+
+void ADJConfig2dx::setStoreInfo(ADJStoreInfo2dx storeInfo) {
+    [((ADJConfig *)config) setStoreInfo:(ADJStoreInfo *)storeInfo.getStoreInfo()];
+}
+
 void(*ADJConfig2dx::getAttributionCallback())(AdjustAttribution2dx) {
     return attributionCallback;
 }
