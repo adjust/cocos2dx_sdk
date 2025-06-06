@@ -15,24 +15,17 @@
 
 void AdjustStoreInfo2dx::initStoreInfo(std::string storeName) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // cocos2d::JniMethodInfo jmiInit;
-    // if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustDeeplink", "<init>", "(Landroid/net/Uri;)V")) {
-    //     return;
-    // }
+    cocos2d::JniMethodInfo jmiInit;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiInit, "com/adjust/sdk/AdjustStoreInfo", "<init>", "(Ljava/lang/String;)V")) {
+        return;
+    }
 
-    // jclass jcUri = jmiInit.env->FindClass("android/net/Uri");
-    // jmethodID midParse = jmiInit.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
-    // jstring jDeeplinkStr = jmiInit.env->NewStringUTF(deeplinkStr.c_str());
-    // jobject jUri = jmiInit.env->CallStaticObjectMethod(jcUri, midParse, jDeeplinkStr);
+    jclass jclsAdjustStoreInfo = jmiInit.env->FindClass("com/adjust/sdk/AdjustStoreInfo");
+    jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustStoreInfo, "<init>", "(Ljava/lang/String;)V");
+    jstring jStoreName = jmiInit.env->NewStringUTF(storeName.c_str());
+    storeInfo = jmiInit.env->NewObject(jclsAdjustStoreInfo, jmidInit, jStoreName);
 
-    // jclass jclsAdjustDeeplink = jmiInit.env->FindClass("com/adjust/sdk/AdjustDeeplink");
-    // jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustDeeplink, "<init>", "(Landroid/net/Uri;)V");
-
-    // deeplink = jmiInit.env->NewObject(jclsAdjustDeeplink, jmidInit, jUri);
-
-    // jmiInit.env->DeleteLocalRef(jDeeplinkStr);
-    // jmiInit.env->DeleteLocalRef(jUri);
-    // TBD
+    jmiInit.env->DeleteLocalRef(jStoreName);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     storeInfo = ADJStoreInfo2dx(storeName);
     isStoreInfoSet = true;
@@ -41,7 +34,15 @@ void AdjustStoreInfo2dx::initStoreInfo(std::string storeName) {
 
 void AdjustStoreInfo2dx::setStoreAppId(std::string storeAppId) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    cocos2d::JniMethodInfo jmiSetStore;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetStore, "com/adjust/sdk/AdjustStoreInfo", "setStoreAppId", "(Ljava/lang/String;)V")) {
+        return;
+    }
+
+    jstring jStoreAppId = jmiSetStore.env->NewStringUTF(storeAppId.c_str());
+    jmiSetStore.env->CallVoidMethod(storeInfo, jmiSetStore.methodID, jStoreAppId);
+
+    jmiSetStore.env->DeleteLocalRef(jStoreAppId);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isStoreInfoSet) {
         storeInfo.setStoreAppId(storeAppId);

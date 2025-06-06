@@ -590,7 +590,15 @@ void AdjustConfig2dx::enableFirstSessionDelay() {
 
 void AdjustConfig2dx::setStoreInfo(AdjustStoreInfo2dx storeInfo) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    // TBD
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiSetStoreInfo;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiSetStoreInfo, "com/adjust/sdk/AdjustConfig", "setStoreInfo", "(Lcom/adjust/sdk/AdjustStoreInfo;)V")) {
+        return;
+    }
+
+    jmiSetStoreInfo.env->CallVoidMethod(config, jmiSetStoreInfo.methodID, storeInfo.getStoreInfo());
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     if (isConfigSet) {
         config.setStoreInfo(storeInfo.getStoreInfo());

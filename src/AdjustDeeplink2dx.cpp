@@ -27,7 +27,6 @@ void AdjustDeeplink2dx::initDeeplink(std::string deeplinkStr) {
 
     jclass jclsAdjustDeeplink = jmiInit.env->FindClass("com/adjust/sdk/AdjustDeeplink");
     jmethodID jmidInit = jmiInit.env->GetMethodID(jclsAdjustDeeplink, "<init>", "(Landroid/net/Uri;)V");
-
     deeplink = jmiInit.env->NewObject(jclsAdjustDeeplink, jmidInit, jUri);
 
     jmiInit.env->DeleteLocalRef(jDeeplinkStr);
@@ -40,6 +39,9 @@ void AdjustDeeplink2dx::initDeeplink(std::string deeplinkStr) {
 
 void AdjustDeeplink2dx::setReferrer(std::string referrer) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (deeplink == NULL) {
+        return;
+    }
     cocos2d::JniMethodInfo jmiSetReferrer;
     if (!cocos2d::JniHelper::getMethodInfo(jmiSetReferrer, "com/adjust/sdk/AdjustDeeplink", "setReferrer", "(Landroid/net/Uri;)V")) {
         return;
@@ -49,7 +51,6 @@ void AdjustDeeplink2dx::setReferrer(std::string referrer) {
     jmethodID midParse = jmiSetReferrer.env->GetStaticMethodID(jcUri, "parse", "(Ljava/lang/String;)Landroid/net/Uri;");
     jstring jReferrerStr = jmiSetReferrer.env->NewStringUTF(referrer.c_str());
     jobject jReferrerUri = jmiSetReferrer.env->CallStaticObjectMethod(jcUri, midParse, jReferrerStr);
-
     jmiSetReferrer.env->CallVoidMethod(deeplink, jmiSetReferrer.methodID, jReferrerUri);
 
     jmiSetReferrer.env->DeleteLocalRef(jReferrerStr);
