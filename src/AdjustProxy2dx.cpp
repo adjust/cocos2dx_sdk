@@ -878,17 +878,26 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallb
         return;
     }
 
-    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
-    std::string verificationStatus = std::string(verificationStatusCStr);
-    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
-    std::string message = std::string(messageCStr);
+    std::string verificationStatus = "";
+    std::string message = "";
+    
+    if (jVerificationStatus != NULL) {
+        const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+        verificationStatus = std::string(verificationStatusCStr);
+        env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    }
+    
+    if (jMessage != NULL) {
+        const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+        message = std::string(messageCStr);
+        env->ReleaseStringUTFChars(jMessage, messageCStr);
+    }
+    
     AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
         verificationStatus,
         message,
         code);
     verifyPlayStorePurchaseCallbackMethod(verificationResult);
-    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
-    env->ReleaseStringUTFChars(jMessage, messageCStr);
 }
 
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
@@ -897,17 +906,26 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurch
         return;
     }
 
-    const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
-    std::string verificationStatus = std::string(verificationStatusCStr);
-    const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
-    std::string message = std::string(messageCStr);
+    std::string verificationStatus = "";
+    std::string message = "";
+    
+    if (jVerificationStatus != NULL) {
+        const char *verificationStatusCStr = env->GetStringUTFChars(jVerificationStatus, NULL);
+        verificationStatus = std::string(verificationStatusCStr);
+        env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
+    }
+    
+    if (jMessage != NULL) {
+        const char *messageCStr = env->GetStringUTFChars(jMessage, NULL);
+        message = std::string(messageCStr);
+        env->ReleaseStringUTFChars(jMessage, messageCStr);
+    }
+    
     AdjustPurchaseVerificationResult2dx verificationResult = AdjustPurchaseVerificationResult2dx(
         verificationStatus,
         message,
         code);
     verifyPlayStorePurchaseCallbackMethod(verificationResult);
-    env->ReleaseStringUTFChars(jVerificationStatus, verificationStatusCStr);
-    env->ReleaseStringUTFChars(jMessage, messageCStr);
 }
 
 void setExecuteTestLibCommandCallbackMethod(void(*callback)(std::string className, std::string methodName, std::string jsonParameters)) {
