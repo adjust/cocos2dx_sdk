@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.227";
+static std::string serverIp = "192.168.86.211";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 static TestLib2dx *testLibrary;
 
@@ -48,44 +48,34 @@ bool TestApp::init() {
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    // Create a Label to identify the sample
+    // create a Label to identify the sample
     auto label = Label::create();
 
-    label->setString("Adjust Cocos2dx Test App");
-    label->setSystemFontSize(19);
-    label->setTextColor(Color4B::BLUE);
+    label->setString("Adjust Cocos2d-x Test App");
+    label->setSystemFontSize(10);
+    label->setTextColor(Color4B::WHITE);
 
-    // Position the label on the center of the screen
+    // position the label on the center of the screen
     label->setPosition(Vec2(origin.x + visibleSize.width / 2,
-                            origin.y + visibleSize.height - label->getContentSize().height));
+                            origin.y + visibleSize.height - label->getContentSize().height - 50));
 
-    // Add the label as a child to this layer
+    // add the label as a child to this layer
     this->addChild(label, 1);
 
-    // Add main menu
+    // add main menu
     auto mainMenu = Menu::create();
     int index = 2;
     int offset = 35;
     int divide = 20;
 
-    // Start test session
-    auto position = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height + offset - divide * (++index));
+    // start test session
+    auto position = Vec2(origin.x + visibleSize.width / 2, origin.y + visibleSize.height - label->getContentSize().height + offset - divide * (++index) - 100);
     makeButton(mainMenu, "Start Test Session", position, CC_CALLBACK_1(TestApp::onStartTestSession, this));
 
-    // Create and initialize test library wrapper
+    // create and initialize test library wrapper
     TestApp::initTestLibrary();
-    
-    CCLOG("[AdjustTest]: Start test session called!");
-    // testLibrary->addTestDirectory("purchase-verification");
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary->startTestSession("cocos2d-x5.4.0@ios5.4.0");
-#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
-    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
-        testLibrary->startTestSession(sdkVersion);
-    });
-#endif
 
-    // Add main menu to screen
+    // add main menu to screen
     mainMenu->setPosition(Vec2::ZERO);
     this->addChild(mainMenu, 1);
     return true;
@@ -101,7 +91,7 @@ void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
 void TestApp::makeButton(Menu *menu, std::string title, Vec2 position, const ccMenuCallback &callback) {
     auto itemlabel = Label::create();
     itemlabel->setString(title);
-    itemlabel->setSystemFontSize(15);
+    itemlabel->setSystemFontSize(8);
 
     auto menuItem = MenuItemLabel::create(itemlabel);
     menuItem->setCallback(callback);
