@@ -20,7 +20,7 @@
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 static jobject testLibrary;
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-static ATLTestLibrary2dx testLibrary;
+static ATLTestLibrary2dx* testLibrary = nullptr;
 #endif
 
 void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, void(*callback)(std::string className, std::string methodName, std::string jsonParameters)) {
@@ -64,7 +64,7 @@ void TestLib2dx::initTestLibrary(std::string baseUrl, std::string controlUrl, vo
     jmiInit.env->DeleteLocalRef(jControlUrl);
     jmiInit.env->DeleteLocalRef(jCommListenerCallbackProxy);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary = ATLTestLibrary2dx(baseUrl, controlUrl, callback);
+    testLibrary = new ATLTestLibrary2dx(baseUrl, controlUrl, callback);
 #endif
 }
 
@@ -82,7 +82,9 @@ void TestLib2dx::addTest(std::string testName) {
     jmiAddTest.env->CallVoidMethod(testLibrary, jmiAddTest.methodID, jTestName);
     jmiAddTest.env->DeleteLocalRef(jTestName);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary.addTest(testName);
+    if (testLibrary != nullptr) {
+        testLibrary->addTest(testName);
+    }
 #endif
 }
 
@@ -100,7 +102,9 @@ void TestLib2dx::addTestDirectory(std::string testDirectory) {
     jmiAddTestDir.env->CallVoidMethod(testLibrary, jmiAddTestDir.methodID, jTestDir);
     jmiAddTestDir.env->DeleteLocalRef(jTestDir);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary.addTestDirectory(testDirectory);
+    if (testLibrary != nullptr) {
+        testLibrary->addTestDirectory(testDirectory);
+    }
 #endif
 }
 
@@ -118,7 +122,9 @@ void TestLib2dx::startTestSession(std::string clientSdk) {
     jmiStartTestSession.env->CallVoidMethod(testLibrary, jmiStartTestSession.methodID, jClientSdk);
     jmiStartTestSession.env->DeleteLocalRef(jClientSdk);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary.startTestSession(clientSdk);
+    if (testLibrary != nullptr) {
+        testLibrary->startTestSession(clientSdk);
+    }
 #endif
 }
 
@@ -138,7 +144,9 @@ void TestLib2dx::addInfoToSend(std::string key, std::string value) {
     jmiAddInfoToSend.env->DeleteLocalRef(jKey);
     jmiAddInfoToSend.env->DeleteLocalRef(jValue);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary.addInfoToSend(key, value);
+    if (testLibrary != nullptr) {
+        testLibrary->addInfoToSend(key, value);
+    }
 #endif    
 }
 
@@ -156,6 +164,8 @@ void TestLib2dx::sendInfoToServer(std::string basePath) {
     jmiSendInfoToServer.env->CallVoidMethod(testLibrary, jmiSendInfoToServer.methodID, jBasePath);
     jmiSendInfoToServer.env->DeleteLocalRef(jBasePath);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    testLibrary.sendInfoToServer(basePath);
+    if (testLibrary != nullptr) {
+        testLibrary->sendInfoToServer(basePath);
+    }
 #endif
 }
