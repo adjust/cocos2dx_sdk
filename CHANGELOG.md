@@ -1,7 +1,7 @@
 ### Version 5.4.2 (8th October 2025)
 #### Added
 - Added support for processing deferred deep links in session responses.
-- Added support for Google License Verification (LVL).
+- Added support for Google License Verification (LVL). For more details about this feature, refer to the [official documentation](https://dev.adjust.com/en/sdk/cocos2dx/plugins/google-lvl-plugin).
 
 #### Native SDKs
 - [iOS@v5.4.5][ios_sdk_v5.4.5]
