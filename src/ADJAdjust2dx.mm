@@ -75,6 +75,21 @@ void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, void 
     }];
 }
 
+void ADJAdjust2dx::verifyAppStorePurchase(ADJAppStorePurchase2dx purchase, std::function<void(AdjustPurchaseVerificationResult2dx)> callback) {
+    [Adjust verifyAppStorePurchase:(ADJAppStorePurchase *)purchase.getPurchase()
+             withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+        if (verificationResult == nil) {
+            callback(AdjustPurchaseVerificationResult2dx());
+        } else {
+            AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
+                std::string([verificationResult.verificationStatus UTF8String]),
+                std::string([verificationResult.message UTF8String]),
+                verificationResult.code);
+            callback(verificationResult2dx);
+        }
+    }];
+}
+
 void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
     [Adjust verifyAndTrackAppStorePurchase:(ADJEvent *)adjustEvent.getEvent()
                      withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
@@ -88,6 +103,21 @@ void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, void 
                     verificationResult.code);
                 callback(verificationResult2dx);
             }
+        }
+    }];
+}
+
+void ADJAdjust2dx::verifyAndTrackAppStorePurchase(ADJEvent2dx adjustEvent, std::function<void(AdjustPurchaseVerificationResult2dx)> callback) {
+    [Adjust verifyAndTrackAppStorePurchase:(ADJEvent *)adjustEvent.getEvent()
+                     withCompletionHandler:^(ADJPurchaseVerificationResult * _Nonnull verificationResult) {
+        if (verificationResult == nil) {
+            callback(AdjustPurchaseVerificationResult2dx());
+        } else {
+            AdjustPurchaseVerificationResult2dx verificationResult2dx = AdjustPurchaseVerificationResult2dx(
+                std::string([verificationResult.verificationStatus UTF8String]),
+                std::string([verificationResult.message UTF8String]),
+                verificationResult.code);
+            callback(verificationResult2dx);
         }
     }];
 }
@@ -169,11 +199,23 @@ void ADJAdjust2dx::isEnabled(void(*callback)(bool isEnabled)) {
     }];
 }
 
+void ADJAdjust2dx::isEnabled(std::function<void(bool)> callback) {
+    [Adjust isEnabledWithCompletionHandler:^(BOOL isEnabled) {
+        callback(isEnabled ? true : false);
+    }];
+}
+
 void ADJAdjust2dx::getIdfa(void(*callback)(std::string idfa)) {
     if (callback == NULL) {
         return;
     }
 
+    [Adjust idfaWithCompletionHandler:^(NSString * _Nullable idfa) {
+        callback(idfa != nil ? std::string([idfa UTF8String]) : std::string());
+    }];
+}
+
+void ADJAdjust2dx::getIdfa(std::function<void(std::string)> callback) {
     [Adjust idfaWithCompletionHandler:^(NSString * _Nullable idfa) {
         callback(idfa != nil ? std::string([idfa UTF8String]) : std::string());
     }];
@@ -189,11 +231,23 @@ void ADJAdjust2dx::getAdid(void(*callback)(std::string adid)) {
     }];
 }
 
+void ADJAdjust2dx::getAdid(std::function<void(std::string)> callback) {
+    [Adjust adidWithCompletionHandler:^(NSString * _Nullable adid) {
+        callback(adid != nil ? std::string([adid UTF8String]) : std::string());
+    }];
+}
+
 void ADJAdjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion), std::string sdkPrefix) {
     if (callback == NULL) {
         return;
     }
 
+    [Adjust sdkVersionWithCompletionHandler:^(NSString * _Nullable sdkVersion) {
+        callback(sdkVersion != nil ? sdkPrefix + "@" + std::string([sdkVersion UTF8String]) : std::string());
+    }];
+}
+
+void ADJAdjust2dx::getSdkVersion(std::function<void(std::string)> callback, std::string sdkPrefix) {
     [Adjust sdkVersionWithCompletionHandler:^(NSString * _Nullable sdkVersion) {
         callback(sdkVersion != nil ? sdkPrefix + "@" + std::string([sdkVersion UTF8String]) : std::string());
     }];
@@ -279,11 +333,93 @@ void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attributi
     }];
 }
 
+void ADJAdjust2dx::getAttribution(std::function<void(AdjustAttribution2dx)> callback) {
+    [Adjust attributionWithCompletionHandler:^(ADJAttribution * _Nullable attribution) {
+        std::string trackerToken;
+        std::string trackerName;
+        std::string network;
+        std::string campaign;
+        std::string adgroup;
+        std::string creative;
+        std::string clickLabel;
+        std::string adid;
+        std::string costType;
+        double costAmount = -1;
+        std::string costCurrency;
+        std::string fbInstallReferrer; // unused in ios
+        std::string jsonResponse;
+
+        if (nil != attribution) {
+            if (attribution.trackerToken != nil) {
+                trackerToken = std::string([attribution.trackerToken UTF8String]);
+            }
+            if (attribution.trackerName != nil) {
+                trackerName = std::string([attribution.trackerName UTF8String]);
+            }
+            if (attribution.network != nil) {
+                network = std::string([attribution.network UTF8String]);
+            }
+            if (attribution.campaign != nil) {
+                campaign = std::string([attribution.campaign UTF8String]);
+            }
+            if (attribution.adgroup != nil) {
+                adgroup = std::string([attribution.adgroup UTF8String]);
+            }
+            if (attribution.creative != nil) {
+                creative = std::string([attribution.creative UTF8String]);
+            }
+            if (attribution.clickLabel != nil) {
+                clickLabel = std::string([attribution.clickLabel UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costType = std::string([attribution.costType UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costAmount = [attribution.costAmount doubleValue];
+            }
+            if (attribution.costCurrency != nil) {
+                costCurrency = std::string([attribution.costCurrency UTF8String]);
+            }
+            if (attribution.jsonResponse != nil) {
+                NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:attribution.jsonResponse
+                                                                           options:0
+                                                                             error:nil];
+                NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                        length:[dataJsonResponse length]
+                                                                      encoding:NSUTF8StringEncoding];
+                jsonResponse = std::string([stringJsonResponse UTF8String]);
+            }
+        }
+
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+            trackerToken,
+            trackerName,
+            network,
+            campaign,
+            adgroup,
+            creative,
+            clickLabel,
+            costType,
+            costAmount,
+            costCurrency,
+            fbInstallReferrer,
+            jsonResponse);
+
+        callback(attribution2dx);
+    }];
+}
+
 void ADJAdjust2dx::requestAppTrackingAuthorization(void (*callback)(int status)) {
     [Adjust requestAppTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
         if (callback != NULL) {
             callback((int)status);
         }
+    }];
+}
+
+void ADJAdjust2dx::requestAppTrackingAuthorization(std::function<void(int)> callback) {
+    [Adjust requestAppTrackingAuthorizationWithCompletionHandler:^(NSUInteger status) {
+        callback((int)status);
     }];
 }
 
@@ -302,6 +438,18 @@ void ADJAdjust2dx::updateSkanConversionValue(int conversionValue,
         if (callback != NULL) {
             callback(error != nil ? std::string([error.localizedDescription UTF8String]) : std::string());
         }
+    }];
+}
+
+void ADJAdjust2dx::updateSkanConversionValue(int conversionValue,
+                                             std::string coarseValue,
+                                             bool lockWindow,
+                                             std::function<void(std::string)> callback) {
+    [Adjust updateSkanConversionValue:conversionValue
+                          coarseValue:[NSString stringWithUTF8String:coarseValue.c_str()]
+                           lockWindow:@(lockWindow)
+                withCompletionHandler:^(NSError * _Nullable error) {
+        callback(error != nil ? std::string([error.localizedDescription UTF8String]) : std::string());
     }];
 }
 
@@ -329,11 +477,29 @@ void ADJAdjust2dx::getLastDeeplink(void(*callback)(std::string lastDeeplink)) {
     }];
 }
 
+void ADJAdjust2dx::getLastDeeplink(std::function<void(std::string)> callback) {
+    [Adjust lastDeeplinkWithCompletionHandler:^(NSURL * _Nullable lastDeeplink) {
+        if (lastDeeplink == nil) {
+            callback(std::string());
+            return;
+        }
+
+        NSString *strLastDeeplink = [lastDeeplink absoluteString];
+        callback(strLastDeeplink != nil ? std::string([strLastDeeplink UTF8String]) : std::string());
+    }];
+}
+
 void ADJAdjust2dx::getIdfv(void(*callback)(std::string idfv)) {
     if (callback == NULL) {
         return;
     }
 
+    [Adjust idfvWithCompletionHandler:^(NSString * _Nullable idfv) {
+        callback(idfv != nil ? std::string([idfv UTF8String]) : std::string());
+    }];
+}
+
+void ADJAdjust2dx::getIdfv(std::function<void(std::string)> callback) {
     [Adjust idfvWithCompletionHandler:^(NSString * _Nullable idfv) {
         callback(idfv != nil ? std::string([idfv UTF8String]) : std::string());
     }];
@@ -345,6 +511,13 @@ void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, void
         if (callback != NULL) {
             callback(resolvedLink != nil ? std::string([resolvedLink UTF8String]) : std::string());
         }
+    }];
+}
+
+void ADJAdjust2dx::processAndResolveDeeplink(ADJDeeplink2dx adjustDeeplink, std::function<void(std::string)> callback) {
+    [Adjust processAndResolveDeeplink:(ADJDeeplink *)adjustDeeplink.getDeeplink()
+                withCompletionHandler:^(NSString * _Nullable resolvedLink) {
+        callback(resolvedLink != nil ? std::string([resolvedLink UTF8String]) : std::string());
     }];
 }
 

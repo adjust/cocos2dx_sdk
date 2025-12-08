@@ -872,9 +872,9 @@ void AdjustCommandExecutor::trackAdRevenue() {
 
 void AdjustCommandExecutor::getLastDeeplink() {
     localBasePath = this->basePath;
-    Adjust2dx::getLastDeeplink([](std::string lastDeeplink) {
+    Adjust2dx::getLastDeeplink([this](std::string lastDeeplink) {
         TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 }
 
@@ -887,11 +887,11 @@ void AdjustCommandExecutor::verifyPurchase() {
         AdjustAppStorePurchase2dx(productId, transactionId);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyAppStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAppStorePurchase(purchase, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string productId = command->getFirstParameterValue("productId");
@@ -900,11 +900,11 @@ void AdjustCommandExecutor::verifyPurchase() {
     AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyPlayStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyPlayStorePurchase(purchase, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #endif
 }
@@ -923,19 +923,19 @@ void AdjustCommandExecutor::verifyTrack() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     localBasePath = this->basePath;
 
-    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     localBasePath = this->basePath;
-    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #endif
 
@@ -948,15 +948,15 @@ void AdjustCommandExecutor::processDeeplink() {
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
     adjustDeeplink.setReferrer(referrer);
     localBasePath = this->basePath;
-    Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [](std::string resolvedLink) {
+    Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [this](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 }
 
 void AdjustCommandExecutor::attributionGetter() {
     localBasePath = this->basePath;
-    Adjust2dx::getAttribution([](AdjustAttribution2dx attribution) {
+    Adjust2dx::getAttribution([this](AdjustAttribution2dx attribution) {
         TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
         TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
         TestLib2dx::addInfoToSend("network", attribution.getNetwork());
@@ -973,6 +973,7 @@ void AdjustCommandExecutor::attributionGetter() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
         TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
         TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
+        TestLib2dx::sendInfoToServer(this->basePath);
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         // remove fb_install_referrer on ios
         std::string jsonStr = attribution.getJsonResponse();
@@ -987,7 +988,7 @@ void AdjustCommandExecutor::attributionGetter() {
         }
         TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 }
 

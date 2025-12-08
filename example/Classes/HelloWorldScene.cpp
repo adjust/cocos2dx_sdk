@@ -212,11 +212,13 @@ void HelloWorld::onDisableSdk(cocos2d::Ref *pSender) {
 }
 
 void HelloWorld::onIsSdkEnabled(cocos2d::Ref *pSender) {
-    if (Adjust2dx::isEnabled()) {
-        CCLOG(">>> SDK is enabled");
-    } else {
-        CCLOG(">>> SDK is disabled");
-    }
+    Adjust2dx::isEnabled([](bool isEnabled) {
+        if (isEnabled) {
+            CCLOG(">>> SDK is enabled");
+        } else {
+            CCLOG(">>> SDK is disabled");
+        }
+    });
 }
 
 void HelloWorld::onSendPushToken(cocos2d::Ref *pSender) {
@@ -224,23 +226,30 @@ void HelloWorld::onSendPushToken(cocos2d::Ref *pSender) {
 }
 
 void HelloWorld::onGetIds(cocos2d::Ref *pSender) {
-    CCLOG(">>> Adid = %s", Adjust2dx::getAdid().c_str());
+    Adjust2dx::getAdid([](std::string adid) {
+        CCLOG(">>> Adid = %s", adid.c_str());
+    });
 
     Adjust2dx::getGoogleAdId([](std::string adId) {
         CCLOG(">>> Google Ad Id = %s", adId.c_str());
     });
 
-    CCLOG(">>> Amazon Ad Id = %s", Adjust2dx::getAmazonAdId().c_str());
-    CCLOG(">>> Get IDFA = %s", Adjust2dx::getIdfa().c_str());
+    Adjust2dx::getAmazonAdId([](std::string amazonAdId) {
+        CCLOG(">>> Amazon Ad Id = %s", amazonAdId.c_str());
+    });
 
-    auto attribution = Adjust2dx::getAttribution();
-    CCLOG(">>> Attribution:");
-    CCLOG("Tracker token = %s", attribution.getTrackerToken().c_str());
-    CCLOG("Tracker name = %s", attribution.getTrackerName().c_str());
-    CCLOG("Network = %s", attribution.getNetwork().c_str());
-    CCLOG("Campaign = %s", attribution.getCampaign().c_str());
-    CCLOG("Adgroup = %s", attribution.getAdgroup().c_str());
-    CCLOG("Creative = %s", attribution.getCreative().c_str());
+    Adjust2dx::getIdfa([](std::string idfa) {
+        CCLOG(">>> Get IDFA = %s", idfa.c_str());
+    });
+
+    Adjust2dx::getAttribution([](AdjustAttribution2dx attribution) {
+        CCLOG(">>> Attribution:");
+        CCLOG("Tracker token = %s", attribution.getTrackerToken().c_str());
+        CCLOG("Tracker name = %s", attribution.getTrackerName().c_str());
+        CCLOG("Network = %s", attribution.getNetwork().c_str());
+        CCLOG("Campaign = %s", attribution.getCampaign().c_str());
+        CCLOG("Adgroup = %s", attribution.getAdgroup().c_str());
+        CCLOG("Creative = %s", attribution.getCreative().c_str());
     CCLOG("Click label = %s", attribution.getClickLabel().c_str());
     CCLOG("Adid = %s", attribution.getAdid().c_str());
 }

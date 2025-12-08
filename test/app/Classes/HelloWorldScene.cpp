@@ -83,8 +83,8 @@ bool TestApp::init() {
 
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
-    Adjust2dx::getSdkVersion([] (std::string sdkVersion) {
-        testLibrary->startTestSession(sdkVersion);
+    Adjust2dx::getSdkVersion([this] (std::string sdkVersion) {
+        this->testLibrary->startTestSession(sdkVersion);
     });
 }
 
