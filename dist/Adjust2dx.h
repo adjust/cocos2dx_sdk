@@ -11,6 +11,7 @@
 
 #include <map>
 #include <iostream>
+#include <functional>
 #include "AdjustEvent2dx.h"
 #include "AdjustConfig2dx.h"
 #include "AdjustAttribution2dx.h"
@@ -33,6 +34,7 @@ public:
     static void enable();
     static void disable();
     static void isEnabled(void(*callback)(bool isEnabled));
+    static void isEnabled(std::function<void(bool)> callback);
     static void switchToOfflineMode();
     static void switchBackToOnlineMode();
     static void processDeeplink(AdjustDeeplink2dx deeplink);
@@ -47,36 +49,55 @@ public:
     static void trackThirdPartySharing(AdjustThirdPartySharing2dx thirdPartySharing);
     static void trackMeasurementConsent(bool measurementConsent);
     static void getAdid(void(*callback)(std::string adid));
+    static void getAdid(std::function<void(std::string)> callback);
     static void getSdkVersion(void(*callback)(std::string sdkVersion));
+    static void getSdkVersion(std::function<void(std::string)> callback);
     static void getAttribution(void(*callback)(AdjustAttribution2dx attribution));
+    static void getAttribution(std::function<void(AdjustAttribution2dx)> callback);
     static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
+    static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
+                                          std::function<void(std::string)> resolvedLinkCallback);
     static void getLastDeeplink(void(*callback)(std::string lastDeeplink));
+    static void getLastDeeplink(std::function<void(std::string)> callback);
     static void endFirstSessionDelay();
     static void enableCoppaComplianceInDelay();
     static void disableCoppaComplianceInDelay();
     static void setExternalDeviceIdInDelay(std::string);
     // androind only
     static void getGoogleAdId(void (*callback)(std::string googleAdId));
+    static void getGoogleAdId(std::function<void(std::string)> callback);
     static void getAmazonAdId(void (*callback)(std::string amazonAdId));
+    static void getAmazonAdId(std::function<void(std::string)> callback);
     static void trackPlayStoreSubscription(AdjustPlayStoreSubscription2dx subscription);
     static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, std::function<void(AdjustPurchaseVerificationResult2dx)> callback);
     static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, std::function<void(AdjustPurchaseVerificationResult2dx)> callback);
     static void enablePlayStoreKidsComplianceInDelay();
     static void disablePlayStoreKidsComplianceInDelay();
     // ios only
     static void getIdfa(void(*callback)(std::string idfa));
+    static void getIdfa(std::function<void(std::string)> callback);
     static void trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscription);
     static void requestAppTrackingAuthorization(void (*callback)(int status));
+    static void requestAppTrackingAuthorization(std::function<void(int)> callback);
     static int getAppTrackingAuthorizationStatus();
     static void updateSkanConversionValue(int conversionValue,
                                           std::string coarseValue,
                                           bool lockWindow,
                                           void (*callback)(std::string error));
+    static void updateSkanConversionValue(int conversionValue,
+                                          std::string coarseValue,
+                                          bool lockWindow,
+                                          std::function<void(std::string)> callback);
     static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, std::function<void(AdjustPurchaseVerificationResult2dx)> callback);
     static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void(*callback)(AdjustPurchaseVerificationResult2dx verificationResult));
+    static void verifyAndTrackAppStorePurchase(AdjustEvent2dx event, std::function<void(AdjustPurchaseVerificationResult2dx)> callback);
     static void getIdfv(void(*callback)(std::string idfv));
+    static void getIdfv(std::function<void(std::string)> callback);
     // testing only
     static void onResume();
     static void onPause();

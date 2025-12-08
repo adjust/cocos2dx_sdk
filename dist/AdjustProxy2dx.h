@@ -10,12 +10,33 @@
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
 #include <jni.h>
+#include <map>
+#include <functional>
+#include <atomic>
 #include "Adjust/AdjustAttribution2dx.h"
 #include "Adjust/AdjustEventFailure2dx.h"
 #include "Adjust/AdjustEventSuccess2dx.h"
 #include "Adjust/AdjustSessionFailure2dx.h"
 #include "Adjust/AdjustSessionSuccess2dx.h"
 #include "Adjust/AdjustPurchaseVerificationResult2dx.h"
+
+// Callback maps for std::function support
+namespace AdjustProxy2dxInternal {
+    extern std::atomic<int64_t> callbackIdCounter;
+    extern std::map<int64_t, std::function<void(bool)>> isEnabledCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> adidCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> sdkVersionCallbackMap;
+    extern std::map<int64_t, std::function<void(AdjustAttribution2dx)>> attributionReadCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> lastDeeplinkCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> resolvedLinkCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> googleAdIdCallbackMap;
+    extern std::map<int64_t, std::function<void(std::string)>> amazonAdIdCallbackMap;
+    extern std::map<int64_t, std::function<void(AdjustPurchaseVerificationResult2dx)>> verifyPlayStorePurchaseCallbackMap;
+    extern std::map<int64_t, std::function<void(AdjustPurchaseVerificationResult2dx)>> verifyAndTrackPlayStorePurchaseCallbackMap;
+    
+    int64_t getNextCallbackId();
+    void removeCallback(int64_t callbackId, int callbackType);
+}
 
 extern "C" {
     static void (*attributionCallbackMethod)(AdjustAttribution2dx attribution);
@@ -51,24 +72,44 @@ extern "C" {
     (JNIEnv *, jobject, jstring);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxIsEnabledCallback_isEnabledRead
     (JNIEnv *, jobject, jboolean);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxIsEnabledCallback_isEnabledReadWithId
+    (JNIEnv *, jobject, jboolean, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_googleAdIdRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxGoogleAdIdCallback_googleAdIdReadWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_amazonAdIdRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAmazonAdIdCallback_amazonAdIdReadWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdidCallback_adidRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdidCallback_adidReadWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionRead
     (JNIEnv *, jobject, jobject);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionReadWithId
+    (JNIEnv *, jobject, jobject, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxLastDeeplinkCallback_lastDeeplinkReadWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionRead
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxSdkVersionCallback_sdkVersionReadWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_deeplinkResolved
     (JNIEnv *, jobject, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxResolvedLinkCallback_deeplinkResolvedWithId
+    (JNIEnv *, jobject, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResult
     (JNIEnv *, jobject, jstring, int, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyPlayStorePurchaseCallback_verificationResultWithId
+    (JNIEnv *, jobject, jstring, int, jstring, jlong);
     JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResult
     (JNIEnv *, jobject, jstring, int, jstring);
+    JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxVerifyAndTrackPlayStorePurchaseCallback_verificationResultWithId
+    (JNIEnv *, jobject, jstring, int, jstring, jlong);
     // Only for testing purposes.
     JNIEXPORT void JNICALL Java_com_adjust_test_Adjust2dxCommandJsonListenerCallback_executeCommand2dx
     (JNIEnv *, jobject, jstring, jstring, jstring);
