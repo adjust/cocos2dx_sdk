@@ -1,3 +1,19 @@
+### Version 5.5.0 (8th December 2025)
+#### Added
+- Added `getAdidWithTimeout` to the `Adjust2dx` API to retrieve the ADID with a specified timeout. If the value is not obtained in time, an empty string is returned.
+- Added `getAttributionWithTimeout` to the `Adjust2dx` API to retrieve the current attribution with a specified timeout. If the value is not obtained in time, an empty `AdjustAttribution2dx` object is returned.
+- Added `disableAppSetIdReading` to `AdjustConfig2dx` to disable reading of the app set ID. Call this method on your `AdjustConfig2dx` instance to disable app set ID reading.
+
+#### Changed
+- Deprecated C function pointer callback methods in favor of `std::function` overloads. The new overloads support lambda captures and avoid concurrency issues on Android. All callback methods (e.g., `getAdid`, `getAttribution`, `isEnabled`, `verifyPlayStorePurchase`, etc.) now have `std::function` overloads. The old C function pointer versions are marked as deprecated and will show warnings in Xcode and Android Studio. Migrate to the `std::function` overloads to use lambda captures and improve thread safety.
+- Updated the Adjust Signature library version to 3.62.0.
+
+#### Native SDKs
+- [iOS@v5.5.0][ios_sdk_v5.5.0]
+- [Android@v5.5.0][android_sdk_v5.5.0]
+
+---
+
 ### Version 5.4.2 (8th October 2025)
 #### Added
 - Added support for processing deferred deep links in session responses.
@@ -505,6 +521,7 @@ In case you were using beta version of the SDK v5, please switch to the official
 [ios_sdk_v5.4.0]: https://github.com/adjust/ios_sdk/tree/v5.4.0
 [ios_sdk_v5.4.3]: https://github.com/adjust/ios_sdk/tree/v5.4.3
 [ios_sdk_v5.4.5]: https://github.com/adjust/ios_sdk/tree/v5.4.5
+[ios_sdk_v5.5.0]: https://github.com/adjust/ios_sdk/tree/v5.5.0
 
 [android_sdk_v4.0.8]: https://github.com/adjust/android_sdk/tree/v4.0.8
 [android_sdk_v4.1.0]: https://github.com/adjust/android_sdk/tree/v4.1.0
@@ -534,5 +551,6 @@ In case you were using beta version of the SDK v5, please switch to the official
 [android_sdk_v5.4.0]: https://github.com/adjust/android_sdk/tree/v5.4.0
 [android_sdk_v5.4.2]: https://github.com/adjust/android_sdk/tree/v5.4.2
 [android_sdk_v5.4.4]: https://github.com/adjust/android_sdk/tree/v5.4.4
+[android_sdk_v5.5.0]: https://github.com/adjust/android_sdk/tree/v5.5.0
 
 [windows_sdk_v4.0.3]: https://github.com/adjust/windows_sdk/tree/v4.0.3
