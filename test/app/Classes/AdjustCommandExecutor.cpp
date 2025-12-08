@@ -288,11 +288,8 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("skanCallback")) {
         localBasePath = this->basePath;
         adjustConfig->setSkanUpdatedCallback([](std::unordered_map<std::string, std::string> data) {
-            CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
-
             for (std::unordered_map<std::string, std::string>::iterator toIterator = data.begin();
-                 toIterator != data.end(); toIterator++)
-            {
+                 toIterator != data.end(); toIterator++) {
                 TestLib2dx::addInfoToSend(toIterator->first, toIterator->second);
 
             }
@@ -420,7 +417,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
-            CCLOG("\n[AdjustCommandExecutor]: Attribution received: %s", attribution.getTrackerToken().c_str());
             TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
             TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
             TestLib2dx::addInfoToSend("network", attribution.getNetwork());
@@ -451,7 +447,6 @@ void AdjustCommandExecutor::config() {
             }
             TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
-            CCLOG("[AdjustCommandExecutor]: AttributionCallback calling: (no testCallbackId)");
             TestLib2dx::sendInfoToServer(localBasePath);
         });
     }
@@ -459,7 +454,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
-            CCLOG("\n[AdjustCommandExecutor]: Session success: %s", adjustSessionSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionSuccess.getAdid());
@@ -473,7 +467,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
-            CCLOG("\n[AdjustCommandExecutor]: Session failure: %s", adjustSessionFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionFailure.getAdid());
@@ -488,7 +481,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
-            CCLOG("\n[AdjustCommandExecutor]: Event success: %s", adjustEventSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventSuccess.getAdid());
@@ -504,7 +496,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
-            CCLOG("\n[AdjustCommandExecutor]: Event failure: %s", adjustEventFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventFailure.getAdid());
@@ -525,7 +516,6 @@ void AdjustCommandExecutor::config() {
         // bool openDeeplink = (openDeeplinkString == "true");
         static bool openDeeplink = (openDeeplinkString == "true");
         adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
-            CCLOG("\n[AdjustCommandExecutor]: Deferred deep link received: %s", deeplink.c_str());
             TestLib2dx::addInfoToSend("deeplink", deeplink);
             TestLib2dx::sendInfoToServer(localBasePath);
             return openDeeplink;
@@ -1036,7 +1026,6 @@ void AdjustCommandExecutor::attributionGetter() {
         if (!testCallbackId.empty()) {
             TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
         }
-        CCLOG("[AdjustCommandExecutor]: AttributionGetter calling: %s", testCallbackId.c_str());
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 }
@@ -1138,18 +1127,18 @@ void AdjustCommandExecutor::attributionGetterWithTimeout() {
         if (!testCallbackId.empty()) {
             TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
         }
-        CCLOG("[AdjustCommandExecutor]: AttributionGetterWithTimeout calling: %s", testCallbackId.c_str());
         TestLib2dx::sendInfoToServer(localBasePath);
     });
 }
 
 void AdjustCommandExecutor::idfaGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     std::string testCallbackId = "";
     if (this->command->containsParameter("testCallbackId")) {
         testCallbackId = command->getFirstParameterValue("testCallbackId");
     }
     std::string localExtraPath = this->basePath;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
     Adjust2dx::getIdfa([this, testCallbackId, localExtraPath](std::string idfa) {
         TestLib2dx::addInfoToSend("idfa", idfa);
         if (!testCallbackId.empty()) {
@@ -1157,18 +1146,17 @@ void AdjustCommandExecutor::idfaGetter() {
         }
         TestLib2dx::sendInfoToServer(localExtraPath);
     });
-#else
-    CCLOG("[AdjustCommandExecutor]: Error! IDFA is not available on this platform.");
 #endif
 }
 
 void AdjustCommandExecutor::idfvGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     std::string testCallbackId = "";
     if (this->command->containsParameter("testCallbackId")) {
         testCallbackId = command->getFirstParameterValue("testCallbackId");
     }
     std::string localExtraPath = this->basePath;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+
     Adjust2dx::getIdfv([this, testCallbackId, localExtraPath](std::string idfv) {
         TestLib2dx::addInfoToSend("idfv", idfv);
         if (!testCallbackId.empty()) {
@@ -1176,18 +1164,17 @@ void AdjustCommandExecutor::idfvGetter() {
         }
         TestLib2dx::sendInfoToServer(localExtraPath);
     });
-#else
-    CCLOG("[AdjustCommandExecutor]: Error! IDFV is not available on this platform.");
 #endif
 }
 
 void AdjustCommandExecutor::googleAdIdGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string testCallbackId = "";
     if (this->command->containsParameter("testCallbackId")) {
         testCallbackId = command->getFirstParameterValue("testCallbackId");
     }
     std::string localExtraPath = this->basePath;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
     Adjust2dx::getGoogleAdId([this, testCallbackId, localExtraPath](std::string googleAdId) {
         TestLib2dx::addInfoToSend("gps_adid", googleAdId);
         if (!testCallbackId.empty()) {
@@ -1195,18 +1182,17 @@ void AdjustCommandExecutor::googleAdIdGetter() {
         }
         TestLib2dx::sendInfoToServer(localExtraPath);
     });
-#else
-    CCLOG("[AdjustCommandExecutor]: Error! Google Advertising ID is not available on this platform.");
 #endif
 }
 
 void AdjustCommandExecutor::amazonAdIdGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string testCallbackId = "";
     if (this->command->containsParameter("testCallbackId")) {
         testCallbackId = command->getFirstParameterValue("testCallbackId");
     }
     std::string localExtraPath = this->basePath;
-#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+
     Adjust2dx::getAmazonAdId([this, testCallbackId, localExtraPath](std::string amazonAdId) {
         TestLib2dx::addInfoToSend("fire_adid", amazonAdId);
         if (!testCallbackId.empty()) {
@@ -1214,8 +1200,6 @@ void AdjustCommandExecutor::amazonAdIdGetter() {
         }
         TestLib2dx::sendInfoToServer(localExtraPath);
     });
-#else
-    CCLOG("[AdjustCommandExecutor]: Error! Amazon Fire Advertising ID is not available on this platform.");
 #endif
 }
 
