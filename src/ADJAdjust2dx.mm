@@ -237,6 +237,22 @@ void ADJAdjust2dx::getAdid(std::function<void(std::string)> callback) {
     }];
 }
 
+void ADJAdjust2dx::getAdidWithTimeout(int timeoutInMilliseconds, void(*callback)(std::string adid)) {
+    if (callback == NULL) {
+        return;
+    }
+
+    [Adjust adidWithTimeout:timeoutInMilliseconds completionHandler:^(NSString * _Nullable adid) {
+        callback(adid != nil ? std::string([adid UTF8String]) : std::string());
+    }];
+}
+
+void ADJAdjust2dx::getAdidWithTimeout(int timeoutInMilliseconds, std::function<void(std::string)> callback) {
+    [Adjust adidWithTimeout:timeoutInMilliseconds completionHandler:^(NSString * _Nullable adid) {
+        callback(adid != nil ? std::string([adid UTF8String]) : std::string());
+    }];
+}
+
 void ADJAdjust2dx::getSdkVersion(void(*callback)(std::string sdkVersion), std::string sdkPrefix) {
     if (callback == NULL) {
         return;
@@ -335,6 +351,162 @@ void ADJAdjust2dx::getAttribution(void(*callback)(AdjustAttribution2dx attributi
 
 void ADJAdjust2dx::getAttribution(std::function<void(AdjustAttribution2dx)> callback) {
     [Adjust attributionWithCompletionHandler:^(ADJAttribution * _Nullable attribution) {
+        std::string trackerToken;
+        std::string trackerName;
+        std::string network;
+        std::string campaign;
+        std::string adgroup;
+        std::string creative;
+        std::string clickLabel;
+        std::string adid;
+        std::string costType;
+        double costAmount = -1;
+        std::string costCurrency;
+        std::string fbInstallReferrer; // unused in ios
+        std::string jsonResponse;
+
+        if (nil != attribution) {
+            if (attribution.trackerToken != nil) {
+                trackerToken = std::string([attribution.trackerToken UTF8String]);
+            }
+            if (attribution.trackerName != nil) {
+                trackerName = std::string([attribution.trackerName UTF8String]);
+            }
+            if (attribution.network != nil) {
+                network = std::string([attribution.network UTF8String]);
+            }
+            if (attribution.campaign != nil) {
+                campaign = std::string([attribution.campaign UTF8String]);
+            }
+            if (attribution.adgroup != nil) {
+                adgroup = std::string([attribution.adgroup UTF8String]);
+            }
+            if (attribution.creative != nil) {
+                creative = std::string([attribution.creative UTF8String]);
+            }
+            if (attribution.clickLabel != nil) {
+                clickLabel = std::string([attribution.clickLabel UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costType = std::string([attribution.costType UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costAmount = [attribution.costAmount doubleValue];
+            }
+            if (attribution.costCurrency != nil) {
+                costCurrency = std::string([attribution.costCurrency UTF8String]);
+            }
+            if (attribution.jsonResponse != nil) {
+                NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:attribution.jsonResponse
+                                                                           options:0
+                                                                             error:nil];
+                NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                        length:[dataJsonResponse length]
+                                                                      encoding:NSUTF8StringEncoding];
+                jsonResponse = std::string([stringJsonResponse UTF8String]);
+            }
+        }
+
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+            trackerToken,
+            trackerName,
+            network,
+            campaign,
+            adgroup,
+            creative,
+            clickLabel,
+            costType,
+            costAmount,
+            costCurrency,
+            fbInstallReferrer,
+            jsonResponse);
+
+        callback(attribution2dx);
+    }];
+}
+
+void ADJAdjust2dx::getAttributionWithTimeout(int timeoutInMilliseconds, void(*callback)(AdjustAttribution2dx attribution)) {
+    if (callback == NULL) {
+        return;
+    }
+
+    [Adjust attributionWithTimeout:timeoutInMilliseconds completionHandler:^(ADJAttribution * _Nullable attribution) {
+        std::string trackerToken;
+        std::string trackerName;
+        std::string network;
+        std::string campaign;
+        std::string adgroup;
+        std::string creative;
+        std::string clickLabel;
+        std::string adid;
+        std::string costType;
+        double costAmount = -1;
+        std::string costCurrency;
+        std::string fbInstallReferrer; // unused in ios
+        std::string jsonResponse;
+
+        if (nil != attribution) {
+            if (attribution.trackerToken != nil) {
+                trackerToken = std::string([attribution.trackerToken UTF8String]);
+            }
+            if (attribution.trackerName != nil) {
+                trackerName = std::string([attribution.trackerName UTF8String]);
+            }
+            if (attribution.network != nil) {
+                network = std::string([attribution.network UTF8String]);
+            }
+            if (attribution.campaign != nil) {
+                campaign = std::string([attribution.campaign UTF8String]);
+            }
+            if (attribution.adgroup != nil) {
+                adgroup = std::string([attribution.adgroup UTF8String]);
+            }
+            if (attribution.creative != nil) {
+                creative = std::string([attribution.creative UTF8String]);
+            }
+            if (attribution.clickLabel != nil) {
+                clickLabel = std::string([attribution.clickLabel UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costType = std::string([attribution.costType UTF8String]);
+            }
+            if (attribution.costType != nil) {
+                costAmount = [attribution.costAmount doubleValue];
+            }
+            if (attribution.costCurrency != nil) {
+                costCurrency = std::string([attribution.costCurrency UTF8String]);
+            }
+            if (attribution.jsonResponse != nil) {
+                NSData *dataJsonResponse = [NSJSONSerialization dataWithJSONObject:attribution.jsonResponse
+                                                                           options:0
+                                                                             error:nil];
+                NSString *stringJsonResponse = [[NSString alloc] initWithBytes:[dataJsonResponse bytes]
+                                                                        length:[dataJsonResponse length]
+                                                                      encoding:NSUTF8StringEncoding];
+                jsonResponse = std::string([stringJsonResponse UTF8String]);
+            }
+        }
+
+        AdjustAttribution2dx attribution2dx = AdjustAttribution2dx(
+            trackerToken,
+            trackerName,
+            network,
+            campaign,
+            adgroup,
+            creative,
+            clickLabel,
+            costType,
+            costAmount,
+            costCurrency,
+            fbInstallReferrer,
+            jsonResponse);
+
+        callback(attribution2dx);
+    }];
+}
+
+void ADJAdjust2dx::getAttributionWithTimeout(int timeoutInMilliseconds, std::function<void(AdjustAttribution2dx)> callback) {
+    [Adjust attributionWithTimeout:timeoutInMilliseconds completionHandler:^(ADJAttribution * _Nullable attribution) {
         std::string trackerToken;
         std::string trackerName;
         std::string network;

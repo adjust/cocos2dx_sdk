@@ -91,6 +91,7 @@ public:
     void setPreinstallFilePath(std::string filePath);
     void enablePlayStoreKidsCompliance();
     void setFbAppId(std::string fbAppId);
+    void disableAppSetIdReading();
 
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     jobject getConfig();

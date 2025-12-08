@@ -18,7 +18,7 @@ Scene *TestApp::createScene() {
     return TestApp::create();
 }
 
-static std::string serverIp = "192.168.86.211";
+static std::string serverIp = "192.168.86.241";
 static std::string controlUrl = "ws://" + serverIp + ":1987";
 static TestLib2dx *testLibrary;
 
@@ -84,7 +84,7 @@ bool TestApp::init() {
 void TestApp::onStartTestSession(cocos2d::Ref *pSender) {
     CCLOG("[AdjustTest]: Start test session called!");
     Adjust2dx::getSdkVersion([this] (std::string sdkVersion) {
-        this->testLibrary->startTestSession(sdkVersion);
+        testLibrary->startTestSession(sdkVersion);
     });
 }
 

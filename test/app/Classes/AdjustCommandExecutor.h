@@ -68,6 +68,15 @@ private:
     void verifyTrack();
     void processDeeplink();
     void attributionGetter();
+    void adidGetter();
+    void adidGetterWithTimeout();
+    void attributionGetterWithTimeout();
+    void idfaGetter();
+    void idfvGetter();
+    void googleAdIdGetter();
+    void amazonAdIdGetter();
+    void sdkVersionGetter();
+    void lastDeeplinkGetter();
     void endFirstSessionDelay();
     void coppaComplianceInDelay();
     void playStoreKidsComplianceInDelay();

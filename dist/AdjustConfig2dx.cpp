@@ -169,6 +169,20 @@ void AdjustConfig2dx::disableAdServices() {
 #endif
 }
 
+void AdjustConfig2dx::disableAppSetIdReading() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiDisableAppSetIdReading;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiDisableAppSetIdReading, "com/adjust/sdk/AdjustConfig", "disableAppSetIdReading", "()V")) {
+        return;
+    }
+
+    jmiDisableAppSetIdReading.env->CallVoidMethod(config, jmiDisableAppSetIdReading.methodID);
+#endif
+}
+
 void AdjustConfig2dx::setDefaultTracker(std::string defaultTracker) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (config == NULL) {

@@ -22,6 +22,19 @@
 
 // Callback maps for std::function support
 namespace AdjustProxy2dxInternal {
+    enum CallbackType {
+        CALLBACK_TYPE_IS_ENABLED = 1,
+        CALLBACK_TYPE_ADID = 2,
+        CALLBACK_TYPE_SDK_VERSION = 3,
+        CALLBACK_TYPE_ATTRIBUTION_READ = 4,
+        CALLBACK_TYPE_LAST_DEEPLINK = 5,
+        CALLBACK_TYPE_RESOLVED_LINK = 6,
+        CALLBACK_TYPE_GOOGLE_AD_ID = 7,
+        CALLBACK_TYPE_AMAZON_AD_ID = 8,
+        CALLBACK_TYPE_VERIFY_PLAY_STORE_PURCHASE = 9,
+        CALLBACK_TYPE_VERIFY_AND_TRACK_PLAY_STORE_PURCHASE = 10
+    };
+    
     extern std::atomic<int64_t> callbackIdCounter;
     extern std::map<int64_t, std::function<void(bool)>> isEnabledCallbackMap;
     extern std::map<int64_t, std::function<void(std::string)>> adidCallbackMap;

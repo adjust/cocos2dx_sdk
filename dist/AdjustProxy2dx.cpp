@@ -28,20 +28,6 @@ namespace AdjustProxy2dxInternal {
         return callbackIdCounter.fetch_add(1);
     }
     
-    // Callback type constants
-    enum CallbackType {
-        CALLBACK_TYPE_IS_ENABLED = 1,
-        CALLBACK_TYPE_ADID = 2,
-        CALLBACK_TYPE_SDK_VERSION = 3,
-        CALLBACK_TYPE_ATTRIBUTION_READ = 4,
-        CALLBACK_TYPE_LAST_DEEPLINK = 5,
-        CALLBACK_TYPE_RESOLVED_LINK = 6,
-        CALLBACK_TYPE_GOOGLE_AD_ID = 7,
-        CALLBACK_TYPE_AMAZON_AD_ID = 8,
-        CALLBACK_TYPE_VERIFY_PLAY_STORE_PURCHASE = 9,
-        CALLBACK_TYPE_VERIFY_AND_TRACK_PLAY_STORE_PURCHASE = 10
-    };
-    
     void removeCallback(int64_t callbackId, int callbackType) {
         switch (callbackType) {
             case CALLBACK_TYPE_IS_ENABLED:
@@ -726,7 +712,10 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attr
     if (NULL == attributionReadCallbackMethod) {
         return;
     }
+    // Handle timeout case (null attribution)
     if (NULL == attributionObject) {
+        AdjustAttribution2dx emptyAttribution = AdjustAttribution2dx("", "", "", "", "", "", "", "", -1, "", "", "");
+        attributionReadCallbackMethod(emptyAttribution);
         return;
     }
 
@@ -1061,13 +1050,17 @@ JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAdidCallback_adidReadWithId
 
 JNIEXPORT void JNICALL Java_com_adjust_sdk_Adjust2dxAttributionReadCallback_attributionReadWithId
 (JNIEnv *env, jobject obj, jobject attributionObject, jlong jCallbackId) {
-    if (NULL == attributionObject) {
-        return;
-    }
-    
     int64_t callbackId = (int64_t)jCallbackId;
     auto it = AdjustProxy2dxInternal::attributionReadCallbackMap.find(callbackId);
     if (it == AdjustProxy2dxInternal::attributionReadCallbackMap.end()) {
+        return;
+    }
+    
+    // Handle timeout case (null attribution)
+    if (NULL == attributionObject) {
+        AdjustAttribution2dx emptyAttribution = AdjustAttribution2dx("", "", "", "", "", "", "", "", -1, "", "", "");
+        it->second(emptyAttribution);
+        AdjustProxy2dxInternal::removeCallback(callbackId, AdjustProxy2dxInternal::CALLBACK_TYPE_ATTRIBUTION_READ);
         return;
     }
     

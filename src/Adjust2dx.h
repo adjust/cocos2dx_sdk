@@ -50,10 +50,14 @@ public:
     static void trackMeasurementConsent(bool measurementConsent);
     static void getAdid(void(*callback)(std::string adid));
     static void getAdid(std::function<void(std::string)> callback);
+    static void getAdidWithTimeout(int timeoutInMilliseconds, void(*callback)(std::string adid));
+    static void getAdidWithTimeout(int timeoutInMilliseconds, std::function<void(std::string)> callback);
     static void getSdkVersion(void(*callback)(std::string sdkVersion));
     static void getSdkVersion(std::function<void(std::string)> callback);
     static void getAttribution(void(*callback)(AdjustAttribution2dx attribution));
     static void getAttribution(std::function<void(AdjustAttribution2dx)> callback);
+    static void getAttributionWithTimeout(int timeoutInMilliseconds, void(*callback)(AdjustAttribution2dx attribution));
+    static void getAttributionWithTimeout(int timeoutInMilliseconds, std::function<void(AdjustAttribution2dx)> callback);
     static void trackAdRevenue(AdjustAdRevenue2dx adRevenue);
     static void processAndResolveDeeplink(AdjustDeeplink2dx deeplink,
                                           void (*resolvedLinkCallback)(std::string resolvedLink));
