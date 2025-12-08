@@ -56,24 +56,40 @@ void Adjust2dx::trackAppStoreSubscription(AdjustAppStoreSubscription2dx subscrip
 void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), callback);
+#else
+    if (callback != NULL) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
 void Adjust2dx::verifyAppStorePurchase(AdjustAppStorePurchase2dx purchase, std::function<void(AdjustPurchaseVerificationResult2dx)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::verifyAppStorePurchase(purchase.getPurchase(), callback);
+#else
+    if (callback) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
 void Adjust2dx::verifyAndTrackAppStorePurchase(AdjustEvent2dx event, void (*callback)(AdjustPurchaseVerificationResult2dx verificationResult)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::verifyAndTrackAppStorePurchase(event.getEvent(), callback);
+#else
+    if (callback != NULL) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
 void Adjust2dx::verifyAndTrackAppStorePurchase(AdjustEvent2dx event, std::function<void(AdjustPurchaseVerificationResult2dx)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::verifyAndTrackAppStorePurchase(event.getEvent(), callback);
+#else
+    if (callback) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
@@ -100,6 +116,10 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, voi
     jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyPlayStorePurchaseCallback, jmidInit);
     jmiVerifyPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyPlayStorePurchase.classID, jmiVerifyPlayStorePurchase.methodID, purchase.getPurchase(), jCallbackProxy);
     jmiVerifyPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback != NULL) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
@@ -118,6 +138,10 @@ void Adjust2dx::verifyPlayStorePurchase(AdjustPlayStorePurchase2dx purchase, std
     jobject jCallbackProxy = jmiVerifyPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyPlayStorePurchaseCallback, jmidInit, (jlong)callbackId);
     jmiVerifyPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyPlayStorePurchase.classID, jmiVerifyPlayStorePurchase.methodID, purchase.getPurchase(), jCallbackProxy);
     jmiVerifyPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
@@ -134,6 +158,10 @@ void Adjust2dx::verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, void (*cal
     jobject jCallbackProxy = jmiVerifyAndTrackPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyAndTrackPlayStorePurchaseCallback, jmidInit);
     jmiVerifyAndTrackPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyAndTrackPlayStorePurchase.classID, jmiVerifyAndTrackPlayStorePurchase.methodID, event.getEvent(), jCallbackProxy);
     jmiVerifyAndTrackPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback != NULL) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
@@ -152,6 +180,10 @@ void Adjust2dx::verifyAndTrackPlayStorePurchase(AdjustEvent2dx event, std::funct
     jobject jCallbackProxy = jmiVerifyAndTrackPlayStorePurchase.env->NewObject(clsAdjust2dxVerifyAndTrackPlayStorePurchaseCallback, jmidInit, (jlong)callbackId);
     jmiVerifyAndTrackPlayStorePurchase.env->CallStaticVoidMethod(jmiVerifyAndTrackPlayStorePurchase.classID, jmiVerifyAndTrackPlayStorePurchase.methodID, event.getEvent(), jCallbackProxy);
     jmiVerifyAndTrackPlayStorePurchase.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback) {
+        callback(AdjustPurchaseVerificationResult2dx());
+    }
 #endif
 }
 
@@ -916,6 +948,10 @@ void Adjust2dx::getGoogleAdId(void (*callback)(std::string googleAdId)) {
     jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback != NULL) {
+        callback("");
+    }
 #endif
 }
 
@@ -947,6 +983,10 @@ void Adjust2dx::getGoogleAdId(std::function<void(std::string)> callback) {
     jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback) {
+        callback("");
+    }
 #endif
 }
 
@@ -974,6 +1014,10 @@ void Adjust2dx::getAmazonAdId(void (*callback)(std::string amazonAdId)) {
     jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback != NULL) {
+        callback("");
+    }
 #endif
 }
 
@@ -1005,6 +1049,10 @@ void Adjust2dx::getAmazonAdId(std::function<void(std::string)> callback) {
     jmiGetAdid.env->CallStaticVoidMethod(jmiGetAdid.classID, jmiGetAdid.methodID, jContext, jCallbackProxy);
     jmiGetContext.env->DeleteLocalRef(jContext);
     jmiInit.env->DeleteLocalRef(jCallbackProxy);
+#else
+    if (callback) {
+        callback("");
+    }
 #endif
 }
 
@@ -1059,24 +1107,40 @@ void Adjust2dx::onPause() {
 void Adjust2dx::getIdfa(void(*callback)(std::string idfa)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::getIdfa(callback);
+#else
+    if (callback != NULL) {
+        callback("");
+    }
 #endif
 }
 
 void Adjust2dx::getIdfa(std::function<void(std::string)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::getIdfa(callback);
+#else
+    if (callback) {
+        callback("");
+    }
 #endif
 }
 
 void Adjust2dx::requestAppTrackingAuthorization(void (*callback)(int status)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::requestAppTrackingAuthorization(callback);
+#else
+    if (callback != NULL) {
+        callback(-1);
+    }
 #endif
 }
 
 void Adjust2dx::requestAppTrackingAuthorization(std::function<void(int)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::requestAppTrackingAuthorization(callback);
+#else
+    if (callback) {
+        callback(-1);
+    }
 #endif
 }
 
@@ -1094,6 +1158,10 @@ void Adjust2dx::updateSkanConversionValue(int conversionValue,
                                           void (*callback)(std::string error)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::updateSkanConversionValue(conversionValue, coarseValue, lockWindow, callback);
+#else
+    if (callback != NULL) {
+        callback("");
+    }
 #endif
 }
 
@@ -1103,18 +1171,30 @@ void Adjust2dx::updateSkanConversionValue(int conversionValue,
                                           std::function<void(std::string)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::updateSkanConversionValue(conversionValue, coarseValue, lockWindow, callback);
+#else
+    if (callback) {
+        callback("");
+    }
 #endif
 }
 
 void Adjust2dx::getIdfv(void(*callback)(std::string idfv)) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
-    return ADJAdjust2dx::getIdfv(callback);
+    ADJAdjust2dx::getIdfv(callback);
+#else
+    if (callback != NULL) {
+        callback("");
+    }
 #endif
 }
 
 void Adjust2dx::getIdfv(std::function<void(std::string)> callback) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     ADJAdjust2dx::getIdfv(callback);
+#else
+    if (callback) {
+        callback("");
+    }
 #endif
 }
 
