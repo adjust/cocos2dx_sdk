@@ -2,11 +2,22 @@ package com.adjust.sdk;
 
 public class Adjust2dxVerifyAndTrackPlayStorePurchaseCallback implements OnPurchaseVerificationFinishedListener {
 	public native void verificationResult(String verificationResult, int code, String message);
+	public native void verificationResultWithId(String verificationResult, int code, String message, long callbackId);
+
+	private long callbackId = 0;
 
 	public Adjust2dxVerifyAndTrackPlayStorePurchaseCallback() {}
 
+	public Adjust2dxVerifyAndTrackPlayStorePurchaseCallback(long callbackId) {
+		this.callbackId = callbackId;
+	}
+
 	@Override
 	public void onVerificationFinished(AdjustPurchaseVerificationResult result) {
-		verificationResult(result.getVerificationStatus(), result.getCode(), result.getMessage());
+		if (callbackId != 0) {
+			verificationResultWithId(result.getVerificationStatus(), result.getCode(), result.getMessage(), callbackId);
+		} else {
+			verificationResult(result.getVerificationStatus(), result.getCode(), result.getMessage());
+		}
 	}
 }

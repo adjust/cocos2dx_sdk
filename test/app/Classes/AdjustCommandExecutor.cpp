@@ -77,6 +77,22 @@ void AdjustCommandExecutor::executeCommand(Command *command) {
         this->processDeeplink();
     } else if (command->methodName == "attributionGetter") {
         this->attributionGetter();
+    } else if (command->methodName == "adidGetter") {
+        this->adidGetter();
+    } else if (command->methodName == "adidGetterWithTimeout") {
+        this->adidGetterWithTimeout();
+    } else if (command->methodName == "attributionGetterWithTimeout") {
+        this->attributionGetterWithTimeout();
+    } else if (command->methodName == "idfaGetter") {
+        this->idfaGetter();
+    } else if (command->methodName == "idfvGetter") {
+        this->idfvGetter();
+    } else if (command->methodName == "googleAdIdGetter") {
+        this->googleAdIdGetter();
+    } else if (command->methodName == "amazonAdIdGetter") {
+        this->amazonAdIdGetter();
+    } else if (command->methodName == "sdkVersionGetter") {
+        this->sdkVersionGetter();
     } else if (command->methodName == "endFirstSessionDelay") {
         this->endFirstSessionDelay();
     } else if (command->methodName == "coppaComplianceInDelay") {
@@ -272,11 +288,8 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("skanCallback")) {
         localBasePath = this->basePath;
         adjustConfig->setSkanUpdatedCallback([](std::unordered_map<std::string, std::string> data) {
-            CCLOG("\n[AdjustCommandExecutor]: Skan Updated received");
-
             for (std::unordered_map<std::string, std::string>::iterator toIterator = data.begin();
-                 toIterator != data.end(); toIterator++)
-            {
+                 toIterator != data.end(); toIterator++) {
                 TestLib2dx::addInfoToSend(toIterator->first, toIterator->second);
 
             }
@@ -325,6 +338,24 @@ void AdjustCommandExecutor::config() {
             adjustConfig->disableAdServices();
         }
     }
+
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (this->command->containsParameter("allowAppSetIdReading")) {
+        std::string allowAppSetIdReadingString = command->getFirstParameterValue("allowAppSetIdReading");
+        bool allowAppSetIdReading = (allowAppSetIdReadingString == "true");
+        if (! allowAppSetIdReading) {
+            adjustConfig->disableAppSetIdReading();
+        }
+    }
+
+    if (this->command->containsParameter("appSetIdReadingEnabled")) {
+        std::string appSetIdReadingEnabledString = command->getFirstParameterValue("appSetIdReadingEnabled");
+        bool appSetIdReadingEnabled = (appSetIdReadingEnabledString == "true");
+        if (! appSetIdReadingEnabled) {
+            adjustConfig->disableAppSetIdReading();
+        }
+    }
+#endif
 
     if (this->command->containsParameter("allowSkAdNetworkHandling")) {
         std::string allowSkAdNetworkHandlingString = command->getFirstParameterValue("allowSkAdNetworkHandling");
@@ -386,7 +417,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("attributionCallbackSendAll")) {
         localBasePath = this->basePath;
         adjustConfig->setAttributionCallback([](AdjustAttribution2dx attribution) {
-            CCLOG("\n[AdjustCommandExecutor]: Attribution received: %s", attribution.getTrackerToken().c_str());
             TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
             TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
             TestLib2dx::addInfoToSend("network", attribution.getNetwork());
@@ -424,7 +454,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionSuccessCallback([](AdjustSessionSuccess2dx adjustSessionSuccess) {
-            CCLOG("\n[AdjustCommandExecutor]: Session success: %s", adjustSessionSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionSuccess.getAdid());
@@ -438,7 +467,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("sessionCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setSessionFailureCallback([](AdjustSessionFailure2dx adjustSessionFailure) {
-            CCLOG("\n[AdjustCommandExecutor]: Session failure: %s", adjustSessionFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustSessionFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustSessionFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustSessionFailure.getAdid());
@@ -453,7 +481,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendSuccess")) {
         localBasePath = this->basePath;
         adjustConfig->setEventSuccessCallback([](AdjustEventSuccess2dx adjustEventSuccess) {
-            CCLOG("\n[AdjustCommandExecutor]: Event success: %s", adjustEventSuccess.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventSuccess.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventSuccess.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventSuccess.getAdid());
@@ -469,7 +496,6 @@ void AdjustCommandExecutor::config() {
     if (this->command->containsParameter("eventCallbackSendFailure")) {
         localBasePath = this->basePath;
         adjustConfig->setEventFailureCallback([](AdjustEventFailure2dx adjustEventFailure){
-            CCLOG("\n[AdjustCommandExecutor]: Event failure: %s", adjustEventFailure.getMessage().c_str());
             TestLib2dx::addInfoToSend("message", adjustEventFailure.getMessage());
             TestLib2dx::addInfoToSend("timestamp", adjustEventFailure.getTimestamp());
             TestLib2dx::addInfoToSend("adid", adjustEventFailure.getAdid());
@@ -490,7 +516,6 @@ void AdjustCommandExecutor::config() {
         // bool openDeeplink = (openDeeplinkString == "true");
         static bool openDeeplink = (openDeeplinkString == "true");
         adjustConfig->setDeferredDeeplinkCallback([](std::string deeplink) {
-            CCLOG("\n[AdjustCommandExecutor]: Deferred deep link received: %s", deeplink.c_str());
             TestLib2dx::addInfoToSend("deeplink", deeplink);
             TestLib2dx::sendInfoToServer(localBasePath);
             return openDeeplink;
@@ -871,10 +896,17 @@ void AdjustCommandExecutor::trackAdRevenue() {
 }
 
 void AdjustCommandExecutor::getLastDeeplink() {
-    localBasePath = this->basePath;
-    Adjust2dx::getLastDeeplink([](std::string lastDeeplink) {
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+    Adjust2dx::getLastDeeplink([this, testCallbackId, localExtraPath](std::string lastDeeplink) {
         TestLib2dx::addInfoToSend("last_deeplink", lastDeeplink);
-        TestLib2dx::sendInfoToServer(localBasePath);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
     });
 }
 
@@ -887,11 +919,11 @@ void AdjustCommandExecutor::verifyPurchase() {
         AdjustAppStorePurchase2dx(productId, transactionId);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyAppStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAppStorePurchase(purchase, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     std::string productId = command->getFirstParameterValue("productId");
@@ -900,11 +932,11 @@ void AdjustCommandExecutor::verifyPurchase() {
     AdjustPlayStorePurchase2dx purchase = AdjustPlayStorePurchase2dx(productId, purchaseToken);
 
     localBasePath = this->basePath;
-    Adjust2dx::verifyPlayStorePurchase(purchase, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyPlayStorePurchase(purchase, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #endif
 }
@@ -923,19 +955,19 @@ void AdjustCommandExecutor::verifyTrack() {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
     localBasePath = this->basePath;
 
-    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAndTrackAppStorePurchase(*adjustEvent, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     localBasePath = this->basePath;
-    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [](AdjustPurchaseVerificationResult2dx verificationResult) {
+    Adjust2dx::verifyAndTrackPlayStorePurchase(*adjustEvent, [this](AdjustPurchaseVerificationResult2dx verificationResult) {
         TestLib2dx::addInfoToSend("verification_status", verificationResult.getVerificationStatus());
         TestLib2dx::addInfoToSend("code", std::to_string(verificationResult.getCode()));
         TestLib2dx::addInfoToSend("message", verificationResult.getMessage());
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 #endif
 
@@ -948,15 +980,19 @@ void AdjustCommandExecutor::processDeeplink() {
     AdjustDeeplink2dx adjustDeeplink = AdjustDeeplink2dx(deeplink);
     adjustDeeplink.setReferrer(referrer);
     localBasePath = this->basePath;
-    Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [](std::string resolvedLink) {
+    Adjust2dx::processAndResolveDeeplink(adjustDeeplink, [this](std::string resolvedLink) {
         TestLib2dx::addInfoToSend("resolved_link", resolvedLink);
-        TestLib2dx::sendInfoToServer(localBasePath);
+        TestLib2dx::sendInfoToServer(this->basePath);
     });
 }
 
 void AdjustCommandExecutor::attributionGetter() {
-    localBasePath = this->basePath;
-    Adjust2dx::getAttribution([](AdjustAttribution2dx attribution) {
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localBasePath = this->basePath;
+    Adjust2dx::getAttribution([this, testCallbackId, localBasePath](AdjustAttribution2dx attribution) {
         TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
         TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
         TestLib2dx::addInfoToSend("network", attribution.getNetwork());
@@ -987,7 +1023,198 @@ void AdjustCommandExecutor::attributionGetter() {
         }
         TestLib2dx::addInfoToSend("json_response", jsonStr);
 #endif
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
         TestLib2dx::sendInfoToServer(localBasePath);
+    });
+}
+
+void AdjustCommandExecutor::adidGetter() {
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+    Adjust2dx::getAdid([this, testCallbackId, localExtraPath](std::string adid) {
+        TestLib2dx::addInfoToSend("adid", adid);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+}
+
+void AdjustCommandExecutor::adidGetterWithTimeout() {
+    std::string timeoutStr = command->getFirstParameterValue("timeout");
+    int timeout = std::stoi(timeoutStr);
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+    Adjust2dx::getAdidWithTimeout(timeout, [this, testCallbackId, localExtraPath](std::string adid) {
+        if (adid.empty()) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            TestLib2dx::addInfoToSend("adid", "nil");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            TestLib2dx::addInfoToSend("adid", "null");
+#endif
+        } else {
+            TestLib2dx::addInfoToSend("adid", adid);
+        }
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+}
+
+void AdjustCommandExecutor::attributionGetterWithTimeout() {
+    std::string timeoutStr = command->getFirstParameterValue("timeout");
+    int timeout = std::stoi(timeoutStr);
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localBasePath = this->basePath;
+    Adjust2dx::getAttributionWithTimeout(timeout, [this, testCallbackId, localBasePath](AdjustAttribution2dx attribution) {
+        // Check if attribution is empty (timeout case)
+        bool isEmpty = attribution.getTrackerToken().empty() && 
+                       attribution.getTrackerName().empty() && 
+                       attribution.getNetwork().empty();
+        
+        if (isEmpty) {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            TestLib2dx::addInfoToSend("attribution", "nil");
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            TestLib2dx::addInfoToSend("attribution", "null");
+#endif
+        } else {
+            TestLib2dx::addInfoToSend("tracker_token", attribution.getTrackerToken());
+            TestLib2dx::addInfoToSend("tracker_name", attribution.getTrackerName());
+            TestLib2dx::addInfoToSend("network", attribution.getNetwork());
+            TestLib2dx::addInfoToSend("campaign", attribution.getCampaign());
+            TestLib2dx::addInfoToSend("adgroup", attribution.getAdgroup());
+            TestLib2dx::addInfoToSend("creative", attribution.getCreative());
+            TestLib2dx::addInfoToSend("click_label", attribution.getClickLabel());
+            TestLib2dx::addInfoToSend("cost_type", attribution.getCostType());
+            std::ostringstream sstream;
+            sstream << attribution.getCostAmount();
+            std::string strCostAmount = sstream.str();
+            TestLib2dx::addInfoToSend("cost_amount", strCostAmount);
+            TestLib2dx::addInfoToSend("cost_currency", attribution.getCostCurrency());
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+            TestLib2dx::addInfoToSend("fb_install_referrer", attribution.getFbInstallReferrer());
+            TestLib2dx::addInfoToSend("json_response", attribution.getJsonResponse());
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+            // remove fb_install_referrer on ios
+            std::string jsonStr = attribution.getJsonResponse();
+            if (!jsonStr.empty()) {
+                try {
+                    nlohmann::json jsonObj = nlohmann::json::parse(jsonStr);
+                    // remove the fb_install_referrer key if it exists
+                    jsonObj.erase("fb_install_referrer");
+                    // convert back to string
+                    jsonStr = jsonObj.dump();
+                } catch (const std::exception& e) {
+                    CCLOG("[AdjustCommandExecutor]: Failed to parse or modify JSON: %s", e.what());
+                }
+            }
+            TestLib2dx::addInfoToSend("json_response", jsonStr);
+#endif
+        }
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localBasePath);
+    });
+}
+
+void AdjustCommandExecutor::idfaGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+
+    Adjust2dx::getIdfa([this, testCallbackId, localExtraPath](std::string idfa) {
+        TestLib2dx::addInfoToSend("idfa", idfa);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+#endif
+}
+
+void AdjustCommandExecutor::idfvGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+
+    Adjust2dx::getIdfv([this, testCallbackId, localExtraPath](std::string idfv) {
+        TestLib2dx::addInfoToSend("idfv", idfv);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+#endif
+}
+
+void AdjustCommandExecutor::googleAdIdGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+
+    Adjust2dx::getGoogleAdId([this, testCallbackId, localExtraPath](std::string googleAdId) {
+        TestLib2dx::addInfoToSend("gps_adid", googleAdId);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+#endif
+}
+
+void AdjustCommandExecutor::amazonAdIdGetter() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+
+    Adjust2dx::getAmazonAdId([this, testCallbackId, localExtraPath](std::string amazonAdId) {
+        TestLib2dx::addInfoToSend("fire_adid", amazonAdId);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
+    });
+#endif
+}
+
+void AdjustCommandExecutor::sdkVersionGetter() {
+    std::string testCallbackId = "";
+    if (this->command->containsParameter("testCallbackId")) {
+        testCallbackId = command->getFirstParameterValue("testCallbackId");
+    }
+    std::string localExtraPath = this->basePath;
+    Adjust2dx::getSdkVersion([this, testCallbackId, localExtraPath](std::string sdkVersion) {
+        TestLib2dx::addInfoToSend("sdk_version", sdkVersion);
+        if (!testCallbackId.empty()) {
+            TestLib2dx::addInfoToSend("test_callback_id", testCallbackId);
+        }
+        TestLib2dx::sendInfoToServer(localExtraPath);
     });
 }
 

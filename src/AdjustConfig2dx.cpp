@@ -12,7 +12,7 @@
 #include "AdjustProxy2dx.h"
 #endif
 
-const std::string AdjustSdkPrefix2dx = "cocos2d-x5.4.2";
+const std::string AdjustSdkPrefix2dx = "cocos2d-x5.5.0";
 
 void AdjustConfig2dx::initConfig(std::string appToken, std::string environment, bool allowSuppressLogLevel) {
 #if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
@@ -166,6 +166,20 @@ void AdjustConfig2dx::disableAdServices() {
     if (isConfigSet) {
         config.disableAdServices();
     }
+#endif
+}
+
+void AdjustConfig2dx::disableAppSetIdReading() {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+    if (config == NULL) {
+        return;
+    }
+    cocos2d::JniMethodInfo jmiDisableAppSetIdReading;
+    if (!cocos2d::JniHelper::getMethodInfo(jmiDisableAppSetIdReading, "com/adjust/sdk/AdjustConfig", "disableAppSetIdReading", "()V")) {
+        return;
+    }
+
+    jmiDisableAppSetIdReading.env->CallVoidMethod(config, jmiDisableAppSetIdReading.methodID);
 #endif
 }
 
